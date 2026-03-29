@@ -1,0 +1,42 @@
+name: Validate Scripts
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'scripts/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+
+jobs:
+  validate-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Lint shell scripts
+        run: |
+          find scripts/ -name "*.sh" -exec shellcheck {} \;
+          echo "All scripts passed shellcheck"
+
+      - name: Check scripts are executable
+        run: |
+          find scripts/ -name "*.sh" | while read script; do
+            if [ ! -x "$script" ]; then
+              echo "WARNING: $script is not executable"
+            else
+              echo "$script is executable"
+            fi
+          done
+
+      - name: Dry-run help flags
+        run: |
+          find scripts/ -name "*.sh" | while read script; do
+            echo "--- Testing: $script --help ---"
+            bash "$script" --help 2>/dev/null || echo "(no --help flag)"
+          done

@@ -1,0 +1,87 @@
+name: Validate Skill Structure
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SKILL.md exists
+        run: |
+          if [ ! -f "SKILL.md" ]; then
+            echo "ERROR: SKILL.md not found at repository root"
+            exit 1
+          fi
+          echo "SKILL.md found"
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          # Check YAML frontmatter exists
+          head -1 SKILL.md | grep -q "^---$" || { echo "ERROR: Missing YAML frontmatter"; exit 1; }
+
+          # Check required fields
+          grep -q "^name:" SKILL.md || { echo "ERROR: Missing 'name' field"; exit 1; }
+          grep -q "^description:" SKILL.md || { echo "ERROR: Missing 'description' field"; exit 1; }
+          grep -q "^version:" SKILL.md || { echo "ERROR: Missing 'version' field"; exit 1; }
+
+          echo "Frontmatter validation passed"
+
+      - name: Validate directory structure
+        run: |
+          REQUIRED_DIRS="spec discrimination templates scripts references"
+          for dir in $REQUIRED_DIRS; do
+            if [ ! -d "$dir" ]; then
+              echo "ERROR: Required directory '$dir' not found"
+              exit 1
+            fi
+            echo "Directory '$dir' found"
+          done
+
+      - name: Validate core spec exists
+        run: |
+          CORE_SPEC=$(find spec/ -name "STEM-AI_v*_CORE.md" | head -1)
+          if [ -z "$CORE_SPEC" ]; then
+            echo "ERROR: No core spec file found in spec/"
+            exit 1
+          fi
+          echo "Core spec found: $CORE_SPEC"
+
+      - name: Validate discrimination files
+        run: |
+          REQUIRED_FILES="H1-H6_examples.md T2_examples.md CA_severity_examples.md B3_COI_guide.md G1-G5_examples.md"
+          for file in $REQUIRED_FILES; do
+            if [ ! -f "discrimination/$file" ]; then
+              echo "WARNING: discrimination/$file not found"
+            else
+              echo "discrimination/$file found"
+            fi
+          done
+
+      - name: Validate templates
+        run: |
+          REQUIRED_TEMPLATES="audit_report.md claim_matrix.md executive_summary.md evidence_ledger.md"
+          for file in $REQUIRED_TEMPLATES; do
+            if [ ! -f "templates/$file" ]; then
+              echo "WARNING: templates/$file not found"
+            else
+              echo "templates/$file found"
+            fi
+          done
+
+      - name: Check for version consistency
+        run: |
+          SKILL_VERSION=$(grep "^version:" SKILL.md | sed 's/version: *"\?\([^"]*\)"\?/\1/')
+          CHANGELOG_VERSION=$(grep -m1 "^\## \[" CHANGELOG.md | sed 's/## \[\(.*\)\].*/\1/')
+          echo "SKILL.md version: $SKILL_VERSION"
+          echo "CHANGELOG latest: $CHANGELOG_VERSION"
+          if [ "$SKILL_VERSION" != "$CHANGELOG_VERSION" ]; then
+            echo "WARNING: Version mismatch between SKILL.md ($SKILL_VERSION) and CHANGELOG ($CHANGELOG_VERSION)"
+          else
+            echo "Version consistency check passed"
+          fi

@@ -1,0 +1,63 @@
+name: Validate Templates
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'templates/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'templates/**'
+
+jobs:
+  validate-templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check template placeholder consistency
+        run: |
+          echo "Checking templates for unresolved placeholders..."
+          TEMPLATES=$(find templates/ -name "*.md")
+          for tmpl in $TEMPLATES; do
+            # Count placeholder patterns [PLACEHOLDER]
+            COUNT=$(grep -c '\[.*\]' "$tmpl" 2>/dev/null || echo 0)
+            echo "$tmpl: $COUNT placeholder patterns found"
+          done
+
+      - name: Validate audit report template sections
+        run: |
+          REPORT="templates/audit_report.md"
+          if [ ! -f "$REPORT" ]; then
+            echo "WARNING: audit_report.md not found"
+            exit 0
+          fi
+
+          REQUIRED_SECTIONS="Trust Score Matrix|Stage 1|Stage 2|Stage 3|Governance Overlay|Risk Penalty|Sovereign Auditor|Author Domain Context"
+          IFS='|' read -ra SECTIONS <<< "$REQUIRED_SECTIONS"
+          for section in "${SECTIONS[@]}"; do
+            if grep -q "$section" "$REPORT"; then
+              echo "[PASS] Section found: $section"
+            else
+              echo "[WARN] Section missing: $section"
+            fi
+          done
+
+      - name: Validate claim matrix template columns
+        run: |
+          MATRIX="templates/claim_matrix.md"
+          if [ ! -f "$MATRIX" ]; then
+            echo "WARNING: claim_matrix.md not found"
+            exit 0
+          fi
+
+          REQUIRED_COLS="Claim ID|Repository|Finding Category|Evidence Type|Confidence|Severity"
+          IFS='|' read -ra COLS <<< "$REQUIRED_COLS"
+          for col in "${COLS[@]}"; do
+            if grep -q "$col" "$MATRIX"; then
+              echo "[PASS] Column found: $col"
+            else
+              echo "[WARN] Column missing: $col"
+            fi
+          done

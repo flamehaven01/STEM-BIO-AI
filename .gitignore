@@ -1,0 +1,34 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Audit outputs (generated, not committed)
+audit_output/
+*.audit.md
+*.claim_matrix.md
+*.evidence_ledger.md
+
+# Temporary files
+tmp/
+*.tmp
+*.bak
+
+# Node modules (if skills.sh used)
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files (never commit credentials)
+.env
+.env.local
+*.key
+*.pem

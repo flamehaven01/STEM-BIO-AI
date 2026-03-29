@@ -1,0 +1,55 @@
+mica_spec: "0.2.0"
+name: stem-ai-bio
+mode: protocol_evolution
+description: "STEM-AI distributed skill (16+ platforms). Single archive update authority. Platform deployments are read-only consumers. Never update archive in deployed copies."
+
+layers:
+  - name: archive
+    path: memory/stem-ai.mica.v1.1.2.json
+    format: json
+    loading_hint: always
+
+  - name: playbook
+    path: memory/stem-ai-playbook.v1.1.2.md
+    format: markdown
+    loading_hint: always
+
+  - name: lessons
+    path: memory/stem-ai-lessons.v1.1.2.md
+    format: markdown
+    loading_hint: on_demand
+
+update_triggers:
+  - on_version_bump
+  - on_explicit_save
+
+archive_policy:
+  rotation: on_version_bump
+  retention: indefinite
+
+drift_profile:
+  enabled: true
+  default_action: warn_continue
+  source_classes:
+    - code
+    - playbook
+    - archive
+    - readme
+    - changelog
+  classes:
+    - id: DRF-001
+      label: code_playbook_divergence
+      severity: error
+      action: require_acknowledgment
+    - id: DRF-002
+      label: docs_canonical_divergence
+      severity: warning
+      action: warn_continue
+    - id: DRF-003
+      label: invariant_change_without_rationale
+      severity: critical
+      action: block_session
+    - id: DRF-004
+      label: version_reference_staleness
+      severity: warning
+      action: warn_continue
