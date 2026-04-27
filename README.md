@@ -138,6 +138,8 @@ stem-ai/
     ca_detection_scan.sh             # Clinical adjacency detection
     snapshot_provenance.sh           # Commit hash + checksum collection
     validate_skill_structure.sh      # Self-validation for skill package
+  audits/
+    fieldbioinformatics_v1_1_2/      # Official v1.1.2 LOCAL_ANALYSIS audit output
   references/
     tier_decision_table.md           # T0-T4 operational decision mapping
     risk_taxonomy.md                 # Finding category definitions
@@ -169,7 +171,7 @@ stem-ai/
 | 1.0.6 | LOCAL_ANALYSIS, dual-path rubric, CA 3-tier, C1-C4 |
 | **1.1.0** | **Universal skill package, multi-file architecture, institutional templates** |
 | **1.1.1** | **Canonical version alignment, explicit audit-layer separation, package consistency fixes** |
-| **1.1.2** | **MICA v0.2.0 memory layer: 18 IMMUTABLE rules as machine-checkable governance archive** |
+| **1.1.2** | **MICA v0.2.0 memory layer plus official LOCAL_ANALYSIS report/json audit artifact shape** |
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 

@@ -73,6 +73,42 @@ That is the useful layer.
 
 ---
 
+## What "loading the contract" means
+
+MICA is not hidden model memory.
+
+It is also not a claim that the model provider changed the LLM.
+
+In v1.1.2, "loading the contract" means the audit session starts by reading a fixed set of repository files before it is allowed to score the target:
+
+```text
+memory/mica.yaml
+memory/stem-ai.mica.v1.1.2.json
+memory/stem-ai-playbook.v1.1.2.md
+memory/stem-ai-lessons.v1.1.2.md
+spec/STEM-AI_v1.1.2_CORE.md
+```
+
+The auditor then performs a pre-execution contract test:
+
+- confirm the canonical spec exists
+- confirm the memory archive exists
+- confirm the invariant count is 18
+- confirm the fixed tier boundaries are present
+- confirm the Stage 2 `N/A` redistribution rule is present
+- confirm Stage 3G cannot raise the formal tier
+- confirm C1-C4 mode gating is active
+
+Only after that does the audit proceed.
+
+This does not make the LLM mathematically deterministic.
+
+It makes the audit procedure file-backed, inspectable, and interruptible. If the session cannot load or reconcile the contract files, the correct behavior is to stop before scoring.
+
+That is the difference between "please be consistent" and "execute this versioned contract."
+
+---
+
 ## The audit workflow
 
 STEM-AI v1.1.2 runs as a structured audit workflow:
@@ -196,6 +232,10 @@ The machine-readable result records the score like this:
 
 Stage 2 was not used for this local-only audit.
 
+That does not mean cross-platform consistency is unimportant.
+
+It means this evidence slice was deliberately scoped to LOCAL_ANALYSIS: repository files, code paths, documentation, dependency manifests, CI definitions, and code-integrity checks. In v1.1.2, when Stage 2 is not available, it is not treated as zero. The contract redistributes the weight to Stage 1 and Stage 3.
+
 That is not left to the LLM's mood.
 
 The contract defines the redistribution:
@@ -215,6 +255,40 @@ T2 Caution
 Not because the prose sounded balanced.
 
 Because the contract math forces that result.
+
+---
+
+## Why the T0 hard floor did not trigger
+
+`T0_HARD_FLOOR` is the rule that prevents a clinically dangerous repository from escaping rejection through good wording.
+
+In simplified form:
+
+```text
+If a repository is CA-DIRECT
+and it has no substantive code implementation,
+then final tier = T0 regardless of score math.
+```
+
+Examples of CA-DIRECT include patient-specific diagnosis, treatment recommendation, triage, risk scoring, or clinical decision support.
+
+The audited repository did not trigger that floor because STEM-AI classified it as:
+
+```json
+{
+  "clinical_adjacent": true,
+  "ca_severity": "CA-INDIRECT",
+  "t0_hard_floor": false
+}
+```
+
+It produces biological sequence artifacts that may sit near public-health or clinical workflows, but the inspected surface did not make direct autonomous diagnosis or treatment claims. It also has substantive implementation, CI, and domain-specific test definitions.
+
+So the result is not T0.
+
+But it is also not high-trust.
+
+The bounded result is T2 Caution.
 
 ---
 
@@ -281,13 +355,7 @@ It is a map of what a reviewer should trust, distrust, or inspect next.
 
 ## A small Python verifier
 
-Here is a small dependency-free Python script that reads the actual audit JSON and verifies the score calculation.
-
-It does not need target private code.
-
-It does not need patient data.
-
-It only checks the machine-readable audit result.
+Here is a small dependency-free Python script that reads the actual audit JSON and verifies the score calculation. It does not need target private code or patient data; it only checks the machine-readable audit result.
 
 ```python
 #!/usr/bin/env python3
@@ -358,34 +426,7 @@ C3_dead_or_deprecated_patient_adjacent_paths: WARN
 C4_exception_handling_clinical_adjacent_paths: WARN
 ```
 
-This is the point of the JSON artifact:
-
-the reader can verify the audit math without asking the LLM to explain itself again.
-
----
-
-## What STEM-AI is actually analyzing
-
-In this run, STEM-AI classified the repository as:
-
-```json
-{
-  "nascent_repo": false,
-  "clinical_adjacent": true,
-  "ca_severity": "CA-INDIRECT",
-  "t0_hard_floor": false
-}
-```
-
-That classification matters.
-
-The repository produces biological sequence outputs that may sit near public-health or clinical workflows, but the inspected surface did not make direct autonomous diagnosis or treatment claims.
-
-So the audit did not collapse it into T0.
-
-It also did not inflate it into a high-trust tier just because it has real code and tests.
-
-The final answer is bounded:
+The final answer remains bounded:
 
 ```text
 T2 Caution
@@ -438,7 +479,15 @@ That is what MICA is for.
 
 ## What comes next
 
-The next version should add a runtime replay lane:
+v1.1.2 is sufficient for a contract-bound LOCAL_ANALYSIS audit because it can inspect repository source, documentation, CI definitions, dependency manifests, and code-integrity paths without relying on README claims alone.
+
+That is the official v1.1.2 scope.
+
+It does not mean runtime replay is unimportant.
+
+It means runtime replay should be a separate evidence lane rather than a hidden assumption inside the score.
+
+The follow-on lane should:
 
 - provision the target dependency environment
 - run selected target tests in a controlled shell
@@ -446,13 +495,7 @@ The next version should add a runtime replay lane:
 - attach a replay manifest to `experiment_results.json`
 - keep runtime evidence separate from source/document/CI evidence
 
-That matters because not every audit should stop at static and CI-definition inspection.
-
-But it should be a separate lane, not a hidden assumption inside the score.
-
-v1.1.2 establishes the contract-bound audit structure.
-
-The next step is reproducible execution capture.
+For the current demonstration, runtime execution status is recorded as an evidence boundary in the audit JSON. The score itself remains based on the official v1.1.2 LOCAL_ANALYSIS evidence basis.
 
 ---
 

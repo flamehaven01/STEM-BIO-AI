@@ -22,12 +22,13 @@ Rubric refinements and additions use patch versions (1.0.x).
 - `memory/stem-ai-lessons.v1.1.2.md` — failure mode history (10 lessons from 33 patches)
 - PATCH-47: MICA initialization step added to SKILL.md loading order (Step 0) and CORE spec Section 8.2 Execution Instruction
 - DEV.to draft for STEM-AI v1.1.2 memory contract explanation
-- IP-neutral public evidence JSON for bio/medical AI reviewers
-- Dependency-free Python validator for the public evidence artifact
+- Official v1.1.2 LOCAL_ANALYSIS audit artifact shape: `report.md` plus `experiment_results.json`
+- Real public-repository audit output under `audits/fieldbioinformatics_v1_1_2/`
 
 ### Changed
 - Canonical spec filename advanced to `spec/STEM-AI_v1.1.2_CORE.md`
 - SKILL.md version updated to 1.1.2
+- Public explanation shifted from synthetic evidence examples to a real audit-result JSON and verifier flow
 
 ### Fixed
 - Post-release consistency cleanup applied to active package surfaces on 2026-04-27
@@ -35,6 +36,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Template references updated to the current canonical spec and audit report version
 - Skill validator strengthened to detect template/spec/MICA drift before release
 - `local_analysis_scan.sh` output description corrected to match actual stdout format
+- Removed placeholder example audits and synthetic public evidence bundle from the official v1.1.2 surface
 
 ---
 

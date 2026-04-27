@@ -21,7 +21,7 @@ This audit is a trustworthiness assessment of an open-source bioinformatics repo
 | Component | Weight | Score | Verdict |
 | --- | ---: | ---: | --- |
 | Stage 1 -- README Intent | 0.50 | 65 / 100 | Clear technical scope; missing explicit clinical-use boundary |
-| Stage 2 -- Cross-Platform | N/A | N/A | Not executed in LOCAL_ANALYSIS-only run |
+| Stage 2 -- Cross-Platform | N/A | N/A | Not executed in this LOCAL_ANALYSIS evidence slice |
 | Stage 3 -- Code/Bio Responsibility | 0.50 | 55 / 100 | Strong test/documentation surface; dependency and governance gaps remain |
 | Risk Penalties | -- | 0 | No C1 credential failure; no T0 hard floor |
 | **Base Final Score** | -- | **60 / 100** | **T2 Caution** |
@@ -42,7 +42,7 @@ The claims are concrete and implementation-aligned rather than hype-driven. The 
 
 ## 3. Stage 2: Cross-Platform Analysis
 
-Stage 2 was not executed for this run. This audit intentionally used local repository evidence only: source code, documentation, dependency files, workflows, and local test execution attempt. No social-media, package-registry, or external web consistency evidence was fetched.
+Stage 2 was not executed for this run. This audit intentionally used a local repository evidence slice only: source code, documentation, dependency files, workflows, and code-integrity inspection. No social-media, package-registry, or external web consistency evidence was fetched.
 
 **Stage 2 Score:** N/A  
 **Effect:** Stage 2 weight redistributed to Stage 1 and Stage 3 according to v1.1.2 rules.
@@ -80,11 +80,13 @@ The main Stage 3 limitations are reproducibility and governance. `environment.ym
 
 C1-C4 are advisory in v1.1.2 except C1 FAIL, which would trigger RP3. C1 did not fail, so no RP3 penalty was applied.
 
-## 5. Reproducibility Roadmap
+## 5. Runtime Evidence Boundary
 
 This v1.1.2 output is a LOCAL_ANALYSIS audit artifact: it records source-code inspection, documentation evidence, CI/test definitions, scoring decisions, and C1-C4 code-integrity findings.
 
-The next version should add a dependency-provisioned runtime replay lane that can execute target test suites inside a controlled environment and attach the resulting run manifest to the audit JSON. That lane is intentionally separate from the v1.1.2 trust-score calculation so that source/document/CI evidence and runtime replay evidence remain distinguishable.
+Local runtime test execution was attempted but stopped at dependency precondition resolution because the current environment did not provide the `Bio` module required by the target test configuration. This is recorded as a runtime evidence boundary, not as completed runtime verification.
+
+The v1.1.2 score therefore remains based on source/document/CI definitions and C1-C4 LOCAL_ANALYSIS evidence. Dependency-provisioned runtime replay is an official follow-on lane for future audit execution, and must remain distinguishable from v1.1.2 scoring evidence.
 
 ## 6. Final Judgment
 

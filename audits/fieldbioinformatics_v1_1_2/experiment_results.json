@@ -17,7 +17,7 @@
   },
   "review_scope": {
     "stage_2_external_fetch": false,
-    "runtime_replay_lane": "planned_next_version",
+    "runtime_evidence_boundary": "dependency_precondition_blocked",
     "read_files": [
       "README.md",
       "pyproject.toml",
@@ -37,7 +37,8 @@
     ],
     "limitations": [
       "Stage 2 cross-platform consistency was not executed.",
-      "Dependency-provisioned runtime replay is planned as a separate next-version audit lane."
+      "Local runtime test execution was attempted but stopped at dependency precondition resolution.",
+      "The v1.1.2 score is based on source, documentation, CI definitions, and C1-C4 LOCAL_ANALYSIS evidence."
     ]
   },
   "file_hashes_sha256": {
@@ -157,10 +158,12 @@
       ]
     }
   },
-  "runtime_replay_roadmap": {
-    "status": "PLANNED_NEXT_VERSION",
-    "goal": "Execute target test suites inside a dependency-provisioned environment and attach a reproducible run manifest to the audit JSON.",
-    "separation_rule": "Runtime replay evidence must remain distinguishable from v1.1.2 source, documentation, CI, and code-integrity scoring evidence."
+  "runtime_evidence_boundary": {
+    "status": "DEPENDENCY_PRECONDITION_BLOCKED",
+    "attempted_command": "python -m pytest tests\\vcf_filter_unit_test.py -q",
+    "blocking_error": "ModuleNotFoundError: No module named 'Bio'",
+    "interpretation": "This is not completed runtime verification. It records the boundary of the local audit environment while preserving the v1.1.2 source/document/CI/C1-C4 evidence basis.",
+    "future_lane": "Dependency-provisioned runtime replay should attach command, environment, exit-code, and output-digest evidence as a separate audit lane."
   },
   "notable_positive_evidence": [
     "README claims align with actual package metadata and command-line entry points in pyproject.toml.",
