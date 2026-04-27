@@ -1,0 +1,192 @@
+{
+  "schema_version": "stem-ai-local-analysis-result-v1",
+  "stem_ai_version": "1.1.2",
+  "generated_at_local": "2026-04-27",
+  "execution_mode": "LOCAL_ANALYSIS",
+  "auditor_affiliation": "independent",
+  "target": {
+    "name": "artic-network/fieldbioinformatics",
+    "local_path": "D:/Sanctum/Extra Repo/fieldbioinformatics",
+    "remote": "https://github.com/artic-network/fieldbioinformatics",
+    "branch": "master",
+    "commit": "8008b4c97c2193a82308ff6f0be507b1d9306e36",
+    "last_commit_date": "2026-04-10T09:57:33+01:00",
+    "last_commit_subject": "Pre 1.10.0 PR (#187)",
+    "last_commit_author": "Sam W <s.a.j.wilkinson@bham.ac.uk>",
+    "file_count": 114
+  },
+  "review_scope": {
+    "stage_2_external_fetch": false,
+    "runtime_dependencies_installed_by_auditor": false,
+    "read_files": [
+      "README.md",
+      "pyproject.toml",
+      "environment.yml",
+      ".github/workflows/unittests.yml",
+      ".github/workflows/docker-build-push.yml",
+      ".github/workflows/stale-issues.yml",
+      "docs/quick-start.md",
+      "docs/tests.md",
+      "docs/troubleshooting.md",
+      "artic/vcf_filter.py",
+      "artic/utils.py",
+      "artic/minion.py",
+      "artic/get_scheme.py",
+      "artic/deprecated/filter_clusters/tagfastas.py",
+      "tests/pipeline_unit_test.py"
+    ],
+    "limitations": [
+      "No package installation was performed in the auditor environment.",
+      "Local pytest execution was blocked by a missing Biopython dependency.",
+      "Stage 2 cross-platform consistency was not executed.",
+      "No full pipeline runtime was executed locally."
+    ]
+  },
+  "file_hashes_sha256": {
+    "README.md": "171C5A7EA5C6014C1CEB55AC407DEDB545727B63B0CE0D65359430F3129E5B90",
+    "pyproject.toml": "473DCAE77758F543F4E89AB7D6DC428BC291C37A1A17C18663F4842790A1793B",
+    "environment.yml": "F0797D4E89AF805A083E97AD55F3B8E2EA5783186782B2C5CD23A650E818C72F"
+  },
+  "classification": {
+    "nascent_repo": false,
+    "clinical_adjacent": true,
+    "ca_severity": "CA-INDIRECT",
+    "t0_hard_floor": false,
+    "rationale": [
+      "The repository produces viral consensus and variant artifacts from sequencing reads.",
+      "No autonomous diagnosis, treatment selection, or direct patient-management claim was observed in the locally reviewed files.",
+      "The codebase is present and substantive, so the CA-DIRECT plus zero-code T0 hard floor is not applicable."
+    ]
+  },
+  "score": {
+    "stage_1_readme_intent": 65,
+    "stage_2_cross_platform": null,
+    "stage_3_code_bio": 55,
+    "stage_2_na_redistribution": {
+      "stage_1_weight": 0.5,
+      "stage_3_weight": 0.5
+    },
+    "risk_penalty": 0,
+    "final_score": 60,
+    "formal_tier": "T2 Caution",
+    "use_scope": "Research reference and supervised non-clinical technical review only; no autonomous clinical decision support."
+  },
+  "stage_1_evidence": [
+    {
+      "path": "README.md",
+      "lines": "4,17",
+      "finding": "README describes a viral nanopore sequencing pipeline generated from tiling amplicon schemes."
+    },
+    {
+      "path": "README.md",
+      "lines": "24-27",
+      "finding": "README lists read filtering, primer trimming, amplicon normalisation, variant calling, and consensus building."
+    },
+    {
+      "path": "README.md",
+      "lines": "4-84",
+      "finding": "No explicit not-for-diagnostic-use or not-for-clinical-use boundary was observed in the README surface reviewed."
+    }
+  ],
+  "stage_3_rubric": {
+    "T1_CI_CD": {
+      "score": 15,
+      "max": 15,
+      "evidence": ".github/workflows/unittests.yml runs environment setup, package install, model download, unit tests, pipeline test runner, and minion validator."
+    },
+    "T2_domain_tests": {
+      "score": 15,
+      "max": 15,
+      "evidence": "docs/tests.md documents full viral pipeline testing and slow SARS-CoV-2 variant/consensus validation against truth sets."
+    },
+    "T3_changelog_release_hygiene": {
+      "score": 15,
+      "max": 15,
+      "evidence": "Repository contains CHANGELOG and release-oriented Docker build/push workflow."
+    },
+    "T4_governance_maturity": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No bounded governance overlay artifact was observed in the local review."
+    },
+    "B1_data_provenance_controls": {
+      "score": 10,
+      "max": 15,
+      "evidence": "artic/utils.py includes manifest download and MD5 hash verification for scheme/reference artifacts; dependency lock/reproducibility remains incomplete."
+    },
+    "B2_bias_limitations": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No explicit bias, cohort representativeness, or biological limitation policy was observed."
+    },
+    "B3_coi_funding": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No COI/funding declaration was observed in the locally reviewed files."
+    }
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        ".github/workflows/stale-issues.yml:23 references secrets.GITHUB_TOKEN",
+        ".github/workflows/docker-build-push.yml:45-46 reference QUAY_USERNAME and QUAY_PASSWORD via GitHub secrets"
+      ],
+      "risk_penalty_applied": false
+    },
+    "C2_dependency_pinning": {
+      "status": "WARN",
+      "evidence": [
+        "environment.yml:6 python>=3.7",
+        "environment.yml:10 clair3>=2.0.0",
+        "environment.yml:23 align_trim>=1.0.2",
+        "environment.yml:24 primalbedtools>=1.0.0",
+        "Most other listed tools are unpinned."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "WARN",
+      "evidence": [
+        "artic/deprecated/filter_clusters/tagfastas.py:62 contains literal patient-adjacent metadata fields.",
+        "artic/deprecated/filter_clusters/tagfastas.py:65 formats lab/sample/location/date metadata into FASTA record IDs."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "WARN",
+      "evidence": [
+        "artic/vcf_filter.py:42-49 fails closed when AF is missing.",
+        "artic/vcf_filter.py:63-71 swallows missing sample-level DP and can still return True if other filters pass."
+      ]
+    }
+  },
+  "runtime_test_attempt": {
+    "command": "python -m pytest tests\\vcf_filter_unit_test.py -q",
+    "status": "BLOCKED",
+    "exit_code": 1,
+    "blocking_error": "ModuleNotFoundError: No module named 'Bio'",
+    "stderr_excerpt": [
+      "ImportError while loading conftest 'D:\\Sanctum\\Extra Repo\\fieldbioinformatics\\tests\\conftest.py'.",
+      "tests\\conftest.py:9: in <module>",
+      "from Bio import SeqIO",
+      "ModuleNotFoundError: No module named 'Bio'"
+    ]
+  },
+  "notable_positive_evidence": [
+    "README claims align with actual package metadata and command-line entry points in pyproject.toml.",
+    "CI includes unit tests, pipeline test runner, and validator path.",
+    "docs/tests.md documents domain-specific variant and consensus validation against truth sets.",
+    "docs/quick-start.md warns that the pipeline requires tiling amplicon reads and is not meaningful for metagenomic or whole-genome shotgun data.",
+    "artic/utils.py verifies downloaded primer/reference artifacts against manifest hashes."
+  ],
+  "notable_risks": [
+    "No explicit clinical-use or diagnostic-use boundary was observed in the README.",
+    "Dependencies are not fully pinned, limiting reproducibility of local scientific runs.",
+    "Deprecated code contains patient-adjacent metadata literals.",
+    "Sample-level missing DP in VCF filtering is not treated as a fail-closed condition.",
+    "Local runtime verification was not completed in the current environment."
+  ],
+  "generated_outputs": {
+    "human_report": "audits/fieldbioinformatics_v1_1_2/report.md",
+    "machine_result": "audits/fieldbioinformatics_v1_1_2/experiment_results.json"
+  }
+}
