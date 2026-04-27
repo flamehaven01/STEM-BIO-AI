@@ -1,6 +1,6 @@
 # ClawBio Audit Example
 
-**Status:** Placeholder -- full audit example to be added from live ClawBio v1.1.1 re-audit.
+**Status:** Placeholder -- full audit example to be added from live ClawBio v1.1.2 re-audit.
 
 This directory will contain:
 - `audit_report.md` -- complete STEM-AI audit report

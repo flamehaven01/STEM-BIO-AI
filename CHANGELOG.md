@@ -26,6 +26,13 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Canonical spec filename advanced to `spec/STEM-AI_v1.1.2_CORE.md`
 - SKILL.md version updated to 1.1.2
 
+### Fixed
+- Post-release consistency cleanup applied to active package surfaces on 2026-04-27
+- Active package surfaces aligned to STEM-AI v1.1.2 and MICA v0.2.0
+- Template references updated to the current canonical spec and audit report version
+- Skill validator strengthened to detect template/spec/MICA drift before release
+- `local_analysis_scan.sh` output description corrected to match actual stdout format
+
 ---
 
 ## [1.1.1] - 2026-03-26

@@ -1,6 +1,6 @@
 {
-  "mica_spec": "0.1.9",
-  "mica_schema_version": "0.1.9",
+  "mica_spec": "0.2.0",
+  "mica_schema_version": "0.2.0",
   "project": {
     "name": "stem-ai-bio",
     "full_name": "STEM-AI: Sovereign Trust Evaluator for Medical AI Artifacts",
@@ -370,19 +370,19 @@
   "provenance_registry": [
     {
       "uri": "spec/STEM-AI_v1.1.2_CORE.md",
-      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sha256": "219BEC44F51F5B56E1C6A18A70F0B52C108C9BE54F417455061A25BF5915A5C3",
       "kind": "canonical_spec",
       "created_at": "2026-03-27T00:00:00Z",
       "trust_class": "canonical",
-      "note": "Primary canonical specification. SHA256 to be updated after file stabilizes."
+      "note": "Primary canonical specification. SHA256 updated from active repository state on 2026-04-27."
     },
     {
       "uri": "SKILL.md",
-      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sha256": "B1C2CA66577F9244BFD9755374BE1316A95129F52E85487016D65DE6169F6975",
       "kind": "entry_point",
       "created_at": "2026-03-26T00:00:00Z",
       "trust_class": "canonical",
-      "note": "Universal skill entry point. SHA256 to be updated after v1.1.2 finalization."
+      "note": "Universal skill entry point. SHA256 updated from active repository state on 2026-04-27."
     },
     {
       "uri": "empirical_validation_batch_1",
@@ -390,19 +390,19 @@
       "kind": "audit_result_batch",
       "created_at": "2026-03-26T00:00:00Z",
       "trust_class": "distilled",
-      "note": "10-repo live audit batch (March 2026): 8 T0, 1 T1, 1 T2, 0 T3/T4. Validates rubric calibration toward lower-trust baseline for current bio-AI ecosystem."
+      "note": "10-repo live audit batch (March 2026): 8 T0, 1 T1, 1 T2, 0 T3/T4. External result batch is referenced here, but its source artifact is not embedded in this repository, so SHA256 remains a placeholder."
     }
   ],
   "artifact_manifest": {
-    "generated_at_utc": "2026-03-27T00:00:00Z",
+    "generated_at_utc": "2026-04-27T00:00:00Z",
     "root": ".",
     "entries": [
-      {"role": "canonical_spec",      "path": "spec/STEM-AI_v1.1.2_CORE.md",            "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"},
-      {"role": "entry_point",         "path": "SKILL.md",                                "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"},
-      {"role": "memory_contract",     "path": "memory/mica.yaml",                        "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"},
+      {"role": "canonical_spec",      "path": "spec/STEM-AI_v1.1.2_CORE.md",            "sha256": "219BEC44F51F5B56E1C6A18A70F0B52C108C9BE54F417455061A25BF5915A5C3", "required": true,  "produced_by_stage": "S0"},
+      {"role": "entry_point",         "path": "SKILL.md",                                "sha256": "B1C2CA66577F9244BFD9755374BE1316A95129F52E85487016D65DE6169F6975", "required": true,  "produced_by_stage": "S0"},
+      {"role": "memory_contract",     "path": "memory/mica.yaml",                        "sha256": "D5EE970560EE4CFDFA106BC45597B80AE3051C8798BD0A44629A0D16AC1EF8CF", "required": true,  "produced_by_stage": "S0"},
       {"role": "memory_archive",      "path": "memory/stem-ai.mica.v1.1.2.json",         "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"},
-      {"role": "session_playbook",    "path": "memory/stem-ai-playbook.v1.1.2.md",       "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"},
-      {"role": "lessons_history",     "path": "memory/stem-ai-lessons.v1.1.2.md",        "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"}
+      {"role": "session_playbook",    "path": "memory/stem-ai-playbook.v1.1.2.md",       "sha256": "99E59E5FC6FC1DA41394982DFFC84278484E992AD56E4FD5DF89090FA79B2C43", "required": true,  "produced_by_stage": "S0"},
+      {"role": "lessons_history",     "path": "memory/stem-ai-lessons.v1.1.2.md",        "sha256": "49171418DB038D47551D6355F1DA6D50FF6E62E71EE6D05E8148793439FDDC5C", "required": true,  "produced_by_stage": "S0"}
     ]
   },
   "deviation_log": [],
@@ -503,8 +503,8 @@
     "objective": "Machine-checkable governance layer for STEM-AI protocol evolution. Encodes 18 IMMUTABLE rubric rules as design_invariants, 10 failure modes as lessons, and empirical validation batch as provenance.",
     "operating_mode": "protocol_evolution",
     "current_state": "active",
-    "update_count": 0,
-    "last_updated": "2026-03-27",
+    "update_count": 1,
+    "last_updated": "2026-04-27",
     "session_count": 0,
     "domain_status": {
       "identity": "stable",

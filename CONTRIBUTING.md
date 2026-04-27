@@ -44,7 +44,7 @@ Scripts in `scripts/` can be improved for portability, accuracy, or coverage. Al
 
 ### 5. Rubric Modifications (Requires Discussion)
 
-Changes to the core rubric in `spec/STEM-AI_v1.1.1_CORE.md` follow strict rules:
+Changes to the core rubric in `spec/STEM-AI_v1.1.2_CORE.md` follow strict rules:
 
 **VARIABLE items** (LLM discretion, evidence narration, output language):
 - Can be modified via PR with rationale

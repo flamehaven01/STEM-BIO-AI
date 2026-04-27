@@ -63,7 +63,7 @@ The skill will:
 ```
 stem-ai/
   SKILL.md                    <-- You are here (entry point)
-  memory/                     <-- MICA v0.1.9 memory layer (load first)
+  memory/                     <-- MICA v0.2.0 memory layer (load first)
     mica.yaml                 <-- composition contract
     stem-ai.mica.v1.1.2.json  <-- archive (18 IMMUTABLE rules, lessons, provenance)
     stem-ai-playbook.v1.1.2.md <-- session protocol and rubric drift guard

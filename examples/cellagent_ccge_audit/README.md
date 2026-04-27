@@ -1,6 +1,6 @@
 # CellAgent CCGE Audit Example
 
-**Status:** Placeholder -- CCGE dogfood audit data available for v1.1.1 reformatting.
+**Status:** Placeholder -- CCGE dogfood audit data available for v1.1.2 reformatting.
 
 This directory will contain:
 - `baseline_audit_v1.0.4.md` -- pre-CCGE baseline (T0, 38/100)

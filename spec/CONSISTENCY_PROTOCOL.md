@@ -16,12 +16,12 @@ Document the reproducibility characteristics of STEM-AI scoring across different
 6. **Manual override rule:** conditions under which human auditor may override LLM score
 7. **Adjudication protocol:** how disagreements between LLM runs are resolved
 
-## Current State (v1.1.1)
+## Current State (v1.1.2)
 
 - Cross-LLM target: +/-10 points on same input
 - Discrimination examples (H1-H6, T2, B3, CA, G1-G5) reduce boundary variance
 - Self-Validation Gate (19 checks) prevents structural errors
-- No empirical consistency data collected yet
+- No committed multi-run reproducibility dataset yet
 
 ## Data Collection Template
 

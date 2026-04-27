@@ -4,7 +4,7 @@
 **Audit Date:** [DATE]
 **Auditor:** [AUDITOR_NAME / AI_MODEL]
 **Auditor Affiliation:** [self / independent / cross-team]
-**Spec Version:** STEM-AI v1.1.1
+**Spec Version:** STEM-AI v1.1.2
 
 ---
 

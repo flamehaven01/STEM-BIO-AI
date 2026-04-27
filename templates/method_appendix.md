@@ -1,11 +1,11 @@
 # STEM-AI Method Appendix
 
-**Spec Version:** STEM-AI v1.1.1
+**Spec Version:** STEM-AI v1.1.2
 **Execution Mode:** [LOCAL_ANALYSIS / FULL / SEARCH_ONLY / MANUAL]
 
 ## Rubric Summary
 
-See `spec/STEM-AI_v1.1.1_CORE.md` for the full canonical rubric.
+See `spec/STEM-AI_v1.1.2_CORE.md` for the full canonical rubric.
 
 ## Audit-Layer Relationship
 

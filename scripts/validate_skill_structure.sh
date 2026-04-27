@@ -47,6 +47,18 @@ check_dir() {
   fi
 }
 
+check_contains() {
+  local path="$1"
+  local pattern="$2"
+  local label="$3"
+  if grep -Fq "$pattern" "$SKILL_ROOT/$path" 2>/dev/null; then
+    echo "  [OK] $label"
+  else
+    echo "  [FAIL] $label"
+    ERRORS=$((ERRORS + 1))
+  fi
+}
+
 echo "=== STEM-AI Skill Package Validation ==="
 echo "Root: $SKILL_ROOT"
 echo ""
@@ -75,6 +87,37 @@ if [ -n "$CORE" ]; then
 else
   echo "  [FAIL] No STEM-AI_v*_CORE.md found in spec/"
   ERRORS=$((ERRORS + 1))
+fi
+
+CORE_BASENAME=$(basename "$CORE" 2>/dev/null || true)
+CORE_VERSION=$(echo "$CORE_BASENAME" | sed -n 's/^STEM-AI_v\([0-9.]*\)_CORE\.md$/\1/p')
+
+echo ""
+echo "--- Version Drift Checks ---"
+if [ -n "$CORE_VERSION" ]; then
+  echo "  [INFO] Active core version: $CORE_VERSION"
+  check_contains "templates/audit_report.md" "v$CORE_VERSION" "audit report template references v$CORE_VERSION"
+  check_contains "templates/claim_matrix.md" "v$CORE_VERSION" "claim matrix template references v$CORE_VERSION"
+  check_contains "templates/method_appendix.md" "v$CORE_VERSION" "method appendix references v$CORE_VERSION"
+  check_contains "templates/errata_log.md" "v$CORE_VERSION" "errata log references v$CORE_VERSION"
+  check_contains "CONTRIBUTING.md" "spec/STEM-AI_v${CORE_VERSION}_CORE.md" "contributing guide references current core spec"
+else
+  echo "  [FAIL] Could not derive core version from spec filename"
+  ERRORS=$((ERRORS + 1))
+fi
+
+MICA_YAML_SPEC=$(sed -n 's/^mica_spec: "\([0-9.]*\)"$/\1/p' "$SKILL_ROOT/memory/mica.yaml" 2>/dev/null | head -1)
+MICA_JSON_SPEC=$(sed -n 's/^  "mica_spec": "\([0-9.]*\)",$/\1/p' "$SKILL_ROOT/memory/stem-ai.mica.v1.1.2.json" 2>/dev/null | head -1)
+if [ -n "$MICA_YAML_SPEC" ] && [ -n "$MICA_JSON_SPEC" ]; then
+  if [ "$MICA_YAML_SPEC" = "$MICA_JSON_SPEC" ]; then
+    echo "  [OK] MICA spec aligned ($MICA_YAML_SPEC)"
+  else
+    echo "  [FAIL] MICA spec mismatch: yaml=$MICA_YAML_SPEC json=$MICA_JSON_SPEC"
+    ERRORS=$((ERRORS + 1))
+  fi
+else
+  echo "  [WARN] Could not read MICA spec version from yaml/json"
+  WARNINGS=$((WARNINGS + 1))
 fi
 
 echo ""

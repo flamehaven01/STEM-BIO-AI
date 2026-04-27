@@ -1,7 +1,7 @@
 # Errata and Revision Log
 
 **Parent Document:** [REPORT_ID]
-**Spec Version:** STEM-AI v1.1.1
+**Spec Version:** STEM-AI v1.1.2
 
 ---
 

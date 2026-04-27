@@ -14,7 +14,7 @@
 ---
 
 ## Purpose
-This report provides a time-bounded technical audit of [NUMBER] publicly available [DOMAIN] repositories in order to assess whether their observable repository surface supports institutional trust establishment, supervised pilot consideration, or operational confidence under the STEM-AI v1.1.1 methodology.
+This report provides a time-bounded technical audit of [NUMBER] publicly available [DOMAIN] repositories in order to assess whether their observable repository surface supports institutional trust establishment, supervised pilot consideration, or operational confidence under the STEM-AI v1.1.2 methodology.
 
 ---
 
@@ -43,7 +43,7 @@ The review used a [dual-path / text-only] audit structure:
 
 **CODE_PATH (LOCAL_ANALYSIS only):** Targeted inspection of code paths, import analysis, dependency verification, C1-C4 code integrity scanning.
 
-Technical audit established the observable executable surface first. Findings were then mapped through the STEM-AI v1.1.1 rubric and assigned trust-tier outcomes.
+Technical audit established the observable executable surface first. Findings were then mapped through the STEM-AI v1.1.2 rubric and assigned trust-tier outcomes.
 
 ---
 

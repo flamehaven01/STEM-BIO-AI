@@ -32,7 +32,7 @@
   "scs_pair": "FLAMEHAVEN_SCS_2_1_1",
   "language": "English",
   "change_from_1_1_1": [
-    "PATCH-46: MICA v0.1.9 memory layer added -- memory/ directory with composition contract, archive (18 IMMUTABLE rules as design_invariants), session playbook, and lessons history",
+    "PATCH-46: MICA memory layer added -- memory/ directory with composition contract, archive (18 IMMUTABLE rules as design_invariants), session playbook, and lessons history; active package aligned to MICA v0.2.0",
     "PATCH-47: MICA initialization step added to Section 8.2 Execution Instruction (Step 0-MICA)"
   ],
   "release": "2026-03"
@@ -2189,7 +2189,7 @@ Patch origin:
             Stage 3G activation strengthened + terminology abstracted,
             T2 discrimination examples, auditor affiliation field,
             inline arithmetic mandatory, CHECK 17-19 -- 2026-03-22)
-  1.1.2 -- MICA v0.1.9 memory layer added
+  1.1.2 -- MICA memory layer added (active package aligned to v0.2.0)
            (memory/ directory, 18 IMMUTABLE rules as design_invariants,
             10 failure mode lessons, session playbook, MICA init step -- 2026-03-27)
 

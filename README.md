@@ -34,28 +34,28 @@ It is NOT a code linter. It is a meta-inspection framework that cross-verifies r
 ### Universal path (Codex CLI, Gemini CLI, Kiro, Antigravity)
 
 ```bash
-git clone https://github.com/user-yun/stem-ai.git ~/.agents/skills/stem-ai
+git clone https://github.com/flamehaven01/STEM-AI-BIO.git ~/.agents/skills/stem-ai
 ```
 
 ### Claude Code
 
 ```bash
-git clone https://github.com/user-yun/stem-ai.git ~/.claude/skills/stem-ai
+git clone https://github.com/flamehaven01/STEM-AI-BIO.git ~/.claude/skills/stem-ai
 ```
 
 ### Project-level (any platform)
 
 ```bash
 cd your-project
-git clone https://github.com/user-yun/stem-ai.git .agents/skills/stem-ai
+git clone https://github.com/flamehaven01/STEM-AI-BIO.git .agents/skills/stem-ai
 # or
-git clone https://github.com/user-yun/stem-ai.git .claude/skills/stem-ai
+git clone https://github.com/flamehaven01/STEM-AI-BIO.git .claude/skills/stem-ai
 ```
 
 ### Symlink for multi-platform
 
 ```bash
-git clone https://github.com/user-yun/stem-ai.git ~/stem-ai-skill
+git clone https://github.com/flamehaven01/STEM-AI-BIO.git ~/stem-ai-skill
 ln -s ~/stem-ai-skill ~/.claude/skills/stem-ai
 ln -s ~/stem-ai-skill ~/.agents/skills/stem-ai
 ```
@@ -110,7 +110,7 @@ stem-ai/
       validate-skill.yml            # CI: validate SKILL.md format
       validate-templates.yml        # CI: validate template completeness
       validate-scripts.yml          # CI: lint and test shell scripts
-  memory/                           # MICA v0.1.9 memory layer
+  memory/                           # MICA v0.2.0 memory layer
     mica.yaml                       # Composition contract (mode: protocol_evolution)
     stem-ai.mica.v1.1.2.json        # Archive: 18 IMMUTABLE rules, lessons, provenance
     stem-ai-playbook.v1.1.2.md      # Session protocol and rubric drift guard
@@ -172,9 +172,19 @@ stem-ai/
 | 1.0.6 | LOCAL_ANALYSIS, dual-path rubric, CA 3-tier, C1-C4 |
 | **1.1.0** | **Universal skill package, multi-file architecture, institutional templates** |
 | **1.1.1** | **Canonical version alignment, explicit audit-layer separation, package consistency fixes** |
-| **1.1.2** | **MICA v0.1.9 memory layer: 18 IMMUTABLE rules as machine-checkable governance archive** |
+| **1.1.2** | **MICA v0.2.0 memory layer: 18 IMMUTABLE rules as machine-checkable governance archive** |
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
+
+## Release Tags
+
+- Current stable tag: `v1.1.2`
+- Tag format: `vMAJOR.MINOR.PATCH`
+- Stable install example:
+
+```bash
+git clone --branch v1.1.2 --depth 1 https://github.com/flamehaven01/STEM-AI-BIO.git ~/.agents/skills/stem-ai
+```
 
 ## Empirical Validation
 
@@ -226,7 +236,7 @@ Apache 2.0. See [LICENSE](LICENSE).
   title = {STEM-AI: Sovereign Trust Evaluator for Medical AI Artifacts},
   version = {1.1.2},
   year = {2026},
-  url = {https://github.com/user-yun/stem-ai}
+  url = {https://github.com/flamehaven01/STEM-AI-BIO}
 }
 ```
 

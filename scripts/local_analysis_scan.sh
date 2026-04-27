@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # STEM-AI Local Analysis Scan -- C1-C4 Code Integrity
 # Usage: bash local_analysis_scan.sh /path/to/repo
-# Output: JSON-formatted findings to stdout
+# Output: human-readable structured findings to stdout
 set -euo pipefail
 
 REPO_PATH="${1:-.}"
