@@ -1,0 +1,153 @@
+{
+  "artifact_id": "STEM-AI-BIO-PUBLIC-EVIDENCE-v1.1.2",
+  "artifact_version": "1.0.0",
+  "generated_for": "public bio/medical AI governance review",
+  "generated_at_utc": "2026-04-27T00:00:00Z",
+  "license": "Apache-2.0",
+  "ip_safety_statement": {
+    "contains_patient_data": false,
+    "contains_private_repository_data": false,
+    "contains_proprietary_target_code": false,
+    "contains_target_repository_names": false,
+    "contains_model_weights_or_datasets": false,
+    "summary": "This file contains only aggregate audit counts, STEM-AI public release metadata, and synthetic verification cases. It does not disclose target repository names, private code, patient records, proprietary datasets, credentials, model weights, or unpublished implementation details from audited projects."
+  },
+  "stem_ai_release": {
+    "name": "STEM-AI: Sovereign Trust Evaluator for Medical AI Artifacts",
+    "version": "1.1.2",
+    "repository": "https://github.com/flamehaven01/STEM-AI-BIO",
+    "tag": "v1.1.2",
+    "mica_spec": "0.2.0",
+    "canonical_spec_path": "spec/STEM-AI_v1.1.2_CORE.md",
+    "memory_archive_path": "memory/stem-ai.mica.v1.1.2.json"
+  },
+  "public_audit_batch": {
+    "batch_id": "MARCH-2026-10-REPO-BIO-AI-AUDIT",
+    "repository_count": 10,
+    "repository_identity_policy": "redacted_aggregate_only",
+    "tier_distribution": {
+      "T0": 8,
+      "T1": 1,
+      "T2": 1,
+      "T3": 0,
+      "T4": 0
+    },
+    "published_context": [
+      "https://dev.to/flamehaven01/how-auditing-10-bio-ai-repositories-shaped-stem-ai-41b5",
+      "https://flamehaven.space/writing/bio-ai-repository-audit-2026-a-technical-report-on-10-open-source-systems/",
+      "https://flamehaven.space/writing/after-auditing-10-bio-ai-repositories-i-think-were-scaling-the-wrong-layer/",
+      "https://flamehaven.space/writing/how-auditing-10-bio-ai-repositories-shaped-stem-ai/"
+    ]
+  },
+  "contract_invariants": {
+    "active_invariant_count": 18,
+    "required_stage_order": [
+      "Stage 1: README Intent",
+      "Stage 2: Cross-Platform",
+      "Stage 3: Code/Bio"
+    ],
+    "base_weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "stage_2_na_weights": {
+      "stage_1": 0.5,
+      "stage_3": 0.5
+    },
+    "tier_boundaries": {
+      "T0": [0, 39],
+      "T1": [40, 54],
+      "T2": [55, 69],
+      "T3": [70, 84],
+      "T4": [85, 100]
+    },
+    "risk_penalties": {
+      "RP1_ethics_flag": -15,
+      "RP2_clinical_overclaim": -10,
+      "RP3_hardcoded_credentials_local_analysis_only": -10
+    },
+    "hard_floor_rule": {
+      "id": "T0_HARD_FLOOR",
+      "condition": "CA-DIRECT plus zero code presence",
+      "final_score": 0,
+      "tier": "T0"
+    },
+    "stage3g_policy": {
+      "advisory_only": true,
+      "may_raise_formal_tier": false,
+      "g3_zero_caps_overlay_verdict_at": "WEAK"
+    }
+  },
+  "pct_gate": {
+    "critical_halt_checks": [
+      "PCT-001: mica.yaml present",
+      "PCT-002: mica.yaml required fields valid",
+      "PCT-003: archive, playbook, and lessons paths exist"
+    ],
+    "noncritical_checks": [
+      "PCT-004: mode coherence",
+      "PCT-005: archive MICA spec present",
+      "PCT-006: MICA spec alignment",
+      "PCT-007: package completeness umbrella check"
+    ]
+  },
+  "synthetic_score_cases": [
+    {
+      "case_id": "SYN-001",
+      "description": "All stages available, no risk penalty",
+      "stage_1": 70,
+      "stage_2": 60,
+      "stage_3": 50,
+      "stage_2_available": true,
+      "risk_penalty": 0,
+      "t0_hard_floor": false,
+      "expected_final_score": 60,
+      "expected_tier": "T2"
+    },
+    {
+      "case_id": "SYN-002",
+      "description": "Stage 2 absent, documented 0.50/0.50 redistribution",
+      "stage_1": 70,
+      "stage_2": null,
+      "stage_3": 40,
+      "stage_2_available": false,
+      "risk_penalty": 0,
+      "t0_hard_floor": false,
+      "expected_final_score": 55,
+      "expected_tier": "T2"
+    },
+    {
+      "case_id": "SYN-003",
+      "description": "Risk penalty applied after weighted average",
+      "stage_1": 80,
+      "stage_2": 60,
+      "stage_3": 70,
+      "stage_2_available": true,
+      "risk_penalty": 10,
+      "t0_hard_floor": false,
+      "expected_final_score": 62,
+      "expected_tier": "T2"
+    },
+    {
+      "case_id": "SYN-004",
+      "description": "T0 hard floor overrides all score computation",
+      "stage_1": 90,
+      "stage_2": 80,
+      "stage_3": 85,
+      "stage_2_available": true,
+      "risk_penalty": 0,
+      "t0_hard_floor": true,
+      "expected_final_score": 0,
+      "expected_tier": "T0"
+    }
+  ],
+  "machine_check_claims": [
+    "Tier counts sum to the public batch repository_count.",
+    "Base weights sum to 1.0.",
+    "Stage 2 N/A redistribution weights sum to 1.0.",
+    "Tier boundaries cover 0 through 100 without overlap.",
+    "Synthetic final scores reproduce expected tier outcomes.",
+    "No redacted target repository names or private code snippets are required to validate the contract math."
+  ]
+}

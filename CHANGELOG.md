@@ -13,14 +13,17 @@ Rubric refinements and additions use patch versions (1.0.x).
 ## [1.1.2] - 2026-03-27
 
 ### Added
-- PATCH-46: MICA v0.1.9 memory layer — `memory/` directory with composition contract,
+- PATCH-46: MICA v0.2.0 memory layer — `memory/` directory with composition contract,
   archive (18 IMMUTABLE rules as design_invariants), session playbook, and lessons document
   (10 failure modes from L-001 through L-010)
-- `memory/mica.yaml` — MICA v0.1.9 composition contract (mode: protocol_evolution)
+- `memory/mica.yaml` — MICA v0.2.0 composition contract (mode: protocol_evolution)
 - `memory/stem-ai.mica.v1.1.2.json` — machine-checkable governance archive
 - `memory/stem-ai-playbook.v1.1.2.md` — session protocol and rubric drift guard
 - `memory/stem-ai-lessons.v1.1.2.md` — failure mode history (10 lessons from 33 patches)
 - PATCH-47: MICA initialization step added to SKILL.md loading order (Step 0) and CORE spec Section 8.2 Execution Instruction
+- DEV.to draft for STEM-AI v1.1.2 memory contract explanation
+- IP-neutral public evidence JSON for bio/medical AI reviewers
+- Dependency-free Python validator for the public evidence artifact
 
 ### Changed
 - Canonical spec filename advanced to `spec/STEM-AI_v1.1.2_CORE.md`

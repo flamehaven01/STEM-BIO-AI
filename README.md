@@ -196,6 +196,20 @@ STEM-AI has been applied to 10 leading open-source bio-AI repositories (March 20
 
 Results published in "Navigating the Illusion of Competence in Biological AI Agents" (v3.0, March 2026).
 
+## Public Evidence Bundle
+
+STEM-AI v1.1.2 includes an IP-neutral public evidence bundle for bio/medical AI reviewers:
+
+- `examples/public_evidence/stem_ai_v1_1_2_public_evidence.json` -- aggregate-only evidence, contract invariants, and synthetic score cases
+- `examples/public_evidence/validate_public_evidence.py` -- dependency-free validator for the public evidence artifact
+- `docs/devto/stem-ai-v1-1-2-memory-contract.md` -- DEV.to draft explaining the MICA memory contract layer
+
+Run the public evidence validator:
+
+```bash
+python examples/public_evidence/validate_public_evidence.py
+```
+
 ## Platform Compatibility
 
 | Platform | Status | Skill Path |
