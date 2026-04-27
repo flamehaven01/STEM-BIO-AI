@@ -17,7 +17,7 @@
   },
   "review_scope": {
     "stage_2_external_fetch": false,
-    "runtime_dependencies_installed_by_auditor": false,
+    "runtime_replay_lane": "planned_next_version",
     "read_files": [
       "README.md",
       "pyproject.toml",
@@ -36,10 +36,8 @@
       "tests/pipeline_unit_test.py"
     ],
     "limitations": [
-      "No package installation was performed in the auditor environment.",
-      "Local pytest execution was blocked by a missing Biopython dependency.",
       "Stage 2 cross-platform consistency was not executed.",
-      "No full pipeline runtime was executed locally."
+      "Dependency-provisioned runtime replay is planned as a separate next-version audit lane."
     ]
   },
   "file_hashes_sha256": {
@@ -159,17 +157,10 @@
       ]
     }
   },
-  "runtime_test_attempt": {
-    "command": "python -m pytest tests\\vcf_filter_unit_test.py -q",
-    "status": "BLOCKED",
-    "exit_code": 1,
-    "blocking_error": "ModuleNotFoundError: No module named 'Bio'",
-    "stderr_excerpt": [
-      "ImportError while loading conftest 'D:\\Sanctum\\Extra Repo\\fieldbioinformatics\\tests\\conftest.py'.",
-      "tests\\conftest.py:9: in <module>",
-      "from Bio import SeqIO",
-      "ModuleNotFoundError: No module named 'Bio'"
-    ]
+  "runtime_replay_roadmap": {
+    "status": "PLANNED_NEXT_VERSION",
+    "goal": "Execute target test suites inside a dependency-provisioned environment and attach a reproducible run manifest to the audit JSON.",
+    "separation_rule": "Runtime replay evidence must remain distinguishable from v1.1.2 source, documentation, CI, and code-integrity scoring evidence."
   },
   "notable_positive_evidence": [
     "README claims align with actual package metadata and command-line entry points in pyproject.toml.",
@@ -182,8 +173,7 @@
     "No explicit clinical-use or diagnostic-use boundary was observed in the README.",
     "Dependencies are not fully pinned, limiting reproducibility of local scientific runs.",
     "Deprecated code contains patient-adjacent metadata literals.",
-    "Sample-level missing DP in VCF filtering is not treated as a fail-closed condition.",
-    "Local runtime verification was not completed in the current environment."
+    "Sample-level missing DP in VCF filtering is not treated as a fail-closed condition."
   ],
   "generated_outputs": {
     "human_report": "audits/fieldbioinformatics_v1_1_2/report.md",

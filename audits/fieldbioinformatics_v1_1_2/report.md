@@ -80,23 +80,12 @@ The main Stage 3 limitations are reproducibility and governance. `environment.ym
 
 C1-C4 are advisory in v1.1.2 except C1 FAIL, which would trigger RP3. C1 did not fail, so no RP3 penalty was applied.
 
-## 5. Runtime Verification Attempt
+## 5. Reproducibility Roadmap
 
-Command attempted:
+This v1.1.2 output is a LOCAL_ANALYSIS audit artifact: it records source-code inspection, documentation evidence, CI/test definitions, scoring decisions, and C1-C4 code-integrity findings.
 
-```powershell
-python -m pytest tests\vcf_filter_unit_test.py -q
-```
-
-Result: blocked before test execution because the current local environment lacks Biopython:
-
-```text
-ModuleNotFoundError: No module named 'Bio'
-```
-
-This audit therefore does not claim local runtime test success. It records CI/test definitions and static code evidence, plus the failed local execution precondition.
+The next version should add a dependency-provisioned runtime replay lane that can execute target test suites inside a controlled environment and attach the resulting run manifest to the audit JSON. That lane is intentionally separate from the v1.1.2 trust-score calculation so that source/document/CI evidence and runtime replay evidence remain distinguishable.
 
 ## 6. Final Judgment
 
-`fieldbioinformatics` is not slop: it is a real, domain-specific viral sequencing pipeline with CI, pipeline tests, documented validation tests, clear user-facing limitations, and code paths matching its README claims. The repository earns a T2 Caution result because the underlying engineering surface is credible, but it remains unsuitable for autonomous clinical use. The main remediation targets are explicit clinical-use boundaries, reproducible dependency locking, removal or quarantine of deprecated patient-adjacent metadata examples, and fail-closed handling for missing depth fields in variant filtering.
-
+The audited repository is a real, domain-specific viral sequencing pipeline with CI, pipeline tests, documented validation tests, clear user-facing limitations, and code paths matching its README claims. It earns a T2 Caution result because the underlying engineering surface is credible, but it remains unsuitable for autonomous clinical use. The main remediation targets are explicit clinical-use boundaries, reproducible dependency locking, removal or quarantine of deprecated patient-adjacent metadata examples, and fail-closed handling for missing depth fields in variant filtering.
