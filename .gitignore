@@ -32,3 +32,8 @@ __pycache__/
 .env.local
 *.key
 *.pem
+
+# Internal documents (not for public repo)
+docs/STRATEGY_INTERNAL.md
+docs/*_INTERNAL.md
+docs/private/
