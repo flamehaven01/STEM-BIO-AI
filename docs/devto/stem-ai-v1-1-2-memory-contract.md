@@ -467,15 +467,7 @@ The AI auditor itself has to load a memory contract before it scores.
 
 That is what MICA is for.
 
-The final answer remains bounded:
-
-```text
-T2 Caution
-Research reference and supervised non-clinical technical review only.
-No autonomous clinical decision support.
-```
-
-That is the kind of result I want from an AI auditor.
+The final answer is T2 Caution: research reference and supervised non-clinical technical review only. No autonomous clinical decision support.
 
 Not hype.
 
