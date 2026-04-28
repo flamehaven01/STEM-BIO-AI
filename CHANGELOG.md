@@ -24,6 +24,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 - DEV.to draft for STEM-AI v1.1.2 memory contract explanation
 - Official v1.1.2 LOCAL_ANALYSIS audit artifact shape: `report.md` plus `experiment_results.json`
 - Real public-repository audit output under `audits/fieldbioinformatics_v1_1_2/`
+- Stage 2R: Repo-Local Consistency lane for LOCAL_ANALYSIS audits when external Stage 2 evidence is not collected
 
 ### Changed
 - Canonical spec filename advanced to `spec/STEM-AI_v1.1.2_CORE.md`

@@ -58,7 +58,7 @@ Examples:
 - Stage weights are fixed.
 - Tier boundaries are fixed.
 - `T0_HARD_FLOOR` cannot be bypassed.
-- Stage 2 `N/A` has deterministic redistribution.
+- Stage 2 may use external evidence or Stage 2R repo-local consistency in LOCAL_ANALYSIS mode.
 - Governance overlay cannot raise the formal base tier.
 - C1-C4 code-integrity checks only run in LOCAL_ANALYSIS mode.
 - Mandatory clinical-use disclaimers cannot be omitted.
@@ -95,7 +95,7 @@ The auditor then performs a pre-execution contract test:
 - confirm the memory archive exists
 - confirm the invariant count is 18
 - confirm the fixed tier boundaries are present
-- confirm the Stage 2 `N/A` redistribution rule is present
+- confirm the Stage 2 / Stage 2R lane rule is present
 - confirm Stage 3G cannot raise the formal tier
 - confirm C1-C4 mode gating is active
 
@@ -123,7 +123,7 @@ MICA pre-check
 Stage 1: README intent and claim surface
     |
     v
-Stage 2: cross-platform consistency
+Stage 2: cross-platform consistency or Stage 2R repo-local consistency
     |
     v
 Stage 3: code, tests, provenance, governance
@@ -219,33 +219,40 @@ The machine-readable result records the score like this:
 {
   "stage_1_readme_intent": 65,
   "stage_2_cross_platform": null,
-  "stage_2_status": "NOT_COLLECTED_LOCAL_ANALYSIS_ONLY",
-  "stage_2_policy": "N/A is not scored as zero; fixed v1.1.2 redistribution applies.",
+  "stage_2_repo_local_consistency": 75,
+  "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+  "stage_2_policy": "External Stage 2 was not collected; LOCAL_ANALYSIS used Stage 2R in the fixed 0.20 Stage 2 slot.",
   "stage_3_code_bio": 55,
-  "stage_2_na_redistribution": {
-    "stage_1_weight": 0.5,
-    "stage_3_weight": 0.5
+  "weights": {
+    "stage_1": 0.4,
+    "stage_2": 0.2,
+    "stage_3": 0.4
   },
   "risk_penalty": 0,
-  "final_score": 60,
+  "final_score": 63,
   "formal_tier": "T2 Caution"
 }
 ```
 
-Stage 2 is explicitly represented as `null` for this local-only audit.
+External Stage 2 is explicitly represented as `null` for this local-only audit.
 
 That does not mean cross-platform consistency is unimportant.
 
-It means this evidence slice was deliberately scoped to LOCAL_ANALYSIS: repository files, code paths, documentation, dependency manifests, CI definitions, and code-integrity checks. In v1.1.2, when Stage 2 is not collected, it is not treated as zero. The contract redistributes the weight to Stage 1 and Stage 3.
+It means this evidence slice was deliberately scoped to LOCAL_ANALYSIS. Instead of pretending to have social/web evidence, v1.1.2 uses Stage 2R: Repo-Local Consistency.
 
-That is not left to the LLM's mood.
+Stage 2R asks whether the repository's own surfaces agree with each other:
 
-The contract defines the redistribution:
+- README vs package metadata and CLI entry points
+- README vs docs, tutorials, and troubleshooting
+- README test claims vs CI workflow and test definitions
+- clinical-adjacent outputs vs local intended-use boundaries
+
+The contract defines the fixed-weight calculation:
 
 ```text
-Final = (Stage 1 x 0.50) + (Stage 3 x 0.50) - Risk Penalty
-      = (65 x 0.50) + (55 x 0.50) - 0
-      = 60
+Final = (Stage 1 x 0.40) + (Stage 2R x 0.20) + (Stage 3 x 0.40) - Risk Penalty
+      = (65 x 0.40) + (75 x 0.20) + (55 x 0.40) - 0
+      = 63
 ```
 
 The final tier is therefore:
@@ -299,10 +306,11 @@ The bounded result is T2 Caution.
 The result can be visualized as a compact scorecard:
 
 ```text
-Stage 1 README Intent      65/100  █████████████░░░░░░░
-Stage 3 Code/Bio Evidence  55/100  ███████████░░░░░░░░░
-Risk Penalty                0/100  ░░░░░░░░░░░░░░░░░░░░
-Final Score                60/100  ████████████░░░░░░░░
+Stage 1 README Intent       65/100  █████████████░░░░░░░
+Stage 2R Local Consistency  75/100  ███████████████░░░░░
+Stage 3 Code/Bio Evidence   55/100  ███████████░░░░░░░░░
+Risk Penalty                 0/100  ░░░░░░░░░░░░░░░░░░░░
+Final Score                 63/100  █████████████░░░░░░░
 
 Formal Tier: T2 Caution
 Use Scope: supervised non-clinical technical review only
@@ -389,24 +397,23 @@ data = json.loads(RESULT.read_text(encoding="utf-8"))
 score = data["score"]
 
 stage_1 = score["stage_1_readme_intent"]
-stage_2 = score["stage_2_cross_platform"]
+stage_2 = score.get("stage_2_repo_local_consistency")
 stage_3 = score["stage_3_code_bio"]
 risk_penalty = score["risk_penalty"]
 
-if stage_2 is None:
-    weights = score["stage_2_na_redistribution"]
-    computed = round(
-        (stage_1 * weights["stage_1_weight"])
-        + (stage_3 * weights["stage_3_weight"])
-        - risk_penalty
-    )
-else:
-    computed = round((stage_1 * 0.40) + (stage_2 * 0.20) + (stage_3 * 0.40) - risk_penalty)
+weights = score["weights"]
+computed = round(
+    (stage_1 * weights["stage_1"])
+    + (stage_2 * weights["stage_2"])
+    + (stage_3 * weights["stage_3"])
+    - risk_penalty
+)
 
 assert computed == score["final_score"]
 assert tier(computed) in score["formal_tier"]
 
 print(f"Stage 1  {stage_1:3}/100  {bar(stage_1)}")
+print(f"Stage 2R {stage_2:3}/100  {bar(stage_2)}")
 print(f"Stage 3  {stage_3:3}/100  {bar(stage_3)}")
 print(f"Final    {computed:3}/100  {bar(computed)}")
 print(f"Tier     {score['formal_tier']}")
@@ -419,8 +426,9 @@ Expected digest:
 
 ```text
 Stage 1   65/100  █████████████░░░░░░░
+Stage 2R  75/100  ███████████████░░░░░
 Stage 3   55/100  ███████████░░░░░░░░░
-Final     60/100  ████████████░░░░░░░░
+Final     63/100  █████████████░░░░░░░
 Tier      T2 Caution
 C1_hardcoded_credentials: PASS
 C2_dependency_pinning: WARN
@@ -487,7 +495,7 @@ The follow-on lane should:
 - attach a replay manifest to `experiment_results.json`
 - keep runtime evidence separate from source/document/CI evidence
 
-For the current demonstration, runtime execution status is recorded as an evidence boundary in the audit JSON. The score itself remains based on the official v1.1.2 LOCAL_ANALYSIS evidence basis.
+For the current demonstration, runtime execution status is recorded as an evidence boundary in the audit JSON. The score itself remains based on the official v1.1.2 LOCAL_ANALYSIS evidence basis: Stage 1 source/README evidence, Stage 2R repo-local consistency, Stage 3 code/bio evidence, and C1-C4 integrity checks.
 
 ---
 

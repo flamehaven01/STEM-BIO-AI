@@ -6,7 +6,7 @@
 **Commit:** `8008b4c97c2193a82308ff6f0be507b1d9306e36`  
 **Branch:** `master`  
 **Last Commit Date:** 2026-04-10  
-**Audit Date:** 2026-04-27  
+**Audit Date:** 2026-04-28
 **Report Expiry:** 2027-04-10  
 **Execution Mode:** LOCAL_ANALYSIS  
 **Auditor Affiliation:** independent  
@@ -20,17 +20,17 @@ This audit is a trustworthiness assessment of an open-source bioinformatics repo
 
 | Component | Weight | Score | Verdict |
 | --- | ---: | ---: | --- |
-| Stage 1 -- README Intent | 0.50 | 65 / 100 | Clear technical scope; missing explicit clinical-use boundary |
-| Stage 2 -- Cross-Platform | N/A | N/A | Not executed in this LOCAL_ANALYSIS evidence slice |
-| Stage 3 -- Code/Bio Responsibility | 0.50 | 55 / 100 | Strong test/documentation surface; dependency and governance gaps remain |
+| Stage 1 -- README Intent | 0.40 | 65 / 100 | Clear technical scope; missing explicit clinical-use boundary |
+| Stage 2R -- Repo-Local Consistency | 0.20 | 75 / 100 | Strong local claim/code/doc/test alignment; clinical boundary still missing |
+| Stage 3 -- Code/Bio Responsibility | 0.40 | 55 / 100 | Strong test/documentation surface; dependency and governance gaps remain |
 | Risk Penalties | -- | 0 | No C1 credential failure; no T0 hard floor |
-| **Base Final Score** | -- | **60 / 100** | **T2 Caution** |
+| **Base Final Score** | -- | **63 / 100** | **T2 Caution** |
 | Governance Overlay (Stage 3G) | advisory | N/A | No bounded governance artifact detected |
 | Code Integrity (C1-C4) | advisory | PASS/WARN/WARN/WARN | LOCAL_ANALYSIS only |
 
 **Formal Tier:** T2 Caution  
 **Use Scope:** Research reference and supervised non-clinical technical review only. No autonomous clinical decision support.  
-**Weight Redistribution:** Stage 2 was not executed, so the fixed v1.1.2 redistribution applies: Stage 1 = 0.50, Stage 3 = 0.50.
+**Stage 2 Lane:** Stage 2R Repo-Local Consistency. No Stage 2 weight redistribution was used.
 
 ## 2. Stage 1: README Intent
 
@@ -40,12 +40,23 @@ The claims are concrete and implementation-aligned rather than hype-driven. The 
 
 **Stage 1 Score:** 65 / 100
 
-## 3. Stage 2: Cross-Platform Analysis
+## 3. Stage 2R: Repo-Local Consistency
 
-Stage 2 was not executed for this run. This audit intentionally used a local repository evidence slice only: source code, documentation, dependency files, workflows, and code-integrity inspection. No social-media, package-registry, or external web consistency evidence was fetched.
+External cross-platform Stage 2 evidence was not collected for this LOCAL_ANALYSIS run. Instead, v1.1.2 Stage 2R was applied as the repo-local consistency lane. Stage 2R does not claim social or public-activity validation; it checks whether the repository's own surfaces agree with each other.
 
-**Stage 2 Score:** N/A  
-**Effect:** Stage 2 weight redistributed to Stage 1 and Stage 3 according to v1.1.2 rules.
+**Stage 2R Rubric:**
+
+| Item | Score | Evidence |
+| --- | ---: | --- |
+| Baseline | 60 | Non-nascent repository baseline |
+| R2R-1 README/package/code alignment | +15 | README viral nanopore pipeline claims align with `pyproject.toml` package description and CLI entry points (`README.md:4`, `README.md:17`, `pyproject.toml:16`, `pyproject.toml:39`). |
+| R2R-2 README/docs alignment | +10 | README pipeline scope aligns with quick-start outputs and troubleshooting surfaces (`README.md:24-27`, `docs/quick-start.md:21-22`, `docs/troubleshooting.md:13-21`). |
+| R2R-3 README/test/CI alignment | +10 | README test instructions align with CI workflow and documented pipeline/validation tests (`README.md:66-80`, `.github/workflows/unittests.yml:23-44`, `docs/tests.md:47-62`). |
+| R2R-D2 Missing clinical-use boundary | -20 | Clinical-adjacent consensus/VCF outputs exist, but no explicit non-diagnostic/non-clinical boundary was observed across the local README/docs surface. |
+
+**Calculation:** 60 + 15 + 10 + 10 - 20 = 75
+**Stage 2R Score:** 75 / 100
+**Verdict:** Mixed Local Consistency
 
 ## 4. Stage 3: Code/Bio Responsibility
 
@@ -69,6 +80,8 @@ The main Stage 3 limitations are reproducibility and governance. `environment.ym
 
 **Stage 3 Score:** 55 / 100
 
+**Weighted Calculation:** `(65 x 0.40) + (75 x 0.20) + (55 x 0.40) - 0 = 63`
+
 ## 4b. Code Integrity (C1-C4)
 
 | Check | Status | Finding |
@@ -86,7 +99,7 @@ This v1.1.2 output is a LOCAL_ANALYSIS audit artifact: it records source-code in
 
 Local runtime test execution was attempted but stopped at dependency precondition resolution because the current environment did not provide the `Bio` module required by the target test configuration. This is recorded as a runtime evidence boundary, not as completed runtime verification.
 
-The v1.1.2 score therefore remains based on source/document/CI definitions and C1-C4 LOCAL_ANALYSIS evidence. Dependency-provisioned runtime replay is an official follow-on lane for future audit execution, and must remain distinguishable from v1.1.2 scoring evidence.
+The v1.1.2 score therefore remains based on Stage 1 source/README evidence, Stage 2R repo-local consistency, Stage 3 code/bio responsibility, and C1-C4 LOCAL_ANALYSIS evidence. Dependency-provisioned runtime replay is an official follow-on lane for future audit execution, and must remain distinguishable from v1.1.2 scoring evidence.
 
 ## 6. Final Judgment
 

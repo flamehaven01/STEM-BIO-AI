@@ -151,7 +151,7 @@ stem-ai/
 | Stage | Weight | What It Evaluates |
 |-------|--------|-------------------|
 | Stage 1: README Intent | 0.40 | Hype detection, clinical disclaimers, regulatory awareness |
-| Stage 2: Cross-Platform | 0.20 | Social media consistency, community engagement quality |
+| Stage 2: Cross-Platform / Stage 2R | 0.20 | External consistency; LOCAL_ANALYSIS may use repo-local README/docs/package/workflow/test consistency |
 | Stage 3: Code Debt | 0.40 | CI/CD, domain tests, CHANGELOG, data provenance, bias, COI |
 | Stage 3G: Governance Overlay | Advisory | Bounded governance uplift (does not change base tier) |
 | C1-C4: Code Integrity | Advisory | Credentials, dependencies, dead paths, exception handling |

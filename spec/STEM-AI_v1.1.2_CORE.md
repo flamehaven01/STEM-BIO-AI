@@ -1121,17 +1121,75 @@ Verdicts: 80-100 Scientific Rigor | 60-79 Borderline | 0-59 VC Pitch
      -> Add: +10 pts
 ```
 
+#### Stage 2R: Repo-Local Consistency (LOCAL_ANALYSIS only)
+
+Stage 2R is a bounded substitute for Stage 2 when LOCAL_ANALYSIS mode has
+repository access but no external professional/social evidence is collected.
+It does not claim cross-platform validation. It asks whether the repository's
+own surfaces agree with each other.
+
+Use Stage 2R only when:
+- execution_mode = LOCAL_ANALYSIS
+- no external Stage 2 text is fetched or provided
+- repository-local files are available for CODE_PATH inspection
+
+Do not use Stage 2R in FULL mode when external Stage 2 evidence is available.
+Do not combine Stage 2 and Stage 2R. Exactly one Stage 2 lane is active:
+external Stage 2, Stage 2R, or N/A.
+
+```
+Baseline: NASCENT_REPO = true -> 50 | false -> 60
+
+[R2R-1] README claims align with package metadata, CLI entry points, and
+        implemented modules.
+        -> Add: +15 pts
+
+[R2R-2] README claims align with docs/tutorial/troubleshooting surfaces.
+        -> Add: +10 pts
+
+[R2R-3] README/test claims align with CI workflows or local test definitions.
+        -> Add: +10 pts
+
+[R2R-4] Output limitations and intended-use constraints are repeated across
+        local docs, not only implied in code.
+        -> Add: +10 pts
+
+[R2R-D1] Repository-local surfaces contradict each other on core capability,
+         target organism/domain, output type, or supported workflow.
+         -> Deduct: -20 pts
+
+[R2R-D2] Clinical-adjacent outputs exist but local surfaces omit an explicit
+         non-diagnostic/non-clinical boundary.
+         -> Deduct: -20 pts
+
+[R2R-D3] Package metadata, docs, or CI advertise stale or removed functionality.
+         -> Deduct: -10 pts
+
+[R2R-D4] Documentation prescribes a workflow unsupported by code or tests.
+         -> Deduct: -15 pts
+```
+
 #### Stage 2 Calculation
 
 ```
 IF MANUAL AND no text: Stage2_Score = N/A
+
+IF LOCAL_ANALYSIS AND no external Stage 2 text fetched/provided:
+  Stage2_Mode = "Stage 2R: Repo-Local Consistency"
+  Stage2_Raw = baseline + sum(R2R additions) - sum(R2R deductions)
+  Stage2_Score = clamp(Stage2_Raw, 0, 100)
+  Record Stage2R evidence with file paths and line references.
 
 ELSE:
   Baseline: NASCENT_REPO = true -> 50 | false -> 60
   Stage2_Raw = baseline + sum(A) - sum(F)
   Stage2_Score = clamp(Stage2_Raw, 0, 100)
 
-Verdicts: 80-100 Authentic | 60-79 Mixed | 0-59 Fame-Seeking
+Verdicts:
+  External Stage 2: 80-100 Authentic | 60-79 Mixed | 0-59 Fame-Seeking
+  Stage 2R: 80-100 Strong Local Consistency |
+            60-79 Mixed Local Consistency |
+            0-59 Local Contradiction / Insufficient Consistency
 
 NASCENT_REPO = true -> append:
   "Stage 2 baseline 50 (nascent repo). Re-audit after 6 months."
@@ -1797,7 +1855,7 @@ made on the basis of its contents.
 | Stage | Weight | Score | Verdict |
 |-------|--------|-------|---------|
 | Stage 1 -- README Intent | 0.40 (0.50 if S2=N/A) | [score] / 100 | [verdict] |
-| Stage 2 -- Cross-Platform | 0.20 (N/A) | [score] / 100 or N/A | [verdict] |
+| Stage 2 -- Cross-Platform or Stage 2R -- Repo-Local Consistency | 0.20 (N/A) | [score] / 100 or N/A | [verdict] |
 | Stage 3 -- Code Debt (pre-modifier) | 0.40 (0.50 if S2=N/A) | [rubric score] / 100 | [verdict] |
 | Stage 3 -- Trajectory Modifier | -- | [+5 / 0 / -5] | [IMPROVING / STABLE / DEGRADING / EXEMPT] |
 | Stage 3 -- Final | 0.40 (0.50 if S2=N/A) | [score] / 100 | |
@@ -1835,9 +1893,10 @@ made on the basis of its contents.
 
 ---
 
-## 3. Stage 2: Cross-Platform Analysis
+## 3. Stage 2: Cross-Platform Analysis / Stage 2R Repo-Local Consistency
 **Mode:** [LOCAL_ANALYSIS/FULL/SEARCH_ONLY/MANUAL] | **Baseline:** [50/60]
 **S2-0 Auto-fetch:** [URLs fetched from README / none / N/A]
+**Stage 2 Lane:** [External Stage 2 / Stage 2R Repo-Local Consistency / N/A]
 
 **Fame-Seeking Deductions:**
 - [F item]: [source] -> [pts]
@@ -1845,8 +1904,11 @@ made on the basis of its contents.
 **Authentic Discourse Additions:**
 - [A item]: [source] -> [pts]
 
+**Stage 2R Repo-Local Evidence (LOCAL_ANALYSIS only):**
+- [R2R item or deduction]: [file path + line evidence] -> [pts]
+
 **Calculation:** [baseline] +/- [items with pts each] = [score]
-**Verdict:** [Authentic / Mixed / Fame-Seeking / N/A]
+**Verdict:** [Authentic / Mixed / Fame-Seeking / Strong Local Consistency / Mixed Local Consistency / Local Contradiction / N/A]
 
 ---
 
@@ -2013,10 +2075,15 @@ WHEN YOU RECEIVE INPUT:
          Score only from successfully fetched content.
          Stage2_Score = baseline +/- rubric items from fetched content.
          Record "S2-0_PARTIAL_FETCH: [N of M URLs succeeded]" in _audit_metadata.
-       IF no URLs found in README: standard MANUAL fallback (Stage 2 = N/A).
+       IF no URLs found in README AND execution_mode = LOCAL_ANALYSIS:
+         Run Stage 2R Repo-Local Consistency.
+         Score README/docs/package/workflow/test consistency from local files.
+         Record "STAGE_2R_LOCAL_CONSISTENCY_ACTIVE" in _audit_metadata.
+       IF no URLs found in README AND execution_mode != LOCAL_ANALYSIS:
+         standard MANUAL fallback (Stage 2 = N/A).
    Mode + NASCENT_REPO baseline.
    F1-F4, A1-A4. Record evidence_chain.
-   Stage2_Score or N/A.
+   Stage2_Score, Stage2R_Score, or N/A.
 
 5a. DERIVED-3 COMPUTATION (PATCH-23 -- reordered)
     Compute trajectory classification (PATCH-33: use split labels

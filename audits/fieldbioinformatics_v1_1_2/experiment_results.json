@@ -1,7 +1,7 @@
 {
   "schema_version": "stem-ai-local-analysis-result-v1",
   "stem_ai_version": "1.1.2",
-  "generated_at_local": "2026-04-27",
+  "generated_at_local": "2026-04-28",
   "execution_mode": "LOCAL_ANALYSIS",
   "auditor_affiliation": "independent",
   "target": {
@@ -17,6 +17,7 @@
   },
   "review_scope": {
     "stage_2_external_fetch": false,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
     "runtime_evidence_boundary": "dependency_precondition_blocked",
     "read_files": [
       "README.md",
@@ -36,9 +37,10 @@
       "tests/pipeline_unit_test.py"
     ],
     "limitations": [
-      "Stage 2 cross-platform consistency was not executed.",
+      "External Stage 2 cross-platform consistency was not collected.",
+      "Stage 2R repo-local consistency was used as the LOCAL_ANALYSIS lane.",
       "Local runtime test execution was attempted but stopped at dependency precondition resolution.",
-      "The v1.1.2 score is based on source, documentation, CI definitions, and C1-C4 LOCAL_ANALYSIS evidence."
+      "The v1.1.2 score is based on Stage 1 source/README evidence, Stage 2R repo-local consistency, Stage 3 code/bio evidence, and C1-C4 LOCAL_ANALYSIS evidence."
     ]
   },
   "file_hashes_sha256": {
@@ -60,15 +62,17 @@
   "score": {
     "stage_1_readme_intent": 65,
     "stage_2_cross_platform": null,
-    "stage_2_status": "NOT_COLLECTED_LOCAL_ANALYSIS_ONLY",
-    "stage_2_policy": "N/A is not scored as zero; fixed v1.1.2 redistribution applies.",
+    "stage_2_repo_local_consistency": 75,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_2_policy": "External Stage 2 was not collected; LOCAL_ANALYSIS used Stage 2R in the fixed 0.20 Stage 2 slot.",
     "stage_3_code_bio": 55,
-    "stage_2_na_redistribution": {
-      "stage_1_weight": 0.5,
-      "stage_3_weight": 0.5
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
     },
     "risk_penalty": 0,
-    "final_score": 60,
+    "final_score": 63,
     "formal_tier": "T2 Caution",
     "use_scope": "Research reference and supervised non-clinical technical review only; no autonomous clinical decision support."
   },
@@ -125,6 +129,31 @@
       "max": 5,
       "evidence": "No COI/funding declaration was observed in the locally reviewed files."
     }
+  },
+  "stage_2r_rubric": {
+    "baseline": {
+      "score": 60,
+      "evidence": "Non-nascent repository baseline."
+    },
+    "R2R_1_readme_package_code_alignment": {
+      "score": 15,
+      "evidence": "README viral nanopore pipeline claims align with pyproject package description and CLI entry points."
+    },
+    "R2R_2_readme_docs_alignment": {
+      "score": 10,
+      "evidence": "README pipeline scope aligns with quick-start outputs, tiling amplicon limitation, and troubleshooting surfaces."
+    },
+    "R2R_3_readme_test_ci_alignment": {
+      "score": 10,
+      "evidence": "README test instructions align with CI workflow and documented pipeline/validation tests."
+    },
+    "R2R_D2_missing_clinical_use_boundary": {
+      "score": -20,
+      "evidence": "Clinical-adjacent consensus/VCF outputs exist, but no explicit non-diagnostic/non-clinical boundary was observed across the local README/docs surface."
+    },
+    "calculation": "60 + 15 + 10 + 10 - 20 = 75",
+    "stage_2r_score": 75,
+    "verdict": "Mixed Local Consistency"
   },
   "code_integrity": {
     "C1_hardcoded_credentials": {
