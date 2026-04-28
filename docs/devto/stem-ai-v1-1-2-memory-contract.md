@@ -219,6 +219,8 @@ The machine-readable result records the score like this:
 {
   "stage_1_readme_intent": 65,
   "stage_2_cross_platform": null,
+  "stage_2_status": "NOT_COLLECTED_LOCAL_ANALYSIS_ONLY",
+  "stage_2_policy": "N/A is not scored as zero; fixed v1.1.2 redistribution applies.",
   "stage_3_code_bio": 55,
   "stage_2_na_redistribution": {
     "stage_1_weight": 0.5,
@@ -230,11 +232,11 @@ The machine-readable result records the score like this:
 }
 ```
 
-Stage 2 was not used for this local-only audit.
+Stage 2 is explicitly represented as `null` for this local-only audit.
 
 That does not mean cross-platform consistency is unimportant.
 
-It means this evidence slice was deliberately scoped to LOCAL_ANALYSIS: repository files, code paths, documentation, dependency manifests, CI definitions, and code-integrity checks. In v1.1.2, when Stage 2 is not available, it is not treated as zero. The contract redistributes the weight to Stage 1 and Stage 3.
+It means this evidence slice was deliberately scoped to LOCAL_ANALYSIS: repository files, code paths, documentation, dependency manifests, CI definitions, and code-integrity checks. In v1.1.2, when Stage 2 is not collected, it is not treated as zero. The contract redistributes the weight to Stage 1 and Stage 3.
 
 That is not left to the LLM's mood.
 
@@ -426,24 +428,6 @@ C3_dead_or_deprecated_patient_adjacent_paths: WARN
 C4_exception_handling_clinical_adjacent_paths: WARN
 ```
 
-The final answer remains bounded:
-
-```text
-T2 Caution
-Research reference and supervised non-clinical technical review only.
-No autonomous clinical decision support.
-```
-
-That is the kind of result I want from an AI auditor.
-
-Not hype.
-
-Not rejection by default.
-
-A bounded trust judgment with evidence paths.
-
----
-
 ## Why this matters
 
 Bio/medical AI governance is full of language that sounds safe but is hard to verify:
@@ -475,17 +459,25 @@ The AI auditor itself has to load a memory contract before it scores.
 
 That is what MICA is for.
 
+The final answer remains bounded:
+
+```text
+T2 Caution
+Research reference and supervised non-clinical technical review only.
+No autonomous clinical decision support.
+```
+
+That is the kind of result I want from an AI auditor.
+
+Not hype.
+
+Not rejection by default.
+
+A bounded trust judgment with evidence paths.
+
 ---
 
 ## What comes next
-
-v1.1.2 is sufficient for a contract-bound LOCAL_ANALYSIS audit because it can inspect repository source, documentation, CI definitions, dependency manifests, and code-integrity paths without relying on README claims alone.
-
-That is the official v1.1.2 scope.
-
-It does not mean runtime replay is unimportant.
-
-It means runtime replay should be a separate evidence lane rather than a hidden assumption inside the score.
 
 The follow-on lane should:
 

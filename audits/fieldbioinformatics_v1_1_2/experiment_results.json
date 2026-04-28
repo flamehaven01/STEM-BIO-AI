@@ -60,6 +60,8 @@
   "score": {
     "stage_1_readme_intent": 65,
     "stage_2_cross_platform": null,
+    "stage_2_status": "NOT_COLLECTED_LOCAL_ANALYSIS_ONLY",
+    "stage_2_policy": "N/A is not scored as zero; fixed v1.1.2 redistribution applies.",
     "stage_3_code_bio": 55,
     "stage_2_na_redistribution": {
       "stage_1_weight": 0.5,
