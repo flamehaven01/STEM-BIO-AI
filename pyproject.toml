@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stem-ai"
+version = "1.1.2"
+description = "Contract-bound trust evaluator for bio/medical AI repositories"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Flamehaven" }
+]
+dependencies = []
+
+[project.optional-dependencies]
+demo = ["gradio>=4.0.0"]
+
+[project.scripts]
+stem = "stem_ai.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/flamehaven01/STEM-AI-BIO"
+Issues = "https://github.com/flamehaven01/STEM-AI-BIO/issues"

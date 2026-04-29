@@ -1,0 +1,99 @@
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+from .render import write_outputs
+from .scanner import audit_repository
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="stem",
+        description="STEM-AI local trust audit for bio/medical AI repositories.",
+    )
+    subparsers = parser.add_subparsers(dest="command")
+
+    audit = subparsers.add_parser("audit", help="Audit a local repository")
+    audit.add_argument("target", help="Path to a local repository")
+    audit.add_argument(
+        "--mode",
+        choices=["brief", "detailed"],
+        default="brief",
+        help="brief = 1-page output; detailed = 3 or 5-page output",
+    )
+    audit.add_argument(
+        "--pages",
+        type=int,
+        choices=[1, 3, 5],
+        default=None,
+        help="PDF page target. brief forces 1; detailed defaults to 3.",
+    )
+    audit.add_argument(
+        "--format",
+        choices=["json", "md", "pdf", "all"],
+        default="all",
+        help="Output format",
+    )
+    audit.add_argument(
+        "--out",
+        default="stem_output",
+        help="Output directory",
+    )
+    return parser
+
+
+def _normalize_argv(argv: list[str]) -> list[str]:
+    if not argv:
+        return argv
+    if argv[0] in {"audit", "-h", "--help"}:
+        return argv
+    # Time-to-value shortcut: `stem <folder>` behaves as `stem audit <folder>`.
+    return ["audit", *argv]
+
+
+def _validate_target(raw_target: str) -> Path:
+    if raw_target.startswith(("http://", "https://")):
+        raise SystemExit(
+            "GitHub URL auditing is not enabled in the local CLI yet. "
+            "Clone the repository first, then run: stem audit <local-folder>"
+        )
+    target = Path(raw_target).expanduser().resolve()
+    if not target.exists():
+        raise SystemExit(f"Target path does not exist: {target}")
+    if not target.is_dir():
+        raise SystemExit(f"Target must be a directory: {target}")
+    return target
+
+
+def run_audit(args: argparse.Namespace) -> int:
+    target = _validate_target(args.target)
+    pages = args.pages
+    if args.mode == "brief":
+        pages = 1
+    elif pages is None:
+        pages = 3
+
+    result = audit_repository(target)
+    output_dir = Path(args.out).expanduser().resolve()
+    created = write_outputs(result, output_dir, args.mode, pages, args.format)
+
+    score = result["score"]
+    print("STEM-AI local audit complete")
+    print(f"Target: {result['target']['name']}")
+    print(f"Final: {score['final_score']} / 100 ({score['formal_tier']})")
+    print(f"Output: {output_dir}")
+    for path in created:
+        print(f"- {path.name}")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = _build_parser()
+    parsed = parser.parse_args(_normalize_argv(list(sys.argv[1:] if argv is None else argv)))
+    if parsed.command == "audit":
+        return run_audit(parsed)
+    parser.print_help()
+    return 2
+

@@ -11,6 +11,7 @@ Thumbs.db
 
 # Audit outputs (generated, not committed)
 audit_output/
+stem_output/
 *.audit.md
 *.claim_matrix.md
 *.evidence_ledger.md
@@ -34,6 +35,7 @@ __pycache__/
 *.pem
 
 # Internal documents (not for public repo)
+STRATEGY_INTERNAL.md
 docs/STRATEGY_INTERNAL.md
 docs/*_INTERNAL.md
 docs/private/

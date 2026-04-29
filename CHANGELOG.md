@@ -25,6 +25,9 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Official v1.1.2 LOCAL_ANALYSIS audit artifact shape: `report.md` plus `experiment_results.json`
 - Real public-repository audit output under `audits/fieldbioinformatics_v1_1_2/`
 - Stage 2R: Repo-Local Consistency lane for LOCAL_ANALYSIS audits when external Stage 2 evidence is not collected
+- Python CLI package with `stem audit <folder>` local scan command
+- CLI output modes for 1-page brief and 3/5-page detailed Markdown, JSON, and PDF reports
+- HuggingFace/Gradio `app.py` demo entry point using the same deterministic scanner
 
 ### Changed
 - Canonical spec filename advanced to `spec/STEM-AI_v1.1.2_CORE.md`

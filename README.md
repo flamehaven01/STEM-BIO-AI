@@ -95,12 +95,64 @@ In practice:
 
 Where both are available, technical findings should be established first and then scored through STEM-AI.
 
+## Local CLI
+
+STEM-AI now includes a zero-API local CLI for fast repository pre-screening.
+
+Install from the repository root:
+
+```bash
+pip install -e .
+```
+
+Run a 1-page brief audit:
+
+```bash
+stem audit /path/to/bio-ai-repo --mode brief --format all --out stem_output
+```
+
+Run a detailed 3-5 page audit:
+
+```bash
+stem audit /path/to/bio-ai-repo --mode detailed --pages 5 --format all --out stem_output
+```
+
+Shortcut form is also supported:
+
+```bash
+stem /path/to/bio-ai-repo
+```
+
+Generated outputs:
+
+- `*_experiment_results.json` -- machine-readable score and evidence object
+- `*_report.md` -- human-readable audit report
+- `*_brief_1p.pdf` -- 1-page executive brief
+- `*_detailed_3p.pdf` or `*_detailed_5p.pdf` -- longer review packet
+
+The local CLI is deterministic and does not require an LLM API key. It uses Stage 2R Repo-Local Consistency when external cross-platform evidence is not collected.
+
+## Web Demo
+
+The HuggingFace/Gradio entry point is `app.py`.
+
+Local demo run:
+
+```bash
+pip install -e .[demo]
+python app.py
+```
+
+The demo accepts a public GitHub URL, clones it into a temporary directory, runs the same deterministic local scanner, and returns Markdown, JSON, and PDF outputs.
+
 ## Repository Structure
 
 ```
 stem-ai/
   SKILL.md                          # Entry point (universal agent skill format)
   README.md                         # This file
+  pyproject.toml                     # Python CLI package metadata
+  app.py                             # HuggingFace/Gradio demo entry point
   LICENSE                           # Apache 2.0
   CHANGELOG.md                      # Version history
   CONTRIBUTING.md                   # Contribution guidelines
@@ -138,6 +190,10 @@ stem-ai/
     ca_detection_scan.sh             # Clinical adjacency detection
     snapshot_provenance.sh           # Commit hash + checksum collection
     validate_skill_structure.sh      # Self-validation for skill package
+  stem_ai/
+    cli.py                           # `stem audit <folder>` entry point
+    scanner.py                       # Deterministic LOCAL_ANALYSIS scanner
+    render.py                        # Markdown/JSON/PDF output renderer
   audits/
     fieldbioinformatics_v1_1_2/      # Official v1.1.2 LOCAL_ANALYSIS audit output
   references/
