@@ -19,6 +19,7 @@ license: apache-2.0
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Stable](https://img.shields.io/badge/stable-v1.1.2-informational.svg)](CHANGELOG.md)
+[![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Spaces-stem--bio--ai-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 STEM BIO-AI is a deterministic trust-audit framework for open-source bio/medical AI repositories. It inspects repository artifacts, scores observable governance evidence, and emits JSON, Markdown, and PDF review packets — without an LLM key or network call.
 
@@ -131,7 +132,7 @@ A reference artifact set for `artic-network/fieldbioinformatics` is stored in `a
 
 ## Web Demo
 
-Live demo: [HuggingFace Space](https://huggingface.co/spaces/flamehaven01/STEM-BIO-AI) *(launching soon)*
+Live demo: [Hugging Face Space](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Run locally:
 
