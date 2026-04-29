@@ -1,3 +1,15 @@
+---
+title: STEM-AI Local Trust Audit
+emoji: 🧬
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # STEM-AI -- Sovereign Trust Evaluator for Medical AI Artifacts
 
 A rubric-based trust evaluation framework for open-source bio/medical AI repositories. Works as a universal AI agent skill across 16+ platforms.
