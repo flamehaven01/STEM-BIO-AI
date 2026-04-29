@@ -1,3 +1,4 @@
 gradio==4.44.0
 huggingface_hub<1.0
+pyaudioop; python_version >= "3.13"
 reportlab>=4.0
