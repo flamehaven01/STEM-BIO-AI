@@ -1,6 +1,2 @@
-gradio==4.44.1
-huggingface_hub<1.0
-fastapi==0.115.0
-starlette==0.38.6
-pyaudioop; python_version >= "3.13"
+gradio>=4.44.0
 reportlab>=4.0

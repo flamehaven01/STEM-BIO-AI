@@ -1,15 +1,3 @@
----
-title: STEM BIO-AI Local Trust Audit
-emoji: 🧬
-colorFrom: blue
-colorTo: purple
-sdk: gradio
-sdk_version: 4.44.0
-app_file: app.py
-pinned: false
-license: apache-2.0
----
-
 # STEM BIO-AI
 
 **Trust Audit Framework for Bio/Medical AI Repositories**
@@ -19,11 +7,20 @@ license: apache-2.0
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Stable](https://img.shields.io/badge/stable-v1.1.2-informational.svg)](CHANGELOG.md)
-[![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Spaces-stem--bio--ai-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
+[![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
-Bio/medical AI repositories often look credible at the README layer while leaving trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI evaluates the visible repository surface — no API key, no LLM, no GPU required.
+Bio/medical AI repositories can look credible at the README layer while leaving trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI evaluates the visible repository surface with a deterministic local scanner.
 
 > Does this repository expose enough trust evidence to be considered, contained, or rejected?
+
+---
+
+## Core Features
+
+- **No API key required** - no OpenAI, Anthropic, or GitHub API key is needed.
+- **No model-runtime dependency** - no PyTorch, TensorFlow, CUDA, or GPU requirement for the scanner.
+- **Tier meaning built in** - maps evidence to T0-T4 trust tiers, from `T0 Trust Not Established` to `T4 Strong Observable Trust`.
+- **CLI artifacts** - `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF review outputs.
 
 ---
 
@@ -41,15 +38,7 @@ stem /path/to/bio-ai-repo --level 3  # Level 3 — 5-page deep review + remediat
 
 ---
 
-## Installation
-
-### CLI with PDF support
-
-```bash
-pip install -e .[pdf]
-```
-
-### As an agent skill
+## Agent Skill Install
 
 ```bash
 # Generic

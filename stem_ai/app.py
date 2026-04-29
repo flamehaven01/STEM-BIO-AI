@@ -125,12 +125,6 @@ def run_demo(repo_url: str, level: int):
         )
 
 
-_LEVEL_CHOICES = [
-    (1, "Level 1 — Brief  (1-page executive summary)"),
-    (2, "Level 2 — Standard  (3-page: stage analysis + gap)"),
-    (3, "Level 3 — Full  (5-page: deep integrity + remediation roadmap)"),
-]
-
 _CSS = """
 .hero {
   padding: 28px;
@@ -184,7 +178,7 @@ _CSS = """
 }
 """
 
-with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
+with gr.Blocks(title="STEM BIO-AI Local Trust Audit") as demo:
     gr.HTML(
         """
         <div class="hero">
@@ -279,8 +273,4 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
 
 def launch_demo() -> None:
     """Launch the Space UI."""
-    launch_kwargs = {
-        "server_name": "0.0.0.0",
-        "server_port": 7860,
-    }
-    demo.queue().launch(**launch_kwargs)
+    demo.queue().launch(css=_CSS, server_name="0.0.0.0", server_port=7860)
