@@ -292,13 +292,8 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
         "fn": run_demo,
         "inputs": [repo_input, level_input],
         "outputs": [score_output, snapshot_output, report_output, json_preview, json_output, pdf_output],
-        "api_name": False,
         "queue": True,
     }
-    if _gradio_major() < 6:
-        click_kwargs["show_api"] = False
-    else:
-        click_kwargs["api_visibility"] = "undocumented"
 
     run_button.click(
         **click_kwargs,
@@ -307,7 +302,6 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
         run_sample,
         inputs=[level_input],
         outputs=[score_output, snapshot_output, report_output, json_preview, json_output, pdf_output],
-        api_name=False,
         queue=True,
     )
     clear_button.add(
@@ -316,15 +310,9 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
 
 
 def launch_demo() -> None:
-    """Launch the Space UI without exposing Gradio's generated API schema."""
-    # Gradio 4.44 can crash while deriving client schemas for some components.
-    # This Space is an interactive demo, not a public API, so skip API metadata.
-    demo.get_api_info = lambda: {}
-
+    """Launch the Space UI."""
     launch_kwargs = {
         "server_name": "0.0.0.0",
         "server_port": 7860,
     }
-    if _gradio_major() < 6:
-        launch_kwargs["show_api"] = False
-    demo.queue(api_open=False).launch(**launch_kwargs)
+    demo.queue().launch(**launch_kwargs)
