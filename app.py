@@ -1,5 +1,5 @@
-from stem_ai.app import demo
+from stem_ai.app import launch_demo
 
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    launch_demo()

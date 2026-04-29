@@ -23,6 +23,13 @@ except ImportError as exc:  # pragma: no cover
 _DEFAULT_REPO = "https://github.com/artic-network/fieldbioinformatics"
 
 
+def _gradio_major() -> int:
+    try:
+        return int(str(gr.__version__).split(".", 1)[0])
+    except (AttributeError, TypeError, ValueError):
+        return 4
+
+
 def _clone_github(url: str, destination: Path) -> Path:
     if not url.startswith("https://github.com/"):
         raise ValueError("Only public https://github.com/ URLs are supported in the demo.")
@@ -96,8 +103,8 @@ def run_demo(repo_url: str, level: int):
             _finding_cards(result),
             report,
             _json_preview(result),
-            str(json_file),
-            str(pdf_file),
+            f"Generated JSON artifact: `{json_file.name}`",
+            f"Generated PDF artifact: `{pdf_file.name}`",
         )
     except Exception as exc:
         return (
@@ -105,8 +112,8 @@ def run_demo(repo_url: str, level: int):
             f"### Error\n`{type(exc).__name__}: {exc}`",
             "No report generated.",
             json.dumps({"error": str(exc), "error_type": type(exc).__name__}, indent=2),
-            None,
-            None,
+            "No JSON artifact generated.",
+            "No PDF artifact generated.",
         )
 
 
@@ -180,15 +187,45 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
                 lines=24,
             )
         with gr.Tab("Downloads"):
-            gr.Markdown("Download the generated audit artifacts.")
+            gr.Markdown(
+                "Artifact files are generated during the audit. "
+                "The public demo shows the report and JSON preview in-browser; "
+                "local CLI runs produce downloadable JSON/Markdown/PDF files."
+            )
             with gr.Row():
-                json_output = gr.File(label="JSON result")
-                pdf_output = gr.File(label="PDF report")
+                json_output = gr.Textbox(label="JSON artifact", interactive=False)
+                pdf_output = gr.Textbox(label="PDF artifact", interactive=False)
+    click_kwargs = {
+        "fn": run_demo,
+        "inputs": [repo_input, level_input],
+        "outputs": [score_output, snapshot_output, report_output, json_preview, json_output, pdf_output],
+        "api_name": False,
+        "queue": True,
+    }
+    if _gradio_major() < 6:
+        click_kwargs["show_api"] = False
+    else:
+        click_kwargs["api_visibility"] = "undocumented"
+
     run_button.click(
-        run_demo,
-        inputs=[repo_input, level_input],
-        outputs=[score_output, snapshot_output, report_output, json_preview, json_output, pdf_output],
+        **click_kwargs,
     )
     clear_button.add(
         [repo_input, score_output, snapshot_output, report_output, json_preview, json_output, pdf_output]
     )
+
+
+def launch_demo() -> None:
+    """Launch the Space UI without exposing Gradio's generated API schema."""
+    # Gradio 4.44 can crash while deriving client schemas for some components.
+    # This Space is an interactive demo, not a public API, so skip API metadata.
+    demo.get_api_info = lambda: {}
+
+    launch_kwargs = {
+        "server_name": "0.0.0.0",
+        "server_port": 7860,
+        "share": True,
+    }
+    if _gradio_major() < 6:
+        launch_kwargs["show_api"] = False
+    demo.queue(api_open=False).launch(**launch_kwargs)
