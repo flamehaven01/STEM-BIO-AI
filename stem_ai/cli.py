@@ -8,6 +8,13 @@ from .render import write_outputs
 from .scanner import audit_repository
 
 
+_LEVEL_MAP = {
+    1: ("brief",    1),
+    2: ("detailed", 3),
+    3: ("detailed", 5),
+}
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
@@ -18,17 +25,16 @@ def _build_parser() -> argparse.ArgumentParser:
     audit = subparsers.add_parser("audit", help="Audit a local repository")
     audit.add_argument("target", help="Path to a local repository")
     audit.add_argument(
-        "--mode",
-        choices=["brief", "detailed"],
-        default="brief",
-        help="brief = 1-page output; detailed = 3 or 5-page output",
-    )
-    audit.add_argument(
-        "--pages",
+        "--level",
         type=int,
-        choices=[1, 3, 5],
-        default=None,
-        help="PDF page target. brief forces 1; detailed defaults to 3.",
+        choices=[1, 2, 3],
+        default=1,
+        help=(
+            "Report depth: "
+            "1=brief 1-page executive summary (default), "
+            "2=detailed 3-page with stage analysis, "
+            "3=detailed 5-page with deep integrity + remediation"
+        ),
     )
     audit.add_argument(
         "--format",
@@ -69,23 +75,20 @@ def _validate_target(raw_target: str) -> Path:
 
 def run_audit(args: argparse.Namespace) -> int:
     target = _validate_target(args.target)
-    pages = args.pages
-    if args.mode == "brief":
-        pages = 1
-    elif pages is None:
-        pages = 3
+    mode, pages = _LEVEL_MAP[args.level]
 
     result = audit_repository(target)
     output_dir = Path(args.out).expanduser().resolve()
-    created = write_outputs(result, output_dir, args.mode, pages, args.format)
+    created = write_outputs(result, output_dir, mode, pages, args.format)
 
     score = result["score"]
     print("STEM-AI local audit complete")
-    print(f"Target: {result['target']['name']}")
-    print(f"Final: {score['final_score']} / 100 ({score['formal_tier']})")
-    print(f"Output: {output_dir}")
+    print(f"Target:  {result['target']['name']}")
+    print(f"Level:   {args.level}  ({mode}, {pages}p)")
+    print(f"Score:   {score['final_score']} / 100  ({score['formal_tier']})")
+    print(f"Output:  {output_dir}")
     for path in created:
-        print(f"- {path.name}")
+        print(f"  {path.name}")
     return 0
 
 
