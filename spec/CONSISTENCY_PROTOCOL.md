@@ -1,10 +1,10 @@
-# STEM-AI Consistency Protocol
+# STEM BIO-AI Consistency Protocol
 
 **Status:** Draft -- to be populated with empirical data from live audits.
 
 ## Purpose
 
-Document the reproducibility characteristics of STEM-AI scoring across different LLMs, sessions, and auditors.
+Document the reproducibility characteristics of STEM BIO-AI scoring across different LLMs, sessions, and auditors.
 
 ## Required Evidence (target for v1.2.0)
 

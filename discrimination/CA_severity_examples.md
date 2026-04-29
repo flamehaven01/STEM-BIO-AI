@@ -1,4 +1,4 @@
-# STEM-AI Clinical Adjacency Severity Examples
+# STEM BIO-AI Clinical Adjacency Severity Examples
 
 3-tier severity classification for CLINICAL_ADJACENT repositories (PATCH-30).
 

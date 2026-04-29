@@ -1,4 +1,4 @@
-# STEM-AI Governance Overlay Discrimination Examples: G1-G5
+# STEM BIO-AI Governance Overlay Discrimination Examples: G1-G5
 
 These examples use generic governance terms. Platform-specific mappings are shown in parentheses as illustrations only.
 

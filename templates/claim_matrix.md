@@ -1,10 +1,10 @@
-# STEM-AI Claim Matrix
+# STEM BIO-AI Claim Matrix
 
 **Target:** [REPOSITORY_NAME]
 **Audit Date:** [DATE]
 **Auditor:** [AUDITOR_NAME / AI_MODEL]
 **Auditor Affiliation:** [self / independent / cross-team]
-**Spec Version:** STEM-AI v1.1.2
+**Spec Version:** STEM BIO-AI v1.1.2
 
 ---
 

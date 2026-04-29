@@ -1,4 +1,4 @@
-# STEM-AI Lessons & Failure Mode History
+# STEM BIO-AI Lessons & Failure Mode History
 # Memory Layer — protocol_evolution
 # Version: 1.1.2 | Updated: 2026-03-27
 
@@ -13,7 +13,7 @@ All resolutions are now encoded in IMMUTABLE or VARIABLE rules.
 - Consult when a rubric edge case appears to have multiple valid interpretations.
 - Each lesson maps to one or more PATCH numbers in CHANGELOG.md.
 - Lessons are immutable records — they are never removed, only extended.
-- When a new failure mode is found, append to this file and increment STEM-AI version.
+- When a new failure mode is found, append to this file and increment STEM BIO-AI version.
 
 ---
 
@@ -144,7 +144,7 @@ When a new failure mode is discovered:
 
 1. Document it as `L-NNN` with patches, failure mode, resolution, and lesson.
 2. Verify the resolution is encoded in CORE spec (IMMUTABLE or VARIABLE rule).
-3. Increment STEM-AI version (patch version for rubric refinement, minor for formula change).
+3. Increment STEM BIO-AI version (patch version for rubric refinement, minor for formula change).
 4. Update `operation_meta.update_count` and `last_updated` in archive JSON.
 5. Add provenance entry for the triggering repository if a real audit exposed the failure.
 

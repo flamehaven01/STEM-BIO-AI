@@ -1,4 +1,4 @@
-# STEM-AI Trustworthiness Audit Report v1.1.2
+# STEM BIO-AI Trustworthiness Audit Report v1.1.2
 
 **Repository:** artic-network/fieldbioinformatics  
 **Local Target Path:** `D:\Sanctum\Extra Repo\fieldbioinformatics`  

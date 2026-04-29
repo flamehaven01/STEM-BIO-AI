@@ -1,13 +1,13 @@
 ---
 name: stem-ai
-description: "Sovereign Trust Evaluator for Medical AI Artifacts. Audits open-source bio/medical AI repositories for clinical trustworthiness using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored audit reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess the trustworthiness of any bio-AI, medical AI, or clinical-adjacent repository."
+description: "Trust Audit Framework for Bio/Medical AI Repositories. Audits open-source bio/medical AI repositories for clinical trustworthiness using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored audit reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess the trustworthiness of any bio-AI, medical AI, or clinical-adjacent repository."
 version: "1.1.2"
 author: "Flamehaven"
 license: "Apache-2.0"
 platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigravity", "universal"]
 ---
 
-# STEM-AI -- Sovereign Trust Evaluator for Medical AI Artifacts
+# STEM BIO-AI -- Trust Audit Framework for Bio/Medical AI Repositories
 
 **Version:** 1.1.2
 **Codename:** Hippocratic_Code_Engine_Unified
@@ -29,7 +29,7 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 
 ## What This Skill Produces
 
-1. **STEM-AI Audit Report** -- scored trust assessment (T0-T4 tier)
+1. **STEM BIO-AI Audit Report** -- scored trust assessment (T0-T4 tier)
 2. **Executive Summary** -- 1-page institutional decision support
 3. **Claim Matrix** -- line-level evidence anchors for every finding
 4. **Evidence Ledger** -- snapshot provenance and artifact tracking
@@ -37,10 +37,10 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 
 ## Audit Layering
 
-STEM-AI sits on top of technical audit. It should not replace it.
+STEM BIO-AI sits on top of technical audit. It should not replace it.
 
 - **Technical audit** determines what the repository actually does.
-- **STEM-AI** determines whether the observable artifact surface is sufficient for institutional trust establishment.
+- **STEM BIO-AI** determines whether the observable artifact surface is sufficient for institutional trust establishment.
 
 Use this skill after or alongside technical inspection, not instead of it.
 

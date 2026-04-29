@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# STEM-AI Snapshot Provenance Collector
+# STEM BIO-AI Snapshot Provenance Collector
 # Usage: bash snapshot_provenance.sh /path/to/repo
 # Output: provenance data for audit trail
 set -euo pipefail
@@ -7,7 +7,7 @@ set -euo pipefail
 REPO_PATH="${1:-.}"
 
 print_help() {
-  echo "STEM-AI Snapshot Provenance Collector"
+  echo "STEM BIO-AI Snapshot Provenance Collector"
   echo ""
   echo "Usage: bash snapshot_provenance.sh [REPO_PATH]"
   echo ""
@@ -29,7 +29,7 @@ fi
 
 cd "$REPO_PATH"
 
-echo "=== STEM-AI Snapshot Provenance ==="
+echo "=== STEM BIO-AI Snapshot Provenance ==="
 echo "Collection Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "Repo Path: $(pwd)"
 echo ""

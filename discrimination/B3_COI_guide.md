@@ -1,4 +1,4 @@
-# STEM-AI B3 COI Declaration Discrimination Guide
+# STEM BIO-AI B3 COI Declaration Discrimination Guide
 
 3-tier scoring for Conflict of Interest disclosure (PATCH-22).
 Apply the highest applicable tier. Do not assign non-standard values.

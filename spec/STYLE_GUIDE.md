@@ -1,4 +1,4 @@
-# STEM-AI Institutional Style Guide
+# STEM BIO-AI Institutional Style Guide
 
 For audit reports intended for institutional submission or external review.
 

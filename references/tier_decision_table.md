@@ -1,4 +1,4 @@
-# STEM-AI Tier Decision Table
+# STEM BIO-AI Tier Decision Table
 
 Operational meaning of each tier for institutional decision-makers.
 

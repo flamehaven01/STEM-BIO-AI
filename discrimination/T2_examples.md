@@ -1,4 +1,4 @@
-# STEM-AI Stage 3 Discrimination Examples: T2 Domain Tests
+# STEM BIO-AI Stage 3 Discrimination Examples: T2 Domain Tests
 
 T2 awards +15 for DOMAIN-SPECIFIC regression tests. This means tests that verify
 biological, chemical, or clinical correctness of outputs -- not infrastructure tests.

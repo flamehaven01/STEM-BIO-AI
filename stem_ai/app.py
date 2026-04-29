@@ -55,8 +55,8 @@ _LEVEL_CHOICES = [
     (3, "Level 3 — Full  (5-page: deep integrity + remediation roadmap)"),
 ]
 
-with gr.Blocks(title="STEM-AI Local Trust Audit") as demo:
-    gr.Markdown("# STEM-AI Local Trust Audit")
+with gr.Blocks(title="STEM BIO-AI Local Trust Audit") as demo:
+    gr.Markdown("# STEM BIO-AI Local Trust Audit")
     gr.Markdown(
         "Deterministic open-source pre-screen for bio/medical AI repositories.  \n"
         "Not clinical certification, regulatory clearance, or medical advice."

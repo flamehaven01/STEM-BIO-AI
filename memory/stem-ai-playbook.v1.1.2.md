@@ -1,4 +1,4 @@
-# STEM-AI Session Protocol & Rubric Drift Guard
+# STEM BIO-AI Session Protocol & Rubric Drift Guard
 # Memory Layer — protocol_evolution playbook
 # Version: 1.1.2 | Updated: 2026-03-27
 
@@ -6,7 +6,7 @@
 
 ## 1. Session Initialization
 
-Every AI session using STEM-AI must begin with this sequence:
+Every AI session using STEM BIO-AI must begin with this sequence:
 
 ```
 [MICA INIT]
@@ -83,7 +83,7 @@ STEM-001: spec/STEM-AI_v1.1.2_CORE.md referenced in SKILL.md exists on disk
 
 Trigger: `on_version_bump` or `on_explicit_save` (see mica.yaml update_triggers)
 
-When STEM-AI version increments:
+When STEM BIO-AI version increments:
 1. Update `operation_meta.update_count` (increment by 1).
 2. Update `operation_meta.last_updated` (YYYY-MM-DD).
 3. If IMMUTABLE rules changed (minor version 1.x.0): update `design_invariants` array.
@@ -102,7 +102,7 @@ Never update the archive in a deployed clone.
 
 When running a batch of real-world audits:
 1. Record each audit result in `provenance_registry` with: `uri`, `sha256`, `kind: audit_result`,
-   `trust_class: distilled`, `note: "STEM-AI T[tier] — [repo-name] — [date]"`.
+   `trust_class: distilled`, `note: "STEM BIO-AI T[tier] — [repo-name] — [date]"`.
 2. After 5+ audits, review for systematic bias patterns (tier inflation, CA threshold drift).
 3. If bias found: document as a new lesson (`L-NNN`) and propose rubric patch.
 

@@ -1,6 +1,6 @@
-# STEM-AI Method Appendix
+# STEM BIO-AI Method Appendix
 
-**Spec Version:** STEM-AI v1.1.2
+**Spec Version:** STEM BIO-AI v1.1.2
 **Execution Mode:** [LOCAL_ANALYSIS / FULL / SEARCH_ONLY / MANUAL]
 
 ## Rubric Summary
@@ -10,9 +10,9 @@ See `spec/STEM-AI_v1.1.2_CORE.md` for the full canonical rubric.
 ## Audit-Layer Relationship
 
 - Technical audit establishes what the repository actually does.
-- STEM-AI classifies whether the artifact surface built around that repository is sufficient for institutional trust establishment.
+- STEM BIO-AI classifies whether the artifact surface built around that repository is sufficient for institutional trust establishment.
 
-Technical audit is therefore the fact-extraction layer. STEM-AI is the trust-classification layer.
+Technical audit is therefore the fact-extraction layer. STEM BIO-AI is the trust-classification layer.
 
 ### Stage 1: README Intent (Weight: 0.40)
 - H1-H6: Hype deductions (-5 to -10 pts each)

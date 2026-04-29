@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# STEM-AI Skill Package Structure Validator
+# STEM BIO-AI Skill Package Structure Validator
 # Usage: bash validate_skill_structure.sh [SKILL_ROOT]
-# Validates the STEM-AI skill package is complete and well-formed
+# Validates the STEM BIO-AI skill package is complete and well-formed
 set -euo pipefail
 
 SKILL_ROOT="${1:-.}"
@@ -9,7 +9,7 @@ ERRORS=0
 WARNINGS=0
 
 print_help() {
-  echo "STEM-AI Skill Package Structure Validator"
+  echo "STEM BIO-AI Skill Package Structure Validator"
   echo ""
   echo "Usage: bash validate_skill_structure.sh [SKILL_ROOT]"
   echo ""
@@ -59,7 +59,7 @@ check_contains() {
   fi
 }
 
-echo "=== STEM-AI Skill Package Validation ==="
+echo "=== STEM BIO-AI Skill Package Validation ==="
 echo "Root: $SKILL_ROOT"
 echo ""
 

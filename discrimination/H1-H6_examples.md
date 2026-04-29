@@ -1,4 +1,4 @@
-# STEM-AI Stage 1 Discrimination Examples: H1-H6
+# STEM BIO-AI Stage 1 Discrimination Examples: H1-H6
 
 These examples are normative. When evaluating H1-H6, consult these before assigning a deduction.
 If a phrase falls outside all listed examples, apply the rubric definition strictly.

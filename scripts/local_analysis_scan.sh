@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# STEM-AI Local Analysis Scan -- C1-C4 Code Integrity
+# STEM BIO-AI Local Analysis Scan -- C1-C4 Code Integrity
 # Usage: bash local_analysis_scan.sh /path/to/repo
 # Output: human-readable structured findings to stdout
 set -euo pipefail
@@ -8,7 +8,7 @@ REPO_PATH="${1:-.}"
 FINDINGS=""
 
 print_help() {
-  echo "STEM-AI Local Analysis Scan (C1-C4 Code Integrity)"
+  echo "STEM BIO-AI Local Analysis Scan (C1-C4 Code Integrity)"
   echo ""
   echo "Usage: bash local_analysis_scan.sh [REPO_PATH]"
   echo ""
@@ -33,7 +33,7 @@ if [ ! -d "$REPO_PATH" ]; then
   exit 1
 fi
 
-echo "=== STEM-AI C1-C4 Code Integrity Scan ==="
+echo "=== STEM BIO-AI C1-C4 Code Integrity Scan ==="
 echo "Target: $REPO_PATH"
 echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo ""

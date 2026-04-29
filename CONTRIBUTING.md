@@ -1,6 +1,6 @@
-# Contributing to STEM-AI
+# Contributing to STEM BIO-AI
 
-Thank you for your interest in improving STEM-AI. This document explains how to contribute effectively.
+Thank you for your interest in improving STEM BIO-AI. This document explains how to contribute effectively.
 
 ## Types of Contributions
 
@@ -68,7 +68,7 @@ Changes to the core rubric in `spec/STEM-AI_v1.1.2_CORE.md` follow strict rules:
 
 ## Code of Conduct
 
-- STEM-AI evaluates repository artifacts, not people
+- STEM BIO-AI evaluates repository artifacts, not people
 - Contributions must not introduce personal attacks or bias
 - Clinical safety is the priority; marketing is not
 - Evidence-based claims only; speculation is not acceptable

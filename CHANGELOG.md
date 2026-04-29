@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to STEM-AI are documented in this file.
+All notable changes to STEM BIO-AI are documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -21,7 +21,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 - `memory/stem-ai-playbook.v1.1.2.md` — session protocol and rubric drift guard
 - `memory/stem-ai-lessons.v1.1.2.md` — failure mode history (10 lessons from 33 patches)
 - PATCH-47: MICA initialization step added to SKILL.md loading order (Step 0) and CORE spec Section 8.2 Execution Instruction
-- DEV.to draft for STEM-AI v1.1.2 memory contract explanation
+- DEV.to draft for STEM BIO-AI v1.1.2 memory contract explanation
 - Official v1.1.2 LOCAL_ANALYSIS audit artifact shape: `report.md` plus `experiment_results.json`
 - Real public-repository audit output under `audits/fieldbioinformatics_v1_1_2/`
 - Stage 2R: Repo-Local Consistency lane for LOCAL_ANALYSIS audits when external Stage 2 evidence is not collected
@@ -36,7 +36,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ### Fixed
 - Post-release consistency cleanup applied to active package surfaces on 2026-04-27
-- Active package surfaces aligned to STEM-AI v1.1.2 and MICA v0.2.0
+- Active package surfaces aligned to STEM BIO-AI v1.1.2 and MICA v0.2.0
 - Template references updated to the current canonical spec and audit report version
 - Skill validator strengthened to detect template/spec/MICA drift before release
 - `local_analysis_scan.sh` output description corrected to match actual stdout format
@@ -51,8 +51,8 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Template and package references updated to the correct canonical spec filename
 
 ### Added
-- Explicit statement of the relationship between technical audit and STEM-AI
-- Method/template wording clarifying technical audit as fact extraction and STEM-AI as trust classification
+- Explicit statement of the relationship between technical audit and STEM BIO-AI
+- Method/template wording clarifying technical audit as fact extraction and STEM BIO-AI as trust classification
 
 ### Changed
 - Canonical spec filename advanced to `spec/STEM-AI_v1.1.1_CORE.md`
@@ -63,7 +63,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ### Changed
 - **Architecture:** Single-file spec split into universal skill package (multi-file)
-- **Name:** "Sovereign Trust Evaluator for Medical AI" -> "Sovereign Trust Evaluator for Medical AI Artifacts"
+- **Name:** "Trust Audit Framework for Bio/Medical AI" -> "Trust Audit Framework for Bio/Medical AI Repositories"
 - **Runtime:** Added AI CLI support alongside LLM-Native
 
 ### Added

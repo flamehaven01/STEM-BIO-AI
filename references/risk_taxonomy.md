@@ -1,4 +1,4 @@
-# STEM-AI Risk Taxonomy
+# STEM BIO-AI Risk Taxonomy
 
 Standardized finding categories for Claim Matrix and audit reports.
 

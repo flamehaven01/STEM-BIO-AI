@@ -1,4 +1,4 @@
-# STEM-AI Evidence Ledger
+# STEM BIO-AI Evidence Ledger
 
 **Audit ID:** [REPORT_ID]
 **Target:** [REPOSITORY_NAME]

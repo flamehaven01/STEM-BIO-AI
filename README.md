@@ -1,5 +1,5 @@
 ---
-title: STEM-AI Local Trust Audit
+title: STEM BIO-AI Local Trust Audit
 emoji: 🧬
 colorFrom: blue
 colorTo: purple
@@ -10,9 +10,9 @@ pinned: false
 license: apache-2.0
 ---
 
-# STEM-AI
+# STEM BIO-AI
 
-**Sovereign Trust Evaluator for Medical AI Artifacts**
+**Trust Audit Framework for Bio/Medical AI Repositories**
 
 [![Python Package](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/python-package.yml/badge.svg)](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/python-package.yml)
 [![Skill Validation](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/validate-skill.yml)
@@ -21,7 +21,7 @@ license: apache-2.0
 [![Stable](https://img.shields.io/badge/stable-v1.1.2-informational.svg)](CHANGELOG.md)
 [![PyPI](https://img.shields.io/badge/PyPI-not%20published%20yet-lightgrey.svg)](#installation)
 
-STEM-AI is a deterministic trust-audit framework for open-source bio/medical AI repositories. It inspects repository artifacts, scores observable governance evidence, and emits machine-readable JSON, Markdown, and PDF review packets.
+STEM BIO-AI is a deterministic trust-audit framework for open-source bio/medical AI repositories. It inspects repository artifacts, scores observable governance evidence, and emits machine-readable JSON, Markdown, and PDF review packets.
 
 It is not a clinical certifier, regulatory clearance tool, or scientific efficacy validator. It answers a narrower question:
 
@@ -54,14 +54,14 @@ stem <folder> --level 3          # Level 3: 5-page full review packet
 
 ## About
 
-Bio/medical AI repositories often look credible at the README layer while leaving important trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM-AI evaluates the visible repository surface instead of relying on marketing claims.
+Bio/medical AI repositories often look credible at the README layer while leaving important trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI evaluates the visible repository surface instead of relying on marketing claims.
 
 The framework separates two jobs:
 
 - **Fact extraction:** inspect README, docs, package metadata, tests, CI, dependency files, and code paths.
 - **Trust classification:** score whether the observable evidence supports supervised use, quarantine, or rejection.
 
-STEM-AI v1.1.2 adds the MICA memory contract layer: immutable invariants, a session playbook, prior failure lessons, and a pre-execution contract test for reducing auditor drift.
+STEM BIO-AI v1.1.2 adds the MICA memory contract layer: immutable invariants, a session playbook, prior failure lessons, and a pre-execution contract test for reducing auditor drift.
 
 ## Features
 
@@ -260,9 +260,9 @@ stem /path/to/bio-ai-repo --level 3 --format all --out stem_output
 
 ## Security and Boundaries
 
-- STEM-AI does not certify clinical safety.
-- STEM-AI does not validate scientific efficacy.
-- STEM-AI does not replace regulatory, legal, security, or medical review.
+- STEM BIO-AI does not certify clinical safety.
+- STEM BIO-AI does not validate scientific efficacy.
+- STEM BIO-AI does not replace regulatory, legal, security, or medical review.
 - The local CLI analyzes repository artifacts and does not require uploading code to an external LLM.
 - Public demo usage should be limited to public repositories. Private audits should run locally or inside the owner-controlled environment.
 
@@ -304,7 +304,7 @@ Apache 2.0. See [LICENSE](LICENSE).
 
 ## Acknowledgements
 
-STEM-AI was shaped by live audits of open-source bioinformatics and bio/medical AI repositories, with emphasis on observable evidence rather than claims.
+STEM BIO-AI was shaped by live audits of open-source bioinformatics and bio/medical AI repositories, with emphasis on observable evidence rather than claims.
 
 ## Author
 
@@ -318,7 +318,7 @@ Maintained by Flamehaven.
 ```bibtex
 @software{stem-ai,
   author = {Yun, Kwansub},
-  title = {STEM-AI: Sovereign Trust Evaluator for Medical AI Artifacts},
+  title = {STEM BIO-AI: Trust Audit Framework for Bio/Medical AI Repositories},
   version = {1.1.2},
   year = {2026},
   url = {https://github.com/flamehaven01/STEM-AI-BIO}
@@ -327,4 +327,4 @@ Maintained by Flamehaven.
 
 ---
 
-Final thought: STEM-AI is designed to be a governance layer, not a verdict machine. Its role is to make bio/medical AI review more reproducible, inspectable, and bounded by evidence paths.
+Final thought: STEM BIO-AI is designed to be a governance layer, not a verdict machine. Its role is to make bio/medical AI review more reproducible, inspectable, and bounded by evidence paths.

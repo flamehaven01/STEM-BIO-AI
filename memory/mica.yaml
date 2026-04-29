@@ -1,7 +1,7 @@
 mica_spec: "0.2.0"
 name: stem-ai-bio
 mode: protocol_evolution
-description: "STEM-AI distributed skill (16+ platforms). Single archive update authority. Platform deployments are read-only consumers. Never update archive in deployed copies."
+description: "STEM BIO-AI distributed skill (16+ platforms). Single archive update authority. Platform deployments are read-only consumers. Never update archive in deployed copies."
 
 layers:
   - name: archive

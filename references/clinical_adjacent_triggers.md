@@ -1,4 +1,4 @@
-# STEM-AI Clinical Adjacency Trigger List
+# STEM BIO-AI Clinical Adjacency Trigger List
 
 Reference list of 60+ tools, libraries, and keywords that trigger CLINICAL_ADJACENT detection.
 Used by both TEXT_PATH (README keyword scan) and CODE_PATH (import/dependency scan).

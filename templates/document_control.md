@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Title | STEM-AI Trustworthiness Audit Report |
+| Document Title | STEM BIO-AI Trustworthiness Audit Report |
 | Document ID | [REPORT_ID] |
 | Version | [VERSION] |
 | Status | [DRAFT / FINAL / SUPERSEDED] |

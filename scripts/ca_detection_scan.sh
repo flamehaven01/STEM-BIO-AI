@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# STEM-AI Clinical Adjacency Detection Scan
+# STEM BIO-AI Clinical Adjacency Detection Scan
 # Usage: bash ca_detection_scan.sh /path/to/repo
 # Output: detected triggers with severity classification
 set -euo pipefail
@@ -7,7 +7,7 @@ set -euo pipefail
 REPO_PATH="${1:-.}"
 
 print_help() {
-  echo "STEM-AI Clinical Adjacency Detection Scan"
+  echo "STEM BIO-AI Clinical Adjacency Detection Scan"
   echo ""
   echo "Usage: bash ca_detection_scan.sh [REPO_PATH]"
   echo ""
@@ -27,7 +27,7 @@ if [ ! -d "$REPO_PATH" ]; then
   exit 1
 fi
 
-echo "=== STEM-AI Clinical Adjacency Detection ==="
+echo "=== STEM BIO-AI Clinical Adjacency Detection ==="
 echo "Target: $REPO_PATH"
 echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo ""

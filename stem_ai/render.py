@@ -100,7 +100,7 @@ def write_outputs(
 def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     score = result["score"]
     lines = [
-        "# STEM-AI Local Audit Report",
+        "# STEM BIO-AI Local Audit Report",
         "",
         f"**Target:** `{result['target']['name']}`",
         f"**Execution Mode:** `{result['execution_mode']}`",
@@ -201,7 +201,7 @@ def _header_block(result: dict[str, Any]) -> list[Any]:
     mode = result.get("execution_mode", "—")
 
     header_data = [[Paragraph(
-        f'<font color="{_WHITE}"><b>STEM-AI Trustworthiness Audit v{result["stem_ai_version"]}</b></font>',
+        f'<font color="{_WHITE}"><b>STEM BIO-AI Trustworthiness Audit v{result["stem_ai_version"]}</b></font>',
         _style("H1", 14, 18, _WHITE, True),
     )]]
     header_tbl = Table(header_data, colWidths=["100%"])
@@ -406,7 +406,7 @@ def _footer_block() -> list[Any]:
         HRFlowable(width="100%", thickness=0.5, color=_hx(_MGRAY)),
         Spacer(1, 1.5 * mm),
         Paragraph(
-            f'<font color="{_DGRAY}" size="7">Independent audit summary — STEM-AI v1.1.2 &nbsp;|&nbsp; '
+            f'<font color="{_DGRAY}" size="7">Independent audit summary — STEM BIO-AI v1.1.2 &nbsp;|&nbsp; '
             "Not clinical certification. Not regulatory clearance. Not medical advice.</font>",
             _style("FT1", 7, 9, _DGRAY, False, "CENTER"),
         ),
@@ -1005,7 +1005,7 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
     tgt = result["target"]
     meta_items = [
         ("Schema Version", result.get("schema_version", "—")),
-        ("STEM-AI Version", result.get("stem_ai_version", "—")),
+        ("STEM BIO-AI Version", result.get("stem_ai_version", "—")),
         ("Generated (local date)", result.get("generated_at_local", "—")),
         ("Report Validity", "180 days from audit date"),
         ("Execution Mode", result.get("execution_mode", "—")),
@@ -1045,7 +1045,7 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
 def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list[str]]:
     score = result["score"]
     brief = [
-        "STEM-AI Local Audit Brief",
+        "STEM BIO-AI Local Audit Brief",
         f"Target: {result['target']['name']}",
         f"Final Score: {score['final_score']} / 100",
         f"Formal Tier: {score['formal_tier']}",
