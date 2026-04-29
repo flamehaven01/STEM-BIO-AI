@@ -16,7 +16,7 @@ dependencies = []
 
 [project.optional-dependencies]
 pdf  = ["reportlab>=4.0"]
-demo = ["gradio>=4.0.0", "reportlab>=4.0"]
+demo = ["gradio==4.44.0", "huggingface_hub<1.0", "reportlab>=4.0"]
 
 [project.scripts]
 stem = "stem_ai.cli:main"
