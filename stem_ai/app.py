@@ -170,6 +170,18 @@ _CSS = """
   font-size: 14px;
   line-height: 1.45;
 }
+.info-card .cli-command {
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: 7px;
+  color: #0f172a;
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  margin: 3px 0;
+  padding: 3px 7px;
+}
 """
 
 with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
@@ -199,7 +211,7 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
           T4: strong observable trust.</span></div>
 
           <div class="info-card"><b>CLI for artifacts</b><br/>
-          <span>Use <code>stem &lt;folder&gt; --level 3 --format all</code> locally to generate
+          <span>Use <code class="cli-command">stem &lt;folder&gt; --level 3 --format all</code> locally to generate
           JSON, Markdown, and PDF files.</span></div>
         </div>
         """

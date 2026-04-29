@@ -22,36 +22,24 @@ license: apache-2.0
 [![Stable](https://img.shields.io/badge/stable-v1.1.2-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Spaces-stem--bio--ai-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
-STEM BIO-AI is a deterministic trust-audit framework for open-source bio/medical AI repositories. It inspects repository artifacts, scores observable governance evidence, and emits JSON, Markdown, and PDF review packets — without an LLM key or network call.
+STEM BIO-AI is a deterministic trust-audit framework for open-source bio/medical AI repositories. It inspects repository artifacts, scores observable governance evidence, and emits JSON, Markdown, and PDF review packets — without an LLM key or model API call.
 
 It is not a clinical certifier, regulatory clearance tool, or scientific efficacy validator. It answers one narrower question:
 
 > Does this repository expose enough trust evidence to be considered, contained, or rejected?
+
+## Core Features
+
+- **No API key required** — runs a deterministic local scanner; no OpenAI, Anthropic, or GitHub API key is needed.
+- **No model-runtime dependency** — no PyTorch, TensorFlow, CUDA, or GPU requirement; the scanner inspects repository evidence instead of running model inference.
+- **Tier meaning built in** — maps observable evidence to T0-T4 trust tiers, from `T0 Trust Not Established` to `T4 Strong Observable Trust`.
+- **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF review artifacts for local evidence trails.
 
 ```bash
 stem <folder>            # Level 1 — 1-page executive brief (default)
 stem <folder> --level 2  # Level 2 — 3-page stage analysis
 stem <folder> --level 3  # Level 3 — 5-page deep review + remediation roadmap
 ```
-
----
-
-## Table of Contents
-
-- [About](#about)
-- [Quick Start](#quick-start)
-- [Installation](#installation)
-- [CLI Usage](#cli-usage)
-- [Output Artifacts](#output-artifacts)
-- [Web Demo](#web-demo)
-- [Architecture](#architecture)
-- [Scoring Model](#scoring-model)
-- [Repository Structure](#repository-structure)
-- [Security and Boundaries](#security-and-boundaries)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Citation](#citation)
 
 ---
 
