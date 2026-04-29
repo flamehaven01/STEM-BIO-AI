@@ -12,6 +12,7 @@ Thumbs.db
 # Audit outputs (generated, not committed)
 audit_output/
 audits/fieldbioinformatics_v1_1_2/
+artic-network_fieldbioinformatics_detailed_5p/
 stem_output*/
 *.audit.md
 *.claim_matrix.md

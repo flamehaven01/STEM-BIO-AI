@@ -1,7 +1,7 @@
 # STEM BIO-AI
 
 <p align="center">
-  <img src="logo.png" alt="STEM BIO-AI logo" width="520">
+  <img src="docs/assets/logo.png" alt="STEM BIO-AI logo" width="520">
 </p>
 
 **Trust Audit Framework for Bio/Medical AI Repositories**
@@ -93,6 +93,33 @@ python app.py
 ```
 
 The Space clones a public GitHub repository and runs the same deterministic local scanner. It does not call OpenAI, Anthropic, or the GitHub API.
+
+## Report Preview
+
+The local CLI can produce a 5-page PDF packet for an audited repository. The preview below shows the `--level 3` detailed report format.
+
+**PDF:** [Download the 5-page sample report](docs/assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
+
+<p align="center">
+  <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="STEM BIO-AI detailed report page 1" width="760">
+</p>
+
+<details>
+<summary>View all 5 preview pages</summary>
+
+| Page 1 | Page 2 |
+|---|---|
+| <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="Report page 1"> | <img src="docs/assets/report-preview/fieldbioinformatics/page-2.png" alt="Report page 2"> |
+
+| Page 3 | Page 4 |
+|---|---|
+| <img src="docs/assets/report-preview/fieldbioinformatics/page-3.png" alt="Report page 3"> | <img src="docs/assets/report-preview/fieldbioinformatics/page-4.png" alt="Report page 4"> |
+
+| Page 5 |
+|---|
+| <img src="docs/assets/report-preview/fieldbioinformatics/page-5.png" alt="Report page 5"> |
+
+</details>
 
 ## Architecture
 
