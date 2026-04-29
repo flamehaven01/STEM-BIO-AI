@@ -1,5 +1,9 @@
 # STEM BIO-AI
 
+<p align="center">
+  <img src="logo.png" alt="STEM BIO-AI logo" width="520">
+</p>
+
 **Trust Audit Framework for Bio/Medical AI Repositories**
 
 [![Python Package](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml)
@@ -13,8 +17,6 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 
 > Does this repository expose enough trust evidence to be considered, contained, or rejected?
 
----
-
 ## Core Features
 
 - **No API key required** - no OpenAI, Anthropic, or GitHub API key is needed.
@@ -22,7 +24,11 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 - **Tier meaning built in** - maps evidence to T0-T4 trust tiers, from `T0 Trust Not Established` to `T4 Strong Observable Trust`.
 - **CLI artifacts** - `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF review outputs.
 
----
+## Boundary
+
+STEM BIO-AI is not a clinical certifier, regulatory clearance tool, medical recommendation engine, or scientific efficacy validator. It is a repository trust pre-screen for observable evidence.
+
+Public demo usage should be limited to public repositories. Private or proprietary repositories should be audited locally.
 
 ## Quick Start
 
@@ -31,46 +37,24 @@ git clone https://github.com/flamehaven01/STEM-BIO-AI.git
 cd STEM-BIO-AI
 pip install -e .[pdf]
 
-stem /path/to/bio-ai-repo            # Level 1 — 1-page executive brief (default)
-stem /path/to/bio-ai-repo --level 2  # Level 2 — 3-page stage analysis
-stem /path/to/bio-ai-repo --level 3  # Level 3 — 5-page deep review + remediation roadmap
+stem /path/to/bio-ai-repo --level 1 --format all  # 1-page brief
+stem /path/to/bio-ai-repo --level 2 --format all  # 3-page stage analysis
+stem /path/to/bio-ai-repo --level 3 --format all  # 5-page deep review
 ```
 
----
+`stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the target repository first, then point the CLI at the local path.
 
-## Agent Skill Install
+## Report Levels And Artifacts
 
-```bash
-# Generic
-git clone --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.agents/skills/stem-bio-ai
+Each run writes to `--out DIR` (default: `stem_output/`).
 
-# Claude Code
-git clone --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.claude/skills/stem-bio-ai
-```
+| Level | PDF | Best For | Outputs |
+|---|---:|---|---|
+| `--level 1` | 1 page | Executive dashboard | score, tier, stage cards, code integrity |
+| `--level 2` | 3 pages | Standard audit review | Level 1 + Stage 1/2R breakdown, Stage 3 T/B-series, gap analysis |
+| `--level 3` | 5 pages | Full local evidence packet | Level 2 + code integrity deep dive, classification analysis, remediation roadmap |
 
----
-
-## CLI Usage
-
-```bash
-stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]
-```
-
-| Level | Pages | Contents |
-|---|---|---|
-| `--level 1` (default) | 1 | Executive dashboard: score, tier, stage cards, code integrity |
-| `--level 2` | 3 | + Stage 1/2R rubric breakdown, Stage 3 T/B-series, gap analysis |
-| `--level 3` | 5 | + Code integrity deep dive, classification analysis, priority roadmap, metadata |
-
-`stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the repository first, then point the CLI at the local path.
-
----
-
-## Output Artifacts
-
-Each run writes to `--out DIR` (default: `stem_output/`):
-
-```
+```text
 <repo>_experiment_results.json   # machine-readable score + evidence object
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
@@ -78,9 +62,24 @@ Each run writes to `--out DIR` (default: `stem_output/`):
 <repo>_detailed_5p.pdf           # Level 3 deep review packet
 ```
 
-A reference artifact set for `artic-network/fieldbioinformatics` is in `audits/fieldbioinformatics_v1_1_2/`.
+## Scoring Model
 
----
+| Stage | Weight | What It Evaluates |
+|---|---:|---|
+| Stage 1: README Intent | 40% | Scope clarity, hype control, clinical boundary language |
+| Stage 2R: Repo-Local Consistency | 20% | README/docs/package/workflow/test alignment |
+| Stage 3: Code / Bio Responsibility | 40% | CI, tests, changelog hygiene, data provenance |
+| C1-C4: Code Integrity | Advisory / penalty | Credentials, dependency pinning, deprecated paths, fail-open exceptions |
+
+| Tier | Score | Disposition |
+|---|---:|---|
+| T0 | 0-39 | Trust not established |
+| T1 | 40-54 | Quarantine |
+| T2 | 55-69 | Caution |
+| T3 | 70-84 | Supervised consideration |
+| T4 | 85-100 | Strong observable trust |
+
+`Final = (S1 x 0.40) + (S2R x 0.20) + (S3 x 0.40) - Risk Penalty`
 
 ## Web Demo
 
@@ -93,7 +92,7 @@ pip install -e .[demo]
 python app.py
 ```
 
----
+The Space clones a public GitHub repository and runs the same deterministic local scanner. It does not call OpenAI, Anthropic, or the GitHub API.
 
 ## Architecture
 
@@ -113,39 +112,21 @@ flowchart LR
     G --> J[PDF]
 ```
 
-| Module | Role |
-|---|---|
-| `stem_ai/scanner.py` | Artifact collection, rubric scoring, integrity checks |
-| `stem_ai/render.py` | Markdown + reportlab PDF generation |
-| `stem_ai/cli.py` | Argument parsing, `stem` entry point |
-| `stem_ai/app.py` | Gradio web demo |
+Core files: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, and `stem_ai/app.py`.
 
----
+## Agent Skill Install
 
-## Scoring Model
+```bash
+# Generic
+git clone --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.agents/skills/stem-bio-ai
 
-| Stage | Weight | What It Evaluates |
-|---|---:|---|
-| Stage 1: README Intent | 40% | Scope clarity, hype control, clinical boundary language |
-| Stage 2R: Repo-Local Consistency | 20% | README/docs/package/workflow/test alignment |
-| Stage 3: Code / Bio Responsibility | 40% | CI, tests, changelog hygiene, data provenance |
-| C1-C4: Code Integrity | Advisory / penalty | Credentials, dependency pinning, deprecated paths, fail-open exceptions |
-
-| Tier | Score | Disposition |
-|---|---:|---|
-| T0 | 0–39 | Trust not established |
-| T1 | 40–54 | Quarantine |
-| T2 | 55–69 | Caution |
-| T3 | 70–84 | Supervised consideration |
-| T4 | 85–100 | Strong observable trust |
-
-`Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Penalty`
-
----
+# Claude Code
+git clone --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.claude/skills/stem-bio-ai
+```
 
 ## Repository Structure
 
-```
+```text
 STEM-BIO-AI/
   app.py                   # HuggingFace Spaces / Gradio entry point
   pyproject.toml           # Package metadata and extras
@@ -159,30 +140,9 @@ STEM-BIO-AI/
   .github/workflows/       # CI checks
 ```
 
----
-
-## Security and Boundaries
-
-- STEM BIO-AI does **not** certify clinical safety, scientific efficacy, or regulatory compliance.
-- The local CLI does not upload code to any external service.
-- Public demo usage should be limited to public repositories. Private audits should run locally.
-
----
-
-## Roadmap
-
-- PyPI release after CLI and PDF outputs stabilize.
-- Runtime replay lanes for dependency-aware execution checks.
-- Deterministic snapshot fixtures for multi-run reproducibility testing.
-- Golden JSON/PDF artifact checks in CI.
-
----
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination examples, clinical-adjacency trigger refinements, report rendering improvements.
-
----
 
 ## License
 
@@ -190,7 +150,7 @@ Apache 2.0. See [LICENSE](LICENSE).
 
 ## Author
 
-Maintained by Flamehaven — [flamehaven01](https://github.com/flamehaven01)
+Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 
 ## Citation
 
