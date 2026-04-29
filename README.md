@@ -1,16 +1,3 @@
----
-title: STEM BIO-AI Local Trust Audit
-emoji: 🧬
-colorFrom: blue
-colorTo: purple
-sdk: gradio
-sdk_version: 4.44.1
-app_file: app.py
-python_version: 3.11
-pinned: false
-license: apache-2.0
----
-
 # STEM BIO-AI
 
 **Trust Audit Framework for Bio/Medical AI Repositories**
