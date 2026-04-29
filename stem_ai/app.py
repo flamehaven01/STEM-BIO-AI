@@ -141,25 +141,35 @@ _CSS = """
 }
 .hero h1 { font-size: 42px; line-height: 1.05; margin: 0 0 10px; }
 .hero p { font-size: 17px; max-width: 820px; margin: 0; }
-.boundary {
-  border-left: 4px solid #d7a84a;
-  padding: 10px 14px;
-  background: #fff8e6;
-  border-radius: 10px;
-}
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
-  margin: 16px 0;
+  margin: 20px 0;
 }
 .info-card {
   border: 1px solid #dde6ef;
   border-radius: 14px;
-  padding: 14px;
+  padding: 16px;
   background: #ffffff;
+  color: #111827;
+  min-height: 132px;
+  box-shadow: 0 8px 24px rgba(16, 35, 63, 0.08);
 }
-.info-card b { color: #10233f; }
+.info-card b {
+  color: #0f172a;
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.info-card span {
+  color: #1f2937;
+  font-size: 14px;
+  line-height: 1.45;
+}
 """
 
 with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
@@ -173,29 +183,24 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
         </div>
         """
     )
-    gr.Markdown(
-        '<div class="boundary"><b>Boundary:</b> This is not clinical certification, '
-        "regulatory clearance, scientific validation, or medical advice. It is a "
-        "repository trust pre-screen based on observable artifacts.</div>"
-    )
     gr.HTML(
         """
         <div class="info-grid">
           <div class="info-card"><b>No API key required</b><br/>
-          The Space clones a public GitHub repository and runs a deterministic local scanner.
-          It does not call OpenAI, Anthropic, or the GitHub API.</div>
+          <span>The Space clones a public GitHub repository and runs a deterministic local scanner.
+          It does not call OpenAI, Anthropic, or the GitHub API.</span></div>
 
           <div class="info-card"><b>What STEM checks</b><br/>
-          README intent, repo-local consistency, CI/tests/docs, dependency hygiene,
-          clinical boundary language, and C1-C4 code-integrity signals.</div>
+          <span>README intent, repo-local consistency, CI/tests/docs, dependency hygiene,
+          clinical boundary language, and C1-C4 code-integrity signals.</span></div>
 
           <div class="info-card"><b>Tier meaning</b><br/>
-          T0: trust not established. T1: quarantine. T2: caution. T3: consider.
-          T4: strong observable trust.</div>
+          <span>T0: trust not established. T1: quarantine. T2: caution. T3: consider.
+          T4: strong observable trust.</span></div>
 
           <div class="info-card"><b>CLI for artifacts</b><br/>
-          Use <code>stem &lt;folder&gt; --level 3 --format all</code> locally to generate
-          JSON, Markdown, and PDF files.</div>
+          <span>Use <code>stem &lt;folder&gt; --level 3 --format all</code> locally to generate
+          JSON, Markdown, and PDF files.</span></div>
         </div>
         """
     )
@@ -213,10 +218,14 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
             )
         with gr.Column(scale=1):
             level_input = gr.Radio(
-                choices=[1, 2, 3],
+                choices=[
+                    ("Brief - 1 page", 1),
+                    ("Standard - 3 pages", 2),
+                    ("Full - 5 pages", 3),
+                ],
                 value=1,
                 label="Report Level",
-                info="1=brief 1p, 2=standard 3p, 3=full 5p",
+                info="Brief, Standard, or Full report depth.",
             )
     with gr.Row():
         run_button = gr.Button("Run live GitHub audit", variant="primary", scale=2)
