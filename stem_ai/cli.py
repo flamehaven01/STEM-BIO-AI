@@ -18,7 +18,18 @@ _LEVEL_MAP = {
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
+        usage=(
+            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]\n"
+            "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]"
+        ),
         description="STEM-AI local trust audit for bio/medical AI repositories.",
+        epilog=(
+            "Examples:\n"
+            "  stem /path/to/bio-ai-repo\n"
+            "  stem /path/to/bio-ai-repo --level 2\n"
+            "  stem /path/to/bio-ai-repo --level 3 --format all --out stem_output"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     subparsers = parser.add_subparsers(dest="command")
 
@@ -99,4 +110,3 @@ def main(argv: list[str] | None = None) -> int:
         return run_audit(parsed)
     parser.print_help()
     return 2
-

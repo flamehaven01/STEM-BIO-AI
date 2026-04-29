@@ -1,0 +1,96 @@
+name: Python Package
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "stem_ai/**"
+      - "pyproject.toml"
+      - "README.md"
+      - ".github/workflows/python-package.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "stem_ai/**"
+      - "pyproject.toml"
+      - "README.md"
+      - ".github/workflows/python-package.yml"
+
+jobs:
+  package-smoke:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package with PDF extra
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[pdf]"
+
+      - name: Compile package
+        run: |
+          python -m py_compile stem_ai/cli.py stem_ai/scanner.py stem_ai/render.py stem_ai/app.py
+
+      - name: CLI help smoke test
+        run: |
+          stem --help
+          python -m stem_ai --help
+
+      - name: Create synthetic bio repository
+        run: |
+          mkdir -p /tmp/stem-target/.github/workflows /tmp/stem-target/tests
+          cat > /tmp/stem-target/README.md <<'EOF'
+          # Synthetic Viral Sequencing Pipeline
+
+          Research-use-only viral sequencing workflow.
+          Not for clinical use. Not for diagnostic use.
+          EOF
+          cat > /tmp/stem-target/requirements.txt <<'EOF'
+          biopython==1.83
+          EOF
+          cat > /tmp/stem-target/tests/test_pipeline.py <<'EOF'
+          def test_pipeline_smoke():
+              assert True
+          EOF
+          cat > /tmp/stem-target/.github/workflows/ci.yml <<'EOF'
+          name: CI
+          on: [push]
+          jobs:
+            test:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - run: python -m pytest
+          EOF
+
+      - name: Run Level 1/2/3 CLI scans
+        run: |
+          stem /tmp/stem-target --level 1 --format all --out /tmp/stem-output-l1
+          stem /tmp/stem-target --level 2 --format all --out /tmp/stem-output-l2
+          stem /tmp/stem-target --level 3 --format all --out /tmp/stem-output-l3
+
+      - name: Verify generated artifacts
+        run: |
+          test -f /tmp/stem-output-l1/stem-target_experiment_results.json
+          test -f /tmp/stem-output-l1/stem-target_report.md
+          test -f /tmp/stem-output-l1/stem-target_brief_1p.pdf
+          test -f /tmp/stem-output-l2/stem-target_detailed_3p.pdf
+          test -f /tmp/stem-output-l3/stem-target_detailed_5p.pdf
+
+      - name: Build source and wheel distributions
+        run: |
+          python -m pip install build
+          python -m build

@@ -57,6 +57,15 @@ def _xt(t: str) -> str:
     return str(t).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def _clip_words(text: str, limit: int) -> str:
+    """Trim table text without cutting through a word."""
+    value = " ".join(str(text).split())
+    if len(value) <= limit:
+        return value
+    trimmed = value[: max(0, limit - 1)].rsplit(" ", 1)[0].rstrip(".,;:")
+    return f"{trimmed}..."
+
+
 # ── public API ────────────────────────────────────────────────────────────────
 def write_outputs(
     result: dict[str, Any], output_dir: Path, mode: str, pages: int, fmt: str
@@ -332,12 +341,12 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
     for key, item in ci.items():
         s = item["status"]
         sc = _status_hex(s)
-        ev = (item["evidence"][0] if item["evidence"] else "")[:90]
+        ev = _clip_words(item["evidence"][0] if item["evidence"] else "", 92)
         badge = [[Paragraph(
             f'<font color="{_WHITE}" size="7"><b>{s}</b></font>',
             _style(f"B_{key[:4]}", 7, 9, _WHITE, True, "CENTER"),
         )]]
-        bt = Table(badge, colWidths=[10 * mm])
+        bt = Table(badge, colWidths=[15 * mm])
         bt.setStyle(TableStyle([
             ("BACKGROUND",    (0, 0), (-1, -1), _hx(sc)),
             ("TOPPADDING",    (0, 0), (-1, -1), 1),
@@ -467,7 +476,7 @@ def _rubric_rows(items: list[tuple[str, str, str, str]], id_prefix: str = "R") -
                 f'<font color="{col}"><b>{_xt(score_str)}</b></font>',
                 _style(f"{uid}S", 8, 11, col, True, "CENTER"),
             ),
-            Paragraph(_xt(ev[:160]), _style(f"{uid}E", 7.5, 10, _DGRAY)),
+            Paragraph(_xt(_clip_words(ev, 175)), _style(f"{uid}E", 7.5, 10, _DGRAY)),
         ])
     t = Table(rows, colWidths=[52 * mm, 18 * mm, None])
     t.setStyle(TableStyle([
