@@ -20,7 +20,7 @@ except ImportError as exc:  # pragma: no cover
     ) from exc
 
 
-_DEFAULT_REPO = "https://github.com/artic-network/fieldbioinformatics"
+_DEFAULT_REPO = "https://github.com/flamehaven01/STEM-BIO-AI"
 _PLACEHOLDER_REPO = "https://github.com/<owner>/<bio-medical-ai-repo>"
 
 
@@ -220,7 +220,10 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit") as demo:
                 label="Public GitHub repository URL",
                 value="",
                 placeholder=_PLACEHOLDER_REPO,
-                info="Paste a public bio/medical AI repository URL. Example: https://github.com/artic-network/fieldbioinformatics",
+                info=(
+                    "Paste a public bio/medical AI repository URL. "
+                    f"Safe demo repository: {_DEFAULT_REPO}"
+                ),
             )
         with gr.Column(scale=1):
             level_input = gr.Radio(
