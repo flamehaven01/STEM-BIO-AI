@@ -1,3 +1,15 @@
+---
+title: STEM BIO-AI Local Trust Audit
+emoji: 🧬
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+license: apache-2.0
+---
+
 # STEM BIO-AI
 
 **Trust Audit Framework for Bio/Medical AI Repositories**
@@ -9,35 +21,9 @@
 [![Stable](https://img.shields.io/badge/stable-v1.1.2-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Spaces-stem--bio--ai-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
-STEM BIO-AI is a deterministic trust-audit framework for open-source bio/medical AI repositories. It inspects repository artifacts, scores observable governance evidence, and emits JSON, Markdown, and PDF review packets — without an LLM key or model API call.
-
-It is not a clinical certifier, regulatory clearance tool, or scientific efficacy validator. It answers one narrower question:
+Bio/medical AI repositories often look credible at the README layer while leaving trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI evaluates the visible repository surface — no API key, no LLM, no GPU required.
 
 > Does this repository expose enough trust evidence to be considered, contained, or rejected?
-
-## Core Features
-
-- **No API key required** — runs a deterministic local scanner; no OpenAI, Anthropic, or GitHub API key is needed.
-- **No model-runtime dependency** — no PyTorch, TensorFlow, CUDA, or GPU requirement; the scanner inspects repository evidence instead of running model inference.
-- **Tier meaning built in** — maps observable evidence to T0-T4 trust tiers, from `T0 Trust Not Established` to `T4 Strong Observable Trust`.
-- **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF review artifacts for local evidence trails.
-
-```bash
-stem <folder>            # Level 1 — 1-page executive brief (default)
-stem <folder> --level 2  # Level 2 — 3-page stage analysis
-stem <folder> --level 3  # Level 3 — 5-page deep review + remediation roadmap
-```
-
----
-
-## About
-
-Bio/medical AI repositories often look credible at the README layer while leaving trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI evaluates the visible repository surface instead of relying on marketing claims.
-
-The framework separates two jobs:
-
-- **Fact extraction** — inspect README, docs, package metadata, tests, CI, dependency files, and code paths.
-- **Trust classification** — score whether observable evidence supports supervised use, quarantine, or rejection.
 
 ---
 
@@ -48,8 +34,9 @@ git clone https://github.com/flamehaven01/STEM-BIO-AI.git
 cd STEM-BIO-AI
 pip install -e .[pdf]
 
-stem /path/to/bio-ai-repo               # Level 1 brief
-stem /path/to/bio-ai-repo --level 3     # Level 3 full packet
+stem /path/to/bio-ai-repo            # Level 1 — 1-page executive brief (default)
+stem /path/to/bio-ai-repo --level 2  # Level 2 — 3-page stage analysis
+stem /path/to/bio-ai-repo --level 3  # Level 3 — 5-page deep review + remediation roadmap
 ```
 
 ---
@@ -65,7 +52,7 @@ pip install -e .[pdf]
 ### As an agent skill
 
 ```bash
-# Generic path
+# Generic
 git clone --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.agents/skills/stem-bio-ai
 
 # Claude Code
@@ -83,10 +70,10 @@ stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]
 | Level | Pages | Contents |
 |---|---|---|
 | `--level 1` (default) | 1 | Executive dashboard: score, tier, stage cards, code integrity |
-| `--level 2` | 3 | + Stage 1/2R full rubric breakdown, Stage 3 T/B-series, gap analysis |
+| `--level 2` | 3 | + Stage 1/2R rubric breakdown, Stage 3 T/B-series, gap analysis |
 | `--level 3` | 5 | + Code integrity deep dive, classification analysis, priority roadmap, metadata |
 
-`stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the target repository first, then point the CLI at the local path.
+`stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the repository first, then point the CLI at the local path.
 
 ---
 
@@ -102,13 +89,13 @@ Each run writes to `--out DIR` (default: `stem_output/`):
 <repo>_detailed_5p.pdf           # Level 3 deep review packet
 ```
 
-A reference artifact set for `artic-network/fieldbioinformatics` is stored in `audits/fieldbioinformatics_v1_1_2/`.
+A reference artifact set for `artic-network/fieldbioinformatics` is in `audits/fieldbioinformatics_v1_1_2/`.
 
 ---
 
 ## Web Demo
 
-Live demo: [Hugging Face Space](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
+Live: [huggingface.co/spaces/Flamehaven/stem-bio-ai](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Run locally:
 
@@ -116,8 +103,6 @@ Run locally:
 pip install -e .[demo]
 python app.py
 ```
-
-The demo accepts a public GitHub URL, shallow-clones it, runs the local scanner, and returns Markdown, JSON, and PDF outputs. No LLM or external API is called.
 
 ---
 
@@ -139,8 +124,6 @@ flowchart LR
     G --> J[PDF]
 ```
 
-Core modules:
-
 | Module | Role |
 |---|---|
 | `stem_ai/scanner.py` | Artifact collection, rubric scoring, integrity checks |
@@ -159,8 +142,6 @@ Core modules:
 | Stage 3: Code / Bio Responsibility | 40% | CI, tests, changelog hygiene, data provenance |
 | C1-C4: Code Integrity | Advisory / penalty | Credentials, dependency pinning, deprecated paths, fail-open exceptions |
 
-**Tier boundaries:**
-
 | Tier | Score | Disposition |
 |---|---:|---|
 | T0 | 0–39 | Trust not established |
@@ -169,7 +150,7 @@ Core modules:
 | T3 | 70–84 | Supervised consideration |
 | T4 | 85–100 | Strong observable trust |
 
-Score formula: `Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Penalty`
+`Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Penalty`
 
 ---
 
@@ -177,7 +158,7 @@ Score formula: `Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Pen
 
 ```
 STEM-BIO-AI/
-  app.py                   # Gradio / HuggingFace Spaces entry point
+  app.py                   # HuggingFace Spaces / Gradio entry point
   pyproject.toml           # Package metadata and extras
   requirements.txt         # Spaces dependency list
   SKILL.md                 # Universal agent skill definition
@@ -186,7 +167,6 @@ STEM-BIO-AI/
   audits/                  # Reference artifact sets
   spec/                    # Core protocol specifications
   memory/                  # MICA contract artifacts
-  discrimination/          # Rubric discrimination examples
   .github/workflows/       # CI checks
 ```
 
@@ -194,9 +174,7 @@ STEM-BIO-AI/
 
 ## Security and Boundaries
 
-- STEM BIO-AI does **not** certify clinical safety.
-- STEM BIO-AI does **not** validate scientific efficacy.
-- STEM BIO-AI does **not** replace regulatory, legal, or medical review.
+- STEM BIO-AI does **not** certify clinical safety, scientific efficacy, or regulatory compliance.
 - The local CLI does not upload code to any external service.
 - Public demo usage should be limited to public repositories. Private audits should run locally.
 
@@ -208,18 +186,12 @@ STEM-BIO-AI/
 - Runtime replay lanes for dependency-aware execution checks.
 - Deterministic snapshot fixtures for multi-run reproducibility testing.
 - Golden JSON/PDF artifact checks in CI.
-- Improved Gradio demo with example repository presets.
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. High-value areas:
-
-- Rubric discrimination examples from real audits.
-- Clinical-adjacency trigger refinements.
-- Report rendering improvements.
-- CI and reproducibility additions.
+See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination examples, clinical-adjacency trigger refinements, report rendering improvements.
 
 ---
 
@@ -227,13 +199,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. High-value areas:
 
 Apache 2.0. See [LICENSE](LICENSE).
 
----
-
 ## Author
 
 Maintained by Flamehaven — [flamehaven01](https://github.com/flamehaven01)
-
----
 
 ## Citation
 
