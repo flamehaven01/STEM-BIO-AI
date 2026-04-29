@@ -79,11 +79,11 @@ if [ -z "$REQ_FILE" ]; then
   echo "C2: WARN -- No dependency file found"
 else
   TOTAL_DEPS=$(grep -cE "^[a-zA-Z]" "$REQ_FILE" 2>/dev/null || echo 0)
-  PINNED_DEPS=$(grep -cE "==" "$REQ_FILE" 2>/dev/null || echo 0)
-  UNPINNED_DEPS=$(grep -E "^[a-zA-Z]" "$REQ_FILE" 2>/dev/null | grep -vcE "==\|>=" || echo 0)
+  PINNED_DEPS=$(grep -cE "==|===|@|sha256|--hash=sha256:" "$REQ_FILE" 2>/dev/null || echo 0)
+  UNPINNED_DEPS=$(grep -E "^[a-zA-Z]" "$REQ_FILE" 2>/dev/null | grep -vcE "==|===|@|sha256|--hash=sha256:" || echo 0)
 
   echo "File: $REQ_FILE"
-  echo "Total: $TOTAL_DEPS | Pinned (==): $PINNED_DEPS | Unpinned: $UNPINNED_DEPS"
+  echo "Total: $TOTAL_DEPS | Exact-pinned: $PINNED_DEPS | Unpinned/loose: $UNPINNED_DEPS"
 
   if [ "$UNPINNED_DEPS" -eq 0 ] 2>/dev/null; then
     echo "C2: PASS -- All dependencies pinned"

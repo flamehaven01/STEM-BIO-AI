@@ -8,6 +8,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from . import __version__
+
 
 TEXT_EXTENSIONS = {
     ".md",
@@ -24,12 +26,26 @@ TEXT_EXTENSIONS = {
 }
 SKIP_DIRS = {".git", "__pycache__", ".mypy_cache", ".pytest_cache", "node_modules", ".venv", "venv"}
 BIO_TERMS = re.compile(r"\b(bio|medical|clinical|virus|viral|genome|sequenc|variant|patient|diagnos|treatment)\b", re.I)
-CLINICAL_OUTPUT_TERMS = re.compile(r"\b(consensus|vcf|variant|diagnos|clinical|patient|triage|risk score|treatment)\b", re.I)
+CA_INDIRECT_TERMS = re.compile(r"\b(consensus|vcf|variant|viral|virus|genome|sequenc|sample|allele)\b", re.I)
+CA_DIRECT_TERMS = re.compile(
+    r"\b(diagnos(?:is|tic)|clinical decision|decision support|patient-facing|triage|risk score|"
+    r"treatment|drug recommendation|pharmacogenomic|pharmacogenetic|DPYD|CYP2D6|CPIC|"
+    r"FDA clearance|CE mark)\b",
+    re.I,
+)
+T0_HARD_FLOOR_TERMS = re.compile(
+    r"\b(autonomous|automated|without clinician|clinical decision support|diagnos(?:is|tic)|"
+    r"treatment recommendation|triage|risk score)\b",
+    re.I,
+)
 DISCLAIMER_TERMS = re.compile(r"(not for clinical|not for diagnostic|research use only|not medical advice)", re.I)
 SECRET_TERMS = re.compile(r"(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9_]{20,}|api[_-]?key\s*=\s*['\"][^'\"]{16,})")
-PINNED_DEP = re.compile(r"(==|@|sha256|[=<>]=\d)")
+EXACT_PINNED_DEP = re.compile(r"(^|[A-Za-z0-9_.\-\]\)])\s*(==|===|@)\s*[^,\s;]+|sha256[:=]|--hash=sha256:", re.I)
+LOOSE_DEP = re.compile(r"(>=|<=|~=|!=|>|<)")
 PATIENT_METADATA = re.compile(r"(patient_|patient age|patient_sex|sample_id|collection_date|pregnan|municipality|lab_id)", re.I)
-FAIL_OPEN = re.compile(r"(except\s+Exception\s*:\s*(?:\n\s*)?(?:pass|return\s+True)|except\s*:\s*(?:\n\s*)?(?:pass|return\s+True))", re.I)
+FAIL_OPEN = re.compile(r"(except(?:\s+Exception)?\s*:\s*(?:\r?\n\s*)?(?:pass|return\s+True))")
+BIAS_LIMITATION_TERMS = re.compile(r"\b(bias|fairness|limitation|limitations|generalizability|generalisation|population|not validated|validation cohort)\b", re.I)
+COI_FUNDING_TERMS = re.compile(r"\b(conflict of interest|competing interest|funding|grant|sponsor|acknowledg(?:e)?ments?)\b", re.I)
 
 
 def audit_repository(target: Path) -> dict[str, Any]:
@@ -43,21 +59,26 @@ def audit_repository(target: Path) -> dict[str, Any]:
     code_text = _read_many(target, max_files=200, suffixes={".py", ".sh"})
 
     repo_name = _repo_name(target)
-    clinical_adjacent = bool(CLINICAL_OUTPUT_TERMS.search(readme + "\n" + docs_text + "\n" + code_text))
+    surface_text = "\n".join([readme, docs_text, package_text])
+    ca_severity = _classify_ca_severity(surface_text)
+    clinical_adjacent = ca_severity != "none"
     has_disclaimer = bool(DISCLAIMER_TERMS.search(readme + "\n" + docs_text))
+    t0_hard_floor = _t0_hard_floor(surface_text, ca_severity, has_disclaimer)
 
     stage_1 = _score_stage_1(readme, package_text, clinical_adjacent, has_disclaimer)
     stage_2r, stage_2r_rubric = _score_stage_2r(readme, docs_text, package_text, workflow_text, test_text, clinical_adjacent, has_disclaimer)
-    stage_3, stage_3_rubric = _score_stage_3(target, workflow_text, test_text, dep_text)
+    stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text)
     code_integrity = _code_integrity(target, dep_text, code_text)
 
     weights = {"stage_1": 0.4, "stage_2": 0.2, "stage_3": 0.4}
     risk_penalty = 10 if code_integrity["C1_hardcoded_credentials"]["status"] == "FAIL" else 0
-    final_score = round(stage_1 * weights["stage_1"] + stage_2r * weights["stage_2"] + stage_3 * weights["stage_3"] - risk_penalty)
+    raw_score = round(stage_1 * weights["stage_1"] + stage_2r * weights["stage_2"] + stage_3 * weights["stage_3"] - risk_penalty)
+    score_cap = _score_cap(ca_severity, has_disclaimer, t0_hard_floor)
+    final_score = min(raw_score, score_cap) if score_cap is not None else raw_score
 
     return {
         "schema_version": "stem-ai-local-cli-result-v1",
-        "stem_ai_version": "1.1.2",
+        "stem_ai_version": __version__,
         "generated_at_local": date.today().isoformat(),
         "execution_mode": "LOCAL_ANALYSIS",
         "target": {
@@ -70,18 +91,20 @@ def audit_repository(target: Path) -> dict[str, Any]:
         },
         "classification": {
             "clinical_adjacent": clinical_adjacent,
-            "ca_severity": "CA-INDIRECT" if clinical_adjacent else "none",
-            "t0_hard_floor": False,
+            "ca_severity": ca_severity,
+            "t0_hard_floor": t0_hard_floor,
+            "score_cap": score_cap,
             "has_explicit_clinical_boundary": has_disclaimer,
         },
         "score": {
             "stage_1_readme_intent": stage_1,
-            "stage_2_cross_platform": None,
+            "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
             "stage_2_repo_local_consistency": stage_2r,
             "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
             "stage_3_code_bio": stage_3,
             "weights": weights,
             "risk_penalty": risk_penalty,
+            "raw_score_before_floor": raw_score,
             "final_score": final_score,
             "formal_tier": _tier(final_score),
             "use_scope": _use_scope(final_score),
@@ -131,20 +154,28 @@ def _score_stage_2r(readme: str, docs_text: str, package_text: str, workflow_tex
     return final, items
 
 
-def _score_stage_3(target: Path, workflow_text: str, test_text: str, dep_text: str) -> tuple[int, dict[str, Any]]:
+def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str, test_text: str, dep_text: str) -> tuple[int, dict[str, Any]]:
     ci = 15 if workflow_text else 0
-    tests = 15 if test_text and BIO_TERMS.search(test_text) else 8 if test_text else 0
+    normalized_test_text = test_text.replace("_", " ")
+    tests = 15 if test_text and BIO_TERMS.search(normalized_test_text) else 8 if test_text else 0
     changelog_path = next((p for p in [target / "CHANGELOG.md", target / "CHANGELOG", target / "NEWS.md"] if p.exists()), None)
     changelog = 15 if changelog_path else 0
-    provenance = 10 if dep_text else 0
-    score = ci + tests + changelog + provenance
+    provenance = 15 if dep_text else 0
+    bias_text = "\n".join([readme, docs_text])
+    bias = 15 if BIAS_LIMITATION_TERMS.search(bias_text) else 0
+    coi_text = "\n".join([readme, docs_text, _read_first(target, ["FUNDING.md", "CITATION.cff", "AUTHORS.md"])])
+    coi = 5 if COI_FUNDING_TERMS.search(coi_text) else 0
+    raw_score = ci + tests + changelog + provenance + bias + coi
+    raw_max = 80
+    score = round((raw_score / raw_max) * 100)
     rubric = {
         "T1_CI_CD": {"score": ci, "max": 15, "evidence": "Workflow files detected." if ci else "No workflow files detected."},
         "T2_domain_tests": {"score": tests, "max": 15, "evidence": "Domain-specific test text detected." if tests == 15 else "Tests present but domain specificity is limited." if tests else "No tests detected."},
         "T3_changelog_release_hygiene": {"score": changelog, "max": 15, "evidence": str(changelog_path.name) if changelog_path else "No changelog detected."},
         "B1_data_provenance_controls": {"score": provenance, "max": 15, "evidence": "Dependency/provenance manifest detected." if provenance else "No dependency/provenance manifest detected."},
-        "B2_bias_limitations": {"score": 0, "max": 15, "evidence": "Not detected by local CLI scan."},
-        "B3_coi_funding": {"score": 0, "max": 5, "evidence": "Not detected by local CLI scan."},
+        "B2_bias_limitations": {"score": bias, "max": 15, "evidence": "Bias, limitation, population, or validation-boundary language detected." if bias else "No bias/limitations language detected by local CLI scan."},
+        "B3_coi_funding": {"score": coi, "max": 5, "evidence": "COI, funding, sponsor, or acknowledgement language detected." if coi else "No COI/funding disclosure detected by local CLI scan."},
+        "stage_3_raw_total": {"score": raw_score, "max": raw_max, "evidence": "Raw rubric total before normalization to 100."},
     }
     return _clamp(score), rubric
 
@@ -152,7 +183,7 @@ def _score_stage_3(target: Path, workflow_text: str, test_text: str, dep_text: s
 def _code_integrity(target: Path, dep_text: str, code_text: str) -> dict[str, Any]:
     secret_hits = [m.group(0)[:24] for m in SECRET_TERMS.finditer(code_text)]
     unpinned = _dependency_unpinned(dep_text)
-    deprecated_patient = bool(PATIENT_METADATA.search(_read_many(target / "deprecated", max_files=80) + _read_many(target / "artic" / "deprecated", max_files=80)))
+    deprecated_patient = bool(PATIENT_METADATA.search(_read_deprecated_text(target)))
     fail_open = bool(FAIL_OPEN.search(code_text))
     return {
         "C1_hardcoded_credentials": {
@@ -220,6 +251,25 @@ def _read_text(path: Path) -> str:
         return ""
 
 
+def _read_deprecated_text(root: Path, max_files: int = 120) -> str:
+    chunks: list[str] = []
+    count = 0
+    deprecated_names = {"deprecated", "legacy", "archive", "archives", "old"}
+    for path in root.rglob("*"):
+        if any(part in SKIP_DIRS for part in path.parts):
+            continue
+        if not path.is_file() or path.suffix.lower() not in TEXT_EXTENSIONS:
+            continue
+        lowered_parts = {part.lower() for part in path.parts}
+        if not lowered_parts & deprecated_names:
+            continue
+        chunks.append(_read_text(path))
+        count += 1
+        if count >= max_files:
+            break
+    return "\n".join(chunks)
+
+
 def _repo_name(target: Path) -> str:
     remote = _git(target, "remote", "get-url", "origin")
     if remote:
@@ -252,9 +302,65 @@ def _shared_terms(left: str, right: str) -> bool:
 def _dependency_unpinned(dep_text: str) -> bool:
     if not dep_text:
         return False
-    lines = [line.strip() for line in dep_text.splitlines() if line.strip() and not line.strip().startswith("#")]
-    dep_lines = [line for line in lines if re.match(r"[-A-Za-z0-9_].*", line)]
-    return any(not PINNED_DEP.search(line) for line in dep_lines[:80])
+    dep_lines = _dependency_entries(dep_text)
+    return any(_is_unpinned_dependency(line) for line in dep_lines[:100])
+
+
+def _dependency_entries(dep_text: str) -> list[str]:
+    entries: list[str] = []
+    in_pyproject_deps = False
+    for raw in dep_text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if re.match(r"^(dependencies|requires|install_requires|pdf|demo)\s*=", line):
+            in_pyproject_deps = "[" in line and "]" not in line
+            entries.extend(_quoted_dependency_strings(line))
+            continue
+        if in_pyproject_deps:
+            entries.extend(_quoted_dependency_strings(line))
+            if "]" in line:
+                in_pyproject_deps = False
+            continue
+        if re.match(r"^[-A-Za-z0-9_.]+(\[[^\]]+\])?(\s*(==|===|>=|<=|~=|!=|>|<|@)\s*|$)", line):
+            entries.append(line)
+    return entries
+
+
+def _quoted_dependency_strings(line: str) -> list[str]:
+    values = [m.group(1) or m.group(2) for m in re.finditer(r'"([^"]+)"|\'([^\']+)\'', line)]
+    return [v.strip() for v in values if re.match(r"^[A-Za-z0-9_.-]+(\[[^\]]+\])?(\s*(==|===|>=|<=|~=|!=|>|<|@)\s*|$)", v.strip())]
+
+
+def _is_unpinned_dependency(line: str) -> bool:
+    normalized = line.split("#", 1)[0].strip().rstrip(",")
+    if not normalized or normalized.startswith(("-", "[", "{")):
+        return False
+    if EXACT_PINNED_DEP.search(normalized):
+        return False
+    if LOOSE_DEP.search(normalized):
+        return True
+    return bool(re.match(r"^[A-Za-z0-9_.-]+(\[[^\]]+\])?(\s*;.*)?$", normalized))
+
+
+def _classify_ca_severity(surface_text: str) -> str:
+    if CA_DIRECT_TERMS.search(surface_text):
+        return "CA-DIRECT"
+    if CA_INDIRECT_TERMS.search(surface_text):
+        return "CA-INDIRECT"
+    return "none"
+
+
+def _t0_hard_floor(surface_text: str, ca_severity: str, has_disclaimer: bool) -> bool:
+    return ca_severity == "CA-DIRECT" and not has_disclaimer and bool(T0_HARD_FLOOR_TERMS.search(surface_text))
+
+
+def _score_cap(ca_severity: str, has_disclaimer: bool, t0_hard_floor: bool) -> int | None:
+    if t0_hard_floor:
+        return 39
+    if ca_severity != "none" and not has_disclaimer:
+        return 69
+    return None
 
 
 def _positive_evidence(workflow_text: str, test_text: str, docs_text: str, package_text: str) -> list[str]:

@@ -1,7 +1,7 @@
 ---
 name: stem-ai
 description: "Trust Audit Framework for Bio/Medical AI Repositories. Audits open-source bio/medical AI repositories for clinical trustworthiness using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored audit reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess the trustworthiness of any bio-AI, medical AI, or clinical-adjacent repository."
-version: "1.1.2"
+version: "1.1.3"
 author: "Flamehaven"
 license: "Apache-2.0"
 platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigravity", "universal"]
@@ -9,7 +9,7 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 
 # STEM BIO-AI -- Trust Audit Framework for Bio/Medical AI Repositories
 
-**Version:** 1.1.2
+**Version:** 1.1.3
 **Codename:** Hippocratic_Code_Engine_Unified
 **Runtime:** LLM-Native + AI CLI (Universal)
 

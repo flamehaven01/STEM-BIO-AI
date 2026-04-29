@@ -81,7 +81,7 @@ check_dir "references"
 
 echo ""
 echo "--- Core Spec ---"
-CORE=$(find "$SKILL_ROOT/spec/" -name "STEM-AI_v*_CORE.md" 2>/dev/null | head -1)
+CORE=$(find "$SKILL_ROOT/spec/" -name "STEM-AI_v*_CORE.md" 2>/dev/null | sort -V | tail -1)
 if [ -n "$CORE" ]; then
   echo "  [OK] Core spec: $CORE"
 else
@@ -107,7 +107,8 @@ else
 fi
 
 MICA_YAML_SPEC=$(sed -n 's/^mica_spec: "\([0-9.]*\)"$/\1/p' "$SKILL_ROOT/memory/mica.yaml" 2>/dev/null | head -1)
-MICA_JSON_SPEC=$(sed -n 's/^  "mica_spec": "\([0-9.]*\)",$/\1/p' "$SKILL_ROOT/memory/stem-ai.mica.v1.1.2.json" 2>/dev/null | head -1)
+MICA_JSON=$(find "$SKILL_ROOT/memory/" -name "stem-ai.mica.v*.json" 2>/dev/null | sort -V | tail -1)
+MICA_JSON_SPEC=$(sed -n 's/^  "mica_spec": "\([0-9.]*\)",$/\1/p' "$MICA_JSON" 2>/dev/null | head -1)
 if [ -n "$MICA_YAML_SPEC" ] && [ -n "$MICA_JSON_SPEC" ]; then
   if [ "$MICA_YAML_SPEC" = "$MICA_JSON_SPEC" ]; then
     echo "  [OK] MICA spec aligned ($MICA_YAML_SPEC)"

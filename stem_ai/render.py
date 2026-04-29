@@ -6,6 +6,8 @@ import textwrap
 from pathlib import Path
 from typing import Any
 
+from . import __version__
+
 try:
     from reportlab.lib import colors
     from reportlab.lib.pagesizes import A4
@@ -164,11 +166,14 @@ def _write_rl_pdf(path: Path, result: dict[str, Any], mode: str, pages: int) -> 
 
 # ── style factory ─────────────────────────────────────────────────────────────
 _style_cache: dict[str, Any] = {}
+_STYLE_CACHE_LIMIT = 256
 
 def _style(name: str, size: int = 9, leading: int = 12, color: str = _DGRAY,
            bold: bool = False, align: str = "LEFT") -> Any:
     key = f"{name}_{size}_{leading}_{color}_{bold}_{align}"
     if key not in _style_cache:
+        if len(_style_cache) >= _STYLE_CACHE_LIMIT:
+            _style_cache.clear()
         _style_cache[key] = ParagraphStyle(
             key,
             fontSize=size,
@@ -406,7 +411,7 @@ def _footer_block() -> list[Any]:
         HRFlowable(width="100%", thickness=0.5, color=_hx(_MGRAY)),
         Spacer(1, 1.5 * mm),
         Paragraph(
-            f'<font color="{_DGRAY}" size="7">Independent audit summary — STEM BIO-AI v1.1.2 &nbsp;|&nbsp; '
+            f'<font color="{_DGRAY}" size="7">Independent audit summary — STEM BIO-AI v{__version__} &nbsp;|&nbsp; '
             "Not clinical certification. Not regulatory clearance. Not medical advice.</font>",
             _style("FT1", 7, 9, _DGRAY, False, "CENTER"),
         ),
@@ -1144,10 +1149,11 @@ def _page_stream(lines: list[str]) -> str:
             if not first:
                 chunks.append("0 -16 Td")
                 y -= 16
+                if y < 60:
+                    chunks.append("ET")
+                    return "\n".join(chunks)
             first = False
             chunks.append(f"({_escape_pdf(wrapped)}) Tj")
-            if y < 60:
-                break
     chunks.append("ET")
     return "\n".join(chunks)
 

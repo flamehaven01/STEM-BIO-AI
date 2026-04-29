@@ -10,6 +10,23 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.1.3] - 2026-04-29
+
+### Fixed
+- Corrected Python dependency-pinning detection so loose ranges such as `>=`, `<=`, `~=`, `<`, and `>` no longer pass C2 as exact pins.
+- Added deterministic CA severity classification for LOCAL_ANALYSIS (`CA-DIRECT`, `CA-INDIRECT`, `none`) and activated the T0 hard-floor cap for unbounded direct clinical claims.
+- Added a T2 score cap for clinical-adjacent repositories that lack an explicit non-clinical/non-diagnostic boundary.
+- Rebalanced Stage 3 scoring to normalize the full 80-point T/B rubric to 100, restoring attainable T3/T4 ranges.
+- Fixed B1 max-score mismatch and added local B2 bias/limitations and B3 COI/funding evidence detection.
+- Removed repository-specific deprecated-path scanning and replaced it with generic deprecated/legacy/archive directory scanning.
+- Hardened fail-open exception detection for CRLF code paths.
+- Prevented fallback PDF text overflow when reportlab is unavailable.
+- Bounded reportlab style cache growth for long-running Gradio sessions.
+- Added CLI `--version` and safer Gradio report-level fallback handling.
+- Made the skill validator select the latest core spec and MICA archive instead of hard-coding v1.1.2.
+
+---
+
 ## [1.1.2] - 2026-03-27
 
 ### Added

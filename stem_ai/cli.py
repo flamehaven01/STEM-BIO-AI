@@ -4,6 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from . import __version__
 from .render import write_outputs
 from .scanner import audit_repository
 
@@ -31,6 +32,7 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument("--version", action="version", version=f"STEM BIO-AI {__version__}")
     subparsers = parser.add_subparsers(dest="command")
 
     audit = subparsers.add_parser("audit", help="Audit a local repository")
@@ -64,7 +66,9 @@ def _build_parser() -> argparse.ArgumentParser:
 def _normalize_argv(argv: list[str]) -> list[str]:
     if not argv:
         return argv
-    if argv[0] in {"audit", "-h", "--help"}:
+    if argv[0] in {"audit", "-h", "--help", "--version"}:
+        return argv
+    if argv[0].startswith("-"):
         return argv
     # Time-to-value shortcut: `stem <folder>` behaves as `stem audit <folder>`.
     return ["audit", *argv]

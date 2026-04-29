@@ -85,6 +85,12 @@ def _json_preview(result: dict) -> str:
 
 def run_demo(repo_url: str, level: int):
     repo_url = (repo_url or "").strip()
+    try:
+        level_int = int(level)
+    except (TypeError, ValueError):
+        level_int = 1
+    if level_int not in _LEVEL_MAP:
+        level_int = 1
     if not repo_url:
         return (
             "Waiting for repository URL",
@@ -100,7 +106,7 @@ def run_demo(repo_url: str, level: int):
     try:
         repo = _clone_github(repo_url, tmp_path)
         result = audit_repository(repo)
-        mode, pages = _LEVEL_MAP[int(level)]
+        mode, pages = _LEVEL_MAP[level_int]
         output_dir = tmp_path / "out"
         files = write_outputs(result, output_dir, mode, pages, "all")
         report = render_markdown(result, mode, pages)
