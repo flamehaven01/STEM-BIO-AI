@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 from uuid import uuid4
+import json
 
 from .cli import _LEVEL_MAP
 from .render import render_markdown, write_outputs
@@ -61,8 +62,8 @@ def _finding_cards(result: dict) -> str:
     )
 
 
-def _json_preview(result: dict) -> dict:
-    return {
+def _json_preview(result: dict) -> str:
+    preview = {
         "schema_version": result["schema_version"],
         "stem_bio_ai_version": result["stem_ai_version"],
         "target": result["target"],
@@ -71,6 +72,7 @@ def _json_preview(result: dict) -> dict:
         "stage_2r_rubric": result.get("stage_2r_rubric", {}),
         "code_integrity": result.get("code_integrity", {}),
     }
+    return json.dumps(preview, indent=2)
 
 
 def run_demo(repo_url: str, level: int):
@@ -102,7 +104,7 @@ def run_demo(repo_url: str, level: int):
             "Audit failed",
             f"### Error\n`{type(exc).__name__}: {exc}`",
             "No report generated.",
-            {"error": str(exc), "error_type": type(exc).__name__},
+            json.dumps({"error": str(exc), "error_type": type(exc).__name__}, indent=2),
             None,
             None,
         )
@@ -171,7 +173,12 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
         with gr.Tab("Report"):
             report_output = gr.Markdown(label="Markdown report")
         with gr.Tab("JSON Preview"):
-            json_preview = gr.JSON(label="Machine-readable evidence object")
+            json_preview = gr.Code(
+                label="Machine-readable evidence object",
+                language="json",
+                interactive=False,
+                lines=24,
+            )
         with gr.Tab("Downloads"):
             gr.Markdown("Download the generated audit artifacts.")
             with gr.Row():
