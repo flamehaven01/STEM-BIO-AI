@@ -224,7 +224,6 @@ def launch_demo() -> None:
     launch_kwargs = {
         "server_name": "0.0.0.0",
         "server_port": 7860,
-        "share": True,
     }
     if _gradio_major() < 6:
         launch_kwargs["show_api"] = False
