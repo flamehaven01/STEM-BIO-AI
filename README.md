@@ -14,8 +14,8 @@ license: apache-2.0
 
 **Trust Audit Framework for Bio/Medical AI Repositories**
 
-[![Python Package](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/python-package.yml/badge.svg)](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/python-package.yml)
-[![Skill Validation](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-AI-BIO/actions/workflows/validate-skill.yml)
+[![Python Package](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml)
+[![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Stable](https://img.shields.io/badge/stable-v1.1.2-informational.svg)](CHANGELOG.md)
@@ -95,8 +95,8 @@ audits/fieldbioinformatics_v1_1_2/
 Clone the repository and install the local CLI:
 
 ```bash
-git clone https://github.com/flamehaven01/STEM-AI-BIO.git
-cd STEM-AI-BIO
+git clone https://github.com/flamehaven01/STEM-BIO-AI.git
+cd STEM-BIO-AI
 pip install -e .[pdf]
 ```
 
@@ -125,20 +125,20 @@ PyPI distribution is intentionally not advertised yet. The `stem-ai` package nam
 ### Universal Agent Skill
 
 ```bash
-git clone --branch v1.1.2 --depth 1 https://github.com/flamehaven01/STEM-AI-BIO.git ~/.agents/skills/stem-ai
+git clone --branch v1.1.2 --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.agents/skills/stem-ai
 ```
 
 Claude Code path:
 
 ```bash
-git clone --branch v1.1.2 --depth 1 https://github.com/flamehaven01/STEM-AI-BIO.git ~/.claude/skills/stem-ai
+git clone --branch v1.1.2 --depth 1 https://github.com/flamehaven01/STEM-BIO-AI.git ~/.claude/skills/stem-ai
 ```
 
 Project-local path:
 
 ```bash
 mkdir -p .agents/skills
-git clone https://github.com/flamehaven01/STEM-AI-BIO.git .agents/skills/stem-ai
+git clone https://github.com/flamehaven01/STEM-BIO-AI.git .agents/skills/stem-ai
 ```
 
 ## CLI Usage
@@ -321,7 +321,7 @@ Maintained by Flamehaven.
   title = {STEM BIO-AI: Trust Audit Framework for Bio/Medical AI Repositories},
   version = {1.1.2},
   year = {2026},
-  url = {https://github.com/flamehaven01/STEM-AI-BIO}
+  url = {https://github.com/flamehaven01/STEM-BIO-AI}
 }
 ```
 

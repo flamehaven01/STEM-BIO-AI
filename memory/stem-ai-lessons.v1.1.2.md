@@ -152,7 +152,7 @@ When a new failure mode is discovered:
 
 ## Drift Profile First Cycle -- 2026-03-28
 
-MICA v0.2.0 Drift Profile applied to STEM-AI-BIO for the first time.
+MICA v0.2.0 Drift Profile applied to STEM-BIO-AI for the first time.
 
 ### Drift events caught and resolved
 

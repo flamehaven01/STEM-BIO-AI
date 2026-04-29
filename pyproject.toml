@@ -22,8 +22,8 @@ demo = ["gradio>=4.0.0", "reportlab>=4.0"]
 stem = "stem_ai.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/flamehaven01/STEM-AI-BIO"
-Issues = "https://github.com/flamehaven01/STEM-AI-BIO/issues"
+Homepage = "https://github.com/flamehaven01/STEM-BIO-AI"
+Issues = "https://github.com/flamehaven01/STEM-BIO-AI/issues"
 
 [tool.setuptools.packages.find]
 include = ["stem_ai*"]

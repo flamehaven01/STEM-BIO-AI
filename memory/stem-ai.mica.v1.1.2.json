@@ -2,7 +2,7 @@
   "mica_spec": "0.2.0",
   "mica_schema_version": "0.2.0",
   "project": {
-    "name": "stem-ai-bio",
+    "name": "STEM-BIO-AI",
     "full_name": "STEM BIO-AI: Trust Audit Framework for Bio/Medical AI Repositories",
     "version": "1.1.2",
     "status": "active",
@@ -402,7 +402,7 @@
       {"role": "memory_contract",     "path": "memory/mica.yaml",                        "sha256": "4D86A1CD245727CEA01F9D690706019E39D489D0E6147601CA1DBFCA1B1C9152", "required": true,  "produced_by_stage": "S0"},
       {"role": "memory_archive",      "path": "memory/stem-ai.mica.v1.1.2.json",         "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "required": true,  "produced_by_stage": "S0"},
       {"role": "session_playbook",    "path": "memory/stem-ai-playbook.v1.1.2.md",       "sha256": "D65BA75E9513FA8303B5F4C9E29CAFB0A1F643A4C673B96D2414198C337F1925", "required": true,  "produced_by_stage": "S0"},
-      {"role": "lessons_history",     "path": "memory/stem-ai-lessons.v1.1.2.md",        "sha256": "63A113F631CEB7C11D86C1CE2A1464B4563B30BEBAE79D1501EF30A50EACE2CC", "required": true,  "produced_by_stage": "S0"}
+      {"role": "lessons_history",     "path": "memory/stem-ai-lessons.v1.1.2.md",        "sha256": "76207BF1AA660F27BF05175AC5167C3C05F107F73E49E504D58A67F4CC299FE5", "required": true,  "produced_by_stage": "S0"}
     ]
   },
   "deviation_log": [],
@@ -481,7 +481,7 @@
     "trigger": "session_start",
     "required_fields": ["gate", "active_invariants", "track"],
     "gate_block_on": ["PCT-001_fail", "PCT-002_fail", "PCT-003_fail"],
-    "format_template": "[MICA READY] stem-ai-bio v1.1.2 | mode: protocol_evolution | invariants: 18 active | Gate: {gate} | Track: {track}"
+    "format_template": "[MICA READY] STEM-BIO-AI v1.1.2 | mode: protocol_evolution | invariants: 18 active | Gate: {gate} | Track: {track}"
   },
   "self_test_policy": {
     "enabled": true,
@@ -498,7 +498,7 @@
     ]
   },
   "operation_meta": {
-    "archive_id": "MICA-STEM-AI-BIO-001",
+    "archive_id": "MICA-STEM-BIO-AI-001",
     "baseline_ref": "v1.1.2-2026-03-27",
     "objective": "Machine-checkable governance layer for STEM BIO-AI protocol evolution. Encodes 18 IMMUTABLE rubric rules as design_invariants, 10 failure modes as lessons, and empirical validation batch as provenance.",
     "operating_mode": "protocol_evolution",
