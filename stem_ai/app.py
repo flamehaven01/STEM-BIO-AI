@@ -83,87 +83,12 @@ def _json_preview(result: dict) -> str:
     return json.dumps(preview, indent=2)
 
 
-def _sample_result() -> dict:
-    return {
-        "schema_version": "stem-ai-local-cli-result-v1",
-        "stem_ai_version": "1.1.2",
-        "generated_at_local": "demo-sample",
-        "execution_mode": "SAMPLE_DEMO",
-        "target": {
-            "name": "sample/bio-medical-ai-repository",
-            "local_path": "sample-demo",
-            "remote": _DEFAULT_REPO,
-            "branch": "main",
-            "commit": "sample",
-            "file_count": 128,
-        },
-        "classification": {
-            "clinical_adjacent": True,
-            "ca_severity": "CA-INDIRECT",
-            "t0_hard_floor": False,
-            "has_explicit_clinical_boundary": True,
-        },
-        "score": {
-            "stage_1_readme_intent": 65,
-            "stage_2_cross_platform": None,
-            "stage_2_repo_local_consistency": 75,
-            "stage_3_code_bio": 55,
-            "weights": {"stage_1": 0.4, "stage_2": 0.2, "stage_3": 0.4},
-            "risk_penalty": 0,
-            "final_score": 63,
-            "formal_tier": "T2 Caution",
-            "use_scope": "Research reference and supervised non-clinical technical review only.",
-        },
-        "stage_2r_rubric": {
-            "R2R_1_readme_docs_alignment": {"score": 25, "evidence": "Sample docs align with the stated research-only scope."},
-            "R2R_2_package_workflow_alignment": {"score": 25, "evidence": "Sample package metadata and CI are consistent with repository claims."},
-            "R2R_3_tests_claims_alignment": {"score": 25, "evidence": "Sample tests cover domain-specific pipeline behavior."},
-            "D2_disclaimer_consistency_penalty": {"score": 0, "evidence": "Explicit non-clinical boundary is present in this sample."},
-        },
-        "stage_3_rubric": {},
-        "code_integrity": {
-            "C1_hardcoded_credentials": {"status": "PASS", "evidence": ["No direct credential patterns detected in the sample."]},
-            "C2_dependency_pinning": {"status": "WARN", "evidence": ["Some dependencies are unpinned or loosely pinned."]},
-            "C3_deprecated_patient_adjacent_paths": {"status": "WARN", "evidence": ["Deprecated examples include patient-adjacent metadata literals."]},
-            "C4_exception_handling": {"status": "PASS", "evidence": ["No fail-open exception handler detected in the sample."]},
-        },
-        "notable_positive_evidence": [
-            "Explicit research-only boundary is visible in the sample artifact surface.",
-            "Sample CI and tests indicate baseline engineering hygiene.",
-            "Repository-local claims, docs, and package metadata are aligned in the sample.",
-        ],
-        "notable_risks": [
-            "Dependencies should be pinned for reproducibility.",
-            "Deprecated patient-adjacent examples should be quarantined or removed.",
-            "A public repository audit is not a clinical validation study.",
-        ],
-        "method": "Sample demonstration object. Use live GitHub audit or the local CLI for repository-specific results.",
-    }
-
-
-def _format_result(result: dict, mode: str, pages: int, artifact_prefix: str) -> tuple[str, str, str, str, str, str]:
-    report = render_markdown(result, mode, pages)
-    return (
-        f"{result['score']['final_score']} / 100  ({result['score']['formal_tier']})",
-        _finding_cards(result),
-        report,
-        _json_preview(result),
-        f"{artifact_prefix} JSON artifact is shown in the JSON Preview tab.",
-        f"{artifact_prefix} PDF output is available from the local CLI: `stem <folder> --level {1 if pages == 1 else 2 if pages == 3 else 3} --format all`.",
-    )
-
-
-def run_sample(level: int):
-    mode, pages = _LEVEL_MAP[int(level)]
-    return _format_result(_sample_result(), mode, pages, "Sample")
-
-
 def run_demo(repo_url: str, level: int):
     repo_url = (repo_url or "").strip()
     if not repo_url:
         return (
             "Waiting for repository URL",
-            "### Input required\nPaste a public GitHub URL for a bio/medical AI repository, or use **Run sample report**.",
+            "### Input required\nPaste a public GitHub URL for a bio/medical AI repository.",
             "No report generated.",
             json.dumps({"status": "input_required", "example": _DEFAULT_REPO}, indent=2),
             "No JSON artifact generated.",
@@ -222,6 +147,19 @@ _CSS = """
   background: #fff8e6;
   border-radius: 10px;
 }
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.info-card {
+  border: 1px solid #dde6ef;
+  border-radius: 14px;
+  padding: 14px;
+  background: #ffffff;
+}
+.info-card b { color: #10233f; }
 """
 
 with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
@@ -238,15 +176,32 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
     gr.Markdown(
         '<div class="boundary"><b>Boundary:</b> This is not clinical certification, '
         "regulatory clearance, scientific validation, or medical advice. It is a "
-        "repository trust pre-screen based on observable artifacts. No OpenAI, Anthropic, "
-        "or GitHub API key is required. The public Space API endpoint is intentionally "
-        "disabled; use this UI or run the CLI locally.</div>"
+        "repository trust pre-screen based on observable artifacts.</div>"
+    )
+    gr.HTML(
+        """
+        <div class="info-grid">
+          <div class="info-card"><b>No API key required</b><br/>
+          The Space clones a public GitHub repository and runs a deterministic local scanner.
+          It does not call OpenAI, Anthropic, or the GitHub API.</div>
+
+          <div class="info-card"><b>What STEM checks</b><br/>
+          README intent, repo-local consistency, CI/tests/docs, dependency hygiene,
+          clinical boundary language, and C1-C4 code-integrity signals.</div>
+
+          <div class="info-card"><b>Tier meaning</b><br/>
+          T0: trust not established. T1: quarantine. T2: caution. T3: consider.
+          T4: strong observable trust.</div>
+
+          <div class="info-card"><b>CLI for artifacts</b><br/>
+          Use <code>stem &lt;folder&gt; --level 3 --format all</code> locally to generate
+          JSON, Markdown, and PDF files.</div>
+        </div>
+        """
     )
     gr.Markdown(
-        "### How to use\n"
-        "1. Use **Run sample report** to see the output format instantly.\n"
-        "2. Use **Run live GitHub audit** with a public bio/medical AI repository URL.\n"
-        "3. For private repositories or downloadable PDF/JSON artifacts, run the local CLI."
+        "Paste a public bio/medical AI repository URL below. The demo works best on repositories "
+        "with README/docs/tests/dependency files. Private repositories should be audited locally."
     )
     with gr.Row():
         with gr.Column(scale=3):
@@ -264,7 +219,6 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
                 info="1=brief 1p, 2=standard 3p, 3=full 5p",
             )
     with gr.Row():
-        sample_button = gr.Button("Run sample report", variant="secondary", scale=1)
         run_button = gr.Button("Run live GitHub audit", variant="primary", scale=2)
         clear_button = gr.ClearButton(value="Clear", scale=1)
     score_output = gr.Textbox(label="Final Score", interactive=False)
@@ -279,11 +233,10 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
                 interactive=False,
                 lines=24,
             )
-        with gr.Tab("Downloads"):
+        with gr.Tab("Local CLI Artifacts"):
             gr.Markdown(
-                "Artifact files are generated during the audit. "
-                "The public demo shows the report and JSON preview in-browser; "
-                "local CLI runs produce downloadable JSON/Markdown/PDF files."
+                "This public Space shows report and JSON previews in-browser. "
+                "For actual downloadable JSON/Markdown/PDF artifacts, run the local CLI."
             )
             with gr.Row():
                 json_output = gr.Textbox(label="JSON artifact", interactive=False)
@@ -297,12 +250,6 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit", css=_CSS) as demo:
 
     run_button.click(
         **click_kwargs,
-    )
-    sample_button.click(
-        run_sample,
-        inputs=[level_input],
-        outputs=[score_output, snapshot_output, report_output, json_preview, json_output, pdf_output],
-        queue=True,
     )
     clear_button.add(
         [repo_input, score_output, snapshot_output, report_output, json_preview, json_output, pdf_output]
