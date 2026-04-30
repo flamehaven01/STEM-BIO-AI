@@ -1,8 +1,15 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 
 import stem_ai.detectors as detectors
+from stem_ai.advisory_contract import (
+    build_advisory_input,
+    known_finding_ids,
+    validate_advisory_output,
+)
+from stem_ai.cli import main as cli_main
 from stem_ai.evidence import make_finding_id
 from stem_ai.reasoning_model import (
     benchmark_alignment,
@@ -147,7 +154,7 @@ def test_evidence_ledger_and_ast_summary_are_observation_only(tmp_path: Path) ->
 
     result = audit_repository(tmp_path)
 
-    assert result["schema_version"] == "stem-ai-local-cli-result-v1.3"
+    assert result["schema_version"] == "stem-ai-local-cli-result-v1.4"
     assert result["score"]["stage_1_readme_intent"] == 70
     assert "evidence_ledger" in result
     assert "detector_summary" in result
@@ -435,3 +442,110 @@ def test_reasoning_benchmark_alignment_counts_major_disagreements() -> None:
     assert result["exact_tier_agreement"] == 1
     assert result["within_one_tier_agreement"] == 3
     assert result["major_disagreement_count"] == 1
+
+
+def test_ai_advisory_is_omitted_by_default(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path)
+
+    assert "ai_advisory" not in result
+
+
+def test_ai_advisory_validate_adds_offline_contract(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(tmp_path / "requirements.txt", "numpy>=1.26\n")
+
+    result = audit_repository(tmp_path, advisory="validate")
+    advisory = result["ai_advisory"]
+
+    assert advisory["schema_version"] == "stem-ai-advisory-v1.4"
+    assert advisory["provider"] == "none"
+    assert advisory["status"] == "valid"
+    assert advisory["policy"]["final_score_override"] is False
+    assert advisory["reviewer_notes"]
+    assert all(set(note["cites"]).issubset(known_finding_ids(result)) for note in advisory["reviewer_notes"])
+
+
+def test_advisory_input_omits_raw_repo_snippets_by_default(tmp_path: Path) -> None:
+    sentinel = "RAW_SENTINEL_SHOULD_NOT_REACH_ADVISORY_INPUT"
+    _write(tmp_path / "README.md", f"Bio repository for molecular analysis. {sentinel}\n")
+
+    result = audit_repository(tmp_path)
+    packet = build_advisory_input(result)
+    serialized = json.dumps(packet)
+
+    assert packet["policy"]["raw_repo_text_allowed"] is False
+    assert "snippet" not in serialized
+    assert sentinel not in serialized
+    assert packet["evidence_ledger"]
+
+
+def test_advisory_validation_rejects_unknown_citation_and_missing_cites(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path)
+
+    advisory = validate_advisory_output(result, {
+        "reviewer_notes": [
+            {
+                "claim": "Inspect this repository.",
+                "severity": "warn",
+                "cites": ["NO_SUCH_FINDING:README.md:1:001"],
+                "recommended_action": "Review cited evidence.",
+            }
+        ],
+        "inspection_priorities": [
+            {"priority": "high", "reason": "Needs inspection.", "cites": []}
+        ],
+    })
+
+    assert advisory["status"] == "invalid"
+    assert advisory["invalid_citations"] == ["NO_SUCH_FINDING:README.md:1:001"]
+    assert "inspection_priorities[0]" in advisory["missing_citation_items"]
+
+
+def test_advisory_validation_rejects_score_override_and_clinical_claim(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path)
+    cite = next(iter(known_finding_ids(result)))
+
+    advisory = validate_advisory_output(result, {
+        "final_score": 100,
+        "reviewer_notes": [
+            {
+                "claim": "This repository is safe for clinical deployment.",
+                "severity": "info",
+                "cites": [cite],
+                "recommended_action": "Use it clinically.",
+            }
+        ],
+        "inspection_priorities": [],
+    })
+
+    assert advisory["status"] == "invalid"
+    assert "final_score_override_requested" in advisory["errors"]
+    assert "prohibited_clinical_or_regulatory_claims" in advisory["errors"]
+
+
+def test_cli_advisory_validate_writes_ai_advisory_json(tmp_path: Path) -> None:
+    _write(tmp_path / "repo" / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "out"
+
+    code = cli_main(["audit", str(tmp_path / "repo"), "--format", "json", "--out", str(out_dir), "--advisory", "validate"])
+
+    assert code == 0
+    [json_path] = list(out_dir.glob("*_experiment_results.json"))
+    result = json.loads(json_path.read_text(encoding="utf-8"))
+    assert result["ai_advisory"]["status"] == "valid"
+
+
+def test_advisory_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path, advisory="validate")
+
+    markdown = render_markdown(result, mode="detailed", pages=3)
+    explain = render_explain(result)
+
+    assert "AI Advisory Contract" in markdown
+    assert "AI Advisory Contract" in explain
+    assert "final_score_override            False" in explain

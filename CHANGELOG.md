@@ -10,6 +10,20 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.4.0] - 2026-04-30
+
+### Added
+- Added provider-neutral `ai_advisory` contract support with offline validation via `stem audit <repo> --advisory validate`.
+- Added `stem_ai/advisory_contract.py` for advisory input packet construction, citation extraction, citation validation, prohibited-claim checks, and deterministic no-AI advisory output.
+- Added ASDP-inspired advisory schema and compile notes under `spec/asdp/` and `docs/asdp/`.
+- Added v1.4.0 planning document for evidence-bound AI advisory, provider adapters, ASDP contract compilation, and local Qwen/Kimi/Unsloth future paths.
+- Added tests ensuring advisory input omits raw snippets by default, rejects unknown citations, rejects score overrides, rejects clinical/regulatory claims, and surfaces advisory validation in CLI/Markdown/explain output.
+
+### Changed
+- Updated local CLI result schema to `stem-ai-local-cli-result-v1.4`.
+
+---
+
 ## [1.3.2] - 2026-04-30
 
 ### Added

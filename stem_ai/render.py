@@ -138,6 +138,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "",
         _markdown_reasoning_summary(result.get("reasoning_model", {})),
         "",
+        *_markdown_advisory_section(result.get("ai_advisory")),
         "## Code Integrity",
     ]
     for key, item in result["code_integrity"].items():
@@ -195,6 +196,7 @@ def render_explain(result: dict[str, Any]) -> str:
     out += _explain_ast_section(result.get("ast_signal_summary", {}))
     out += _explain_s4_section(result.get("stage_4_rubric", {}))
     out += _explain_reasoning_section(result.get("reasoning_model", {}))
+    out += _explain_advisory_section(result.get("ai_advisory"))
     out += [_EXPLAIN_SEP,
             "DISCLAIMER: Evidence-surface pre-screen only.",
             "Not clinical certification, regulatory clearance, or medical advice."]
@@ -220,6 +222,20 @@ def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
         f"{envelope.get('upper', 'n/a')}. "
         "This diagnostic layer does not override the final score."
     )
+
+
+def _markdown_advisory_section(advisory: dict[str, Any] | None) -> list[str]:
+    if not advisory:
+        return []
+    return [
+        "## AI Advisory Contract",
+        "",
+        f"**Status:** `{advisory.get('status', 'unknown')}`",
+        f"**Provider:** `{advisory.get('provider', 'none')}`",
+        f"**Mode:** `{advisory.get('mode', 'unknown')}`",
+        f"**Invalid Citations:** {len(advisory.get('invalid_citations', []))}",
+        "",
+    ]
 
 
 def _explain_detector_group(detector: str, findings: list[dict[str, Any]]) -> list[str]:
@@ -283,6 +299,20 @@ def _explain_reasoning_section(reasoning: dict[str, Any]) -> list[str]:
         item = reasoning.get(key, {})
         status = item.get("status", "unknown")
         lines.append(f"  {key:<31} {status}")
+    lines.append("")
+    return lines
+
+
+def _explain_advisory_section(advisory: dict[str, Any] | None) -> list[str]:
+    if not advisory:
+        return []
+    lines = [_EXPLAIN_SEP, "AI Advisory Contract", ""]
+    lines.append(f"  schema_version                  {advisory.get('schema_version', 'unknown')}")
+    lines.append(f"  provider                        {advisory.get('provider', 'none')}")
+    lines.append(f"  mode                            {advisory.get('mode', 'unknown')}")
+    lines.append(f"  status                          {advisory.get('status', 'unknown')}")
+    lines.append(f"  final_score_override            {advisory.get('policy', {}).get('final_score_override', False)}")
+    lines.append(f"  invalid_citations               {len(advisory.get('invalid_citations', []))}")
     lines.append("")
     return lines
 

@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.3.2",
+    [string]$ExpectedVersion = "1.4.0",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -53,7 +53,7 @@ try {
 
     Invoke-Step "local audit artifacts with --explain" {
         New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-        python -m stem_ai . --level 3 --format all --out $outDir --explain
+        python -m stem_ai . --level 3 --format all --out $outDir --explain --advisory validate
     }
 
     Invoke-Step "audit JSON contract" {
@@ -62,7 +62,7 @@ try {
         $result = Get-Content -LiteralPath $jsonFiles[0].FullName -Raw | ConvertFrom-Json
 
         Assert-True ($result.stem_ai_version -eq $ExpectedVersion) "stem_ai_version mismatch: $($result.stem_ai_version)"
-        Assert-True ($result.schema_version -eq "stem-ai-local-cli-result-v1.3") "schema_version mismatch: $($result.schema_version)"
+        Assert-True ($result.schema_version -eq "stem-ai-local-cli-result-v1.4") "schema_version mismatch: $($result.schema_version)"
         Assert-True ($null -ne $result.evidence_ledger -and $result.evidence_ledger.Count -gt 0) "evidence_ledger missing or empty"
         Assert-True ($null -ne $result.detector_summary) "detector_summary missing"
         Assert-True ($null -ne $result.ast_signal_summary) "ast_signal_summary missing"
@@ -75,6 +75,11 @@ try {
         Assert-True ($null -ne $result.reasoning_model.lane_coherence) "reasoning_model.lane_coherence missing"
         Assert-True ($null -ne $result.reasoning_model.uncertainty_budget) "reasoning_model.uncertainty_budget missing"
         Assert-True ($null -ne $result.reasoning_model.evidence_risk_gate) "reasoning_model.evidence_risk_gate missing"
+        Assert-True ($null -ne $result.ai_advisory) "ai_advisory missing"
+        Assert-True ($result.ai_advisory.schema_version -eq "stem-ai-advisory-v1.4") "ai_advisory schema mismatch: $($result.ai_advisory.schema_version)"
+        Assert-True ($result.ai_advisory.policy.final_score_override -eq $false) "ai_advisory must not override final score"
+        Assert-True ($result.ai_advisory.policy.requires_finding_id_citations -eq $true) "ai_advisory must require finding_id citations"
+        Assert-True ($result.ai_advisory.invalid_citations.Count -eq 0) "ai_advisory has invalid citations"
 
         $badIds = @($result.evidence_ledger | Where-Object { [string]$_.finding_id -match "\\" })
         Assert-True ($badIds.Count -eq 0) "finding_id contains Windows backslash"

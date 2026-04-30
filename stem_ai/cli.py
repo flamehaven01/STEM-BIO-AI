@@ -20,9 +20,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
         usage=(
-            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain]\n"
+            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory none|validate]\n"
             "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all]"
-            " [--out DIR] [--explain]"
+            " [--out DIR] [--explain] [--advisory none|validate]"
         ),
         description="STEM BIO-AI local evidence-surface scan for bio/medical AI repositories.",
         epilog=(
@@ -30,7 +30,8 @@ def _build_parser() -> argparse.ArgumentParser:
             "  stem /path/to/bio-ai-repo\n"
             "  stem /path/to/bio-ai-repo --level 2\n"
             "  stem /path/to/bio-ai-repo --level 3 --format all --out stem_output\n"
-            "  stem /path/to/bio-ai-repo --explain"
+            "  stem /path/to/bio-ai-repo --explain\n"
+            "  stem /path/to/bio-ai-repo --advisory validate"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -68,6 +69,12 @@ def _build_parser() -> argparse.ArgumentParser:
         default=False,
         help="Write a {stem}_explain.txt file listing every evidence finding with file, line, snippet, and reason",
     )
+    audit.add_argument(
+        "--advisory",
+        choices=["none", "validate"],
+        default="none",
+        help="Run provider-neutral AI advisory contract validation without calling an AI API",
+    )
     return parser
 
 
@@ -100,7 +107,7 @@ def run_audit(args: argparse.Namespace) -> int:
     target = _validate_target(args.target)
     mode, pages = _LEVEL_MAP[args.level]
 
-    result = audit_repository(target)
+    result = audit_repository(target, advisory=args.advisory)
     output_dir = Path(args.out).expanduser().resolve()
     created = write_outputs(result, output_dir, mode, pages, args.format, explain=args.explain)
 
@@ -109,6 +116,8 @@ def run_audit(args: argparse.Namespace) -> int:
     print(f"Target:  {result['target']['name']}")
     print(f"Level:   {args.level}  ({mode}, {pages}p)")
     print(f"Score:   {score['final_score']} / 100  ({score['formal_tier']})")
+    if args.advisory != "none":
+        print(f"Advisory: {result.get('ai_advisory', {}).get('status', 'not_run')}")
     print(f"Output:  {output_dir}")
     for path in created:
         print(f"  {path.name}")

@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .advisory_contract import build_offline_advisory
 from .detectors import collect_evidence_bundle
 from .patterns import (
     BIAS_LIMITATION_TERMS,
@@ -46,7 +47,7 @@ T0_HARD_FLOOR_TERMS = re.compile(
 )
 
 
-def audit_repository(target: Path) -> dict[str, Any]:
+def audit_repository(target: Path, advisory: str = "none") -> dict[str, Any]:
     files = _list_files(target)
     readme = _read_first(target, ["README.md", "README.rst", "readme.md"])
     docs_text = _read_many(target / "docs", max_files=30)
@@ -76,7 +77,7 @@ def audit_repository(target: Path) -> dict[str, Any]:
     final_score = min(raw_score, score_cap) if score_cap is not None else raw_score
 
     result = {
-        "schema_version": "stem-ai-local-cli-result-v1.3",
+        "schema_version": "stem-ai-local-cli-result-v1.4",
         "stem_ai_version": __version__,
         "generated_at_local": date.today().isoformat(),
         "execution_mode": "LOCAL_ANALYSIS",
@@ -140,6 +141,8 @@ def audit_repository(target: Path) -> dict[str, Any]:
         },
     }
     result["reasoning_model"] = build_reasoning_model(result)
+    if advisory == "validate":
+        result["ai_advisory"] = build_offline_advisory(result)
     return result
 
 

@@ -10,7 +10,7 @@
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.3.2-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.4.0-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, replication evidence, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using local file reads, deterministic pattern matching, and stdlib AST parsing — no LLM, no API, no runtime execution.
@@ -25,6 +25,7 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 - **Replication evidence lane** — reports Stage 4 `replication_score` / `replication_tier` separately from the final score.
 - **Explainable evidence ledger** — `--explain` writes file/line/snippet evidence with stable `finding_id` values.
 - **Reasoning diagnostics** — reports confidence envelope, lane coherence, uncertainty, and evidence-risk signals without changing the final score.
+- **AI advisory contract** — `--advisory validate` adds offline provider-neutral advisory validation with required `finding_id` citations and no AI API call.
 - **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF outputs.
 
 ## Measurement Boundary
@@ -46,6 +47,7 @@ stem /path/to/bio-ai-repo --level 1 --format all  # 1-page brief
 stem /path/to/bio-ai-repo --level 2 --format all  # 3-page stage analysis
 stem /path/to/bio-ai-repo --level 3 --format all  # 5-page deep review
 stem /path/to/bio-ai-repo --level 3 --format all --explain
+stem /path/to/bio-ai-repo --advisory validate
 ```
 
 `stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the target repository first, then point the CLI at the local path.
@@ -86,6 +88,8 @@ Clinical-adjacent repositories without an explicit disclaimer are capped at T2 (
 Stage 4 is intentionally not folded into the final score in v1.3. It is reported as `replication_score` and `replication_tier` so reviewers can inspect replication evidence without changing the established T0-T4 scoring formula before benchmark calibration.
 
 `reasoning_model` diagnostics are also separate from the final score. They summarize evidence budget, confidence envelope, lane coherence, uncertainty, and evidence-risk gate signals using deterministic stdlib-only formulas. These values are diagnostic initial priors, not a replacement score or clinical truth claim.
+
+`ai_advisory` is optional and omitted by default. In v1.4.0, `--advisory validate` runs an offline contract validator only: no Gemini, OpenAI, Claude, Kimi, Qwen, Ollama, or local model call is made. The contract reserves provider-neutral space for future adapters and rejects advisory output that lacks valid `finding_id` citations, attempts to override scores, or makes uncited clinical/regulatory claims.
 
 ## Triage Tiers
 
@@ -235,7 +239,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.3.2},
+  version = {1.4.0},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }
