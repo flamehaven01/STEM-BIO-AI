@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.4.2",
+    [string]$ExpectedVersion = "1.4.3",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -121,18 +121,33 @@ try {
         Assert-True (-not $packetText.Contains('"snippet"')) "packet must not include raw snippets"
     }
 
-    Invoke-Step "advisory adapter harness contract" {
-        $harnessDir = Join-Path $outDir "harness"
-        New-Item -ItemType Directory -Force -Path $harnessDir | Out-Null
-        python -m stem_ai . --format json --out $harnessDir --advisory mock-invalid
-        $harnessJson = @(Get-ChildItem -LiteralPath $harnessDir -Filter "*_experiment_results.json")
-        Assert-True ($harnessJson.Count -eq 1) "Expected one harness result JSON, found $($harnessJson.Count)"
-        $harness = Get-Content -LiteralPath $harnessJson[0].FullName -Raw | ConvertFrom-Json
-        Assert-True ($harness.ai_advisory.status -eq "invalid") "mock-invalid should remain invalid"
-        Assert-True ($harness.ai_advisory.adapter_contract.network_called -eq $false) "mock harness must not call network"
-        Assert-True ($harness.ai_advisory.adapter_contract.citation_repair_attempted -eq $false) "mock harness must not repair citations"
-        Assert-True ($harness.ai_advisory.invalid_citations.Count -gt 0) "mock-invalid should expose invalid citations"
-        Assert-True (($harness.ai_advisory.errors -contains "final_score_override_requested")) "mock-invalid should reject score override"
+    Invoke-Step "advisory response file validation contract" {
+        $responseDir = Join-Path $outDir "response"
+        New-Item -ItemType Directory -Force -Path $responseDir | Out-Null
+        $jsonFiles = @(Get-ChildItem -LiteralPath $outDir -Filter "*_experiment_results.json")
+        $baseline = Get-Content -LiteralPath $jsonFiles[0].FullName -Raw | ConvertFrom-Json
+        $cite = [string]$baseline.evidence_ledger[0].finding_id
+        $responseFile = Join-Path $responseDir "provider_advisory.json"
+        @{
+            provider = "external_response"
+            model = "release-validation-provider"
+            reviewer_notes = @(@{
+                claim = "Review the cited evidence before advisory use."
+                severity = "info"
+                cites = @($cite)
+                recommended_action = "Inspect the cited finding in the evidence ledger."
+            })
+            inspection_priorities = @()
+        } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $responseFile -Encoding UTF8
+
+        python -m stem_ai . --format json --out $responseDir --advisory-response $responseFile
+        $responseJson = @(Get-ChildItem -LiteralPath $responseDir -Filter "*_experiment_results.json")
+        Assert-True ($responseJson.Count -eq 1) "Expected one response validation result JSON, found $($responseJson.Count)"
+        $response = Get-Content -LiteralPath $responseJson[0].FullName -Raw | ConvertFrom-Json
+        Assert-True ($response.ai_advisory.status -eq "valid") "advisory response should validate"
+        Assert-True ($response.ai_advisory.response_contract.network_called -eq $false) "response validator must not call network"
+        Assert-True ($response.ai_advisory.response_contract.citation_repair_attempted -eq $false) "response validator must not repair citations"
+        Assert-True ($response.ai_advisory.invalid_citations.Count -eq 0) "response validator has invalid citations"
     }
 
     Invoke-Step "markdown and PDF artifacts exist" {

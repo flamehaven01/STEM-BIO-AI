@@ -5,7 +5,6 @@ import sys
 from pathlib import Path
 
 from . import __version__
-from .advisory_adapters import ADVISORY_HARNESS_MODES
 from .render import write_outputs
 from .scanner import audit_repository
 
@@ -15,16 +14,16 @@ _LEVEL_MAP = {
     2: ("detailed", 3),
     3: ("detailed", 5),
 }
-_ADVISORY_CHOICES = ["none", "validate", "packet", *ADVISORY_HARNESS_MODES]
+_ADVISORY_CHOICES = ["none", "validate", "packet"]
 
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
         usage=(
-            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory MODE]\n"
+            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory MODE] [--advisory-response FILE]\n"
             "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all]"
-            " [--out DIR] [--explain] [--advisory MODE]"
+            " [--out DIR] [--explain] [--advisory MODE] [--advisory-response FILE]"
         ),
         description="STEM BIO-AI local evidence-surface scan for bio/medical AI repositories.",
         epilog=(
@@ -35,7 +34,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "  stem /path/to/bio-ai-repo --explain\n"
             "  stem /path/to/bio-ai-repo --advisory validate\n"
             "  stem /path/to/bio-ai-repo --advisory packet\n"
-            "  stem /path/to/bio-ai-repo --advisory mock-invalid"
+            "  stem /path/to/bio-ai-repo --advisory-response provider_advisory.json"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -79,6 +78,11 @@ def _build_parser() -> argparse.ArgumentParser:
         default="none",
         help="Run offline advisory validation or export a provider-neutral advisory input packet",
     )
+    audit.add_argument(
+        "--advisory-response",
+        default=None,
+        help="Validate a provider-produced advisory JSON response against this audit's evidence ledger",
+    )
     return parser
 
 
@@ -109,9 +113,10 @@ def _validate_target(raw_target: str) -> Path:
 
 def run_audit(args: argparse.Namespace) -> int:
     target = _validate_target(args.target)
+    advisory_response = _validate_optional_file(args.advisory_response)
     mode, pages = _LEVEL_MAP[args.level]
 
-    result = audit_repository(target, advisory=args.advisory)
+    result = audit_repository(target, advisory=args.advisory, advisory_response_path=advisory_response)
     output_dir = Path(args.out).expanduser().resolve()
     created = write_outputs(result, output_dir, mode, pages, args.format, explain=args.explain)
 
@@ -120,13 +125,24 @@ def run_audit(args: argparse.Namespace) -> int:
     print(f"Target:  {result['target']['name']}")
     print(f"Level:   {args.level}  ({mode}, {pages}p)")
     print(f"Score:   {score['final_score']} / 100  ({score['formal_tier']})")
-    if args.advisory != "none":
+    if args.advisory != "none" or advisory_response is not None:
         status = "packet_ready" if args.advisory == "packet" else result.get("ai_advisory", {}).get("status", "not_run")
         print(f"Advisory: {status}")
     print(f"Output:  {output_dir}")
     for path in created:
         print(f"  {path.name}")
     return 0
+
+
+def _validate_optional_file(raw_path: str | None) -> Path | None:
+    if raw_path is None:
+        return None
+    path = Path(raw_path).expanduser().resolve()
+    if not path.exists():
+        raise SystemExit(f"Advisory response file does not exist: {path}")
+    if not path.is_file():
+        raise SystemExit(f"Advisory response path must be a file: {path}")
+    return path
 
 
 def main(argv: list[str] | None = None) -> int:

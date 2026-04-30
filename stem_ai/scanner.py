@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
-from .advisory_adapters import ADVISORY_HARNESS_MODES, run_advisory_harness
 from .advisory_contract import build_advisory_input, build_offline_advisory
 from .advisory_providers import load_provider_config, provider_handoff_metadata
+from .advisory_response import validate_advisory_response_file
 from .detectors import collect_evidence_bundle
 from .patterns import (
     BIAS_LIMITATION_TERMS,
@@ -49,7 +49,11 @@ T0_HARD_FLOOR_TERMS = re.compile(
 )
 
 
-def audit_repository(target: Path, advisory: str = "none") -> dict[str, Any]:
+def audit_repository(
+    target: Path,
+    advisory: str = "none",
+    advisory_response_path: Path | None = None,
+) -> dict[str, Any]:
     files = _list_files(target)
     readme = _read_first(target, ["README.md", "README.rst", "readme.md"])
     docs_text = _read_many(target / "docs", max_files=30)
@@ -148,8 +152,8 @@ def audit_repository(target: Path, advisory: str = "none") -> dict[str, Any]:
     elif advisory == "packet":
         result["ai_advisory_input"] = build_advisory_input(result)
         result["ai_advisory_input"]["provider_request"] = provider_handoff_metadata(load_provider_config())
-    elif advisory in ADVISORY_HARNESS_MODES:
-        result["ai_advisory"] = run_advisory_harness(result, advisory)
+    if advisory_response_path is not None:
+        result["ai_advisory"] = validate_advisory_response_file(result, advisory_response_path)
     return result
 
 

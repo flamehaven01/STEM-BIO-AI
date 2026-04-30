@@ -10,7 +10,7 @@
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.4.2-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.4.3-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, replication evidence, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using local file reads, deterministic pattern matching, and stdlib AST parsing — no LLM, no API, no runtime execution.
@@ -25,7 +25,7 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 - **Replication evidence lane** — reports Stage 4 `replication_score` / `replication_tier` separately from the final score.
 - **Explainable evidence ledger** — `--explain` writes file/line/snippet evidence with stable `finding_id` values.
 - **Reasoning diagnostics** — reports confidence envelope, lane coherence, uncertainty, and evidence-risk signals without changing the final score.
-- **AI advisory contract** — `--advisory validate` adds offline provider-neutral advisory validation; `--advisory packet` exports a sanitized provider-neutral AI handoff packet; mock harness modes test adapter output contracts with no AI API call.
+- **AI advisory contract** — `--advisory validate` adds offline provider-neutral advisory validation; `--advisory packet` exports a sanitized provider-neutral AI handoff packet; `--advisory-response FILE` validates provider-produced JSON against the same `finding_id` contract with no AI API call.
 - **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF outputs.
 
 ## Measurement Boundary
@@ -49,7 +49,7 @@ stem /path/to/bio-ai-repo --level 3 --format all  # 5-page deep review
 stem /path/to/bio-ai-repo --level 3 --format all --explain
 stem /path/to/bio-ai-repo --advisory validate
 stem /path/to/bio-ai-repo --advisory packet
-stem /path/to/bio-ai-repo --advisory mock-invalid
+stem /path/to/bio-ai-repo --advisory-response provider_advisory.json
 ```
 
 `stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the target repository first, then point the CLI at the local path.
@@ -91,7 +91,7 @@ Stage 4 is intentionally not folded into the final score in v1.3. It is reported
 
 `reasoning_model` diagnostics are also separate from the final score. They summarize evidence budget, confidence envelope, lane coherence, uncertainty, and evidence-risk gate signals using deterministic stdlib-only formulas. These values are diagnostic initial priors, not a replacement score or clinical truth claim.
 
-`ai_advisory` is optional and omitted by default. `--advisory validate` runs an offline contract validator only; `--advisory packet` writes a sanitized `{stem}_advisory_input.json` for future adapters. v1.4.2 also includes no-network mock harness modes (`mock-valid`, `mock-invalid`, `mock-error`, `mock-timeout`) to test adapter contracts before real provider clients exist. No Gemini, OpenAI, Claude, Kimi, Qwen, Ollama, or local model call is made. The contract reserves provider-neutral space for future adapters and rejects advisory output that lacks valid `finding_id` citations, attempts to override scores, or makes uncited clinical/regulatory claims.
+`ai_advisory` is optional and omitted by default. `--advisory validate` runs an offline contract validator only; `--advisory packet` writes a sanitized `{stem}_advisory_input.json` for future adapters. `--advisory-response FILE` validates a provider-produced JSON advisory response against the current audit's evidence ledger without calling any provider. No Gemini, OpenAI, Claude, Kimi, Qwen, Ollama, or local model call is made by the core scanner. The contract reserves provider-neutral space for future adapters and rejects advisory output that lacks valid `finding_id` citations, attempts to override scores, or makes uncited clinical/regulatory claims.
 
 ## Triage Tiers
 
@@ -241,7 +241,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.4.2},
+  version = {1.4.3},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

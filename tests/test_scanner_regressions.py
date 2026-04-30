@@ -9,7 +9,6 @@ from stem_ai.advisory_contract import (
     known_finding_ids,
     validate_advisory_output,
 )
-from stem_ai.advisory_adapters import ADVISORY_HARNESS_MODES
 from stem_ai.advisory_providers import (
     load_provider_config,
     provider_handoff_metadata,
@@ -602,56 +601,126 @@ def test_cli_advisory_packet_writes_standalone_input_packet(tmp_path: Path) -> N
     assert packet["provider_request"]["registry"]
 
 
-def test_mock_valid_advisory_harness_returns_valid_no_network_contract(tmp_path: Path) -> None:
-    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+def test_advisory_response_file_validates_provider_json_without_network(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    base = audit_repository(repo)
+    cite = next(iter(known_finding_ids(base)))
+    response_path = tmp_path / "provider_advisory.json"
+    _write(response_path, json.dumps({
+        "provider": "openai_compatible",
+        "model": "qwen-local",
+        "mode": "provider_response_file",
+        "reviewer_notes": [
+            {
+                "claim": "Inspect the cited evidence before review use.",
+                "severity": "info",
+                "cites": [cite],
+                "recommended_action": "Open the cited finding in the evidence ledger.",
+            }
+        ],
+        "inspection_priorities": [],
+    }))
 
-    result = audit_repository(tmp_path, advisory="mock-valid")
+    result = audit_repository(repo, advisory_response_path=response_path)
     advisory = result["ai_advisory"]
 
-    assert "mock-valid" in ADVISORY_HARNESS_MODES
     assert advisory["status"] == "valid"
-    assert advisory["provider"] == "mock"
-    assert advisory["adapter_contract"]["network_called"] is False
-    assert advisory["adapter_contract"]["citation_repair_attempted"] is False
-    assert advisory["invalid_citations"] == []
+    assert advisory["provider"] == "openai_compatible"
+    assert advisory["response_contract"]["network_called"] is False
+    assert advisory["response_contract"]["citation_repair_attempted"] is False
+    assert "source_sha256" in advisory["response_contract"]
 
 
-def test_mock_invalid_advisory_harness_does_not_repair_bad_output(tmp_path: Path) -> None:
-    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+def test_advisory_response_file_keeps_malformed_provider_output_invalid(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    response_path = tmp_path / "bad_provider_advisory.json"
+    _write(response_path, json.dumps({
+        "provider": "gemini",
+        "model": "external-model",
+        "final_score": 100,
+        "reviewer_notes": [
+            {
+                "claim": "This repository is safe for clinical deployment.",
+                "severity": "info",
+                "cites": ["NO_SUCH_FINDING:README.md:1:001"],
+                "recommended_action": "Use it clinically.",
+            }
+        ],
+        "inspection_priorities": [
+            {"priority": "high", "reason": "Missing citations should remain invalid.", "cites": []}
+        ],
+    }))
 
-    result = audit_repository(tmp_path, advisory="mock-invalid")
-    advisory = result["ai_advisory"]
+    advisory = audit_repository(repo, advisory_response_path=response_path)["ai_advisory"]
 
     assert advisory["status"] == "invalid"
-    assert "MOCK:NO_SUCH_FINDING:001" in advisory["invalid_citations"]
+    assert advisory["invalid_citations"] == ["NO_SUCH_FINDING:README.md:1:001"]
     assert "inspection_priorities[0]" in advisory["missing_citation_items"]
     assert "final_score_override_requested" in advisory["errors"]
     assert "prohibited_clinical_or_regulatory_claims" in advisory["errors"]
-    assert advisory["adapter_contract"]["citation_repair_attempted"] is False
+    assert advisory["response_contract"]["citation_repair_attempted"] is False
 
 
-def test_mock_error_and_timeout_use_standard_error_envelope(tmp_path: Path) -> None:
-    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+def test_advisory_response_file_parse_error_uses_error_envelope(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    response_path = tmp_path / "broken_provider_advisory.json"
+    _write(response_path, "{not-json")
 
-    error_result = audit_repository(tmp_path, advisory="mock-error")["ai_advisory"]
-    timeout_result = audit_repository(tmp_path, advisory="mock-timeout")["ai_advisory"]
+    advisory = audit_repository(repo, advisory_response_path=response_path)["ai_advisory"]
 
-    assert error_result["status"] == "error"
-    assert error_result["adapter_error"]["type"] == "adapter_error"
-    assert error_result["adapter_contract"]["network_called"] is False
-    assert timeout_result["status"] == "error"
-    assert timeout_result["adapter_error"]["type"] == "timeout"
-    assert timeout_result["adapter_contract"]["network_called"] is False
+    assert advisory["status"] == "error"
+    assert advisory["errors"] == ["response_parse_error"]
+    assert advisory["response_error"]["type"] == "response_parse_error"
+    assert advisory["response_contract"]["network_called"] is False
 
 
-def test_cli_mock_invalid_writes_invalid_ai_advisory_json(tmp_path: Path) -> None:
-    _write(tmp_path / "repo" / "README.md", "Bio repository for molecular analysis.\n")
+def test_advisory_response_file_accepts_utf8_bom(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    base = audit_repository(repo)
+    cite = next(iter(known_finding_ids(base)))
+    response_path = tmp_path / "provider_advisory_bom.json"
+    payload = json.dumps({
+        "provider": "external_response",
+        "reviewer_notes": [
+            {"claim": "Review cited evidence.", "severity": "info", "cites": [cite], "recommended_action": "Inspect cited finding."}
+        ],
+        "inspection_priorities": [],
+    })
+    response_path.write_bytes(payload.encode("utf-8-sig"))
+
+    advisory = audit_repository(repo, advisory_response_path=response_path)["ai_advisory"]
+
+    assert advisory["status"] == "valid"
+    assert advisory["response_contract"]["parser"] == "json"
+
+
+def test_cli_advisory_response_writes_validated_ai_advisory_json(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    base = audit_repository(repo)
+    cite = next(iter(known_finding_ids(base)))
+    response_path = tmp_path / "provider_advisory.json"
+    _write(response_path, json.dumps({
+        "provider": "anthropic",
+        "model": "external-model",
+        "reviewer_notes": [
+            {"claim": "Review cited evidence.", "severity": "info", "cites": [cite], "recommended_action": "Inspect cited finding."}
+        ],
+        "inspection_priorities": [],
+    }))
     out_dir = tmp_path / "out"
 
-    code = cli_main(["audit", str(tmp_path / "repo"), "--format", "json", "--out", str(out_dir), "--advisory", "mock-invalid"])
+    code = cli_main([
+        "audit", str(repo), "--format", "json", "--out", str(out_dir),
+        "--advisory-response", str(response_path),
+    ])
 
     assert code == 0
     [json_path] = list(out_dir.glob("*_experiment_results.json"))
     result = json.loads(json_path.read_text(encoding="utf-8"))
-    assert result["ai_advisory"]["status"] == "invalid"
-    assert result["ai_advisory"]["adapter_contract"]["network_called"] is False
+    assert result["ai_advisory"]["status"] == "valid"
+    assert result["ai_advisory"]["response_contract"]["network_called"] is False

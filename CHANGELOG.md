@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.4.3] - 2026-04-30
+
+### Added
+- Added `stem_ai/advisory_response.py` for validating provider-produced advisory JSON files against the current audit evidence ledger.
+- Added `stem audit ... --advisory-response FILE` to validate external Gemini/OpenAI/Claude/Ollama/local-model style JSON responses without making API calls.
+- Added response contracts with source hash, byte count, JSON parser marker, no-network flag, and no citation-repair flag.
+- Added regression coverage for valid provider responses, malformed provider responses, parse errors, and CLI response-file validation.
+
+### Changed
+- Removed v1.4.2 mock harness modes from the public CLI surface; v1.4.3 uses real response-file validation instead of mock/stub advisory modes.
+
+---
+
 ## [1.4.2] - 2026-04-30
 
 ### Added
