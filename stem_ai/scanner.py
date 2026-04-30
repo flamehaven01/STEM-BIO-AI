@@ -19,13 +19,19 @@ from .patterns import (
     FAIL_OPEN,
     LOOSE_DEP,
     PATIENT_METADATA,
+    PLACEHOLDER_SECRET_VALUES,
     SECRET_TERMS,
     SKIP_DIRS,
     TEXT_EXTENSIONS,
 )
 
 
-CA_INDIRECT_TERMS = re.compile(r"\b(consensus|vcf|variant|viral|virus|genome|sequenc|sample|allele)\b", re.I)
+CA_INDIRECT_TERMS = re.compile(
+    r"\b(consensus|vcf|variant|viral|virus|genome|sequenc|sample|allele|clinical trial|"
+    r"medical imaging|pydicom|biomarker|survival analysis|AutoDock|drug docking|nnU-Net|"
+    r"regulatory submission)\b",
+    re.I,
+)
 CA_DIRECT_TERMS = re.compile(
     r"\b(diagnos(?:is|tic)|clinical decision|decision support|patient-facing|triage|risk score|"
     r"treatment recommendation|treatment guidance|drug recommendation|pharmacogenomic|pharmacogenetic|"
@@ -125,7 +131,7 @@ def audit_repository(target: Path) -> dict[str, Any]:
             "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
             "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
-            "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...)",
+            "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...), excluding obvious placeholder/test values such as super-secret, dummy, fake, and example keys",
             "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
             "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
             "C4": "except Exception: pass or except: pass pattern (regex)",
@@ -196,7 +202,11 @@ def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str
 
 
 def _code_integrity(target: Path, dep_text: str, code_text: str) -> dict[str, Any]:
-    secret_hits = [m.group(0)[:24] for m in SECRET_TERMS.finditer(code_text)]
+    secret_hits = [
+        m.group(0)[:24]
+        for m in SECRET_TERMS.finditer(code_text)
+        if not PLACEHOLDER_SECRET_VALUES.search(m.group(0))
+    ]
     unpinned = _dependency_unpinned(dep_text)
     deprecated_patient = bool(PATIENT_METADATA.search(_read_deprecated_text(target)))
     fail_open = bool(FAIL_OPEN.search(code_text))

@@ -118,7 +118,7 @@ Scores reflect observable repository signals only. Each item below describes wha
 | Stage 4 Citation/Interface | `CITATION.cff`, package CLI entry points, argparse AST evidence |
 | AST Summary | Python stdlib `ast` detects assertion tests, seed settings, argparse, annotations, docstrings, portable model loading, and fail-open handlers |
 | CA Severity | Clinical/diagnostic phrase regex match in README, docs, and package metadata |
-| C1 Credentials | Hardcoded key patterns: AWS `AKIA*`, OpenAI `sk-*`, GitHub `ghp_*`, `api_key=...` |
+| C1 Credentials | Hardcoded key patterns: AWS `AKIA*`, OpenAI `sk-*`, GitHub `ghp_*`, `api_key=...`; obvious placeholder/test values are recorded but excluded from the C1 penalty |
 | C2 Dependency Pinning | `==` or hash pin present vs. loose ranges `>=`, `~=`, `<`, `>` |
 | C3 Deprecated Paths | Patient metadata patterns in `deprecated/`, `legacy/`, `archive/` directories |
 | C4 Fail-Open | `except Exception: pass` or `except: pass` pattern in Python source |

@@ -74,6 +74,51 @@ def test_deprecated_patient_paths_are_generic_not_repo_specific(tmp_path: Path) 
     assert result["code_integrity"]["C3_dead_or_deprecated_patient_adjacent_paths"]["status"] == "WARN"
 
 
+def test_skill_catalog_clinical_terms_trigger_ca_indirect_cap(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Scientific skills catalog.\n"
+        "Includes AutoDock Vina drug docking, nnU-Net medical imaging, pydicom, "
+        "biomarker survival analysis, and clinical trial examples.\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["classification"]["ca_severity"] == "CA-INDIRECT"
+    assert result["classification"]["clinical_adjacent"] is True
+    assert result["classification"]["score_cap"] == 69
+    assert result["score"]["stage_1_readme_intent"] == 60
+
+
+def test_placeholder_credentials_in_tests_do_not_trigger_c1_penalty(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(
+        tmp_path / "tests" / "test_provider.py",
+        "def test_provider():\n"
+        "    provider = Client(api_key=\"super-secret-key\")\n",
+    )
+
+    result = audit_repository(tmp_path)
+    c1_findings = [f for f in result["evidence_ledger"] if f["detector"] == "C1_hardcoded_credentials"]
+
+    assert result["code_integrity"]["C1_hardcoded_credentials"]["status"] == "PASS"
+    assert result["score"]["risk_penalty"] == 0
+    assert any(f["status"] == "not_applicable" and f.get("metadata", {}).get("placeholder") is True for f in c1_findings)
+
+
+def test_real_credential_like_values_still_trigger_c1_penalty(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(
+        tmp_path / "pipeline.py",
+        "TOKEN = 'sk-" + "abcdefghijklmnopqrstuv" + "'\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["code_integrity"]["C1_hardcoded_credentials"]["status"] == "FAIL"
+    assert result["score"]["risk_penalty"] == 10
+
+
 def test_fail_open_detection_handles_crlf(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
     code_path = tmp_path / "pipeline.py"

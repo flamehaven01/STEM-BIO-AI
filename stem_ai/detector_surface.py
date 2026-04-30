@@ -24,6 +24,7 @@ from .patterns import (
     DISCLAIMER_TERMS,
     FAIL_OPEN,
     PATIENT_METADATA,
+    PLACEHOLDER_SECRET_VALUES,
     SECRET_TERMS,
 )
 
@@ -53,7 +54,7 @@ def collect_surface_findings(
     regex_detector(target, findings, counters, "S3_B2_bias_limitations", "bias_limitations_v2", BIAS_LIMITATION_TERMS, [*readme_paths, *docs_paths], "Bias, limitation, or validation-boundary language detected.")
     regex_detector(target, findings, counters, "S3_B3_coi_funding", "coi_funding_v1", COI_FUNDING_TERMS, [*readme_paths, *docs_paths, *funding_paths], "COI, funding, sponsor, or acknowledgement language detected.")
     regex_detector(target, findings, counters, "S2_package_bio_terms", "package_bio_terms_v1", BIO_TERMS, package_paths, "Package metadata exposes bio/medical vocabulary.")
-    regex_detector(target, findings, counters, "C1_hardcoded_credentials", "credential_pattern_v1", SECRET_TERMS, code_paths, "Hardcoded credential-like pattern detected.")
+    credential_detector(target, findings, counters, code_paths)
     dependency_pinning_detector(target, findings, counters, dep_paths)
     regex_detector(target, findings, counters, "C3_dead_or_deprecated_patient_adjacent_paths", "deprecated_patient_metadata_v1", PATIENT_METADATA, deprecated_paths, "Patient-adjacent metadata pattern detected in deprecated/legacy/archive path.")
     regex_detector(target, findings, counters, "C4_exception_handling_clinical_adjacent_paths", "fail_open_exception_v1", FAIL_OPEN, code_paths, "Fail-open exception pattern detected in code text.")
@@ -141,6 +142,60 @@ def _check_unpinned_deps_in_file(
                         line, "dependency", "Unpinned or loosely pinned dependency detected.",
                         {"dependency": entry})
     return found
+
+
+def credential_detector(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    paths: Iterable[Path],
+) -> None:
+    detected = False
+    placeholders = False
+    for path in sorted(set(paths), key=lambda p: relative_path(target, p).as_posix()):
+        text = read_text(path)
+        lines = text.splitlines()
+        for match in SECRET_TERMS.finditer(text):
+            line = text.count("\n", 0, match.start()) + 1
+            status = "not_applicable" if PLACEHOLDER_SECRET_VALUES.search(match.group(0)) else "detected"
+            severity = "info" if status == "not_applicable" else "warn"
+            explanation = (
+                "Credential-like placeholder in test/example context ignored for C1 penalty."
+                if status == "not_applicable"
+                else "Hardcoded credential-like pattern detected."
+            )
+            detected = detected or status == "detected"
+            placeholders = placeholders or status == "not_applicable"
+            add_finding(
+                target,
+                findings,
+                counters,
+                "C1_hardcoded_credentials",
+                "credential_pattern_v2",
+                status,
+                severity,
+                path,
+                line,
+                source_line(lines, line),
+                "regex",
+                explanation,
+                {"match": match.group(0), "placeholder": status == "not_applicable"},
+            )
+    if not detected and not placeholders:
+        add_finding(
+            target,
+            findings,
+            counters,
+            "C1_hardcoded_credentials",
+            "credential_pattern_v2",
+            "not_detected",
+            "info",
+            Path("."),
+            0,
+            "",
+            "regex",
+            "No hardcoded credential evidence detected for C1_hardcoded_credentials.",
+        )
 
 
 def file_presence_detector(
