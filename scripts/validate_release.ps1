@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.4.1",
+    [string]$ExpectedVersion = "1.4.2",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -119,6 +119,20 @@ try {
         Assert-True ($null -ne $packet.evidence_ledger -and $packet.evidence_ledger.Count -gt 0) "packet evidence ledger missing"
         $packetText = Get-Content -LiteralPath $packetFiles[0].FullName -Raw
         Assert-True (-not $packetText.Contains('"snippet"')) "packet must not include raw snippets"
+    }
+
+    Invoke-Step "advisory adapter harness contract" {
+        $harnessDir = Join-Path $outDir "harness"
+        New-Item -ItemType Directory -Force -Path $harnessDir | Out-Null
+        python -m stem_ai . --format json --out $harnessDir --advisory mock-invalid
+        $harnessJson = @(Get-ChildItem -LiteralPath $harnessDir -Filter "*_experiment_results.json")
+        Assert-True ($harnessJson.Count -eq 1) "Expected one harness result JSON, found $($harnessJson.Count)"
+        $harness = Get-Content -LiteralPath $harnessJson[0].FullName -Raw | ConvertFrom-Json
+        Assert-True ($harness.ai_advisory.status -eq "invalid") "mock-invalid should remain invalid"
+        Assert-True ($harness.ai_advisory.adapter_contract.network_called -eq $false) "mock harness must not call network"
+        Assert-True ($harness.ai_advisory.adapter_contract.citation_repair_attempted -eq $false) "mock harness must not repair citations"
+        Assert-True ($harness.ai_advisory.invalid_citations.Count -gt 0) "mock-invalid should expose invalid citations"
+        Assert-True (($harness.ai_advisory.errors -contains "final_score_override_requested")) "mock-invalid should reject score override"
     }
 
     Invoke-Step "markdown and PDF artifacts exist" {

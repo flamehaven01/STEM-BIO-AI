@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .advisory_adapters import ADVISORY_HARNESS_MODES, run_advisory_harness
 from .advisory_contract import build_advisory_input, build_offline_advisory
 from .advisory_providers import load_provider_config, provider_handoff_metadata
 from .detectors import collect_evidence_bundle
@@ -147,6 +148,8 @@ def audit_repository(target: Path, advisory: str = "none") -> dict[str, Any]:
     elif advisory == "packet":
         result["ai_advisory_input"] = build_advisory_input(result)
         result["ai_advisory_input"]["provider_request"] = provider_handoff_metadata(load_provider_config())
+    elif advisory in ADVISORY_HARNESS_MODES:
+        result["ai_advisory"] = run_advisory_harness(result, advisory)
     return result
 
 

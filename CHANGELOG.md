@@ -10,6 +10,16 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.4.2] - 2026-04-30
+
+### Added
+- Added `stem_ai/advisory_adapters.py` as a deterministic no-network adapter contract harness.
+- Added mock advisory modes: `mock-valid`, `mock-invalid`, `mock-error`, and `mock-timeout`.
+- Added standard adapter error envelopes for adapter failures and timeout simulations.
+- Added regression coverage proving malformed advisory output remains invalid and is not citation-repaired.
+
+---
+
 ## [1.4.1] - 2026-04-30
 
 ### Added

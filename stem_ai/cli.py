@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from .advisory_adapters import ADVISORY_HARNESS_MODES
 from .render import write_outputs
 from .scanner import audit_repository
 
@@ -14,15 +15,16 @@ _LEVEL_MAP = {
     2: ("detailed", 3),
     3: ("detailed", 5),
 }
+_ADVISORY_CHOICES = ["none", "validate", "packet", *ADVISORY_HARNESS_MODES]
 
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
         usage=(
-            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory none|validate|packet]\n"
+            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory MODE]\n"
             "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all]"
-            " [--out DIR] [--explain] [--advisory none|validate|packet]"
+            " [--out DIR] [--explain] [--advisory MODE]"
         ),
         description="STEM BIO-AI local evidence-surface scan for bio/medical AI repositories.",
         epilog=(
@@ -32,7 +34,8 @@ def _build_parser() -> argparse.ArgumentParser:
             "  stem /path/to/bio-ai-repo --level 3 --format all --out stem_output\n"
             "  stem /path/to/bio-ai-repo --explain\n"
             "  stem /path/to/bio-ai-repo --advisory validate\n"
-            "  stem /path/to/bio-ai-repo --advisory packet"
+            "  stem /path/to/bio-ai-repo --advisory packet\n"
+            "  stem /path/to/bio-ai-repo --advisory mock-invalid"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -72,7 +75,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     audit.add_argument(
         "--advisory",
-        choices=["none", "validate", "packet"],
+        choices=_ADVISORY_CHOICES,
         default="none",
         help="Run offline advisory validation or export a provider-neutral advisory input packet",
     )
