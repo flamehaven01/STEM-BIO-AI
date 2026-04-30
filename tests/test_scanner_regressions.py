@@ -47,7 +47,7 @@ def test_stage_3_full_rubric_can_reach_100(tmp_path: Path) -> None:
     _write(
         tmp_path / "README.md",
         "Bioinformatics repository for viral genome analysis.\n"
-        "Limitations and population validation boundaries are documented.\n"
+        "Limitations and validation boundaries are documented.\n"
         "Funding and competing interest disclosures are provided.\n",
     )
     _write(tmp_path / "requirements.txt", "numpy==1.26.4\n")

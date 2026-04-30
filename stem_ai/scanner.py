@@ -189,7 +189,7 @@ def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str
         "T2_domain_tests": {"score": tests, "max": 15, "evidence": "Domain-specific test text detected." if tests == 15 else "Tests present but domain specificity is limited." if tests else "No tests detected."},
         "T3_changelog_release_hygiene": {"score": changelog, "max": 15, "evidence": str(changelog_path.name) if changelog_path else "No changelog detected."},
         "B1_data_provenance_controls": {"score": provenance, "max": 15, "evidence": "Dependency/provenance manifest detected." if provenance else "No dependency/provenance manifest detected."},
-        "B2_bias_limitations": {"score": bias, "max": 15, "evidence": "Bias, limitation, population, or validation-boundary language detected." if bias else "No bias/limitations language detected by local CLI scan."},
+        "B2_bias_limitations": {"score": bias, "max": 15, "evidence": "Bias, limitation, or validation-boundary language detected." if bias else "No bias/limitations language detected by local CLI scan."},
         "B3_coi_funding": {"score": coi, "max": 5, "evidence": "COI, funding, sponsor, or acknowledgement language detected." if coi else "No COI/funding disclosure detected by local CLI scan."},
         "stage_3_raw_total": {"score": raw_score, "max": raw_max, "evidence": "Raw rubric total before normalization to 100."},
     }

@@ -154,11 +154,11 @@ The local CLI can produce a 5-page PDF packet for an audited repository. The pre
 ```mermaid
 flowchart LR
     A[Target repository] --> B[LOCAL_ANALYSIS scanner]
-    B --> C[Stage 1 README intent]
+    B --> C[Stage 1 README evidence signal]
     B --> D[Stage 2R repo-local consistency]
     B --> E[Stage 3 code/bio responsibility]
     B --> F[C1-C4 code integrity]
-    C --> G[Weighted trust score]
+    C --> G[Weighted evidence score]
     D --> G
     E --> G
     F --> G
@@ -212,7 +212,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 ```bibtex
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
-  title   = {STEM BIO-AI: Trust Audit Framework for Bio/Medical AI Repositories},
+  title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
   version = {1.2.0},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}

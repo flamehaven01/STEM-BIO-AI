@@ -23,7 +23,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]\n"
             "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]"
         ),
-        description="STEM BIO-AI local trust audit for bio/medical AI repositories.",
+        description="STEM BIO-AI local evidence-surface scan for bio/medical AI repositories.",
         epilog=(
             "Examples:\n"
             "  stem /path/to/bio-ai-repo\n"
@@ -97,7 +97,7 @@ def run_audit(args: argparse.Namespace) -> int:
     created = write_outputs(result, output_dir, mode, pages, args.format)
 
     score = result["score"]
-    print("STEM BIO-AI local audit complete")
+    print("STEM BIO-AI local evidence-surface scan complete")
     print(f"Target:  {result['target']['name']}")
     print(f"Level:   {args.level}  ({mode}, {pages}p)")
     print(f"Score:   {score['final_score']} / 100  ({score['formal_tier']})")

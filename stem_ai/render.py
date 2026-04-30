@@ -114,7 +114,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "",
         "| Stage | Weight | Score |",
         "| --- | ---: | ---: |",
-        f"| Stage 1 README Intent | 0.40 | {score['stage_1_readme_intent']} |",
+        f"| Stage 1 README Evidence Signal | 0.40 | {score['stage_1_readme_intent']} |",
         f"| Stage 2R Repo-Local Consistency | 0.20 | {score['stage_2_repo_local_consistency']} |",
         f"| Stage 3 Code/Bio Responsibility | 0.40 | {score['stage_3_code_bio']} |",
         f"| Risk Penalty | -- | {score['risk_penalty']} |",
@@ -141,7 +141,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     lines.extend([
         "",
         "## Disclaimer",
-        "This is a trustworthiness pre-screen, not clinical certification, "
+        "This is an evidence-surface pre-screen, not clinical certification, "
         "regulatory clearance, or medical advice.",
     ])
     return "\n".join(lines) + "\n"
@@ -206,7 +206,7 @@ def _header_block(result: dict[str, Any]) -> list[Any]:
     mode = result.get("execution_mode", "—")
 
     header_data = [[Paragraph(
-        f'<font color="{_WHITE}"><b>STEM BIO-AI Trustworthiness Audit v{result["stem_ai_version"]}</b></font>',
+        f'<font color="{_WHITE}"><b>STEM BIO-AI Evidence-Surface Scan v{result["stem_ai_version"]}</b></font>',
         _style("H1", 14, 18, _WHITE, True),
     )]]
     header_tbl = Table(header_data, colWidths=["100%"])
@@ -293,7 +293,7 @@ def _score_row(result: dict[str, Any]) -> list[Any]:
 def _stage_cards(result: dict[str, Any]) -> list[Any]:
     score = result["score"]
     stages = [
-        ("Stage 1", "README Intent", score["stage_1_readme_intent"], _TEAL),
+        ("Stage 1", "README Evidence", score["stage_1_readme_intent"], _TEAL),
         ("Stage 2R", "Repo-Local Consistency", score["stage_2_repo_local_consistency"] or 0, _PURPLE),
         ("Stage 3", "Code / Bio Responsibility", score["stage_3_code_bio"], _SLATE),
     ]
@@ -608,7 +608,7 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
         "R2R_3_readme_test_ci_alignment": "Test and CI surfaces are present and reference the same "
                     "domain as the README.",
         "R2R_D2_missing_clinical_use_boundary": "Clinical-adjacent repository lacks an explicit "
-                    "'research use only' or 'not for diagnostic use' boundary — high trust risk.",
+                    "'research use only' or 'not for diagnostic use' boundary — high review risk.",
     }
 
     s2r_items: list[tuple[str, str, str, str]] = []
@@ -676,11 +676,11 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         "B1_data_provenance_controls": "Pinned or checksummed dependency manifests "
                     "(requirements.txt, pyproject.toml, environment.yml) ensure reproducible environments. "
                     "Score 10 if manifest detected; max 15 requires hash-pinning evidence.",
-        "B2_bias_limitations": "Documentation of algorithmic bias, population limitations, "
+        "B2_bias_limitations": "Documentation of algorithmic bias, limitations, "
                     "or model boundary conditions. Requires manual review of README, model cards, "
                     "or supplementary docs — not detectable by local CLI scan.",
         "B3_coi_funding": "Conflict of interest and funding disclosure in README or FUNDING.md. "
-                    "Required for institutional trust — not detectable by local CLI scan.",
+                    "Required for institutional review context — not detectable by local CLI scan.",
     }
 
     t_items: list[tuple[str, str, str, str]] = []
@@ -759,7 +759,7 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         f'&#8226; <b>Gap to T3 (final score &gt;= 70):</b> {gap_t3} points needed across all stages',
         f'&#8226; <b>Gap to T4 (final score &gt;= 85):</b> {gap_t4} points needed across all stages',
         '&#8226; <b>B2 Bias/Limitations:</b> Not detectable — requires manual audit of README, '
-        'model card, or supplementary documentation for population disclaimers and algorithmic boundaries',
+        'model card, or supplementary documentation for validation boundaries and algorithmic limitations',
         '&#8226; <b>B3 COI/Funding:</b> Not detectable — requires inspection of README or FUNDING.md '
         'for conflict of interest and funding source disclosure',
     ]
@@ -1057,7 +1057,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         f"Use Scope: {score['use_scope']}",
         "",
         "Stage Scores",
-        f"- Stage 1 README Intent: {score['stage_1_readme_intent']} / 100",
+        f"- Stage 1 README Evidence Signal: {score['stage_1_readme_intent']} / 100",
         f"- Stage 2R Repo-Local Consistency: {score['stage_2_repo_local_consistency']} / 100",
         f"- Stage 3 Code/Bio Responsibility: {score['stage_3_code_bio']} / 100",
         "",

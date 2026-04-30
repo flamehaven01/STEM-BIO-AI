@@ -184,12 +184,12 @@ _CSS = """
 }
 """
 
-with gr.Blocks(title="STEM BIO-AI Local Trust Audit") as demo:
+with gr.Blocks(title="STEM BIO-AI Local Evidence Scan") as demo:
     gr.HTML(
         """
         <div class="hero">
           <h1>STEM BIO-AI</h1>
-          <p>Contract-bound trust audit for open-source bio/medical AI repositories.
+          <p>Contract-bound evidence-surface scan for open-source bio/medical AI repositories.
           Clone a public GitHub repo, inspect its visible evidence surface, and return
           JSON, Markdown, and PDF review artifacts.</p>
         </div>
@@ -203,12 +203,12 @@ with gr.Blocks(title="STEM BIO-AI Local Trust Audit") as demo:
           It does not call OpenAI, Anthropic, or the GitHub API.</span></div>
 
           <div class="info-card"><b>What STEM checks</b><br/>
-          <span>README intent, repo-local consistency, CI/tests/docs, dependency hygiene,
+          <span>README evidence signal, repo-local consistency, CI/tests/docs, dependency hygiene,
           clinical boundary language, and C1-C4 code-integrity signals.</span></div>
 
           <div class="info-card"><b>Tier meaning</b><br/>
-          <span>T0: trust not established. T1: quarantine. T2: caution. T3: consider.
-          T4: strong observable trust.</span></div>
+          <span>T0: insufficient evidence. T1: quarantine. T2: caution. T3: consider.
+          T4: strong observable evidence.</span></div>
 
           <div class="info-card"><b>CLI for artifacts</b><br/>
           <span>Use <code class="cli-command">stem &lt;folder&gt; --level 3 --format all</code> locally to generate

@@ -1,15 +1,15 @@
 ---
 name: stem-ai
-description: "Trust Audit Framework for Bio/Medical AI Repositories. Audits open-source bio/medical AI repositories for clinical trustworthiness using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored audit reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess the trustworthiness of any bio-AI, medical AI, or clinical-adjacent repository."
-version: "1.1.3"
+description: "Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories. Audits and reviews open-source bio/medical AI repositories for repository evidence-surface triage using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored review-priority reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess evidence signals for any bio-AI, medical AI, or clinical-adjacent repository."
+version: "1.2.0"
 author: "Flamehaven"
 license: "Apache-2.0"
 platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigravity", "universal"]
 ---
 
-# STEM BIO-AI -- Trust Audit Framework for Bio/Medical AI Repositories
+# STEM BIO-AI -- Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories
 
-**Version:** 1.1.3
+**Version:** 1.2.0
 **Codename:** Hippocratic_Code_Engine_Unified
 **Runtime:** LLM-Native + AI CLI (Universal)
 
@@ -20,16 +20,16 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 
 ## When to Use This Skill
 
-- Evaluating the trustworthiness of a bio-AI or medical AI repository
+- Evaluating repository evidence signals for a bio-AI or medical AI repository
 - Auditing open-source clinical-adjacent tools before procurement or pilot
 - Assessing governance maturity of repositories handling patient data
 - Generating structured audit reports with evidence chains and scores
-- Comparing repository trust levels across an ecosystem
+- Comparing repository review-priority tiers across an ecosystem
 - Producing institutional-grade documentation (Claim Matrix, Evidence Ledger)
 
 ## What This Skill Produces
 
-1. **STEM BIO-AI Audit Report** -- scored trust assessment (T0-T4 tier)
+1. **STEM BIO-AI Audit Report** -- scored repository evidence-surface triage (T0-T4 review-priority tier)
 2. **Executive Summary** -- 1-page institutional decision support
 3. **Claim Matrix** -- line-level evidence anchors for every finding
 4. **Evidence Ledger** -- snapshot provenance and artifact tracking
@@ -40,7 +40,7 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 STEM BIO-AI sits on top of technical audit. It should not replace it.
 
 - **Technical audit** determines what the repository actually does.
-- **STEM BIO-AI** determines whether the observable artifact surface is sufficient for institutional trust establishment.
+- **STEM BIO-AI** determines whether the observable artifact surface is sufficient for institutional review triage.
 
 Use this skill after or alongside technical inspection, not instead of it.
 
@@ -53,7 +53,7 @@ To audit a repository, provide:
 
 The skill will:
 1. Detect execution mode (LOCAL_ANALYSIS / FULL / MANUAL)
-2. Run 3-stage evaluation (README Intent, Cross-Platform, Code Debt)
+2. Run 3-stage evaluation (README Evidence Signal, Cross-Platform, Code Debt)
 3. Score with fixed rubric (cross-LLM target: +/-10 points)
 4. Evaluate governance overlay if artifacts present
 5. Generate multi-file output package
