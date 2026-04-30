@@ -70,7 +70,12 @@ def _clip_words(text: str, limit: int) -> str:
 
 # ── public API ────────────────────────────────────────────────────────────────
 def write_outputs(
-    result: dict[str, Any], output_dir: Path, mode: str, pages: int, fmt: str
+    result: dict[str, Any],
+    output_dir: Path,
+    mode: str,
+    pages: int,
+    fmt: str,
+    explain: bool = False,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     stem = _safe_name(result["target"]["name"])
@@ -93,6 +98,11 @@ def write_outputs(
             _write_rl_pdf(p, result, mode, pages)
         else:
             write_simple_pdf(p, render_pdf_pages(result, mode, pages))
+        created.append(p)
+
+    if explain:
+        p = output_dir / f"{stem}_explain.txt"
+        p.write_text(render_explain(result), encoding="utf-8")
         created.append(p)
 
     return created
@@ -119,6 +129,11 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         f"| Stage 3 Code/Bio Responsibility | 0.40 | {score['stage_3_code_bio']} |",
         f"| Risk Penalty | -- | {score['risk_penalty']} |",
         "",
+        "## Replication Evidence Lane",
+        "",
+        f"**Stage 4 Replication Score:** **{result.get('replication_score', 0)} / 100**",
+        f"**Replication Tier:** **{result.get('replication_tier', 'R0')}**",
+        "",
         "## Code Integrity",
     ]
     for key, item in result["code_integrity"].items():
@@ -136,6 +151,9 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         lines.extend(["", "## Stage 3 Evidence"])
         for key, item in result["stage_3_rubric"].items():
             lines.append(f"- **{key}:** {item['score']} / {item['max']} — {item['evidence']}")
+        lines.extend(["", "## Stage 4 Replication Evidence"])
+        for key, item in result.get("stage_4_rubric", {}).items():
+            lines.append(f"- **{key}:** {item['score']} / {item['max']} — {item['evidence']}")
         lines.extend(["", "## Method Boundary", result["method"]])
 
     lines.extend([
@@ -145,6 +163,92 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "regulatory clearance, or medical advice.",
     ])
     return "\n".join(lines) + "\n"
+
+
+# ── explain text report ───────────────────────────────────────────────────────
+_EXPLAIN_SEP = "=" * 72
+_EXPLAIN_META_SKIP = frozenset({"file_count", "max_ast_files", "max_file_size_bytes"})
+
+
+def render_explain(result: dict[str, Any]) -> str:
+    """Return a human-readable plain-text explain report grouped by detector."""
+    ledger: list[dict[str, Any]] = result.get("evidence_ledger", [])
+    score = result["score"]
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for finding in ledger:
+        grouped.setdefault(finding["detector"], []).append(finding)
+
+    out: list[str] = [
+        "STEM BIO-AI Explain Report",
+        f"Target  : {result['target']['name']}",
+        f"Score   : {score['final_score']} / 100  ({score['formal_tier']})",
+        f"Replic  : {result.get('replication_score', 0)} / 100"
+        f"  ({result.get('replication_tier', 'R0')})",
+        _EXPLAIN_SEP, "",
+    ]
+    for detector, findings in grouped.items():
+        out += _explain_detector_group(detector, findings)
+    out += _explain_ast_section(result.get("ast_signal_summary", {}))
+    out += _explain_s4_section(result.get("stage_4_rubric", {}))
+    out += [_EXPLAIN_SEP,
+            "DISCLAIMER: Evidence-surface pre-screen only.",
+            "Not clinical certification, regulatory clearance, or medical advice."]
+    return "\n".join(out) + "\n"
+
+
+def _explain_detector_group(detector: str, findings: list[dict[str, Any]]) -> list[str]:
+    label = _explain_status_label({f["status"] for f in findings})
+    noun = "finding" if len(findings) == 1 else "findings"
+    lines = [f"{detector}  [{label}]  ({len(findings)} {noun})"]
+    for f in findings:
+        lines += _explain_finding_lines(f)
+    lines.append("")
+    return lines
+
+
+def _explain_finding_lines(f: dict[str, Any]) -> list[str]:
+    occ = f["finding_id"].rsplit(":", 1)[-1]
+    file_str = "(repository)" if f["file"] == "." else (
+        f"{f['file']}:{f['line']}" if f["line"] else f["file"]
+    )
+    lines = [f"  [{occ}]  {file_str}", f"         finding_id: {f['finding_id']}"]
+    if f.get("pattern_id"):
+        lines.append(f"         pattern : {f['pattern_id']}")
+    if f.get("snippet"):
+        lines.append(f"         snippet : \"{f['snippet']}\"")
+    if f.get("explanation"):
+        lines.append(f"         reason  : {f['explanation']}")
+    for k, v in (f.get("metadata") or {}).items():
+        if k not in _EXPLAIN_META_SKIP:
+            lines.append(f"         {k}      : {v}")
+    return lines
+
+
+def _explain_ast_section(ast: dict[str, Any]) -> list[str]:
+    if not ast:
+        return []
+    lines = [_EXPLAIN_SEP, "AST Signal Summary", ""]
+    lines += [f"  {k:<34} {v}" for k, v in ast.items() if v is not None]
+    lines.append("")
+    return lines
+
+
+def _explain_s4_section(s4: dict[str, Any]) -> list[str]:
+    if not s4:
+        return []
+    lines = [_EXPLAIN_SEP, "Stage 4 Replication Rubric", ""]
+    for key, item in s4.items():
+        sc, mx, ev = item.get("score", 0), item.get("max", 0), item.get("evidence", "")
+        lines.append(f"  {key:<42} {sc:>3} / {mx:<3}  {ev}")
+    lines.append("")
+    return lines
+
+
+def _explain_status_label(statuses: set[str]) -> str:
+    for candidate in ("error", "detected", "not_detected", "absent", "not_applicable"):
+        if candidate in statuses:
+            return candidate.upper()
+    return next(iter(statuses), "UNKNOWN").upper()
 
 
 # ── reportlab: document entry point ──────────────────────────────────────────
@@ -296,6 +400,7 @@ def _stage_cards(result: dict[str, Any]) -> list[Any]:
         ("Stage 1", "README Evidence", score["stage_1_readme_intent"], _TEAL),
         ("Stage 2R", "Repo-Local Consistency", score["stage_2_repo_local_consistency"] or 0, _PURPLE),
         ("Stage 3", "Code / Bio Responsibility", score["stage_3_code_bio"], _SLATE),
+        ("Stage 4", "Replication Evidence", result.get("replication_score", 0), _GREEN),
     ]
     cells = []
     for label, sub, val, col in stages:
@@ -320,7 +425,7 @@ def _stage_cards(result: dict[str, Any]) -> list[Any]:
         ]))
         cells.append(t)
 
-    row = Table([cells], colWidths=["33%", "33%", "34%"])
+    row = Table([cells], colWidths=["25%", "25%", "25%", "25%"])
     row.setStyle(TableStyle([
         ("LEFTPADDING",  (0, 0), (-1, -1), 3),
         ("RIGHTPADDING", (0, 0), (-1, -1), 3),
@@ -1060,6 +1165,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         f"- Stage 1 README Evidence Signal: {score['stage_1_readme_intent']} / 100",
         f"- Stage 2R Repo-Local Consistency: {score['stage_2_repo_local_consistency']} / 100",
         f"- Stage 3 Code/Bio Responsibility: {score['stage_3_code_bio']} / 100",
+        f"- Stage 4 Replication Evidence: {result.get('replication_score', 0)} / 100 ({result.get('replication_tier', 'R0')})",
         "",
         "Code Integrity",
         *[f"- {k}: {v['status']}" for k, v in result["code_integrity"].items()],
@@ -1078,6 +1184,9 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
     p3 = _fit_page(["Stage 3 Evidence", *[
         f"- {k}: {v['score']} / {v['max']} {v['evidence']}"
         for k, v in result["stage_3_rubric"].items()
+    ], "", "Stage 4 Replication Evidence", *[
+        f"- {k}: {v['score']} / {v['max']} {v['evidence']}"
+        for k, v in result.get("stage_4_rubric", {}).items()
     ]])
     sets = [_fit_page(brief), p2, p3]
     if pages == 5:
@@ -1141,21 +1250,29 @@ def write_simple_pdf(path: Path, pages: list[list[str]]) -> None:
 
 
 def _page_stream(lines: list[str]) -> str:
-    y = 800
     chunks = ["BT", "/F1 11 Tf", "50 800 Td"]
+    y = 800
     first = True
     for line in lines:
         for wrapped in textwrap.wrap(_ascii(line), width=88) or [""]:
+            overflow = _emit_page_chunk(chunks, wrapped, y, first)
+            if overflow:
+                return overflow
             if not first:
-                chunks.append("0 -16 Td")
                 y -= 16
-                if y < 60:
-                    chunks.append("ET")
-                    return "\n".join(chunks)
             first = False
-            chunks.append(f"({_escape_pdf(wrapped)}) Tj")
     chunks.append("ET")
     return "\n".join(chunks)
+
+
+def _emit_page_chunk(chunks: list[str], wrapped: str, y: int, first: bool) -> str:
+    if not first:
+        chunks.append("0 -16 Td")
+        if y - 16 < 60:
+            chunks.append("ET")
+            return "\n".join(chunks)
+    chunks.append(f"({_escape_pdf(wrapped)}) Tj")
+    return ""
 
 
 def _fit_page(lines: list[str], max_lines: int = 44) -> list[str]:

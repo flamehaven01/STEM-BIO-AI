@@ -10,10 +10,10 @@
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.2.0-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.3.0-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
-Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using only file reads and deterministic pattern matching — no LLM, no API, no runtime execution.
+Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, replication evidence, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using local file reads, deterministic pattern matching, and stdlib AST parsing — no LLM, no API, no runtime execution.
 
 > Does this repository expose enough observable evidence to be considered, contained, or rejected as a starting point?
 
@@ -22,11 +22,13 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 - **No API key required** — no OpenAI, Anthropic, or GitHub API key is needed.
 - **No model-runtime dependency** — no PyTorch, TensorFlow, CUDA, or GPU requirement.
 - **Triage tier built in** — maps evidence signals to T0–T4 review-priority tiers.
+- **Replication evidence lane** — reports Stage 4 `replication_score` / `replication_tier` separately from the final score.
+- **Explainable evidence ledger** — `--explain` writes file/line/snippet evidence with stable `finding_id` values.
 - **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF outputs.
 
 ## Measurement Boundary
 
-STEM BIO-AI scans observable repository signals using file reads, directory structure checks, and regex pattern matching. It does not infer model accuracy, clinical safety, author intent, scientific validity, or regulatory compliance.
+STEM BIO-AI scans observable repository signals using file reads, directory structure checks, regex pattern matching, and Python AST structure checks. It does not infer model accuracy, clinical safety, author intent, scientific validity, or regulatory compliance.
 
 It is a pre-screening triage tool, not a certification or trust verdict. A T4 score means strong observable evidence signals — it does not mean the repository is safe for clinical deployment.
 
@@ -42,6 +44,7 @@ pip install -e .[pdf]
 stem /path/to/bio-ai-repo --level 1 --format all  # 1-page brief
 stem /path/to/bio-ai-repo --level 2 --format all  # 3-page stage analysis
 stem /path/to/bio-ai-repo --level 3 --format all  # 5-page deep review
+stem /path/to/bio-ai-repo --level 3 --format all --explain
 ```
 
 `stem <folder>` is shorthand for `stem audit <folder>`. GitHub URL auditing is not enabled in the local CLI; clone the target repository first, then point the CLI at the local path.
@@ -62,6 +65,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
 <repo>_detailed_3p.pdf           # Level 2 stage analysis
 <repo>_detailed_5p.pdf           # Level 3 deep review packet
+<repo>_explain.txt               # optional --explain proof trace
 ```
 
 ## Scoring Model
@@ -71,11 +75,14 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 | Stage 1: README Evidence | 40% | Bio-domain vocabulary presence; explicit non-clinical disclaimer |
 | Stage 2R: Repo-Local Consistency | 20% | Vocabulary overlap across README, docs, package metadata, CI, tests |
 | Stage 3: Code / Bio Responsibility | 40% | CI presence; test domain coverage; changelog; dependency manifest; bias/COI language |
+| Stage 4: Replication Evidence | Separate lane | Containers; reproducibility targets; lock/pin/hash evidence; dataset/model references; citation/CLI/seed/example signals |
 | C1-C4: Code Integrity | Advisory / penalty | Hardcoded secrets; dependency pinning; deprecated patient paths; fail-open exceptions |
 
 `Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Penalty`
 
 Clinical-adjacent repositories without an explicit disclaimer are capped at T2 (score ≤ 69). Repositories with unbounded CA-DIRECT claims are capped at T0 (score ≤ 39).
+
+Stage 4 is intentionally not folded into the final score in v1.3. It is reported as `replication_score` and `replication_tier` so reviewers can inspect replication evidence without changing the established T0-T4 scoring formula before benchmark calibration.
 
 ## Triage Tiers
 
@@ -103,6 +110,13 @@ Scores reflect observable repository signals only. Each item below describes wha
 | B1 Data Provenance | `requirements.txt`, `pyproject.toml`, or `environment.yml` file exists |
 | B2 Bias/Limitations | `bias`, `limitation`, `not validated`, `validation cohort` in README or docs (regex) |
 | B3 COI/Funding | `funding`, `grant`, `sponsor`, `conflict of interest` in README, docs, or FUNDING.md (regex) |
+| Stage 4 Containers | `Dockerfile` or compose file exists |
+| Stage 4 Reproduction Target | `Makefile` target such as `reproduce`, `eval`, `benchmark`, or `test` |
+| Stage 4 Dependency Lock/Pin | environment/lock/requirements file presence; exact pins or hash evidence |
+| Stage 4 Reproducibility Section | README heading mentioning reproduction, replication, rerun, or result recreation |
+| Stage 4 Artifact References | dataset/model/checkpoint URLs or checksum files |
+| Stage 4 Citation/Interface | `CITATION.cff`, package CLI entry points, argparse AST evidence |
+| AST Summary | Python stdlib `ast` detects assertion tests, seed settings, argparse, annotations, docstrings, portable model loading, and fail-open handlers |
 | CA Severity | Clinical/diagnostic phrase regex match in README, docs, and package metadata |
 | C1 Credentials | Hardcoded key patterns: AWS `AKIA*`, OpenAI `sk-*`, GitHub `ghp_*`, `api_key=...` |
 | C2 Dependency Pinning | `==` or hash pin present vs. loose ranges `>=`, `~=`, `<`, `>` |
@@ -154,20 +168,25 @@ The local CLI can produce a 5-page PDF packet for an audited repository. The pre
 ```mermaid
 flowchart LR
     A[Target repository] --> B[LOCAL_ANALYSIS scanner]
-    B --> C[Stage 1 README evidence signal]
-    B --> D[Stage 2R repo-local consistency]
-    B --> E[Stage 3 code/bio responsibility]
-    B --> F[C1-C4 code integrity]
-    C --> G[Weighted evidence score]
-    D --> G
-    E --> G
-    F --> G
-    G --> H[JSON]
-    G --> I[Markdown]
-    G --> J[PDF]
+B --> C[Stage 1 README evidence signal]
+B --> D[Stage 2R repo-local consistency]
+B --> E[Stage 3 code/bio responsibility]
+B --> F[Stage 4 replication evidence lane]
+B --> K[C1-C4 code integrity]
+C --> G[Weighted evidence score]
+D --> G
+E --> G
+K --> G
+F --> H[Replication score/tier]
+G --> I[JSON]
+H --> I
+I --> L[Evidence ledger]
+I --> M[Explain trace]
+G --> N[Markdown]
+G --> O[PDF]
 ```
 
-Core files: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, and `stem_ai/app.py`.
+Core files: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem_ai/detectors.py`, `stem_ai/detector_surface.py`, `stem_ai/detector_ast.py`, `stem_ai/detector_stage4.py`, `stem_ai/evidence.py`, and `stem_ai/app.py`.
 
 ## Agent Skill Install
 
@@ -213,7 +232,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.2.0},
+  version = {1.3.0},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

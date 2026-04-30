@@ -10,6 +10,30 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.3.0] - 2026-04-30
+
+### Added
+- Added v1.3 evidence ledger output with stable POSIX `finding_id` values, detector metadata, source file, line, snippet, match type, explanation, and optional metadata.
+- Added stdlib AST observation summary (`ast_signal_summary`) for assertion tests, seed settings, argparse CLI surfaces, docstrings, annotations, portable model loading, syntax errors, and fail-open handlers.
+- Added Stage 4 Reproducibility & Replication Evidence as a separate lane with `replication_score`, `replication_tier`, and `stage_4_rubric`.
+- Added deterministic Stage 4 detectors for containers, Makefile reproduction/evaluation targets, environment/lock files, exact pins/hashes, README reproducibility sections, checksum files, dataset/model artifact references, `CITATION.cff`, CLI evidence, seed evidence, and runnable examples.
+- Added `stem audit ... --explain`, which writes a plain-text proof trace grouped by detector and includes full `finding_id` values for citation by future AI layers.
+- Added v1.3 planning documents for evidence-ledger contracts, Stage 4, benchmark methodology, and deferred v1.3.1 reasoning model candidates.
+- Added `audits/benchmark-v1.3/` template workspace for the 30-repository benchmark manifest, JSONL results, tier alignment summary, and false-positive/false-negative log.
+
+### Changed
+- Split detector implementation into focused modules: surface detectors, AST detectors, Stage 4 detectors, shared detector utilities, shared patterns, and evidence dataclasses.
+- Kept AST and Stage 4 outputs observation-only for v1.3.0; the established final score formula remains unchanged.
+- Updated README to describe Stage 4, `--explain`, AST observation, replication tiers, and evidence-ledger artifacts.
+
+### Fixed
+- Closed evidence-ledger coverage gaps for scored Stage 3 and C1-C4 components.
+- Improved AST detection for direct `ArgumentParser()` imports and mock-style assertion calls.
+- Removed duplicated detector constants from scanner internals by centralizing shared patterns.
+- Reduced nested complexity in explain rendering, AST visiting, dependency-pinning detection, and fallback PDF page-stream generation; local slop scan reports all Python files clean.
+
+---
+
 ## [1.2.0] - 2026-04-30
 
 ### Changed

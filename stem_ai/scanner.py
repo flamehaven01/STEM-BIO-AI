@@ -9,23 +9,22 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .detectors import collect_evidence_bundle
+from .patterns import (
+    BIAS_LIMITATION_TERMS,
+    BIO_TERMS,
+    COI_FUNDING_TERMS,
+    DISCLAIMER_TERMS,
+    EXACT_PINNED_DEP,
+    FAIL_OPEN,
+    LOOSE_DEP,
+    PATIENT_METADATA,
+    SECRET_TERMS,
+    SKIP_DIRS,
+    TEXT_EXTENSIONS,
+)
 
 
-TEXT_EXTENSIONS = {
-    ".md",
-    ".rst",
-    ".txt",
-    ".toml",
-    ".yml",
-    ".yaml",
-    ".json",
-    ".py",
-    ".sh",
-    ".cfg",
-    ".ini",
-}
-SKIP_DIRS = {".git", "__pycache__", ".mypy_cache", ".pytest_cache", "node_modules", ".venv", "venv"}
-BIO_TERMS = re.compile(r"\b(bio|medical|clinical|virus|viral|genome|sequenc|variant|patient|diagnos|treatment)\b", re.I)
 CA_INDIRECT_TERMS = re.compile(r"\b(consensus|vcf|variant|viral|virus|genome|sequenc|sample|allele)\b", re.I)
 CA_DIRECT_TERMS = re.compile(
     r"\b(diagnos(?:is|tic)|clinical decision|decision support|patient-facing|triage|risk score|"
@@ -38,14 +37,6 @@ T0_HARD_FLOOR_TERMS = re.compile(
     r"treatment recommendation|triage|risk score)\b",
     re.I,
 )
-DISCLAIMER_TERMS = re.compile(r"(not for clinical|not for diagnostic|research use only|not medical advice)", re.I)
-SECRET_TERMS = re.compile(r"(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9_]{20,}|api[_-]?key\s*=\s*['\"][^'\"]{16,})")
-EXACT_PINNED_DEP = re.compile(r"(^|[A-Za-z0-9_.\-\]\)])\s*(==|===|@)\s*[^,\s;]+|sha256[:=]|--hash=sha256:", re.I)
-LOOSE_DEP = re.compile(r"(>=|<=|~=|!=|>|<)")
-PATIENT_METADATA = re.compile(r"(patient_|patient age|patient_sex|sample_id|collection_date|pregnan|municipality|lab_id)", re.I)
-FAIL_OPEN = re.compile(r"(except(?:\s+Exception)?\s*:\s*(?:\r?\n\s*)?(?:pass|return\s+True))")
-BIAS_LIMITATION_TERMS = re.compile(r"\b(bias|fairness|limitation|limitations|generalizability|generalisation|not validated|validation cohort)\b", re.I)
-COI_FUNDING_TERMS = re.compile(r"\b(conflict of interest|competing interest|funding|grant|sponsor|acknowledg(?:e)?ments?)\b", re.I)
 
 
 def audit_repository(target: Path) -> dict[str, Any]:
@@ -69,6 +60,7 @@ def audit_repository(target: Path) -> dict[str, Any]:
     stage_2r, stage_2r_rubric = _score_stage_2r(readme, docs_text, package_text, workflow_text, test_text, clinical_adjacent, has_disclaimer)
     stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text)
     code_integrity = _code_integrity(target, dep_text, code_text)
+    evidence_ledger, ast_signal_summary, stage_4 = collect_evidence_bundle(target)
 
     weights = {"stage_1": 0.4, "stage_2": 0.2, "stage_3": 0.4}
     risk_penalty = 10 if code_integrity["C1_hardcoded_credentials"]["status"] == "FAIL" else 0
@@ -77,7 +69,7 @@ def audit_repository(target: Path) -> dict[str, Any]:
     final_score = min(raw_score, score_cap) if score_cap is not None else raw_score
 
     return {
-        "schema_version": "stem-ai-local-cli-result-v1",
+        "schema_version": "stem-ai-local-cli-result-v1.3",
         "stem_ai_version": __version__,
         "generated_at_local": date.today().isoformat(),
         "execution_mode": "LOCAL_ANALYSIS",
@@ -111,7 +103,13 @@ def audit_repository(target: Path) -> dict[str, Any]:
         },
         "stage_2r_rubric": stage_2r_rubric,
         "stage_3_rubric": stage_3_rubric,
+        "replication_score": stage_4["replication_score"],
+        "replication_tier": stage_4["replication_tier"],
+        "stage_4_rubric": stage_4["stage_4_rubric"],
         "code_integrity": code_integrity,
+        "evidence_ledger": evidence_ledger,
+        "detector_summary": _detector_summary(evidence_ledger),
+        "ast_signal_summary": ast_signal_summary,
         "notable_positive_evidence": _positive_evidence(workflow_text, test_text, docs_text, package_text),
         "notable_risks": _risks(clinical_adjacent, has_disclaimer, code_integrity),
         "file_hashes_sha256": _hash_key_files(target),
@@ -125,6 +123,7 @@ def audit_repository(target: Path) -> dict[str, Any]:
             "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
             "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
             "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+            "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
             "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...)",
             "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
@@ -400,6 +399,22 @@ def _risks(clinical_adjacent: bool, has_disclaimer: bool, code_integrity: dict[s
         if item["status"] in {"WARN", "FAIL"}:
             risks.append(f"{key}: {item['status']}")
     return risks or ["No major local risks detected by the CLI scan."]
+
+
+def _detector_summary(evidence_ledger: list[dict[str, Any]]) -> dict[str, Any]:
+    by_status: dict[str, int] = {}
+    by_detector: dict[str, dict[str, int]] = {}
+    for finding in evidence_ledger:
+        status = str(finding.get("status", "unknown"))
+        detector = str(finding.get("detector", "unknown"))
+        by_status[status] = by_status.get(status, 0) + 1
+        bucket = by_detector.setdefault(detector, {})
+        bucket[status] = bucket.get(status, 0) + 1
+    return {
+        "total_findings": len(evidence_ledger),
+        "by_status": by_status,
+        "by_detector": by_detector,
+    }
 
 
 def _hash_key_files(target: Path) -> dict[str, str]:

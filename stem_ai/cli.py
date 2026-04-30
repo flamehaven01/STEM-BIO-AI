@@ -20,15 +20,17 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
         usage=(
-            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]\n"
-            "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR]"
+            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain]\n"
+            "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all]"
+            " [--out DIR] [--explain]"
         ),
         description="STEM BIO-AI local evidence-surface scan for bio/medical AI repositories.",
         epilog=(
             "Examples:\n"
             "  stem /path/to/bio-ai-repo\n"
             "  stem /path/to/bio-ai-repo --level 2\n"
-            "  stem /path/to/bio-ai-repo --level 3 --format all --out stem_output"
+            "  stem /path/to/bio-ai-repo --level 3 --format all --out stem_output\n"
+            "  stem /path/to/bio-ai-repo --explain"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -59,6 +61,12 @@ def _build_parser() -> argparse.ArgumentParser:
         "--out",
         default="stem_output",
         help="Output directory",
+    )
+    audit.add_argument(
+        "--explain",
+        action="store_true",
+        default=False,
+        help="Write a {stem}_explain.txt file listing every evidence finding with file, line, snippet, and reason",
     )
     return parser
 
@@ -94,7 +102,7 @@ def run_audit(args: argparse.Namespace) -> int:
 
     result = audit_repository(target)
     output_dir = Path(args.out).expanduser().resolve()
-    created = write_outputs(result, output_dir, mode, pages, args.format)
+    created = write_outputs(result, output_dir, mode, pages, args.format, explain=args.explain)
 
     score = result["score"]
     print("STEM BIO-AI local evidence-surface scan complete")

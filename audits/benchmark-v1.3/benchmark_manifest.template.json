@@ -1,0 +1,33 @@
+{
+  "schema_version": "stem-bio-ai-benchmark-v1.3",
+  "generated_at": "YYYY-MM-DD",
+  "stem_ai_version": "1.3.0",
+  "selection_criteria": {
+    "topics": [
+      "bioinformatics",
+      "medical-ai",
+      "clinical-nlp",
+      "genomics",
+      "variant-calling",
+      "biomedical-ai"
+    ],
+    "stars_preferred_min": 30,
+    "last_commit_within_years": 3,
+    "primary_language": "Python or Python-majority mixed",
+    "manual_verdict_after_scan": true,
+    "selection_before_manual_verdict": true
+  },
+  "repo_count": 0,
+  "repos": [
+    {
+      "repo": "owner/name",
+      "commit": "full_commit_sha",
+      "selected_by": [
+        "topic:bioinformatics",
+        "stars>30",
+        "python-majority"
+      ],
+      "exception_note": ""
+    }
+  ]
+}
