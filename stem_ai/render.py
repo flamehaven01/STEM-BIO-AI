@@ -510,7 +510,7 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
     readme_present = "README.md" in result.get("file_hashes_sha256", {})
 
     # ── Stage 1 ──────────────────────────────────────────────────────────────
-    story += _sec_hdr("Stage 1 — README Intent Analysis  |  Weight: 0.40", _TEAL)
+    story += _sec_hdr("Stage 1 — README Evidence Signal  |  Weight: 0.40", _TEAL)
 
     s1_items: list[tuple[str, str, str, str]] = [
         ("Baseline",

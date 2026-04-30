@@ -29,8 +29,8 @@ BIO_TERMS = re.compile(r"\b(bio|medical|clinical|virus|viral|genome|sequenc|vari
 CA_INDIRECT_TERMS = re.compile(r"\b(consensus|vcf|variant|viral|virus|genome|sequenc|sample|allele)\b", re.I)
 CA_DIRECT_TERMS = re.compile(
     r"\b(diagnos(?:is|tic)|clinical decision|decision support|patient-facing|triage|risk score|"
-    r"treatment|drug recommendation|pharmacogenomic|pharmacogenetic|DPYD|CYP2D6|CPIC|"
-    r"FDA clearance|CE mark)\b",
+    r"treatment recommendation|treatment guidance|drug recommendation|pharmacogenomic|pharmacogenetic|"
+    r"DPYD|CYP2D6|CPIC|FDA clearance|CE mark)\b",
     re.I,
 )
 T0_HARD_FLOOR_TERMS = re.compile(
@@ -44,7 +44,7 @@ EXACT_PINNED_DEP = re.compile(r"(^|[A-Za-z0-9_.\-\]\)])\s*(==|===|@)\s*[^,\s;]+|
 LOOSE_DEP = re.compile(r"(>=|<=|~=|!=|>|<)")
 PATIENT_METADATA = re.compile(r"(patient_|patient age|patient_sex|sample_id|collection_date|pregnan|municipality|lab_id)", re.I)
 FAIL_OPEN = re.compile(r"(except(?:\s+Exception)?\s*:\s*(?:\r?\n\s*)?(?:pass|return\s+True))")
-BIAS_LIMITATION_TERMS = re.compile(r"\b(bias|fairness|limitation|limitations|generalizability|generalisation|population|not validated|validation cohort)\b", re.I)
+BIAS_LIMITATION_TERMS = re.compile(r"\b(bias|fairness|limitation|limitations|generalizability|generalisation|not validated|validation cohort)\b", re.I)
 COI_FUNDING_TERMS = re.compile(r"\b(conflict of interest|competing interest|funding|grant|sponsor|acknowledg(?:e)?ments?)\b", re.I)
 
 
@@ -116,6 +116,22 @@ def audit_repository(target: Path) -> dict[str, Any]:
         "notable_risks": _risks(clinical_adjacent, has_disclaimer, code_integrity),
         "file_hashes_sha256": _hash_key_files(target),
         "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
+        "measurement_basis": {
+            "stage_1": "BIO_TERMS regex match in README; disclaimer phrase presence/absence",
+            "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
+            "stage_3_T1": ".github/workflows/ directory contains files",
+            "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
+            "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
+            "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
+            "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
+            "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+            "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
+            "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...)",
+            "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
+            "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
+            "C4": "except Exception: pass or except: pass pattern (regex)",
+            "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
+        },
     }
 
 

@@ -10,6 +10,25 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.2.0] - 2026-04-30
+
+### Changed
+- Repositioned as a **deterministic evidence-surface scanner** rather than a trust auditor; README subtitle and Core Features updated accordingly.
+- T0–T4 labels changed from trust verdicts to **triage / review-priority tiers** with explicit scope statements.
+- Added **"What STEM Actually Measures"** table to README — each score component now documents its physical detection method.
+- Renamed "Stage 1 — README Intent Analysis" to "Stage 1 — README Evidence Signal" in PDF reports.
+- `Measurement Boundary` section in README replaces `Boundary` and explicitly states that scores reflect observable signals, not clinical safety or author intent.
+- `pyproject.toml` description updated; `[demo]` extra dependencies cleaned up (removes outdated pins).
+
+### Fixed
+- Removed bare `treatment` from CA-DIRECT terms; replaced with phrase-level patterns `treatment recommendation` and `treatment guidance` to reduce false positives on bioinformatics data-processing contexts.
+- Removed bare `population` from B2 bias/limitations terms; the word alone is a false positive in population-genetics contexts.
+
+### Added
+- `measurement_basis` field added to JSON output documenting the detection method for each scored component.
+
+---
+
 ## [1.1.3] - 2026-04-29
 
 ### Fixed

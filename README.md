@@ -4,29 +4,31 @@
   <img src="docs/assets/logo.png" alt="STEM BIO-AI logo" width="520">
 </p>
 
-**Trust Audit Framework for Bio/Medical AI Repositories**
+**Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories**
 
 [![Python Package](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml)
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.1.3-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.2.0-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
-Bio/medical AI repositories can look credible at the README layer while leaving trust gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI evaluates the visible repository surface with a deterministic local scanner.
+Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using only file reads and deterministic pattern matching — no LLM, no API, no runtime execution.
 
-> Does this repository expose enough trust evidence to be considered, contained, or rejected?
+> Does this repository expose enough observable evidence to be considered, contained, or rejected as a starting point?
 
 ## Core Features
 
-- **No API key required** - no OpenAI, Anthropic, or GitHub API key is needed.
-- **No model-runtime dependency** - no PyTorch, TensorFlow, CUDA, or GPU requirement for the scanner.
-- **Tier meaning built in** - maps evidence to T0-T4 trust tiers, from `T0 Trust Not Established` to `T4 Strong Observable Trust`.
-- **CLI artifacts** - `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF review outputs.
+- **No API key required** — no OpenAI, Anthropic, or GitHub API key is needed.
+- **No model-runtime dependency** — no PyTorch, TensorFlow, CUDA, or GPU requirement.
+- **Triage tier built in** — maps evidence signals to T0–T4 review-priority tiers.
+- **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF outputs.
 
-## Boundary
+## Measurement Boundary
 
-STEM BIO-AI is not a clinical certifier, regulatory clearance tool, medical recommendation engine, or scientific efficacy validator. It is a repository trust pre-screen for observable evidence.
+STEM BIO-AI scans observable repository signals using file reads, directory structure checks, and regex pattern matching. It does not infer model accuracy, clinical safety, author intent, scientific validity, or regulatory compliance.
+
+It is a pre-screening triage tool, not a certification or trust verdict. A T4 score means strong observable evidence signals — it does not mean the repository is safe for clinical deployment.
 
 Public demo usage should be limited to public repositories. Private or proprietary repositories should be audited locally.
 
@@ -64,22 +66,48 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 
 ## Scoring Model
 
-| Stage | Weight | What It Evaluates |
+| Stage | Weight | Signal Measured |
 |---|---:|---|
-| Stage 1: README Intent | 40% | Scope clarity, hype control, clinical boundary language |
-| Stage 2R: Repo-Local Consistency | 20% | README/docs/package/workflow/test alignment |
-| Stage 3: Code / Bio Responsibility | 40% | CI, tests, changelog hygiene, data provenance |
-| C1-C4: Code Integrity | Advisory / penalty | Credentials, dependency pinning, deprecated paths, fail-open exceptions |
+| Stage 1: README Evidence | 40% | Bio-domain vocabulary presence; explicit non-clinical disclaimer |
+| Stage 2R: Repo-Local Consistency | 20% | Vocabulary overlap across README, docs, package metadata, CI, tests |
+| Stage 3: Code / Bio Responsibility | 40% | CI presence; test domain coverage; changelog; dependency manifest; bias/COI language |
+| C1-C4: Code Integrity | Advisory / penalty | Hardcoded secrets; dependency pinning; deprecated patient paths; fail-open exceptions |
 
-| Tier | Score | Disposition |
+`Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Penalty`
+
+Clinical-adjacent repositories without an explicit disclaimer are capped at T2 (score ≤ 69). Repositories with unbounded CA-DIRECT claims are capped at T0 (score ≤ 39).
+
+## Triage Tiers
+
+| Tier | Score | Review Priority |
 |---|---:|---|
-| T0 | 0-39 | Trust not established |
-| T1 | 40-54 | Quarantine |
-| T2 | 55-69 | Caution |
-| T3 | 70-84 | Supervised consideration |
-| T4 | 85-100 | Strong observable trust |
+| T0 | 0–39 | Insufficient evidence — do not proceed without independent expert review |
+| T1 | 40–54 | Minimal evidence signal — expert validation required before any use |
+| T2 | 55–69 | Partial evidence — supervised non-clinical research reference only |
+| T3 | 70–84 | Adequate evidence signal — supervised institutional review candidate |
+| T4 | 85–100 | Strong evidence signal — clinical deployment still requires independent validation |
 
-`Final = (S1 x 0.40) + (S2R x 0.20) + (S3 x 0.40) - Risk Penalty`
+## What STEM Actually Measures
+
+Scores reflect observable repository signals only. Each item below describes what is physically detected — not semantic intent or clinical safety.
+
+| Score Component | Actual Detection Method |
+|---|---|
+| Stage 1 baseline | Non-zero README present (+60 base) |
+| Stage 1 domain signal | Bio-domain keyword regex match in README and package metadata |
+| Stage 1 boundary | Disclaimer phrase match (`not for clinical`, `research use only`, etc.) |
+| Stage 2R consistency | Set intersection of bio-domain vocabulary across README, docs, package, tests |
+| T1 CI/CD | `.github/workflows/` directory contains at least one file |
+| T2 Domain Tests | `tests/` directory text contains bio-domain vocabulary (regex) |
+| T3 Changelog | `CHANGELOG.md`, `CHANGELOG`, or `NEWS.md` file exists |
+| B1 Data Provenance | `requirements.txt`, `pyproject.toml`, or `environment.yml` file exists |
+| B2 Bias/Limitations | `bias`, `limitation`, `not validated`, `validation cohort` in README or docs (regex) |
+| B3 COI/Funding | `funding`, `grant`, `sponsor`, `conflict of interest` in README, docs, or FUNDING.md (regex) |
+| CA Severity | Clinical/diagnostic phrase regex match in README, docs, and package metadata |
+| C1 Credentials | Hardcoded key patterns: AWS `AKIA*`, OpenAI `sk-*`, GitHub `ghp_*`, `api_key=...` |
+| C2 Dependency Pinning | `==` or hash pin present vs. loose ranges `>=`, `~=`, `<`, `>` |
+| C3 Deprecated Paths | Patient metadata patterns in `deprecated/`, `legacy/`, `archive/` directories |
+| C4 Fail-Open | `except Exception: pass` or `except: pass` pattern in Python source |
 
 ## Web Demo
 
@@ -185,7 +213,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Trust Audit Framework for Bio/Medical AI Repositories},
-  version = {1.1.3},
+  version = {1.2.0},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }
