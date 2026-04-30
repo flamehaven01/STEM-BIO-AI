@@ -10,6 +10,16 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.4.1] - 2026-04-30
+
+### Added
+- Added provider-neutral advisory provider registry and secret-free environment configuration loader.
+- Added `--advisory packet` to export a bounded advisory input packet for future cloud, OpenAI-compatible, local-server, and local-runtime adapters without calling any AI API.
+- Added standalone `{stem}_advisory_input.json` output with provider handoff metadata, registry status, evidence citation policy, and sanitized evidence ledger.
+- Added release validation and regression coverage for advisory packet export and secret-free provider metadata.
+
+---
+
 ## [1.4.0] - 2026-04-30
 
 ### Added

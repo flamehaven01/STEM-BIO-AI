@@ -86,6 +86,11 @@ def write_outputs(
         p.write_text(json.dumps(result, indent=2), encoding="utf-8")
         created.append(p)
 
+    if "ai_advisory_input" in result:
+        p = output_dir / f"{stem}_advisory_input.json"
+        p.write_text(json.dumps(result["ai_advisory_input"], indent=2), encoding="utf-8")
+        created.append(p)
+
     md = render_markdown(result, mode, pages)
     if fmt in {"md", "all"}:
         p = output_dir / f"{stem}_report.md"

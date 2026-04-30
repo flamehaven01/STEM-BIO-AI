@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.4.0",
+    [string]$ExpectedVersion = "1.4.1",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -101,6 +101,24 @@ try {
         Assert-True ($explain.Contains("AST Signal Summary")) "Explain AST summary missing"
         Assert-True ($explain.Contains("Stage 4 Replication Rubric")) "Explain Stage 4 rubric missing"
         Assert-True ($explain.Contains("DISCLAIMER:")) "Explain disclaimer missing"
+    }
+
+    Invoke-Step "advisory packet export contract" {
+        $packetDir = Join-Path $outDir "packet"
+        New-Item -ItemType Directory -Force -Path $packetDir | Out-Null
+        python -m stem_ai . --format json --out $packetDir --advisory packet
+        $packetFiles = @(Get-ChildItem -LiteralPath $packetDir -Filter "*_advisory_input.json")
+        Assert-True ($packetFiles.Count -eq 1) "Expected one advisory input packet, found $($packetFiles.Count)"
+        $packet = Get-Content -LiteralPath $packetFiles[0].FullName -Raw | ConvertFrom-Json
+        Assert-True ($packet.schema_version -eq "stem-ai-advisory-input-v1.4") "advisory packet schema mismatch: $($packet.schema_version)"
+        Assert-True ($packet.policy.raw_repo_text_allowed -eq $false) "advisory packet must not allow raw repo text"
+        Assert-True ($packet.policy.requires_finding_id_citations -eq $true) "advisory packet must require finding_id citations"
+        Assert-True ($null -ne $packet.provider_request) "provider_request missing"
+        Assert-True ($packet.provider_request.provider -eq "none") "default provider should be none"
+        Assert-True ($packet.provider_request.registry.Count -ge 7) "provider registry too small"
+        Assert-True ($null -ne $packet.evidence_ledger -and $packet.evidence_ledger.Count -gt 0) "packet evidence ledger missing"
+        $packetText = Get-Content -LiteralPath $packetFiles[0].FullName -Raw
+        Assert-True (-not $packetText.Contains('"snippet"')) "packet must not include raw snippets"
     }
 
     Invoke-Step "markdown and PDF artifacts exist" {

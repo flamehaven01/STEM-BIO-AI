@@ -20,9 +20,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stem",
         usage=(
-            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory none|validate]\n"
+            "stem <folder> [--level 1|2|3] [--format json|md|pdf|all] [--out DIR] [--explain] [--advisory none|validate|packet]\n"
             "       stem audit <folder> [--level 1|2|3] [--format json|md|pdf|all]"
-            " [--out DIR] [--explain] [--advisory none|validate]"
+            " [--out DIR] [--explain] [--advisory none|validate|packet]"
         ),
         description="STEM BIO-AI local evidence-surface scan for bio/medical AI repositories.",
         epilog=(
@@ -31,7 +31,8 @@ def _build_parser() -> argparse.ArgumentParser:
             "  stem /path/to/bio-ai-repo --level 2\n"
             "  stem /path/to/bio-ai-repo --level 3 --format all --out stem_output\n"
             "  stem /path/to/bio-ai-repo --explain\n"
-            "  stem /path/to/bio-ai-repo --advisory validate"
+            "  stem /path/to/bio-ai-repo --advisory validate\n"
+            "  stem /path/to/bio-ai-repo --advisory packet"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -71,9 +72,9 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     audit.add_argument(
         "--advisory",
-        choices=["none", "validate"],
+        choices=["none", "validate", "packet"],
         default="none",
-        help="Run provider-neutral AI advisory contract validation without calling an AI API",
+        help="Run offline advisory validation or export a provider-neutral advisory input packet",
     )
     return parser
 
@@ -117,7 +118,8 @@ def run_audit(args: argparse.Namespace) -> int:
     print(f"Level:   {args.level}  ({mode}, {pages}p)")
     print(f"Score:   {score['final_score']} / 100  ({score['formal_tier']})")
     if args.advisory != "none":
-        print(f"Advisory: {result.get('ai_advisory', {}).get('status', 'not_run')}")
+        status = "packet_ready" if args.advisory == "packet" else result.get("ai_advisory", {}).get("status", "not_run")
+        print(f"Advisory: {status}")
     print(f"Output:  {output_dir}")
     for path in created:
         print(f"  {path.name}")

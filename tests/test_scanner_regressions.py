@@ -9,6 +9,11 @@ from stem_ai.advisory_contract import (
     known_finding_ids,
     validate_advisory_output,
 )
+from stem_ai.advisory_providers import (
+    load_provider_config,
+    provider_handoff_metadata,
+    provider_registry,
+)
 from stem_ai.cli import main as cli_main
 from stem_ai.evidence import make_finding_id
 from stem_ai.reasoning_model import (
@@ -549,3 +554,48 @@ def test_advisory_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
     assert "AI Advisory Contract" in markdown
     assert "AI Advisory Contract" in explain
     assert "final_score_override            False" in explain
+
+
+def test_provider_config_is_secret_free_and_broad() -> None:
+    config = load_provider_config({
+        "STEM_AI_ADVISORY_PROVIDER": "openai_compatible",
+        "STEM_AI_ADVISORY_MODEL": "qwen-local",
+        "STEM_AI_ADVISORY_BASE_URL": "http://localhost:8000/v1",
+        "STEM_AI_ADVISORY_API_KEY": "secret-value",
+        "STEM_AI_ADVISORY_TIMEOUT_SEC": "30",
+        "STEM_AI_ADVISORY_MAX_TOKENS": "4096",
+    })
+    handoff = provider_handoff_metadata(config)
+    providers = {item["provider"] for item in provider_registry()}
+
+    assert {"openai", "anthropic", "gemini", "openai_compatible", "ollama", "local_runtime"}.issubset(providers)
+    assert handoff["provider"] == "openai_compatible"
+    assert handoff["api_key_present"] is True
+    assert "secret-value" not in json.dumps(handoff)
+    assert handoff["status"] == "adapter_not_implemented"
+
+
+def test_advisory_packet_mode_adds_provider_request_without_ai_output(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path, advisory="packet")
+    packet = result["ai_advisory_input"]
+
+    assert "ai_advisory" not in result
+    assert packet["schema_version"] == "stem-ai-advisory-input-v1.4"
+    assert packet["provider_request"]["provider"] == "none"
+    assert packet["provider_request"]["status"] == "offline_ready"
+    assert packet["evidence_ledger"]
+
+
+def test_cli_advisory_packet_writes_standalone_input_packet(tmp_path: Path) -> None:
+    _write(tmp_path / "repo" / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "out"
+
+    code = cli_main(["audit", str(tmp_path / "repo"), "--format", "json", "--out", str(out_dir), "--advisory", "packet"])
+
+    assert code == 0
+    [packet_path] = list(out_dir.glob("*_advisory_input.json"))
+    packet = json.loads(packet_path.read_text(encoding="utf-8"))
+    assert packet["policy"]["requires_finding_id_citations"] is True
+    assert packet["provider_request"]["registry"]

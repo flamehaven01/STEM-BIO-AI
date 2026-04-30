@@ -9,7 +9,8 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
-from .advisory_contract import build_offline_advisory
+from .advisory_contract import build_advisory_input, build_offline_advisory
+from .advisory_providers import load_provider_config, provider_handoff_metadata
 from .detectors import collect_evidence_bundle
 from .patterns import (
     BIAS_LIMITATION_TERMS,
@@ -143,6 +144,9 @@ def audit_repository(target: Path, advisory: str = "none") -> dict[str, Any]:
     result["reasoning_model"] = build_reasoning_model(result)
     if advisory == "validate":
         result["ai_advisory"] = build_offline_advisory(result)
+    elif advisory == "packet":
+        result["ai_advisory_input"] = build_advisory_input(result)
+        result["ai_advisory_input"]["provider_request"] = provider_handoff_metadata(load_provider_config())
     return result
 
 

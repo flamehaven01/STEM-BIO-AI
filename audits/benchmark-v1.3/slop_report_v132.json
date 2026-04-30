@@ -1,0 +1,2942 @@
+{
+  "project_path": "D:\\Sanctum\\STEM-BIO-AI",
+  "total_files": 20,
+  "deficit_files": 0,
+  "clean_files": 20,
+  "avg_deficit_score": 6.377561600179109,
+  "weighted_deficit_score": 15.097957681061555,
+  "avg_ldr": 0.9924463961235614,
+  "avg_inflation": 0.0,
+  "avg_ddc": 0.98375,
+  "overall_status": "clean",
+  "structural_coherence": 0.5278,
+  "coherence_level": "vr_structural",
+  "file_results": [
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\app.py",
+      "ldr": {
+        "total_lines": 3,
+        "logic_lines": 3,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 1.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "stem_ai"
+        ],
+        "actually_used": [
+          "stem_ai"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.07692307692307693,
+        "ImportFrom": 0.07692307692307693,
+        "If": 0.07692307692307693,
+        "alias": 0.07692307692307693,
+        "Compare": 0.07692307692307693,
+        "Expr": 0.07692307692307693,
+        "Name": 0.15384615384615385,
+        "Eq": 0.07692307692307693,
+        "Constant": 0.07692307692307693,
+        "Call": 0.07692307692307693,
+        "Load": 0.15384615384615385
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\app.py",
+      "ldr": {
+        "total_lines": 260,
+        "logic_lines": 257,
+        "empty_lines": 3,
+        "ldr_score": 0.9884615384615385,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 3.8333333333333335,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "cli",
+          "gradio",
+          "json",
+          "pathlib",
+          "render",
+          "scanner",
+          "subprocess",
+          "tempfile",
+          "uuid"
+        ],
+        "actually_used": [
+          "cli",
+          "gradio",
+          "json",
+          "pathlib",
+          "render",
+          "scanner",
+          "subprocess",
+          "tempfile",
+          "uuid"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.4211306064940912,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 1,
+        "inflated_count": 1,
+        "avg_inflation_ratio": 1.0,
+        "max_inflation_ratio": 1.0,
+        "total_docstring_lines": 1,
+        "total_implementation_lines": 1,
+        "overall_ratio": 1.0,
+        "status": "WARNING",
+        "details": [
+          {
+            "name": "launch_demo",
+            "type": "function",
+            "line": 283,
+            "docstring_lines": 1,
+            "implementation_lines": 1,
+            "inflation_ratio": 1.0,
+            "severity": "warning",
+            "docstring_preview": "Launch the Space UI."
+          }
+        ]
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [
+          {
+            "category": "serialization",
+            "imported": [
+              "json"
+            ],
+            "used": [
+              "json"
+            ],
+            "unused": [],
+            "usage_ratio": 1.0
+          }
+        ],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.12,
+        "confidence": 0.88,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0009689922480620155,
+        "ImportFrom": 0.005813953488372093,
+        "Import": 0.003875968992248062,
+        "Try": 0.003875968992248062,
+        "Assign": 0.03391472868217054,
+        "FunctionDef": 0.005813953488372093,
+        "With": 0.009689922480620155,
+        "alias": 0.01065891472868217,
+        "ExceptHandler": 0.003875968992248062,
+        "Name": 0.1937984496124031,
+        "Constant": 0.14631782945736435,
+        "arguments": 0.005813953488372093,
+        "If": 0.003875968992248062,
+        "Return": 0.007751937984496124,
+        "Expr": 0.00872093023255814,
+        "withitem": 0.009689922480620155,
+        "Raise": 0.0029069767441860465,
+        "Store": 0.04263565891472868,
+        "Load": 0.23934108527131784,
+        "arg": 0.005813953488372093,
+        "UnaryOp": 0.001937984496124031,
+        "BinOp": 0.003875968992248062,
+        "Call": 0.06395348837209303,
+        "Compare": 0.003875968992248062,
+        "Subscript": 0.018410852713178296,
+        "ListComp": 0.0009689922480620155,
+        "BoolOp": 0.0029069767441860465,
+        "Dict": 0.005813953488372093,
+        "Tuple": 0.009689922480620155,
+        "Not": 0.001937984496124031,
+        "Div": 0.003875968992248062,
+        "Attribute": 0.05426356589147287,
+        "List": 0.005813953488372093,
+        "keyword": 0.0377906976744186,
+        "NotEq": 0.001937984496124031,
+        "JoinedStr": 0.011627906976744186,
+        "comprehension": 0.003875968992248062,
+        "Or": 0.0029069767441860465,
+        "NotIn": 0.0009689922480620155,
+        "FormattedValue": 0.014534883720930232,
+        "GeneratorExp": 0.0029069767441860465,
+        "Eq": 0.0009689922480620155
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\cli.py",
+      "ldr": {
+        "total_lines": 106,
+        "logic_lines": 106,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 2.8,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "argparse",
+          "pathlib",
+          "render",
+          "scanner",
+          "sys"
+        ],
+        "actually_used": [
+          "argparse",
+          "pathlib",
+          "render",
+          "scanner",
+          "sys"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 1.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\cli.py",
+          "line": 19,
+          "column": 0,
+          "message": "God function '_build_parser': 52 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [
+          {
+            "category": "cli",
+            "imported": [
+              "argparse"
+            ],
+            "used": [
+              "argparse"
+            ],
+            "unused": [],
+            "usage_ratio": 1.0
+          }
+        ],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.06,
+        "confidence": 0.94,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0018083182640144665,
+        "ImportFrom": 0.009041591320072333,
+        "Import": 0.003616636528028933,
+        "Assign": 0.023508137432188065,
+        "FunctionDef": 0.009041591320072333,
+        "alias": 0.012658227848101266,
+        "Name": 0.18083182640144665,
+        "Dict": 0.0018083182640144665,
+        "arguments": 0.009041591320072333,
+        "Expr": 0.023508137432188065,
+        "Return": 0.0162748643761302,
+        "Attribute": 0.05605786618444846,
+        "If": 0.012658227848101266,
+        "Subscript": 0.0216998191681736,
+        "For": 0.0018083182640144665,
+        "Store": 0.028933092224231464,
+        "Constant": 0.13924050632911392,
+        "Tuple": 0.009041591320072333,
+        "Call": 0.06690777576853527,
+        "Load": 0.24593128390596744,
+        "arg": 0.007233273056057866,
+        "UnaryOp": 0.0054249547920434,
+        "Compare": 0.0054249547920434,
+        "List": 0.0054249547920434,
+        "Raise": 0.0054249547920434,
+        "keyword": 0.04159132007233273,
+        "Not": 0.0054249547920434,
+        "In": 0.0018083182640144665,
+        "Set": 0.0018083182640144665,
+        "Starred": 0.0018083182640144665,
+        "JoinedStr": 0.014466546112115732,
+        "BinOp": 0.0018083182640144665,
+        "Eq": 0.0018083182640144665,
+        "FormattedValue": 0.019891500904159132,
+        "BitOr": 0.0018083182640144665,
+        "IfExp": 0.0018083182640144665,
+        "Is": 0.0018083182640144665,
+        "Slice": 0.0018083182640144665
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detectors.py",
+      "ldr": {
+        "total_lines": 34,
+        "logic_lines": 34,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 1.5,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "collections",
+          "detector_ast",
+          "detector_stage4",
+          "detector_surface",
+          "evidence",
+          "pathlib"
+        ],
+        "actually_used": [
+          "collections",
+          "detector_ast",
+          "detector_stage4",
+          "detector_surface"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.00423728813559322,
+        "ImportFrom": 0.03389830508474576,
+        "FunctionDef": 0.00847457627118644,
+        "alias": 0.0423728813559322,
+        "arguments": 0.00847457627118644,
+        "Assign": 0.01694915254237288,
+        "Return": 0.00847457627118644,
+        "Subscript": 0.05084745762711865,
+        "AnnAssign": 0.00847457627118644,
+        "Expr": 0.00423728813559322,
+        "arg": 0.00847457627118644,
+        "Tuple": 0.05508474576271186,
+        "Call": 0.025423728813559324,
+        "Name": 0.2838983050847458,
+        "Load": 0.3432203389830508,
+        "List": 0.00423728813559322,
+        "Dict": 0.00423728813559322,
+        "Store": 0.05508474576271186,
+        "keyword": 0.00847457627118644,
+        "Constant": 0.012711864406779662,
+        "ListComp": 0.00423728813559322,
+        "comprehension": 0.00423728813559322,
+        "Attribute": 0.00423728813559322
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_ast.py",
+      "ldr": {
+        "total_lines": 213,
+        "logic_lines": 213,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 4.5,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "ast",
+          "dataclasses",
+          "detector_utils",
+          "evidence",
+          "pathlib"
+        ],
+        "actually_used": [
+          "ast",
+          "dataclasses",
+          "detector_utils",
+          "pathlib"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 7.0,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 high-severity issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_ast.py",
+          "line": 25,
+          "column": 0,
+          "message": "God function 'collect_ast_findings': 96 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "high",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_ast.py",
+          "line": 1,
+          "column": 0,
+          "message": "4 structurally similar functions detected (AST JSD < 0.05): _is_seed_call, _is_portable_torch_load, _is_fail_open_handler, _is_argparse_constructor. Review for unnecessary decomposition.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.19,
+        "confidence": 0.81,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0006626905235255136,
+        "ImportFrom": 0.003976143141153081,
+        "Import": 0.0006626905235255136,
+        "Assign": 0.0145791915175613,
+        "ClassDef": 0.0006626905235255136,
+        "FunctionDef": 0.00728959575878065,
+        "alias": 0.0066269052352551355,
+        "Name": 0.22332670642809807,
+        "Constant": 0.11597084161696487,
+        "AnnAssign": 0.003976143141153081,
+        "Call": 0.04572564612326044,
+        "arguments": 0.00728959575878065,
+        "If": 0.015241882041086813,
+        "For": 0.0019880715705765406,
+        "Return": 0.010603048376408217,
+        "Subscript": 0.025182239893969515,
+        "Store": 0.02982107355864811,
+        "keyword": 0.02054340622929092,
+        "arg": 0.01656726308813784,
+        "Compare": 0.007952286282306162,
+        "Expr": 0.008614976805831677,
+        "Dict": 0.0033134526176275677,
+        "Try": 0.0013253810470510272,
+        "AugAssign": 0.00728959575878065,
+        "Tuple": 0.007952286282306162,
+        "Load": 0.2935719019218025,
+        "UnaryOp": 0.003976143141153081,
+        "List": 0.0006626905235255136,
+        "BoolOp": 0.005964214711729622,
+        "Attribute": 0.06428098078197482,
+        "Slice": 0.0006626905235255136,
+        "Gt": 0.0013253810470510272,
+        "ExceptHandler": 0.0013253810470510272,
+        "Continue": 0.0019880715705765406,
+        "Add": 0.00728959575878065,
+        "BinOp": 0.0026507620941020544,
+        "Not": 0.0033134526176275677,
+        "Starred": 0.0019880715705765406,
+        "IsNot": 0.0026507620941020544,
+        "Or": 0.003976143141153081,
+        "In": 0.0013253810470510272,
+        "Set": 0.0013253810470510272,
+        "And": 0.0019880715705765406,
+        "GeneratorExp": 0.0019880715705765406,
+        "IfExp": 0.0006626905235255136,
+        "BitOr": 0.0013253810470510272,
+        "USub": 0.0006626905235255136,
+        "Eq": 0.0013253810470510272,
+        "NotEq": 0.0006626905235255136,
+        "comprehension": 0.0019880715705765406,
+        "JoinedStr": 0.0006626905235255136,
+        "Div": 0.0013253810470510272,
+        "Is": 0.0006626905235255136,
+        "FormattedValue": 0.0013253810470510272
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_stage4.py",
+      "ldr": {
+        "total_lines": 289,
+        "logic_lines": 289,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 3.85,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "detector_utils",
+          "evidence",
+          "pathlib",
+          "patterns",
+          "re"
+        ],
+        "actually_used": [
+          "detector_utils",
+          "pathlib",
+          "patterns",
+          "re"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 14.44369637317158,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 critical issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "critical",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_stage4.py",
+          "line": 1,
+          "column": 0,
+          "message": "14 structurally near-identical functions detected (AST JSD < 0.05): _score_item, _checksum_files, _score_or_absent, _citation_cff, _dataset_urls, _seed_setting, ... (+8 more). Possible god function fragmented into helpers to evade per-function gates.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.05,
+        "confidence": 0.95,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.00033692722371967657,
+        "ImportFrom": 0.0020215633423180594,
+        "Import": 0.00033692722371967657,
+        "Assign": 0.017183288409703505,
+        "FunctionDef": 0.006738544474393531,
+        "alias": 0.004043126684636119,
+        "Name": 0.26752021563342315,
+        "Call": 0.05087601078167116,
+        "arguments": 0.008086253369272238,
+        "AnnAssign": 0.0006738544474393531,
+        "Expr": 0.014487870619946091,
+        "Return": 0.003706199460916442,
+        "Subscript": 0.0330188679245283,
+        "If": 0.0057277628032345014,
+        "Constant": 0.1034366576819407,
+        "For": 0.0047169811320754715,
+        "Store": 0.0272911051212938,
+        "Attribute": 0.019204851752021565,
+        "arg": 0.03234501347708895,
+        "Dict": 0.0026954177897574125,
+        "Tuple": 0.02526954177897574,
+        "Load": 0.32378706199460916,
+        "Compare": 0.0033692722371967657,
+        "UnaryOp": 0.004043126684636119,
+        "List": 0.0047169811320754715,
+        "BoolOp": 0.003032345013477089,
+        "IfExp": 0.0020215633423180594,
+        "BinOp": 0.0020215633423180594,
+        "ListComp": 0.0006738544474393531,
+        "GeneratorExp": 0.0013477088948787063,
+        "LtE": 0.0013477088948787063,
+        "Not": 0.004043126684636119,
+        "Set": 0.0013477088948787063,
+        "Starred": 0.0013477088948787063,
+        "And": 0.0013477088948787063,
+        "Continue": 0.0016846361185983828,
+        "keyword": 0.0026954177897574125,
+        "Div": 0.0016846361185983828,
+        "comprehension": 0.0020215633423180594,
+        "Slice": 0.0010107816711590297,
+        "Or": 0.0016846361185983828,
+        "JoinedStr": 0.0006738544474393531,
+        "Lambda": 0.0013477088948787063,
+        "Add": 0.00033692722371967657,
+        "FormattedValue": 0.0006738544474393531,
+        "In": 0.0020215633423180594
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_surface.py",
+      "ldr": {
+        "total_lines": 198,
+        "logic_lines": 198,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 4.857142857142857,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "collections",
+          "detector_utils",
+          "evidence",
+          "pathlib",
+          "patterns",
+          "re"
+        ],
+        "actually_used": [
+          "detector_utils",
+          "pathlib",
+          "patterns"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 16.44369637317158,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 critical issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_surface.py",
+          "line": 147,
+          "column": 0,
+          "message": "God function 'credential_detector': 52 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "critical",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_surface.py",
+          "line": 1,
+          "column": 0,
+          "message": "6 structurally near-identical functions detected (AST JSD < 0.05): regex_detector, file_presence_detector, _check_unpinned_deps_in_file, dependency_pinning_detector, regex_line_detector, credential_detector. Possible god function fragmented into helpers to evade per-function gates.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.24,
+        "confidence": 0.76,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0006666666666666666,
+        "ImportFrom": 0.004,
+        "Import": 0.0006666666666666666,
+        "FunctionDef": 0.004666666666666667,
+        "alias": 0.015333333333333332,
+        "arguments": 0.008,
+        "Assign": 0.025333333333333333,
+        "Expr": 0.015333333333333332,
+        "Constant": 0.11333333333333333,
+        "For": 0.006666666666666667,
+        "If": 0.005333333333333333,
+        "Return": 0.0013333333333333333,
+        "Name": 0.27266666666666667,
+        "arg": 0.029333333333333333,
+        "Call": 0.06133333333333333,
+        "UnaryOp": 0.005333333333333333,
+        "Tuple": 0.010666666666666666,
+        "Load": 0.29333333333333333,
+        "BoolOp": 0.002,
+        "Subscript": 0.018666666666666668,
+        "Store": 0.034666666666666665,
+        "List": 0.005333333333333333,
+        "keyword": 0.008666666666666666,
+        "Not": 0.005333333333333333,
+        "IfExp": 0.004,
+        "And": 0.0006666666666666666,
+        "BinOp": 0.004,
+        "Starred": 0.004666666666666667,
+        "Attribute": 0.016,
+        "Lambda": 0.0033333333333333335,
+        "JoinedStr": 0.002,
+        "Continue": 0.0013333333333333333,
+        "Div": 0.0026666666666666666,
+        "Add": 0.0013333333333333333,
+        "Dict": 0.002,
+        "FormattedValue": 0.002,
+        "Compare": 0.0033333333333333335,
+        "Or": 0.0013333333333333333,
+        "Eq": 0.0033333333333333335
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_utils.py",
+      "ldr": {
+        "total_lines": 116,
+        "logic_lines": 116,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 4.818181818181818,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "collections",
+          "evidence",
+          "pathlib",
+          "patterns",
+          "re"
+        ],
+        "actually_used": [
+          "evidence",
+          "pathlib",
+          "patterns",
+          "re"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 5.0,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 high-severity issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "high",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\detector_utils.py",
+          "line": 1,
+          "column": 0,
+          "message": "4 structurally similar functions detected (AST JSD < 0.05): iter_text_files, iter_code_files, iter_deprecated_files, iter_python_files. Review for unnecessary decomposition.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0011086474501108647,
+        "ImportFrom": 0.007760532150776054,
+        "Import": 0.0011086474501108647,
+        "Assign": 0.012195121951219513,
+        "FunctionDef": 0.012195121951219513,
+        "alias": 0.014412416851441241,
+        "Name": 0.23059866962305986,
+        "arguments": 0.01662971175166297,
+        "AugAssign": 0.0011086474501108647,
+        "Expr": 0.0011086474501108647,
+        "Constant": 0.04434589800443459,
+        "Return": 0.022172949002217297,
+        "Subscript": 0.02106430155210643,
+        "If": 0.008869179600886918,
+        "Try": 0.0022172949002217295,
+        "Store": 0.026607538802660754,
+        "Load": 0.2838137472283814,
+        "arg": 0.036585365853658534,
+        "IfExp": 0.0011086474501108647,
+        "Tuple": 0.005543237250554324,
+        "Add": 0.0011086474501108647,
+        "Call": 0.06430155210643015,
+        "ListComp": 0.007760532150776054,
+        "UnaryOp": 0.007760532150776054,
+        "Set": 0.0022172949002217295,
+        "ExceptHandler": 0.0022172949002217295,
+        "Compare": 0.012195121951219513,
+        "BoolOp": 0.009977827050997782,
+        "List": 0.0033259423503325942,
+        "BinOp": 0.005543237250554324,
+        "Attribute": 0.04988913525498891,
+        "comprehension": 0.013303769401330377,
+        "Not": 0.007760532150776054,
+        "Slice": 0.0033259423503325942,
+        "keyword": 0.019955654101995565,
+        "Eq": 0.0011086474501108647,
+        "Or": 0.005543237250554324,
+        "BitOr": 0.0011086474501108647,
+        "NotEq": 0.0011086474501108647,
+        "Div": 0.0022172949002217295,
+        "Lambda": 0.004434589800443459,
+        "LtE": 0.0011086474501108647,
+        "Gt": 0.0011086474501108647,
+        "And": 0.004434589800443459,
+        "Dict": 0.0011086474501108647,
+        "In": 0.007760532150776054,
+        "SetComp": 0.0011086474501108647,
+        "BitAnd": 0.0011086474501108647,
+        "Sub": 0.0011086474501108647,
+        "GeneratorExp": 0.004434589800443459
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\evidence.py",
+      "ldr": {
+        "total_lines": 52,
+        "logic_lines": 52,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 2.5,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "dataclasses",
+          "pathlib"
+        ],
+        "actually_used": [
+          "dataclasses",
+          "pathlib"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.003076923076923077,
+        "ImportFrom": 0.012307692307692308,
+        "ClassDef": 0.003076923076923077,
+        "FunctionDef": 0.009230769230769232,
+        "alias": 0.015384615384615385,
+        "AnnAssign": 0.036923076923076927,
+        "Call": 0.046153846153846156,
+        "arguments": 0.009230769230769232,
+        "If": 0.009230769230769232,
+        "Assign": 0.018461538461538463,
+        "Return": 0.012307692307692308,
+        "Name": 0.25846153846153846,
+        "Subscript": 0.012307692307692308,
+        "keyword": 0.006153846153846154,
+        "arg": 0.021538461538461538,
+        "BoolOp": 0.003076923076923077,
+        "JoinedStr": 0.006153846153846154,
+        "Load": 0.27692307692307694,
+        "Constant": 0.07692307692307693,
+        "Compare": 0.003076923076923077,
+        "BinOp": 0.009230769230769232,
+        "Store": 0.055384615384615386,
+        "Tuple": 0.006153846153846154,
+        "Dict": 0.003076923076923077,
+        "Attribute": 0.055384615384615386,
+        "Or": 0.003076923076923077,
+        "FormattedValue": 0.012307692307692308,
+        "LtE": 0.003076923076923077,
+        "Add": 0.003076923076923077,
+        "BitOr": 0.003076923076923077,
+        "Slice": 0.003076923076923077,
+        "Sub": 0.003076923076923077
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\patterns.py",
+      "ldr": {
+        "total_lines": 30,
+        "logic_lines": 30,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 1.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "re"
+        ],
+        "actually_used": [
+          "re"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.006711409395973154,
+        "ImportFrom": 0.006711409395973154,
+        "Import": 0.006711409395973154,
+        "Assign": 0.08053691275167785,
+        "alias": 0.013422818791946308,
+        "Name": 0.19463087248322147,
+        "Set": 0.013422818791946308,
+        "Call": 0.06711409395973154,
+        "Store": 0.08053691275167785,
+        "Constant": 0.18791946308724833,
+        "Attribute": 0.11409395973154363,
+        "Load": 0.22818791946308725
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\reasoning_model.py",
+      "ldr": {
+        "total_lines": 217,
+        "logic_lines": 217,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 3.466666666666667,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "math",
+          "re",
+          "statistics"
+        ],
+        "actually_used": [
+          "math",
+          "re",
+          "statistics"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 14.44369637317158,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 critical issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "critical",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\reasoning_model.py",
+          "line": 1,
+          "column": 0,
+          "message": "8 structurally near-identical functions detected (AST JSD < 0.05): required_bits, confidence_envelope, build_reasoning_model, evidence_risk_gate, uncertainty_budget, lane_coherence, ... (+2 more). Possible god function fragmented into helpers to evade per-function gates.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 2,
+        "inflated_count": 1,
+        "avg_inflation_ratio": 0.75,
+        "max_inflation_ratio": 1.0,
+        "total_docstring_lines": 2,
+        "total_implementation_lines": 3,
+        "overall_ratio": 0.6666666666666666,
+        "status": "WARNING",
+        "details": [
+          {
+            "name": "unique_token_count",
+            "type": "function",
+            "line": 19,
+            "docstring_lines": 1,
+            "implementation_lines": 1,
+            "inflation_ratio": 1.0,
+            "severity": "warning",
+            "docstring_preview": "Deterministic evidence token count; no model tokenizer or locale rules."
+          },
+          {
+            "name": "required_bits",
+            "type": "function",
+            "line": 13,
+            "docstring_lines": 1,
+            "implementation_lines": 2,
+            "inflation_ratio": 0.5,
+            "severity": "info",
+            "docstring_preview": "Return the evidence budget required for a confidence value in [0, 1]."
+          }
+        ]
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.05,
+        "confidence": 0.95,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0005534034311012728,
+        "ImportFrom": 0.0016602102933038186,
+        "Import": 0.0011068068622025456,
+        "Assign": 0.027116768123962368,
+        "FunctionDef": 0.008301051466519093,
+        "alias": 0.003320420586607637,
+        "Name": 0.2423907028223575,
+        "Constant": 0.14554510237963475,
+        "arguments": 0.008301051466519093,
+        "Expr": 0.002213613724405091,
+        "Return": 0.01162147205312673,
+        "Subscript": 0.01383508577753182,
+        "AnnAssign": 0.0011068068622025456,
+        "For": 0.0011068068622025456,
+        "If": 0.004980630879911455,
+        "BinOp": 0.02324294410625346,
+        "Store": 0.039291643608190374,
+        "arg": 0.013281682346430549,
+        "Call": 0.08190370780298838,
+        "Load": 0.2523519645821804,
+        "Dict": 0.009407858328721638,
+        "Tuple": 0.011068068622025456,
+        "DictComp": 0.0011068068622025456,
+        "List": 0.002767017155506364,
+        "IfExp": 0.005534034311012728,
+        "ListComp": 0.002213613724405091,
+        "Compare": 0.012174875484228001,
+        "Raise": 0.0005534034311012728,
+        "BitOr": 0.004980630879911455,
+        "UnaryOp": 0.0011068068622025456,
+        "Attribute": 0.02158273381294964,
+        "Sub": 0.004427227448810182,
+        "comprehension": 0.005534034311012728,
+        "BoolOp": 0.0011068068622025456,
+        "Continue": 0.0005534034311012728,
+        "Div": 0.004980630879911455,
+        "Add": 0.004980630879911455,
+        "NotEq": 0.0005534034311012728,
+        "GeneratorExp": 0.002213613724405091,
+        "Slice": 0.0005534034311012728,
+        "Is": 0.002767017155506364,
+        "Gt": 0.002767017155506364,
+        "GtE": 0.0016602102933038186,
+        "Lt": 0.0005534034311012728,
+        "LtE": 0.0011068068622025456,
+        "USub": 0.0005534034311012728,
+        "Or": 0.0005534034311012728,
+        "Mult": 0.00387382401770891,
+        "Eq": 0.0011068068622025456,
+        "And": 0.0005534034311012728,
+        "JoinedStr": 0.0005534034311012728,
+        "IsNot": 0.0016602102933038186,
+        "Not": 0.0005534034311012728,
+        "FormattedValue": 0.0011068068622025456
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+      "ldr": {
+        "total_lines": 1167,
+        "logic_lines": 1167,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 4.82051282051282,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "json",
+          "pathlib",
+          "re",
+          "reportlab",
+          "textwrap"
+        ],
+        "actually_used": [
+          "json",
+          "re",
+          "reportlab",
+          "textwrap"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 24.44369637317158,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 critical issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 112,
+          "column": 0,
+          "message": "God function 'render_markdown': 55 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 479,
+          "column": 0,
+          "message": "God function '_integrity_and_risks': 71 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 650,
+          "column": 0,
+          "message": "God function '_page2_stage_analysis': 139 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 807,
+          "column": 0,
+          "message": "God function '_page3_stage3_analysis': 103 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 925,
+          "column": 0,
+          "message": "God function '_page4_integrity_deep': 131 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 1073,
+          "column": 0,
+          "message": "God function '_page5_method_remediation': 112 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "critical",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\render.py",
+          "line": 1,
+          "column": 0,
+          "message": "29 structurally near-identical functions detected (AST JSD < 0.05): _status_hex, add, _ascii, _safe_name, _escape_pdf, _xt, ... (+23 more). Possible god function fragmented into helpers to evade per-function gates.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 1,
+        "inflated_count": 1,
+        "avg_inflation_ratio": 1.0,
+        "max_inflation_ratio": 1.0,
+        "total_docstring_lines": 1,
+        "total_implementation_lines": 1,
+        "overall_ratio": 1.0,
+        "status": "WARNING",
+        "details": [
+          {
+            "name": "_xt",
+            "type": "function",
+            "line": 57,
+            "docstring_lines": 1,
+            "implementation_lines": 1,
+            "inflation_ratio": 1.0,
+            "severity": "warning",
+            "docstring_preview": "Escape text for use in reportlab XML markup."
+          }
+        ]
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [
+          {
+            "category": "serialization",
+            "imported": [
+              "json"
+            ],
+            "used": [
+              "json"
+            ],
+            "unused": [],
+            "usage_ratio": 1.0
+          }
+        ],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.24,
+        "confidence": 0.76,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 9.453582907922102e-05,
+        "ImportFrom": 0.0008508224617129892,
+        "Import": 0.0002836074872376631,
+        "Try": 9.453582907922102e-05,
+        "Assign": 0.019947059935715637,
+        "FunctionDef": 0.003781433163168841,
+        "AnnAssign": 0.0024579315560597464,
+        "alias": 0.0017016449234259785,
+        "ExceptHandler": 9.453582907922102e-05,
+        "Name": 0.1905842314237096,
+        "Constant": 0.17612024957458877,
+        "Dict": 0.003214218188693515,
+        "arguments": 0.003781433163168841,
+        "Return": 0.00463225562488183,
+        "For": 0.003214218188693515,
+        "Expr": 0.012006050293061071,
+        "If": 0.003403289846851957,
+        "Subscript": 0.02287767063717149,
+        "BinOp": 0.005861221402911704,
+        "Call": 0.05823407071280015,
+        "AugAssign": 0.003214218188693515,
+        "Store": 0.036207222537341655,
+        "arg": 0.006712043864624693,
+        "Load": 0.25496313102665913,
+        "Tuple": 0.0363962941955001,
+        "Compare": 0.003781433163168841,
+        "JoinedStr": 0.014936660994516921,
+        "List": 0.015031196823596143,
+        "Mult": 0.003970504821327283,
+        "Set": 0.0003781433163168841,
+        "Add": 0.004159576479485725,
+        "UnaryOp": 0.017016449234259785,
+        "IfExp": 0.004254112308564946,
+        "ListComp": 0.0007562866326337682,
+        "BoolOp": 0.0017016449234259785,
+        "Attribute": 0.02571374550954812,
+        "LtE": 9.453582907922102e-05,
+        "FormattedValue": 0.025146530535072792,
+        "keyword": 0.004159576479485725,
+        "In": 0.0010398941198714313,
+        "Slice": 0.0024579315560597464,
+        "Eq": 0.0010398941198714313,
+        "Not": 0.0011344299489506524,
+        "SetComp": 9.453582907922102e-05,
+        "comprehension": 0.0012289657780298732,
+        "NotIn": 0.00018907165815844205,
+        "Or": 0.0014180374361883153,
+        "GeneratorExp": 0.0003781433163168841,
+        "GtE": 0.0002836074872376631,
+        "Continue": 9.453582907922102e-05,
+        "Starred": 0.0005672149744753262,
+        "NotEq": 0.00018907165815844205,
+        "Div": 0.0003781433163168841,
+        "USub": 0.01588201928530913,
+        "Sub": 0.0005672149744753262,
+        "Lt": 0.00018907165815844205,
+        "IsNot": 9.453582907922102e-05,
+        "Is": 9.453582907922102e-05,
+        "And": 0.0002836074872376631,
+        "Gt": 0.0005672149744753262
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\scanner.py",
+      "ldr": {
+        "total_lines": 403,
+        "logic_lines": 403,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 5.703703703703703,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "datetime",
+          "detectors",
+          "hashlib",
+          "json",
+          "pathlib",
+          "patterns",
+          "re",
+          "reasoning_model",
+          "subprocess"
+        ],
+        "actually_used": [
+          "datetime",
+          "detectors",
+          "hashlib",
+          "patterns",
+          "re",
+          "reasoning_model",
+          "subprocess"
+        ],
+        "unused": [
+          "json"
+        ],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 0.875,
+        "grade": "GOOD"
+      },
+      "deficit_score": 9.57625068586639,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 high-severity issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\scanner.py",
+          "line": 49,
+          "column": 0,
+          "message": "God function 'audit_repository': 91 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "high",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\scanner.py",
+          "line": 159,
+          "column": 0,
+          "message": "God function '_score_stage_2r': complexity=12 (limit 10)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 1,
+        "category_usage": [
+          {
+            "category": "serialization",
+            "imported": [
+              "json"
+            ],
+            "used": [],
+            "unused": [
+              "json"
+            ],
+            "usage_ratio": 0.0
+          }
+        ],
+        "hallucinated_deps": [
+          {
+            "library": "json",
+            "category": "serialization",
+            "line": 4,
+            "likely_intent": "data serialization/deserialization"
+          }
+        ],
+        "worst_category": "serialization",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.06,
+        "confidence": 0.94,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.0003214400514304082,
+        "ImportFrom": 0.0025715204114432656,
+        "Import": 0.0012857602057216328,
+        "Assign": 0.026036644165863067,
+        "FunctionDef": 0.008678881388621022,
+        "alias": 0.007393121182899389,
+        "Name": 0.22597235615557698,
+        "Call": 0.05271616843458695,
+        "arguments": 0.008678881388621022,
+        "Return": 0.015429122468659595,
+        "Subscript": 0.017357762777242044,
+        "If": 0.016072002571520413,
+        "AnnAssign": 0.0032144005143040825,
+        "For": 0.0025715204114432656,
+        "Try": 0.0006428801028608164,
+        "BinOp": 0.010607521697203472,
+        "Store": 0.041465766634522665,
+        "Attribute": 0.036322725811636127,
+        "Constant": 0.13082610093217614,
+        "arg": 0.01864352298296368,
+        "Compare": 0.009643201542912247,
+        "Tuple": 0.007393121182899389,
+        "Dict": 0.009643201542912247,
+        "IfExp": 0.008036001285760206,
+        "Load": 0.2539376406300225,
+        "BoolOp": 0.008036001285760206,
+        "AugAssign": 0.0032144005143040825,
+        "UnaryOp": 0.005143040822886531,
+        "JoinedStr": 0.0009643201542912247,
+        "ListComp": 0.0009643201542912247,
+        "List": 0.008036001285760206,
+        "Expr": 0.003857280617164899,
+        "ExceptHandler": 0.0006428801028608164,
+        "Set": 0.0009643201542912247,
+        "BitOr": 0.0009643201542912247,
+        "SetComp": 0.0009643201542912247,
+        "keyword": 0.0032144005143040825,
+        "NotEq": 0.0009643201542912247,
+        "And": 0.005143040822886531,
+        "Add": 0.006428801028608165,
+        "Sub": 0.0012857602057216328,
+        "Not": 0.004500160720025715,
+        "FormattedValue": 0.0012857602057216328,
+        "GeneratorExp": 0.0016072002571520412,
+        "comprehension": 0.0035358405657344907,
+        "Continue": 0.0035358405657344907,
+        "Break": 0.0006428801028608164,
+        "Or": 0.0028929604628736743,
+        "LtE": 0.0022500803600128574,
+        "Div": 0.0032144005143040825,
+        "Eq": 0.0009643201542912247,
+        "IsNot": 0.0006428801028608164,
+        "GtE": 0.0012857602057216328,
+        "Mult": 0.0012857602057216328,
+        "Slice": 0.0009643201542912247,
+        "BitAnd": 0.0006428801028608164,
+        "In": 0.0019286403085824494,
+        "USub": 0.0006428801028608164,
+        "NotIn": 0.0012857602057216328,
+        "Is": 0.0003214400514304082,
+        "Starred": 0.0003214400514304082
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\stem_ai\\__main__.py",
+      "ldr": {
+        "total_lines": 3,
+        "logic_lines": 3,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 1.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "cli"
+        ],
+        "actually_used": [
+          "cli"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.07692307692307693,
+        "ImportFrom": 0.07692307692307693,
+        "If": 0.07692307692307693,
+        "alias": 0.07692307692307693,
+        "Compare": 0.07692307692307693,
+        "Expr": 0.07692307692307693,
+        "Name": 0.15384615384615385,
+        "Eq": 0.07692307692307693,
+        "Constant": 0.07692307692307693,
+        "Call": 0.07692307692307693,
+        "Load": 0.15384615384615385
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\app.py",
+      "ldr": {
+        "total_lines": 3,
+        "logic_lines": 3,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 1.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "stem_ai"
+        ],
+        "actually_used": [
+          "stem_ai"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.07692307692307693,
+        "ImportFrom": 0.07692307692307693,
+        "If": 0.07692307692307693,
+        "alias": 0.07692307692307693,
+        "Compare": 0.07692307692307693,
+        "Expr": 0.07692307692307693,
+        "Name": 0.15384615384615385,
+        "Eq": 0.07692307692307693,
+        "Constant": 0.07692307692307693,
+        "Call": 0.07692307692307693,
+        "Load": 0.15384615384615385
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\app.py",
+      "ldr": {
+        "total_lines": 254,
+        "logic_lines": 251,
+        "empty_lines": 3,
+        "ldr_score": 0.9881889763779528,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 3.5,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "cli",
+          "gradio",
+          "json",
+          "pathlib",
+          "render",
+          "scanner",
+          "subprocess",
+          "tempfile",
+          "uuid"
+        ],
+        "actually_used": [
+          "cli",
+          "gradio",
+          "json",
+          "pathlib",
+          "render",
+          "scanner",
+          "subprocess",
+          "tempfile",
+          "uuid"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.4311163008732466,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 1,
+        "inflated_count": 1,
+        "avg_inflation_ratio": 1.0,
+        "max_inflation_ratio": 1.0,
+        "total_docstring_lines": 1,
+        "total_implementation_lines": 1,
+        "overall_ratio": 1.0,
+        "status": "WARNING",
+        "details": [
+          {
+            "name": "launch_demo",
+            "type": "function",
+            "line": 277,
+            "docstring_lines": 1,
+            "implementation_lines": 1,
+            "inflation_ratio": 1.0,
+            "severity": "warning",
+            "docstring_preview": "Launch the Space UI."
+          }
+        ]
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [
+          {
+            "category": "serialization",
+            "imported": [
+              "json"
+            ],
+            "used": [
+              "json"
+            ],
+            "unused": [],
+            "usage_ratio": 1.0
+          }
+        ],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.12,
+        "confidence": 0.88,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.00099601593625498,
+        "ImportFrom": 0.00597609561752988,
+        "Import": 0.00398406374501992,
+        "Try": 0.00298804780876494,
+        "Assign": 0.03187250996015936,
+        "FunctionDef": 0.00597609561752988,
+        "With": 0.0099601593625498,
+        "alias": 0.010956175298804782,
+        "ExceptHandler": 0.00298804780876494,
+        "Name": 0.19123505976095617,
+        "Constant": 0.14840637450199204,
+        "arguments": 0.00597609561752988,
+        "If": 0.00298804780876494,
+        "Return": 0.00796812749003984,
+        "Expr": 0.008964143426294821,
+        "withitem": 0.0099601593625498,
+        "Raise": 0.00298804780876494,
+        "Store": 0.04083665338645418,
+        "Load": 0.2400398406374502,
+        "arg": 0.00597609561752988,
+        "UnaryOp": 0.00199203187250996,
+        "BinOp": 0.00398406374501992,
+        "Call": 0.06573705179282868,
+        "Compare": 0.00298804780876494,
+        "Subscript": 0.018924302788844622,
+        "ListComp": 0.00099601593625498,
+        "BoolOp": 0.00298804780876494,
+        "Dict": 0.00597609561752988,
+        "Tuple": 0.008964143426294821,
+        "Not": 0.00199203187250996,
+        "Div": 0.00398406374501992,
+        "Attribute": 0.055776892430278883,
+        "List": 0.00597609561752988,
+        "keyword": 0.03884462151394422,
+        "NotEq": 0.00199203187250996,
+        "JoinedStr": 0.01195219123505976,
+        "comprehension": 0.00398406374501992,
+        "Or": 0.00298804780876494,
+        "FormattedValue": 0.014940239043824702,
+        "GeneratorExp": 0.00298804780876494,
+        "Eq": 0.00099601593625498
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\cli.py",
+      "ldr": {
+        "total_lines": 94,
+        "logic_lines": 94,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 2.6,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "argparse",
+          "pathlib",
+          "render",
+          "scanner",
+          "sys"
+        ],
+        "actually_used": [
+          "argparse",
+          "pathlib",
+          "render",
+          "scanner",
+          "sys"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [
+          {
+            "category": "cli",
+            "imported": [
+              "argparse"
+            ],
+            "used": [
+              "argparse"
+            ],
+            "unused": [],
+            "usage_ratio": 1.0
+          }
+        ],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.001984126984126984,
+        "ImportFrom": 0.007936507936507936,
+        "Import": 0.003968253968253968,
+        "Assign": 0.025793650793650792,
+        "FunctionDef": 0.00992063492063492,
+        "alias": 0.011904761904761904,
+        "Name": 0.1865079365079365,
+        "Dict": 0.001984126984126984,
+        "arguments": 0.00992063492063492,
+        "Expr": 0.021825396825396824,
+        "Return": 0.015873015873015872,
+        "Attribute": 0.05357142857142857,
+        "If": 0.011904761904761904,
+        "Subscript": 0.021825396825396824,
+        "For": 0.001984126984126984,
+        "Store": 0.031746031746031744,
+        "Constant": 0.13293650793650794,
+        "Tuple": 0.00992063492063492,
+        "Call": 0.06746031746031746,
+        "Load": 0.24801587301587302,
+        "arg": 0.007936507936507936,
+        "UnaryOp": 0.005952380952380952,
+        "Compare": 0.005952380952380952,
+        "List": 0.005952380952380952,
+        "Raise": 0.005952380952380952,
+        "keyword": 0.03373015873015873,
+        "Not": 0.005952380952380952,
+        "In": 0.001984126984126984,
+        "Set": 0.001984126984126984,
+        "Starred": 0.001984126984126984,
+        "JoinedStr": 0.013888888888888888,
+        "BinOp": 0.001984126984126984,
+        "Eq": 0.001984126984126984,
+        "FormattedValue": 0.01984126984126984,
+        "BitOr": 0.001984126984126984,
+        "IfExp": 0.001984126984126984,
+        "Is": 0.001984126984126984,
+        "Slice": 0.001984126984126984
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+      "ldr": {
+        "total_lines": 1025,
+        "logic_lines": 1025,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 5.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "json",
+          "pathlib",
+          "re",
+          "reportlab",
+          "textwrap"
+        ],
+        "actually_used": [
+          "json",
+          "re",
+          "reportlab",
+          "textwrap"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 22.44369637317158,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 critical issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+          "line": 326,
+          "column": 0,
+          "message": "God function '_integrity_and_risks': 71 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+          "line": 497,
+          "column": 0,
+          "message": "God function '_page2_stage_analysis': 139 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+          "line": 654,
+          "column": 0,
+          "message": "God function '_page3_stage3_analysis': 103 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+          "line": 772,
+          "column": 0,
+          "message": "God function '_page4_integrity_deep': 131 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "medium",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+          "line": 920,
+          "column": 0,
+          "message": "God function '_page5_method_remediation': 112 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "function_clone_cluster",
+          "severity": "critical",
+          "axis": "structure",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\render.py",
+          "line": 1,
+          "column": 0,
+          "message": "17 structurally near-identical functions detected (AST JSD < 0.05): _clip_words, write_simple_pdf, _page3_stage3_analysis, _page5_method_remediation, _page4_integrity_deep, _page2_stage_analysis, ... (+11 more). Possible god function fragmented into helpers to evade per-function gates.",
+          "code": null,
+          "suggestion": "If these functions represent a fragmented complex operation, consider consolidating or using a data-driven dispatch table."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 1,
+        "inflated_count": 1,
+        "avg_inflation_ratio": 1.0,
+        "max_inflation_ratio": 1.0,
+        "total_docstring_lines": 1,
+        "total_implementation_lines": 1,
+        "overall_ratio": 1.0,
+        "status": "WARNING",
+        "details": [
+          {
+            "name": "_xt",
+            "type": "function",
+            "line": 55,
+            "docstring_lines": 1,
+            "implementation_lines": 1,
+            "inflation_ratio": 1.0,
+            "severity": "warning",
+            "docstring_preview": "Escape text for use in reportlab XML markup."
+          }
+        ]
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [
+          {
+            "category": "serialization",
+            "imported": [
+              "json"
+            ],
+            "used": [
+              "json"
+            ],
+            "unused": [],
+            "usage_ratio": 1.0
+          }
+        ],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.24,
+        "confidence": 0.76,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.00010925379656943078,
+        "ImportFrom": 0.0008740303725554463,
+        "Import": 0.00032776138970829236,
+        "Try": 0.00010925379656943078,
+        "Assign": 0.020539713755052987,
+        "FunctionDef": 0.0033868676936523543,
+        "AnnAssign": 0.002512837321096908,
+        "alias": 0.0018573145416803233,
+        "ExceptHandler": 0.00010925379656943078,
+        "Name": 0.190210859827379,
+        "Constant": 0.18037801813613022,
+        "Dict": 0.002185075931388616,
+        "arguments": 0.0033868676936523543,
+        "Return": 0.003605375286791216,
+        "For": 0.0028405987108052005,
+        "Expr": 0.011580902436359664,
+        "If": 0.002512837321096908,
+        "Subscript": 0.021522997924177865,
+        "AugAssign": 0.0029498525073746312,
+        "Store": 0.035398230088495575,
+        "arg": 0.006227466404457555,
+        "Call": 0.057795258385228886,
+        "Load": 0.2544520922102043,
+        "Tuple": 0.03976838195127281,
+        "Compare": 0.0037146290833606466,
+        "JoinedStr": 0.014093739757456572,
+        "List": 0.015951054299136895,
+        "BinOp": 0.0063367202010269855,
+        "Add": 0.003933136676499509,
+        "BoolOp": 0.0018573145416803233,
+        "IfExp": 0.004588659455916093,
+        "ListComp": 0.0006555227794165847,
+        "Attribute": 0.021850759313886157,
+        "LtE": 0.00010925379656943078,
+        "FormattedValue": 0.023271058669288757,
+        "keyword": 0.0046979132524855235,
+        "In": 0.001092537965694308,
+        "Set": 0.00032776138970829236,
+        "Slice": 0.0028405987108052005,
+        "Eq": 0.0009832841691248771,
+        "NotIn": 0.00010925379656943078,
+        "Or": 0.001529553151972031,
+        "GeneratorExp": 0.00043701518627772313,
+        "GtE": 0.00021850759313886157,
+        "Continue": 0.00010925379656943078,
+        "comprehension": 0.001092537965694308,
+        "UnaryOp": 0.01901016060308096,
+        "Starred": 0.000546268982847154,
+        "NotEq": 0.00021850759313886157,
+        "Div": 0.00032776138970829236,
+        "Sub": 0.000546268982847154,
+        "Not": 0.0007647765759860155,
+        "Break": 0.00010925379656943078,
+        "Mult": 0.004479405659346662,
+        "Is": 0.00010925379656943078,
+        "Lt": 0.00021850759313886157,
+        "And": 0.00032776138970829236,
+        "Gt": 0.0006555227794165847,
+        "USub": 0.01824538402709494
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\scanner.py",
+      "ldr": {
+        "total_lines": 270,
+        "logic_lines": 270,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 6.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "datetime",
+          "hashlib",
+          "json",
+          "pathlib",
+          "re",
+          "subprocess"
+        ],
+        "actually_used": [
+          "datetime",
+          "hashlib",
+          "re",
+          "subprocess"
+        ],
+        "unused": [
+          "json"
+        ],
+        "fake_imports": [],
+        "type_checking_imports": [
+          "__future__",
+          "typing"
+        ],
+        "usage_ratio": 0.8,
+        "grade": "GOOD"
+      },
+      "deficit_score": 11.904252544490562,
+      "status": "clean",
+      "warnings": [
+        "PATTERNS: 1 high-severity issues found"
+      ],
+      "pattern_issues": [
+        {
+          "pattern_id": "god_function",
+          "severity": "low",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\scanner.py",
+          "line": 35,
+          "column": 0,
+          "message": "God function 'audit_repository': 58 logic lines (limit 50)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        },
+        {
+          "pattern_id": "god_function",
+          "severity": "high",
+          "axis": "style",
+          "file": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\scanner.py",
+          "line": 112,
+          "column": 0,
+          "message": "God function '_score_stage_2r': complexity=12 (limit 10)",
+          "code": null,
+          "suggestion": "Break into smaller single-responsibility functions. Each function should do one thing and fit on one screen."
+        }
+      ],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 1,
+        "category_usage": [
+          {
+            "category": "serialization",
+            "imported": [
+              "json"
+            ],
+            "used": [],
+            "unused": [
+              "json"
+            ],
+            "usage_ratio": 0.0
+          }
+        ],
+        "hallucinated_deps": [
+          {
+            "library": "json",
+            "category": "serialization",
+            "line": 4,
+            "likely_intent": "data serialization/deserialization"
+          }
+        ],
+        "worst_category": "serialization",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.06,
+        "confidence": 0.94,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.00044033465433729633,
+        "ImportFrom": 0.0017613386173491853,
+        "Import": 0.0017613386173491853,
+        "Assign": 0.025979744605900485,
+        "FunctionDef": 0.00836635843240863,
+        "alias": 0.0035226772346983706,
+        "Name": 0.21972699251431088,
+        "Set": 0.0017613386173491853,
+        "Call": 0.05063848524878908,
+        "arguments": 0.00836635843240863,
+        "Return": 0.01453104359313078,
+        "Subscript": 0.016292382210479964,
+        "If": 0.014971378247468076,
+        "AnnAssign": 0.002642007926023778,
+        "For": 0.002201673271686482,
+        "Try": 0.0008806693086745927,
+        "BinOp": 0.01453104359313078,
+        "Store": 0.041391457507705856,
+        "Constant": 0.142668428005284,
+        "Attribute": 0.035667107001321,
+        "arg": 0.01893439013650374,
+        "Tuple": 0.007045354469396741,
+        "Dict": 0.010568031704095112,
+        "IfExp": 0.009247027741083224,
+        "Load": 0.24614707177454867,
+        "BoolOp": 0.00836635843240863,
+        "AugAssign": 0.003963011889035667,
+        "UnaryOp": 0.0048436811977102595,
+        "JoinedStr": 0.001321003963011889,
+        "ListComp": 0.001321003963011889,
+        "List": 0.00836635843240863,
+        "Expr": 0.0035226772346983706,
+        "ExceptHandler": 0.0008806693086745927,
+        "Compare": 0.008806693086745927,
+        "BitOr": 0.0008806693086745927,
+        "SetComp": 0.0008806693086745927,
+        "keyword": 0.005284015852047556,
+        "And": 0.006164685160722149,
+        "Add": 0.008806693086745927,
+        "Sub": 0.0017613386173491853,
+        "Not": 0.003963011889035667,
+        "FormattedValue": 0.0017613386173491853,
+        "GeneratorExp": 0.0017613386173491853,
+        "comprehension": 0.003963011889035667,
+        "Continue": 0.002201673271686482,
+        "Break": 0.00044033465433729633,
+        "NotEq": 0.00044033465433729633,
+        "Or": 0.002201673271686482,
+        "LtE": 0.0030823425803610744,
+        "Div": 0.005284015852047556,
+        "Eq": 0.0008806693086745927,
+        "GtE": 0.001321003963011889,
+        "Slice": 0.001321003963011889,
+        "BitAnd": 0.00044033465433729633,
+        "In": 0.001321003963011889,
+        "USub": 0.0008806693086745927,
+        "IsNot": 0.00044033465433729633,
+        "NotIn": 0.0008806693086745927,
+        "Is": 0.00044033465433729633,
+        "Starred": 0.00044033465433729633,
+        "Mult": 0.001321003963011889
+      }
+    },
+    {
+      "file_path": "D:\\Sanctum\\STEM-BIO-AI\\tmp\\hf_space_payload\\stem_ai\\__main__.py",
+      "ldr": {
+        "total_lines": 3,
+        "logic_lines": 3,
+        "empty_lines": 0,
+        "ldr_score": 1.0,
+        "grade": "S++",
+        "is_abc_interface": false,
+        "is_type_stub": false,
+        "is_packaging_init": false
+      },
+      "inflation": {
+        "jargon_count": 0,
+        "avg_complexity": 1.0,
+        "inflation_score": 0.0,
+        "status": "PASS",
+        "jargon_found": [],
+        "jargon_details": [],
+        "justified_jargon": [],
+        "is_config_file": false
+      },
+      "ddc": {
+        "imported": [
+          "cli"
+        ],
+        "actually_used": [
+          "cli"
+        ],
+        "unused": [],
+        "fake_imports": [],
+        "type_checking_imports": [],
+        "usage_ratio": 1.0,
+        "grade": "EXCELLENT"
+      },
+      "deficit_score": 0.0,
+      "status": "clean",
+      "warnings": [],
+      "pattern_issues": [],
+      "docstring_inflation": {
+        "total_docstrings": 0,
+        "inflated_count": 0,
+        "avg_inflation_ratio": 0.0,
+        "max_inflation_ratio": 0.0,
+        "total_docstring_lines": 0,
+        "total_implementation_lines": 0,
+        "overall_ratio": 0.0,
+        "status": "PASS",
+        "details": []
+      },
+      "hallucination_deps": {
+        "total_hallucinated": 0,
+        "category_usage": [],
+        "hallucinated_deps": [],
+        "worst_category": "none",
+        "status": "PASS"
+      },
+      "context_jargon": {
+        "total_jargon": 0,
+        "justified_jargon": 0,
+        "unjustified_jargon": 0,
+        "evidence_details": [],
+        "worst_offenders": [],
+        "justification_ratio": 1.0,
+        "status": "PASS"
+      },
+      "ml_score": {
+        "slop_probability": 0.0,
+        "confidence": 1.0,
+        "model_type": "random_forest",
+        "agreement": true,
+        "features_used": 16
+      },
+      "dcf": {
+        "Module": 0.07692307692307693,
+        "ImportFrom": 0.07692307692307693,
+        "If": 0.07692307692307693,
+        "alias": 0.07692307692307693,
+        "Compare": 0.07692307692307693,
+        "Expr": 0.07692307692307693,
+        "Name": 0.15384615384615385,
+        "Eq": 0.07692307692307693,
+        "Constant": 0.07692307692307693,
+        "Call": 0.07692307692307693,
+        "Load": 0.15384615384615385
+      }
+    }
+  ],
+  "js_file_results": [],
+  "go_file_results": []
+}
