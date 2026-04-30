@@ -29,7 +29,7 @@ from stem_ai.reasoning_model import (
     unique_token_count,
 )
 from stem_ai.render import _explain_status_label, render_explain, render_markdown
-from stem_ai.scanner import audit_repository
+from stem_ai.scanner import _score_stage_2r, audit_repository
 
 
 def _write(path: Path, text: str) -> None:
@@ -795,3 +795,44 @@ def test_provider_benchmark_response_record(tmp_path: Path) -> None:
     assert record["status"] == "valid"
     assert record["invalid_citation_count"] == 0
     assert record["network_called"] is False
+
+
+def test_license_restriction_evidence_is_detected_without_score_change(tmp_path: Path) -> None:
+    base = tmp_path / "base"
+    restricted = tmp_path / "restricted"
+    _write(base / "README.md", "Bio repository for molecular analysis.\n")
+    _write(restricted / "README.md", "Bio repository for molecular analysis.\n")
+    _write(restricted / "LICENSE", "This model is for non-commercial research use only and not for clinical use.\n")
+
+    base_result = audit_repository(base)
+    restricted_result = audit_repository(restricted)
+    findings = [
+        finding for finding in restricted_result["evidence_ledger"]
+        if finding["detector"] == "S4_license_restriction"
+    ]
+
+    assert restricted_result["replication_score"] == base_result["replication_score"]
+    assert restricted_result["stage_4_rubric"]["S4_license_restriction"]["score"] == 0
+    assert restricted_result["stage_4_rubric"]["S4_license_restriction"]["max"] == 0
+    assert any(finding["status"] == "detected" and finding["severity"] == "warn" for finding in findings)
+
+
+def test_stage2r_refactor_preserves_score_and_rubric() -> None:
+    readme = "Bio sequencing package with pytest CI workflow and clinical decision support notes."
+    docs = "Bio sequencing tutorial and pytest workflow guide."
+    package = "bio sequencing cli"
+    workflow = "pytest workflow"
+    tests = "pytest bio sequencing"
+
+    score, rubric = _score_stage_2r(
+        readme, docs, package, workflow, tests,
+        clinical_adjacent=True,
+        has_disclaimer=False,
+    )
+
+    assert score == 75
+    assert rubric["R2R_1_readme_package_code_alignment"]["score"] == 15
+    assert rubric["R2R_2_readme_docs_alignment"]["score"] == 10
+    assert rubric["R2R_3_readme_test_ci_alignment"]["score"] == 10
+    assert rubric["R2R_D2_missing_clinical_use_boundary"]["score"] == -20
+    assert rubric["verdict"] == "Mixed Local Consistency"

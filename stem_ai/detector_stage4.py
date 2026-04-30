@@ -16,6 +16,15 @@ HASH_PIN = re.compile(r"(--hash=sha256:|sha256[:=]|md5[:=])[A-Fa-f0-9]{16,}", re
 PYPROJECT_SCRIPT = re.compile(r"(?im)^\s*\[project\.scripts\]|\bentry_points\b|\bconsole_scripts\b")
 DATASET_CONTEXT = re.compile(r"\b(dataset|data set|data|SRA|GEO|Zenodo|Figshare|Kaggle|OpenML|Hugging ?Face)\b", re.I)
 MODEL_CONTEXT = re.compile(r"\b(model|weight|checkpoint|ckpt|\.pt|\.pth|\.onnx|safetensors|hugging ?face)\b", re.I)
+LICENSE_RESTRICTION = re.compile(
+    r"\b("
+    r"non[- ]commercial|not for commercial use|no commercial use|research use only|"
+    r"academic use only|evaluation use only|restricted license|license restriction|"
+    r"custom license|source-available|not open source|no clinical use|not for clinical use|"
+    r"no medical use|not for medical use"
+    r")\b",
+    re.I,
+)
 
 
 def collect_stage4_findings(
@@ -35,6 +44,7 @@ def collect_stage4_findings(
     _dataset_urls(target, findings, counters, items)
     _model_weight_urls(target, findings, counters, items)
     _citation_cff(target, findings, counters, items)
+    _license_restrictions(target, findings, counters, items)
     _cli_entrypoint(target, findings, counters, items, ast_summary)
     _seed_setting(target, findings, counters, items, ast_summary)
     _runnable_examples(target, findings, counters, items)
@@ -195,6 +205,57 @@ def _citation_cff(
 ) -> None:
     paths = existing_named_files(target, ["CITATION.cff"])
     _file_presence_score(target, findings, counters, items, "S4_citation_cff", "citation_cff_v1", paths, 5, "CITATION.cff exists.")
+
+
+def _license_restrictions(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    items: dict[str, dict[str, Any]],
+) -> None:
+    paths = [
+        *existing_named_files(target, [
+            "LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", "NOTICE",
+            "README.md", "README.rst", "readme.md", "pyproject.toml",
+        ]),
+        *_docs_files(target),
+    ]
+    detected = False
+    for path in sorted(set(paths), key=lambda p: relative_path(target, p).as_posix()):
+        lines = read_text(path).splitlines()
+        for line_number, line in enumerate(lines, start=1):
+            match = LICENSE_RESTRICTION.search(line)
+            if not match:
+                continue
+            detected = True
+            add_finding(
+                target, findings, counters,
+                "S4_license_restriction", "license_restriction_v1",
+                "detected", "warn", path, line_number, line, "regex",
+                "License, use-scope, or commercialization restriction language detected.",
+                {"matched_term": match.group(1)},
+            )
+    if not detected:
+        status = "not_detected" if paths else "absent"
+        explanation = (
+            "License/readme/docs surfaces exist but no restriction language was detected."
+            if paths else
+            "No license/readme/docs surface available for license restriction scan."
+        )
+        add_finding(
+            target, findings, counters,
+            "S4_license_restriction", "license_restriction_v1",
+            status, "info", Path("."), 0, "", "aggregate", explanation,
+        )
+    _score_item(
+        items,
+        "S4_license_restriction",
+        0,
+        0,
+        "License/use restriction language detected; review boundary noted."
+        if detected else
+        "No license/use restriction language detected.",
+    )
 
 
 def _cli_entrypoint(

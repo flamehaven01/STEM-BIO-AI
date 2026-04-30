@@ -137,7 +137,7 @@ def audit_repository(
             "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
             "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
             "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
-            "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
+            "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, license/use-scope restriction evidence, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
             "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...), excluding obvious placeholder/test values such as super-secret, dummy, fake, and example keys",
             "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
@@ -174,22 +174,31 @@ def _score_stage_2r(readme: str, docs_text: str, package_text: str, workflow_tex
     items: dict[str, Any] = {"baseline": {"score": 60, "evidence": "Non-nascent local repository baseline."}}
     score = 60
     if readme and package_text and _shared_terms(readme, package_text):
-        score += 15
-        items["R2R_1_readme_package_code_alignment"] = {"score": 15, "evidence": "README has domain overlap with package metadata or entry points."}
+        score += _add_stage2r_item(items, "R2R_1_readme_package_code_alignment", 15, "README has domain overlap with package metadata or entry points.")
     if readme and docs_text and _shared_terms(readme, docs_text):
-        score += 10
-        items["R2R_2_readme_docs_alignment"] = {"score": 10, "evidence": "README has domain overlap with docs/tutorial/troubleshooting surfaces."}
+        score += _add_stage2r_item(items, "R2R_2_readme_docs_alignment", 10, "README has domain overlap with docs/tutorial/troubleshooting surfaces.")
     if (workflow_text or test_text) and re.search(r"(test|pytest|unittest|ci|workflow)", readme + workflow_text + test_text, re.I):
-        score += 10
-        items["R2R_3_readme_test_ci_alignment"] = {"score": 10, "evidence": "Test/CI surfaces are present and locally consistent."}
+        score += _add_stage2r_item(items, "R2R_3_readme_test_ci_alignment", 10, "Test/CI surfaces are present and locally consistent.")
     if clinical_adjacent and not has_disclaimer:
-        score -= 20
-        items["R2R_D2_missing_clinical_use_boundary"] = {"score": -20, "evidence": "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary."}
+        score += _add_stage2r_item(items, "R2R_D2_missing_clinical_use_boundary", -20, "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
     final = _clamp(score)
     items["calculation"] = f"60 plus local consistency additions/deductions = {final}"
     items["stage_2r_score"] = final
-    items["verdict"] = "Strong Local Consistency" if final >= 80 else "Mixed Local Consistency" if final >= 60 else "Local Contradiction / Insufficient Consistency"
+    items["verdict"] = _stage2r_verdict(final)
     return final, items
+
+
+def _add_stage2r_item(items: dict[str, Any], key: str, score: int, evidence: str) -> int:
+    items[key] = {"score": score, "evidence": evidence}
+    return score
+
+
+def _stage2r_verdict(score: int) -> str:
+    if score >= 80:
+        return "Strong Local Consistency"
+    if score >= 60:
+        return "Mixed Local Consistency"
+    return "Local Contradiction / Insufficient Consistency"
 
 
 def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str, test_text: str, dep_text: str) -> tuple[int, dict[str, Any]]:

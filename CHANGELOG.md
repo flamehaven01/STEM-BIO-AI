@@ -10,6 +10,18 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.0] - 2026-04-30
+
+### Added
+- Added `S4_license_restriction` evidence detection for non-commercial, research-only, academic-only, no-clinical-use, and related license/use-scope boundary language.
+- Added `docs/API_CONTRACT_V1_5_DRAFT.md` documenting the draft local Python/CLI contract without declaring a stable external SDK.
+- Added regression coverage for license restriction evidence and Stage 2R refactor score preservation.
+
+### Changed
+- Refactored `_score_stage_2r` into smaller helper functions without changing its scoring behavior or T0-T4 boundaries.
+
+---
+
 ## [1.4.5] - 2026-04-30
 
 ### Added

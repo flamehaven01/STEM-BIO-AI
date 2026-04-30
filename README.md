@@ -10,7 +10,7 @@
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.4.5-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.5.0-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, replication evidence, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using local file reads, deterministic pattern matching, and stdlib AST parsing — no LLM, no API, no runtime execution.
@@ -27,6 +27,7 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 - **Reasoning diagnostics** — reports confidence envelope, lane coherence, uncertainty, and evidence-risk signals without changing the final score.
 - **AI advisory contract** — `--advisory validate` adds offline provider-neutral advisory validation; `--advisory packet` exports a sanitized provider-budgeted AI handoff packet with exact `allowed_finding_ids`; `--advisory-response FILE` validates provider-produced JSON against the same citation contract with no AI API call.
 - **Provider benchmark artifacts** — `scripts/provider_packet_benchmark.py` exports local benchmark packet stats and optional response-validation records without making provider API calls.
+- **License restriction evidence** — Stage 4 records non-commercial, research-only, academic-only, no-clinical-use, and related license/use-scope boundaries as review evidence without changing the final score.
 - **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF outputs.
 
 ## Measurement Boundary
@@ -81,7 +82,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 | Stage 1: README Evidence | 40% | Bio-domain vocabulary presence; explicit non-clinical disclaimer |
 | Stage 2R: Repo-Local Consistency | 20% | Vocabulary overlap across README, docs, package metadata, CI, tests |
 | Stage 3: Code / Bio Responsibility | 40% | CI presence; test domain coverage; changelog; dependency manifest; bias/COI language |
-| Stage 4: Replication Evidence | Separate lane | Containers; reproducibility targets; lock/pin/hash evidence; dataset/model references; citation/CLI/seed/example signals |
+| Stage 4: Replication Evidence | Separate lane | Containers; reproducibility targets; lock/pin/hash evidence; dataset/model references; citation/CLI/seed/example signals; license/use-scope restriction evidence |
 | C1-C4: Code Integrity | Advisory / penalty | Hardcoded secrets; dependency pinning; deprecated patient paths; fail-open exceptions |
 
 `Final = (S1 × 0.40) + (S2R × 0.20) + (S3 × 0.40) − Risk Penalty`
@@ -93,6 +94,8 @@ Stage 4 is intentionally not folded into the final score in v1.3. It is reported
 `reasoning_model` diagnostics are also separate from the final score. They summarize evidence budget, confidence envelope, lane coherence, uncertainty, and evidence-risk gate signals using deterministic stdlib-only formulas. These values are diagnostic initial priors, not a replacement score or clinical truth claim.
 
 `ai_advisory` is optional and omitted by default. `--advisory validate` runs an offline contract validator only; `--advisory packet` writes a sanitized `{stem}_advisory_input.json` for future adapters. The packet is provider-budgeted by default, capped to 40 evidence findings, and includes `allowed_finding_ids` plus a prompt contract requiring exact citation copying. `--advisory-response FILE` validates a provider-produced JSON advisory response against the current audit's evidence ledger without calling any provider. No Gemini, OpenAI, Claude, Kimi, Qwen, Ollama, or local model call is made by the core scanner. The contract reserves provider-neutral space for future adapters and rejects advisory output that lacks valid `finding_id` citations, attempts to override scores, or makes uncited clinical/regulatory claims.
+
+Python integration surfaces are documented as a draft, not a stable SDK, in `docs/API_CONTRACT_V1_5_DRAFT.md`.
 
 ## Triage Tiers
 
@@ -120,6 +123,7 @@ Scores reflect observable repository signals only. Each item below describes wha
 | B1 Data Provenance | `requirements.txt`, `pyproject.toml`, or `environment.yml` file exists |
 | B2 Bias/Limitations | `bias`, `limitation`, `not validated`, `validation cohort` in README or docs (regex) |
 | B3 COI/Funding | `funding`, `grant`, `sponsor`, `conflict of interest` in README, docs, or FUNDING.md (regex) |
+| Stage 4 License Restriction | `non-commercial`, `research use only`, `academic use only`, `not for clinical use`, and related license/use-scope restrictions in LICENSE/README/docs metadata |
 | Stage 4 Containers | `Dockerfile` or compose file exists |
 | Stage 4 Reproduction Target | `Makefile` target such as `reproduce`, `eval`, `benchmark`, or `test` |
 | Stage 4 Dependency Lock/Pin | environment/lock/requirements file presence; exact pins or hash evidence |
@@ -242,7 +246,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.4.5},
+  version = {1.5.0},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }
