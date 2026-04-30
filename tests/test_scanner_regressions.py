@@ -4,6 +4,11 @@ from pathlib import Path
 
 import stem_ai.detectors as detectors
 from stem_ai.evidence import make_finding_id
+from stem_ai.reasoning_model import (
+    benchmark_alignment,
+    lane_coherence,
+    unique_token_count,
+)
 from stem_ai.render import _explain_status_label, render_explain, render_markdown
 from stem_ai.scanner import audit_repository
 
@@ -371,3 +376,62 @@ def test_explain_report_no_backslash_in_finding_ids(tmp_path: Path) -> None:
 def test_explain_status_label_prioritizes_errors() -> None:
     assert _explain_status_label({"detected", "error"}) == "ERROR"
     assert _explain_status_label({"not_detected", "detected"}) == "DETECTED"
+
+
+def test_reasoning_model_is_diagnostic_only_and_does_not_change_score(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral genome analysis.\n")
+    _write(tmp_path / "requirements.txt", "numpy==1.26.4\n")
+
+    result = audit_repository(tmp_path)
+    reasoning = result["reasoning_model"]
+
+    assert reasoning["version"] == "stem-bio-ai-reasoning-v1.3.2"
+    assert reasoning["policy"]["mode"] == "diagnostic_only"
+    assert reasoning["policy"]["final_score_override"] is False
+    assert "reasoning_score" not in result["score"]
+    assert result["score"]["final_score"] == round(
+        result["score"]["stage_1_readme_intent"] * 0.4
+        + result["score"]["stage_2_repo_local_consistency"] * 0.2
+        + result["score"]["stage_3_code_bio"] * 0.4
+        - result["score"]["risk_penalty"]
+    )
+
+
+def test_reasoning_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="detailed", pages=3)
+    explain = render_explain(result)
+
+    assert "Reasoning Diagnostics" in markdown
+    assert "does not override the final score" in markdown
+    assert "Reasoning Diagnostics" in explain
+    assert "stem-bio-ai-reasoning-v1.3.2" in explain
+
+
+def test_reasoning_unique_token_count_is_deterministic() -> None:
+    text = "Limitations and limitations are documented."
+
+    assert unique_token_count(text) == 4
+
+
+def test_reasoning_lane_coherence_excludes_null_stage4() -> None:
+    result = lane_coherence({
+        "stage_1_readme_evidence": 80,
+        "stage_3_code_bio": 60,
+        "stage_4_replication": None,
+    })
+
+    assert len(result["pairs"]) == 1
+    assert result["pairs"][0]["pair"] == "stage_1_readme_evidence:stage_3_code_bio"
+    assert result["overall"] == 0.8
+
+
+def test_reasoning_benchmark_alignment_counts_major_disagreements() -> None:
+    result = benchmark_alignment([0, 1, 2, 4], [0, 0, 3, 1])
+
+    assert result["count"] == 4
+    assert result["exact_tier_agreement"] == 1
+    assert result["within_one_tier_agreement"] == 3
+    assert result["major_disagreement_count"] == 1

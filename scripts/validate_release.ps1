@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.3.1",
+    [string]$ExpectedVersion = "1.3.2",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -69,6 +69,12 @@ try {
         Assert-True ($null -ne $result.stage_4_rubric) "stage_4_rubric missing"
         Assert-True ($null -ne $result.replication_score) "replication_score missing"
         Assert-True ([string]$result.replication_tier -match "^R[0-4]$") "replication_tier invalid: $($result.replication_tier)"
+        Assert-True ($null -ne $result.reasoning_model) "reasoning_model missing"
+        Assert-True ($result.reasoning_model.version -eq "stem-bio-ai-reasoning-v1.3.2") "reasoning_model version mismatch: $($result.reasoning_model.version)"
+        Assert-True ($result.reasoning_model.policy.final_score_override -eq $false) "reasoning_model must not override final score"
+        Assert-True ($null -ne $result.reasoning_model.lane_coherence) "reasoning_model.lane_coherence missing"
+        Assert-True ($null -ne $result.reasoning_model.uncertainty_budget) "reasoning_model.uncertainty_budget missing"
+        Assert-True ($null -ne $result.reasoning_model.evidence_risk_gate) "reasoning_model.evidence_risk_gate missing"
 
         $badIds = @($result.evidence_ledger | Where-Object { [string]$_.finding_id -match "\\" })
         Assert-True ($badIds.Count -eq 0) "finding_id contains Windows backslash"

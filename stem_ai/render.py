@@ -134,6 +134,10 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         f"**Stage 4 Replication Score:** **{result.get('replication_score', 0)} / 100**",
         f"**Replication Tier:** **{result.get('replication_tier', 'R0')}**",
         "",
+        "## Reasoning Diagnostics",
+        "",
+        _markdown_reasoning_summary(result.get("reasoning_model", {})),
+        "",
         "## Code Integrity",
     ]
     for key, item in result["code_integrity"].items():
@@ -190,10 +194,32 @@ def render_explain(result: dict[str, Any]) -> str:
         out += _explain_detector_group(detector, findings)
     out += _explain_ast_section(result.get("ast_signal_summary", {}))
     out += _explain_s4_section(result.get("stage_4_rubric", {}))
+    out += _explain_reasoning_section(result.get("reasoning_model", {}))
     out += [_EXPLAIN_SEP,
             "DISCLAIMER: Evidence-surface pre-screen only.",
             "Not clinical certification, regulatory clearance, or medical advice."]
     return "\n".join(out) + "\n"
+
+
+def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
+    if not reasoning:
+        return "Reasoning diagnostics are not available."
+    coherence = reasoning.get("lane_coherence", {})
+    uncertainty = reasoning.get("uncertainty_budget", {})
+    gate = reasoning.get("evidence_risk_gate", {})
+    envelope = reasoning.get("confidence_envelope", {})
+    return (
+        f"Diagnostic-only model `{reasoning.get('version', 'unknown')}`; "
+        f"lane coherence `{coherence.get('status', 'unknown')}` "
+        f"({coherence.get('overall', 'n/a')}), "
+        f"uncertainty `{uncertainty.get('status', 'unknown')}` "
+        f"({uncertainty.get('uncertainty', 'n/a')}), "
+        f"risk gate `{gate.get('status', 'unknown')}` "
+        f"({gate.get('evidence_risk', 'n/a')}), "
+        f"confidence envelope {envelope.get('lower', 'n/a')}-"
+        f"{envelope.get('upper', 'n/a')}. "
+        "This diagnostic layer does not override the final score."
+    )
 
 
 def _explain_detector_group(detector: str, findings: list[dict[str, Any]]) -> list[str]:
@@ -240,6 +266,23 @@ def _explain_s4_section(s4: dict[str, Any]) -> list[str]:
     for key, item in s4.items():
         sc, mx, ev = item.get("score", 0), item.get("max", 0), item.get("evidence", "")
         lines.append(f"  {key:<42} {sc:>3} / {mx:<3}  {ev}")
+    lines.append("")
+    return lines
+
+
+def _explain_reasoning_section(reasoning: dict[str, Any]) -> list[str]:
+    if not reasoning:
+        return []
+    lines = [_EXPLAIN_SEP, "Reasoning Diagnostics", ""]
+    lines.append(f"  version                         {reasoning.get('version', 'unknown')}")
+    policy = reasoning.get("policy", {})
+    lines.append(f"  mode                            {policy.get('mode', 'unknown')}")
+    lines.append(f"  final_score_override            {policy.get('final_score_override', False)}")
+    for key in ("evidence_budget", "confidence_envelope", "lane_coherence",
+                "uncertainty_budget", "evidence_risk_gate"):
+        item = reasoning.get(key, {})
+        status = item.get("status", "unknown")
+        lines.append(f"  {key:<31} {status}")
     lines.append("")
     return lines
 

@@ -24,6 +24,7 @@ from .patterns import (
     SKIP_DIRS,
     TEXT_EXTENSIONS,
 )
+from .reasoning_model import build_reasoning_model
 
 
 CA_INDIRECT_TERMS = re.compile(
@@ -74,7 +75,7 @@ def audit_repository(target: Path) -> dict[str, Any]:
     score_cap = _score_cap(ca_severity, has_disclaimer, t0_hard_floor)
     final_score = min(raw_score, score_cap) if score_cap is not None else raw_score
 
-    return {
+    result = {
         "schema_version": "stem-ai-local-cli-result-v1.3",
         "stem_ai_version": __version__,
         "generated_at_local": date.today().isoformat(),
@@ -138,6 +139,8 @@ def audit_repository(target: Path) -> dict[str, Any]:
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
         },
     }
+    result["reasoning_model"] = build_reasoning_model(result)
+    return result
 
 
 def _score_stage_1(readme: str, package_text: str, clinical_adjacent: bool, has_disclaimer: bool) -> int:

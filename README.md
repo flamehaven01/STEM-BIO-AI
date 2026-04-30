@@ -10,7 +10,7 @@
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.3.1-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.3.2-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, replication evidence, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using local file reads, deterministic pattern matching, and stdlib AST parsing — no LLM, no API, no runtime execution.
@@ -24,6 +24,7 @@ Bio/medical AI repositories can look credible at the README layer while leaving 
 - **Triage tier built in** — maps evidence signals to T0–T4 review-priority tiers.
 - **Replication evidence lane** — reports Stage 4 `replication_score` / `replication_tier` separately from the final score.
 - **Explainable evidence ledger** — `--explain` writes file/line/snippet evidence with stable `finding_id` values.
+- **Reasoning diagnostics** — reports confidence envelope, lane coherence, uncertainty, and evidence-risk signals without changing the final score.
 - **CLI artifacts** — `stem <folder> --level 3 --format all` emits JSON, Markdown, and PDF outputs.
 
 ## Measurement Boundary
@@ -83,6 +84,8 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 Clinical-adjacent repositories without an explicit disclaimer are capped at T2 (score ≤ 69). Repositories with unbounded CA-DIRECT claims are capped at T0 (score ≤ 39).
 
 Stage 4 is intentionally not folded into the final score in v1.3. It is reported as `replication_score` and `replication_tier` so reviewers can inspect replication evidence without changing the established T0-T4 scoring formula before benchmark calibration.
+
+`reasoning_model` diagnostics are also separate from the final score. They summarize evidence budget, confidence envelope, lane coherence, uncertainty, and evidence-risk gate signals using deterministic stdlib-only formulas. These values are diagnostic initial priors, not a replacement score or clinical truth claim.
 
 ## Triage Tiers
 
@@ -232,7 +235,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.3.1},
+  version = {1.3.2},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

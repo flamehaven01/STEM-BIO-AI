@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.3.2] - 2026-04-30
+
+### Added
+- Added `stem_ai/reasoning_model.py` as a deterministic diagnostic layer over the evidence ledger.
+- Added `reasoning_model` JSON output with evidence budget, confidence envelope, lane coherence, uncertainty budget, evidence-risk gate, and benchmark alignment function support.
+- Added reasoning diagnostics to Markdown and `--explain` outputs without changing the established final score.
+- Added regression coverage for deterministic token counting, S4-null lane coherence handling, benchmark alignment metrics, and final-score non-overwrite behavior.
+
+### Changed
+- Updated release validation defaults to target v1.3.2.
+
+---
+
 ## [1.3.1] - 2026-04-30
 
 ### Fixed
