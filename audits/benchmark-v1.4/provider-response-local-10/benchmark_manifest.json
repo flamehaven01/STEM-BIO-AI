@@ -1,0 +1,94 @@
+{
+  "schema_version": "stem-bio-ai-provider-response-benchmark-v1.4",
+  "generated_at": "2026-04-30",
+  "stem_ai_version": "1.4.5",
+  "benchmark_type": "provider_packet_readiness",
+  "source_manifest": "D:\\Sanctum\\STEM-BIO-AI\\audits\\benchmark-v1.3\\local-10\\benchmark_manifest.json",
+  "source_schema_version": "stem-bio-ai-benchmark-v1.3-local-control-10",
+  "repo_count": 10,
+  "response_validation_count": 0,
+  "packet_profile": "provider_budgeted",
+  "api_calls_made_by_script": false,
+  "repos": [
+    {
+      "repo": "snap-stanford/Biomni",
+      "local_name": "Biomni",
+      "local_path": "D:\\Sanctum\\Extra Repo\\Biomni",
+      "expected_commit": "400c1f366b96a35ca253e13c9b06c5076af41d65",
+      "scan_commit": "400c1f366b96a35ca253e13c9b06c5076af41d65",
+      "packet_file": "packets/Biomni_advisory_input.json"
+    },
+    {
+      "repo": "SakanaAI/AI-Scientist",
+      "local_name": "AI-Scientist",
+      "local_path": "D:\\Sanctum\\Extra Repo\\AI-Scientist",
+      "expected_commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb",
+      "scan_commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb",
+      "packet_file": "packets/AI-Scientist_advisory_input.json"
+    },
+    {
+      "repo": "lsq2wal/CellAgent",
+      "local_name": "CellAgent",
+      "local_path": "D:\\Sanctum\\Extra Repo\\CellAgent",
+      "expected_commit": "e1c6ad49a1c3d9a1f5861c082d1f830861714f58",
+      "scan_commit": "e1c6ad49a1c3d9a1f5861c082d1f830861714f58",
+      "packet_file": "packets/CellAgent_advisory_input.json"
+    },
+    {
+      "repo": "ClawBio/ClawBio",
+      "local_name": "ClawBio",
+      "local_path": "D:\\Sanctum\\Extra Repo\\ClawBio",
+      "expected_commit": "c2a73bd621edab1db823315007abdc5649af9b1f",
+      "scan_commit": "c2a73bd621edab1db823315007abdc5649af9b1f",
+      "packet_file": "packets/ClawBio_advisory_input.json"
+    },
+    {
+      "repo": "wu-yc/LabClaw",
+      "local_name": "LabClaw",
+      "local_path": "D:\\Sanctum\\Extra Repo\\LabClaw",
+      "expected_commit": "5b0edf9a75a1a8f88ced9a9af03d86eab6054a6b",
+      "scan_commit": "5b0edf9a75a1a8f88ced9a9af03d86eab6054a6b",
+      "packet_file": "packets/LabClaw_advisory_input.json"
+    },
+    {
+      "repo": "K-Dense-AI/claude-scientific-skills",
+      "local_name": "claude-scientific-skills",
+      "local_path": "D:\\Sanctum\\Extra Repo\\claude-scientific-skills",
+      "expected_commit": "c84622c08adb7a4619bb0bbfcf43224541ef22dd",
+      "scan_commit": "c84622c08adb7a4619bb0bbfcf43224541ef22dd",
+      "packet_file": "packets/claude-scientific-skills_advisory_input.json"
+    },
+    {
+      "repo": "jaechang-hits/SciAgent-Skills",
+      "local_name": "SciAgent-Skills",
+      "local_path": "D:\\Sanctum\\Extra Repo\\SciAgent-Skills",
+      "expected_commit": "cbc4117a17f5d65546f84a01597ab03af4399440",
+      "scan_commit": "cbc4117a17f5d65546f84a01597ab03af4399440",
+      "packet_file": "packets/SciAgent-Skills_advisory_input.json"
+    },
+    {
+      "repo": "bio-xyz/BioAgents",
+      "local_name": "BioAgents",
+      "local_path": "D:\\Sanctum\\Extra Repo\\BioAgents",
+      "expected_commit": "84ade8cd5296d6471a5e3ef5c8426c5d0c09db69",
+      "scan_commit": "84ade8cd5296d6471a5e3ef5c8426c5d0c09db69",
+      "packet_file": "packets/BioAgents_advisory_input.json"
+    },
+    {
+      "repo": "Runchuan-BU/BioClaw",
+      "local_name": "BioClaw",
+      "local_path": "D:\\Sanctum\\Extra Repo\\BioClaw",
+      "expected_commit": "dfbcebfa452e39fdc616fde936ac803adaf60c75",
+      "scan_commit": "dfbcebfa452e39fdc616fde936ac803adaf60c75",
+      "packet_file": "packets/BioClaw_advisory_input.json"
+    },
+    {
+      "repo": "FreedomIntelligence/OpenClaw-Medical-Skills",
+      "local_name": "OpenClaw-Medical-Skills",
+      "local_path": "D:\\Sanctum\\Extra Repo\\OpenClaw-Medical-Skills",
+      "expected_commit": "bbc8290fe18e2d9a0128fd78de96323533a48191",
+      "scan_commit": "bbc8290fe18e2d9a0128fd78de96323533a48191",
+      "packet_file": "packets/OpenClaw-Medical-Skills_advisory_input.json"
+    }
+  ]
+}

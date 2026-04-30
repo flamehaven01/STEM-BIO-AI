@@ -17,6 +17,12 @@ from stem_ai.advisory_providers import (
 )
 from stem_ai.cli import main as cli_main
 from stem_ai.evidence import make_finding_id
+from stem_ai.provider_benchmark import (
+    PROVIDER_BENCHMARK_SCHEMA_VERSION,
+    packet_stats_record,
+    packet_summary,
+    response_validation_record,
+)
 from stem_ai.reasoning_model import (
     benchmark_alignment,
     lane_coherence,
@@ -748,3 +754,44 @@ def test_cli_advisory_response_writes_validated_ai_advisory_json(tmp_path: Path)
     result = json.loads(json_path.read_text(encoding="utf-8"))
     assert result["ai_advisory"]["status"] == "valid"
     assert result["ai_advisory"]["response_contract"]["network_called"] is False
+
+
+def test_provider_benchmark_packet_record_and_summary(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path, advisory="packet")
+    repo_entry = {"repo": "example/repo", "local_name": "repo", "local_path": str(tmp_path), "commit": "abc123"}
+
+    record = packet_stats_record(repo_entry, result, result["ai_advisory_input"], Path("packets/repo.json"))
+    summary = packet_summary([record])
+
+    assert record["schema_version"] == PROVIDER_BENCHMARK_SCHEMA_VERSION
+    assert record["record_type"] == "packet_stats"
+    assert record["packet_profile"] == "provider_budgeted"
+    assert record["citation_allowlist_exact"] is True
+    assert record["packet_finding_count"] == record["allowed_finding_id_count"]
+    assert summary["record_count"] == 1
+    assert summary["all_citation_allowlists_exact"] is True
+
+
+def test_provider_benchmark_response_record(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    base = audit_repository(repo)
+    cite = next(iter(known_finding_ids(base)))
+    response_path = tmp_path / "provider.json"
+    _write(response_path, json.dumps({
+        "provider": "gemini",
+        "model": "external-model",
+        "reviewer_notes": [
+            {"claim": "Review cited evidence.", "severity": "info", "cites": [cite], "recommended_action": "Inspect cited finding."}
+        ],
+        "inspection_priorities": [],
+    }))
+    result = audit_repository(repo, advisory_response_path=response_path)
+
+    record = response_validation_record({"repo": "example/repo", "local_name": "repo"}, result["ai_advisory"], response_path)
+
+    assert record["record_type"] == "provider_response_validation"
+    assert record["status"] == "valid"
+    assert record["invalid_citation_count"] == 0
+    assert record["network_called"] is False

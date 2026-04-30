@@ -1,0 +1,919 @@
+{
+  "schema_version": "stem-ai-advisory-input-v1.4",
+  "packet_profile": "provider_budgeted",
+  "policy": {
+    "final_score_override": false,
+    "requires_finding_id_citations": true,
+    "raw_repo_text_allowed": false,
+    "clinical_claims_allowed": false
+  },
+  "target": {
+    "name": "SakanaAI/AI-Scientist",
+    "remote": "https://github.com/SakanaAI/AI-Scientist",
+    "branch": "main",
+    "commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb",
+    "file_count": 2326
+  },
+  "score": {
+    "stage_1_readme_intent": 40,
+    "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
+    "stage_2_repo_local_consistency": 60,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_3_code_bio": 19,
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "risk_penalty": 0,
+    "raw_score_before_floor": 36,
+    "final_score": 36,
+    "formal_tier": "T0 Rejected",
+    "use_scope": "Do not rely on this repository without independent expert validation."
+  },
+  "classification": {
+    "clinical_adjacent": false,
+    "ca_severity": "none",
+    "t0_hard_floor": false,
+    "score_cap": null,
+    "has_explicit_clinical_boundary": false
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        "No direct credential patterns detected by local CLI scan."
+      ]
+    },
+    "C2_dependency_pinning": {
+      "status": "WARN",
+      "evidence": [
+        "Unpinned or loosely pinned dependencies detected."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No deprecated patient-adjacent metadata patterns detected."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "WARN",
+      "evidence": [
+        "Fail-open exception pattern detected in code text."
+      ]
+    }
+  },
+  "detector_summary": {
+    "total_findings": 173,
+    "by_status": {
+      "not_detected": 15,
+      "detected": 154,
+      "absent": 4
+    },
+    "by_detector": {
+      "S1_readme_bio_terms": {
+        "not_detected": 1
+      },
+      "S1_clinical_boundary": {
+        "not_detected": 1
+      },
+      "S3_T1_workflow_files": {
+        "not_detected": 1
+      },
+      "S3_T2_domain_tests": {
+        "not_detected": 1
+      },
+      "S3_T3_changelog_release_hygiene": {
+        "not_detected": 1
+      },
+      "S3_B1_dependency_manifest": {
+        "detected": 1
+      },
+      "S3_B2_bias_limitations": {
+        "not_detected": 1
+      },
+      "S3_B3_coi_funding": {
+        "not_detected": 1
+      },
+      "S2_package_bio_terms": {
+        "not_detected": 1
+      },
+      "C1_hardcoded_credentials": {
+        "not_detected": 1
+      },
+      "C2_dependency_pinning": {
+        "detected": 15
+      },
+      "C3_dead_or_deprecated_patient_adjacent_paths": {
+        "not_detected": 1
+      },
+      "C4_exception_handling_clinical_adjacent_paths": {
+        "detected": 6
+      },
+      "AST_argparse_cli": {
+        "detected": 75
+      },
+      "AST_seed_setting": {
+        "detected": 45
+      },
+      "AST_fail_open_precision": {
+        "detected": 6
+      },
+      "AST_portable_model_loading": {
+        "detected": 3
+      },
+      "S4_container_environment": {
+        "not_detected": 1
+      },
+      "S4_make_reproduce_target": {
+        "absent": 1
+      },
+      "S4_environment_lock_evidence": {
+        "detected": 1
+      },
+      "S4_exact_dependency_pins_or_hashes": {
+        "not_detected": 1
+      },
+      "S4_readme_reproducibility_section": {
+        "absent": 1
+      },
+      "S4_checksum_files": {
+        "not_detected": 1
+      },
+      "S4_dataset_url": {
+        "absent": 1
+      },
+      "S4_model_weight_url_or_checksum": {
+        "absent": 1
+      },
+      "S4_citation_cff": {
+        "not_detected": 1
+      },
+      "S4_cli_entrypoint": {
+        "detected": 1
+      },
+      "S4_seed_setting": {
+        "detected": 1
+      },
+      "S4_runnable_examples": {
+        "not_detected": 1
+      }
+    }
+  },
+  "reasoning_model": {
+    "version": "stem-bio-ai-reasoning-v1.3.2",
+    "policy": {
+      "mode": "diagnostic_only",
+      "final_score_override": false,
+      "uses_ai": false,
+      "weights": "uncalibrated_initial_priors_pending_benchmark_calibration"
+    },
+    "evidence_budget": {
+      "confidence": 0.36,
+      "required_bits": 0.6439,
+      "observed_bits": 7.4429,
+      "unique_token_count": 173,
+      "deficit": -6.7991,
+      "budget_deficit_max": 1.0,
+      "flagged": false,
+      "status": "supported",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "confidence_envelope": {
+      "confidence": 0.36,
+      "evidence_count": 173,
+      "lower": 0.3221,
+      "upper": 0.3979,
+      "margin": 0.0379,
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "lane_coherence": {
+      "stage_scores": {
+        "stage_1_readme_evidence": 0.4,
+        "stage_2_repo_local_consistency": 0.6,
+        "stage_3_code_bio": 0.19,
+        "stage_4_replication": 0.2
+      },
+      "pairs": [
+        {
+          "pair": "stage_1_readme_evidence:stage_3_code_bio",
+          "left": 0.4,
+          "right": 0.19,
+          "coherence": 0.79
+        },
+        {
+          "pair": "stage_3_code_bio:stage_4_replication",
+          "left": 0.19,
+          "right": 0.2,
+          "coherence": 0.99
+        }
+      ],
+      "overall": 0.89,
+      "status": "coherent",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "uncertainty_budget": {
+      "stage_std": 0.1681,
+      "manual_review_required_ratio": 0.0,
+      "error_ratio": 0.0,
+      "uncertainty": 0.2402,
+      "status": "review_advised",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "evidence_risk_gate": {
+      "components": {
+        "missing_required_boundary_ratio": 0.0,
+        "contradiction_ratio": 0.11,
+        "manual_review_required_ratio": 0.0,
+        "parse_error_ratio": 0.0
+      },
+      "evidence_risk": 0.033,
+      "risk_gate": 0.6,
+      "risk_gate_factor": 0.945,
+      "status": "within_gate",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "benchmark_alignment": null
+  },
+  "stage_4_rubric": {
+    "S4_container_environment": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_container_environment."
+    },
+    "S4_make_reproduce_target": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No Makefile detected."
+    },
+    "S4_environment_lock_evidence": {
+      "score": 10,
+      "max": 10,
+      "evidence": "Environment, dependency, or lock manifest detected."
+    },
+    "S4_exact_dependency_pins_or_hashes": {
+      "score": 0,
+      "max": 10,
+      "evidence": "Dependency manifests exist but no exact pins or hashes were detected."
+    },
+    "S4_readme_reproducibility_section": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README detected."
+    },
+    "S4_checksum_files": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_checksum_files."
+    },
+    "S4_dataset_url": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README/docs files detected."
+    },
+    "S4_model_weight_url_or_checksum": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README/docs or checksum files detected."
+    },
+    "S4_citation_cff": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_citation_cff."
+    },
+    "S4_cli_entrypoint": {
+      "score": 5,
+      "max": 5,
+      "evidence": "CLI entry point or argparse interface detected."
+    },
+    "S4_seed_setting": {
+      "score": 5,
+      "max": 5,
+      "evidence": "Deterministic seed setting detected."
+    },
+    "S4_runnable_examples": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_runnable_examples."
+    },
+    "stage_4_raw_total": {
+      "score": 20,
+      "max": 100,
+      "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score."
+    }
+  },
+  "ast_signal_summary": {
+    "files_total": 131,
+    "files_considered": 131,
+    "files_parsed": 131,
+    "files_skipped_size": 0,
+    "syntax_errors": 0,
+    "file_limit_exceeded": false,
+    "test_functions": 0,
+    "assertion_tests": 0,
+    "public_functions": 1261,
+    "docstring_functions": 93,
+    "annotated_functions": 173,
+    "seed_settings": 45,
+    "argparse_cli": true,
+    "portable_model_loading": 3,
+    "fail_open_handlers": 6,
+    "docstring_coverage": 0.0738,
+    "type_annotation_coverage": 0.1372
+  },
+  "allowed_finding_ids": [
+    "AST_fail_open_precision:review_iclr_bench/iclr_analysis.py:173:001",
+    "AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:61:001",
+    "AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:91:002",
+    "AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:98:003",
+    "AST_fail_open_precision:templates/tensorf/renderer.py:33:001",
+    "AST_fail_open_precision:templates/tensorf/renderer.py:99:002",
+    "C2_dependency_pinning:requirements.txt:2:001",
+    "C2_dependency_pinning:requirements.txt:3:002",
+    "C2_dependency_pinning:requirements.txt:4:003",
+    "C2_dependency_pinning:requirements.txt:5:004",
+    "C2_dependency_pinning:requirements.txt:6:005",
+    "C2_dependency_pinning:requirements.txt:8:006",
+    "C2_dependency_pinning:requirements.txt:9:007",
+    "C2_dependency_pinning:requirements.txt:10:008",
+    "C2_dependency_pinning:requirements.txt:12:009",
+    "C2_dependency_pinning:requirements.txt:13:010",
+    "C2_dependency_pinning:requirements.txt:14:011",
+    "C2_dependency_pinning:requirements.txt:15:012",
+    "C2_dependency_pinning:requirements.txt:16:013",
+    "C2_dependency_pinning:requirements.txt:17:014",
+    "C2_dependency_pinning:requirements.txt:18:015",
+    "AST_argparse_cli:ai_scientist/generate_ideas.py:500:001",
+    "AST_argparse_cli:ai_scientist/perform_writeup.py:521:001",
+    "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/experiment.py:202:001",
+    "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_1.py:200:001",
+    "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_2.py:200:001",
+    "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_3.py:200:001",
+    "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_4.py:200:001",
+    "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_5.py:202:001",
+    "AST_argparse_cli:example_papers/data_augmentation_grokking/experiment.py:445:001",
+    "AST_argparse_cli:example_papers/data_augmentation_grokking/run_1.py:410:001",
+    "AST_argparse_cli:example_papers/data_augmentation_grokking/run_2.py:440:001",
+    "AST_argparse_cli:example_papers/data_augmentation_grokking/run_3.py:446:001",
+    "AST_argparse_cli:example_papers/data_augmentation_grokking/run_4.py:445:001",
+    "AST_argparse_cli:example_papers/data_augmentation_grokking/run_5.py:445:001",
+    "AST_argparse_cli:example_papers/dual_expert_denoiser/experiment.py:192:001",
+    "AST_argparse_cli:example_papers/dual_expert_denoiser/run_1.py:186:001",
+    "AST_argparse_cli:example_papers/dual_expert_denoiser/run_2.py:188:001",
+    "AST_argparse_cli:example_papers/dual_expert_denoiser/run_3.py:192:001",
+    "AST_argparse_cli:example_papers/dual_expert_denoiser/run_4.py:192:001"
+  ],
+  "provider_prompt_contract": {
+    "response_format": "strict_json_object_only",
+    "max_reviewer_notes": 2,
+    "max_inspection_priorities": 2,
+    "citation_rule": "Each cites entry must be copied exactly from allowed_finding_ids.",
+    "forbidden_citations": [
+      "detector names",
+      "shortened finding IDs",
+      "file names",
+      "categories",
+      "uncited claims"
+    ],
+    "score_rule": "Do not modify or override final_score, formal_tier, replication_score, or replication_tier.",
+    "claim_boundary": "Do not make clinical safety, efficacy, regulatory, deployment, or medical-advice claims."
+  },
+  "evidence_ledger": [
+    {
+      "finding_id": "AST_fail_open_precision:review_iclr_bench/iclr_analysis.py:173:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "review_iclr_bench/iclr_analysis.py",
+      "line": 173,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:61:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "templates/tensorf/dataLoader/colmap2nerf.py",
+      "line": 61,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:91:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "templates/tensorf/dataLoader/colmap2nerf.py",
+      "line": 91,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:98:003",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "templates/tensorf/dataLoader/colmap2nerf.py",
+      "line": 98,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:templates/tensorf/renderer.py:33:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "templates/tensorf/renderer.py",
+      "line": 33,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:templates/tensorf/renderer.py:99:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "templates/tensorf/renderer.py",
+      "line": 99,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:2:001",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 2,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:3:002",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 3,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:4:003",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 4,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:5:004",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 5,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:6:005",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 6,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:8:006",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 8,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:9:007",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 9,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:10:008",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 10,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:12:009",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 12,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:13:010",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 13,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:14:011",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 14,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:15:012",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 15,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:16:013",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 16,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:17:014",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 17,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:requirements.txt:18:015",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.4.5",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "requirements.txt",
+      "line": 18,
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:ai_scientist/generate_ideas.py:500:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "ai_scientist/generate_ideas.py",
+      "line": 500,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:ai_scientist/perform_writeup.py:521:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "ai_scientist/perform_writeup.py",
+      "line": 521,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/experiment.py:202:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/adaptive_dual_scale_denoising/experiment.py",
+      "line": 202,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_1.py:200:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/adaptive_dual_scale_denoising/run_1.py",
+      "line": 200,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_2.py:200:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/adaptive_dual_scale_denoising/run_2.py",
+      "line": 200,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_3.py:200:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/adaptive_dual_scale_denoising/run_3.py",
+      "line": 200,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_4.py:200:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/adaptive_dual_scale_denoising/run_4.py",
+      "line": 200,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_5.py:202:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/adaptive_dual_scale_denoising/run_5.py",
+      "line": 202,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/data_augmentation_grokking/experiment.py:445:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/data_augmentation_grokking/experiment.py",
+      "line": 445,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/data_augmentation_grokking/run_1.py:410:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/data_augmentation_grokking/run_1.py",
+      "line": 410,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/data_augmentation_grokking/run_2.py:440:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/data_augmentation_grokking/run_2.py",
+      "line": 440,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/data_augmentation_grokking/run_3.py:446:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/data_augmentation_grokking/run_3.py",
+      "line": 446,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/data_augmentation_grokking/run_4.py:445:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/data_augmentation_grokking/run_4.py",
+      "line": 445,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/data_augmentation_grokking/run_5.py:445:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/data_augmentation_grokking/run_5.py",
+      "line": 445,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/dual_expert_denoiser/experiment.py:192:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/dual_expert_denoiser/experiment.py",
+      "line": 192,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/dual_expert_denoiser/run_1.py:186:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/dual_expert_denoiser/run_1.py",
+      "line": 186,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/dual_expert_denoiser/run_2.py:188:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/dual_expert_denoiser/run_2.py",
+      "line": 188,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/dual_expert_denoiser/run_3.py:192:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/dual_expert_denoiser/run_3.py",
+      "line": 192,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:example_papers/dual_expert_denoiser/run_4.py:192:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "example_papers/dual_expert_denoiser/run_4.py",
+      "line": 192,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    }
+  ],
+  "omitted_finding_count": 133,
+  "provider_request": {
+    "provider": "none",
+    "model": null,
+    "base_url": null,
+    "api_key_present": false,
+    "timeout_sec": 60,
+    "max_tokens": 2048,
+    "runtime": null,
+    "registry": [
+      {
+        "provider": "none",
+        "provider_class": "offline_stub",
+        "network_required": false,
+        "implemented": true
+      },
+      {
+        "provider": "openai",
+        "provider_class": "cloud_native",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "anthropic",
+        "provider_class": "cloud_native",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "gemini",
+        "provider_class": "cloud_native",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "openai_compatible",
+        "provider_class": "openai_compatible",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "ollama",
+        "provider_class": "local_server",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "local_runtime",
+        "provider_class": "local_runtime",
+        "network_required": false,
+        "implemented": false
+      }
+    ],
+    "status": "offline_ready"
+  }
+}

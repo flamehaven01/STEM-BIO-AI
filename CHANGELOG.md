@@ -10,6 +10,16 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.4.5] - 2026-04-30
+
+### Added
+- Added `stem_ai/provider_benchmark.py` for compact provider-packet and provider-response validation benchmark records.
+- Added `scripts/provider_packet_benchmark.py` to export provider-budgeted packets, packet stats, packet summaries, and optional saved response-validation records without making provider API calls.
+- Added `audits/benchmark-v1.4/` workspace documentation for provider response benchmark artifacts.
+- Added regression coverage for provider benchmark packet summaries and response-validation records.
+
+---
+
 ## [1.4.4] - 2026-04-30
 
 ### Added

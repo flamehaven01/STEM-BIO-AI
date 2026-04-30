@@ -1,0 +1,17 @@
+{
+  "schema_version": "stem-bio-ai-provider-response-benchmark-v1.4",
+  "record_count": 10,
+  "all_citation_allowlists_exact": true,
+  "max_packet_finding_count": 40,
+  "max_packet_bytes": 27992,
+  "total_omitted_findings": 1452,
+  "tiers": {
+    "T0 Rejected": 7,
+    "T1 Quarantine": 3
+  },
+  "replication_tiers": {
+    "R0": 6,
+    "R1": 3,
+    "R2": 1
+  }
+}

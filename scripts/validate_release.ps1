@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.4.4",
+    [string]$ExpectedVersion = "1.4.5",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -153,6 +153,18 @@ try {
         Assert-True ($response.ai_advisory.response_contract.network_called -eq $false) "response validator must not call network"
         Assert-True ($response.ai_advisory.response_contract.citation_repair_attempted -eq $false) "response validator must not repair citations"
         Assert-True ($response.ai_advisory.invalid_citations.Count -eq 0) "response validator has invalid citations"
+    }
+
+    Invoke-Step "provider benchmark exporter contract" {
+        $benchmarkDir = Join-Path $outDir "provider_benchmark"
+        python scripts\provider_packet_benchmark.py --out $benchmarkDir
+        Assert-True (Test-Path -LiteralPath (Join-Path $benchmarkDir "benchmark_manifest.json")) "provider benchmark manifest missing"
+        Assert-True (Test-Path -LiteralPath (Join-Path $benchmarkDir "packet_stats.jsonl")) "packet_stats.jsonl missing"
+        Assert-True (Test-Path -LiteralPath (Join-Path $benchmarkDir "packet_summary.json")) "packet_summary.json missing"
+        $summary = Get-Content -LiteralPath (Join-Path $benchmarkDir "packet_summary.json") -Raw | ConvertFrom-Json
+        Assert-True ($summary.record_count -gt 0) "provider benchmark should include records"
+        Assert-True ($summary.all_citation_allowlists_exact -eq $true) "citation allowlists should be exact"
+        Assert-True ($summary.max_packet_finding_count -le 40) "provider packets should be capped to 40 findings"
     }
 
     Invoke-Step "markdown and PDF artifacts exist" {

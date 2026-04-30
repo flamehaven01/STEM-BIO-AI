@@ -1,0 +1,923 @@
+{
+  "schema_version": "stem-ai-advisory-input-v1.4",
+  "packet_profile": "provider_budgeted",
+  "policy": {
+    "final_score_override": false,
+    "requires_finding_id_citations": true,
+    "raw_repo_text_allowed": false,
+    "clinical_claims_allowed": false
+  },
+  "target": {
+    "name": "FreedomIntelligence/OpenClaw-Medical-Skills",
+    "remote": "https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills",
+    "branch": "main",
+    "commit": "bbc8290fe18e2d9a0128fd78de96323533a48191",
+    "file_count": 5170
+  },
+  "score": {
+    "stage_1_readme_intent": 40,
+    "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
+    "stage_2_repo_local_consistency": 70,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_3_code_bio": 19,
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "risk_penalty": 0,
+    "raw_score_before_floor": 38,
+    "final_score": 38,
+    "formal_tier": "T0 Rejected",
+    "use_scope": "Do not rely on this repository without independent expert validation."
+  },
+  "classification": {
+    "clinical_adjacent": false,
+    "ca_severity": "none",
+    "t0_hard_floor": false,
+    "score_cap": null,
+    "has_explicit_clinical_boundary": false
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        "No direct credential patterns detected by local CLI scan."
+      ]
+    },
+    "C2_dependency_pinning": {
+      "status": "PASS",
+      "evidence": [
+        "Dependency manifest appears pinned or not present."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No deprecated patient-adjacent metadata patterns detected."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "WARN",
+      "evidence": [
+        "Fail-open exception pattern detected in code text."
+      ]
+    }
+  },
+  "detector_summary": {
+    "total_findings": 549,
+    "by_status": {
+      "not_detected": 16,
+      "detected": 526,
+      "absent": 6,
+      "not_applicable": 1
+    },
+    "by_detector": {
+      "S1_readme_bio_terms": {
+        "not_detected": 1
+      },
+      "S1_clinical_boundary": {
+        "not_detected": 1
+      },
+      "S3_T1_workflow_files": {
+        "detected": 1
+      },
+      "S3_T2_domain_tests": {
+        "not_detected": 1
+      },
+      "S3_T3_changelog_release_hygiene": {
+        "not_detected": 1
+      },
+      "S3_B1_dependency_manifest": {
+        "not_detected": 1
+      },
+      "S3_B2_bias_limitations": {
+        "not_detected": 1
+      },
+      "S3_B3_coi_funding": {
+        "not_detected": 1
+      },
+      "S2_package_bio_terms": {
+        "not_detected": 1
+      },
+      "C1_hardcoded_credentials": {
+        "not_detected": 1
+      },
+      "C2_dependency_pinning": {
+        "absent": 1
+      },
+      "C3_dead_or_deprecated_patient_adjacent_paths": {
+        "not_detected": 1
+      },
+      "C4_exception_handling_clinical_adjacent_paths": {
+        "not_detected": 1
+      },
+      "AST_file_limit": {
+        "not_applicable": 1
+      },
+      "AST_argparse_cli": {
+        "detected": 11
+      },
+      "AST_seed_setting": {
+        "detected": 16
+      },
+      "AST_fail_open_precision": {
+        "detected": 8
+      },
+      "AST_assertion_tests": {
+        "detected": 488
+      },
+      "S4_container_environment": {
+        "not_detected": 1
+      },
+      "S4_make_reproduce_target": {
+        "absent": 1
+      },
+      "S4_environment_lock_evidence": {
+        "not_detected": 1
+      },
+      "S4_exact_dependency_pins_or_hashes": {
+        "absent": 1
+      },
+      "S4_readme_reproducibility_section": {
+        "absent": 1
+      },
+      "S4_checksum_files": {
+        "not_detected": 1
+      },
+      "S4_dataset_url": {
+        "absent": 1
+      },
+      "S4_model_weight_url_or_checksum": {
+        "absent": 1
+      },
+      "S4_citation_cff": {
+        "not_detected": 1
+      },
+      "S4_cli_entrypoint": {
+        "detected": 1
+      },
+      "S4_seed_setting": {
+        "detected": 1
+      },
+      "S4_runnable_examples": {
+        "not_detected": 1
+      }
+    }
+  },
+  "reasoning_model": {
+    "version": "stem-bio-ai-reasoning-v1.3.2",
+    "policy": {
+      "mode": "diagnostic_only",
+      "final_score_override": false,
+      "uses_ai": false,
+      "weights": "uncalibrated_initial_priors_pending_benchmark_calibration"
+    },
+    "evidence_budget": {
+      "confidence": 0.38,
+      "required_bits": 0.6897,
+      "observed_bits": 8.2761,
+      "unique_token_count": 309,
+      "deficit": -7.5865,
+      "budget_deficit_max": 1.0,
+      "flagged": false,
+      "status": "supported",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "confidence_envelope": {
+      "confidence": 0.38,
+      "evidence_count": 549,
+      "lower": 0.3587,
+      "upper": 0.4013,
+      "margin": 0.0213,
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "lane_coherence": {
+      "stage_scores": {
+        "stage_1_readme_evidence": 0.4,
+        "stage_2_repo_local_consistency": 0.7,
+        "stage_3_code_bio": 0.19,
+        "stage_4_replication": 0.1
+      },
+      "pairs": [
+        {
+          "pair": "stage_1_readme_evidence:stage_3_code_bio",
+          "left": 0.4,
+          "right": 0.19,
+          "coherence": 0.79
+        },
+        {
+          "pair": "stage_3_code_bio:stage_4_replication",
+          "left": 0.19,
+          "right": 0.1,
+          "coherence": 0.91
+        }
+      ],
+      "overall": 0.85,
+      "status": "coherent",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "uncertainty_budget": {
+      "stage_std": 0.2308,
+      "manual_review_required_ratio": 0.0,
+      "error_ratio": 0.0,
+      "uncertainty": 0.3297,
+      "status": "review_advised",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "evidence_risk_gate": {
+      "components": {
+        "missing_required_boundary_ratio": 0.0,
+        "contradiction_ratio": 0.15,
+        "manual_review_required_ratio": 0.0,
+        "parse_error_ratio": 0.0
+      },
+      "evidence_risk": 0.045,
+      "risk_gate": 0.6,
+      "risk_gate_factor": 0.925,
+      "status": "within_gate",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "benchmark_alignment": null
+  },
+  "stage_4_rubric": {
+    "S4_container_environment": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_container_environment."
+    },
+    "S4_make_reproduce_target": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No Makefile detected."
+    },
+    "S4_environment_lock_evidence": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No environment, dependency, or lock manifest detected."
+    },
+    "S4_exact_dependency_pins_or_hashes": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No dependency manifest detected."
+    },
+    "S4_readme_reproducibility_section": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README detected."
+    },
+    "S4_checksum_files": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_checksum_files."
+    },
+    "S4_dataset_url": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README/docs files detected."
+    },
+    "S4_model_weight_url_or_checksum": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README/docs or checksum files detected."
+    },
+    "S4_citation_cff": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_citation_cff."
+    },
+    "S4_cli_entrypoint": {
+      "score": 5,
+      "max": 5,
+      "evidence": "CLI entry point or argparse interface detected."
+    },
+    "S4_seed_setting": {
+      "score": 5,
+      "max": 5,
+      "evidence": "Deterministic seed setting detected."
+    },
+    "S4_runnable_examples": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_runnable_examples."
+    },
+    "stage_4_raw_total": {
+      "score": 10,
+      "max": 100,
+      "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score."
+    }
+  },
+  "ast_signal_summary": {
+    "files_total": 1150,
+    "files_considered": 500,
+    "files_parsed": 500,
+    "files_skipped_size": 0,
+    "syntax_errors": 0,
+    "file_limit_exceeded": true,
+    "test_functions": 502,
+    "assertion_tests": 488,
+    "public_functions": 1675,
+    "docstring_functions": 1402,
+    "annotated_functions": 524,
+    "seed_settings": 16,
+    "argparse_cli": true,
+    "portable_model_loading": 0,
+    "fail_open_handlers": 8,
+    "docstring_coverage": 0.837,
+    "type_annotation_coverage": 0.3128
+  },
+  "allowed_finding_ids": [
+    "AST_fail_open_precision:skills/bio-clinical-databases-tumor-mutational-burden/examples/tmb_calculation.py:76:001",
+    "AST_fail_open_precision:skills/bio-comparative-genomics-positive-selection/examples/selection_analysis.py:113:001",
+    "AST_fail_open_precision:skills/bio-metabolomics-metabolite-annotation/examples/annotate_features.py:23:001",
+    "AST_fail_open_precision:skills/bio-workflows-metabolic-modeling-pipeline/examples/metabolic_modeling_workflow.py:89:001",
+    "AST_fail_open_precision:skills/biomaster-workflows/repo/agents/ToolAgent.py:70:001",
+    "AST_fail_open_precision:skills/biomcp-server/repo/src/biomcp/http_client.py:225:001",
+    "AST_fail_open_precision:skills/biomcp-server/repo/src/biomcp/openfda/drug_shortages.py:320:001",
+    "AST_fail_open_precision:skills/biomcp-server/repo/src/biomcp/openfda/drug_shortages_helpers.py:100:001",
+    "AST_argparse_cli:skills/antibody-design-agent/MAGE/repo/generate_antibodies.py:14:001",
+    "AST_argparse_cli:skills/arboreto/scripts/basic_grn_inference.py:67:001",
+    "AST_argparse_cli:skills/bayesian-optimizer/bayesian_optimization.py:104:001",
+    "AST_argparse_cli:skills/bio-alignment-filtering/examples/filter_bam.py:56:001",
+    "AST_argparse_cli:skills/bio-alignment-validation/examples/validate_alignment.py:92:001",
+    "AST_argparse_cli:skills/bio-bedgraph-handling/examples/bedgraph_operations.py:60:001",
+    "AST_argparse_cli:skills/bio-chipseq-qc/examples/chipseq_qc.py:33:001",
+    "AST_argparse_cli:skills/bio-clinical-databases-tumor-mutational-burden/examples/tmb_calculation.py:161:001",
+    "AST_argparse_cli:skills/bio-orchestrator/orchestrator.py:287:001",
+    "AST_argparse_cli:skills/bio-research-tools-biomarker-signature-studio/scripts/biomarker_signature_studio.py:90:001",
+    "AST_argparse_cli:skills/bio-sequence-similarity/examples/find_orthologs.py:42:001",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:41:001",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:86:002",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:132:003",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:196:004",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:257:005",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:322:006",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:365:007",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:413:008",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:443:009",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:473:010",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:506:011",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:33:001",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:51:002",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:67:003",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:85:004",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:101:005",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:118:006",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:141:007",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:154:008",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:172:009",
+    "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:198:010"
+  ],
+  "provider_prompt_contract": {
+    "response_format": "strict_json_object_only",
+    "max_reviewer_notes": 2,
+    "max_inspection_priorities": 2,
+    "citation_rule": "Each cites entry must be copied exactly from allowed_finding_ids.",
+    "forbidden_citations": [
+      "detector names",
+      "shortened finding IDs",
+      "file names",
+      "categories",
+      "uncited claims"
+    ],
+    "score_rule": "Do not modify or override final_score, formal_tier, replication_score, or replication_tier.",
+    "claim_boundary": "Do not make clinical safety, efficacy, regulatory, deployment, or medical-advice claims."
+  },
+  "evidence_ledger": [
+    {
+      "finding_id": "AST_fail_open_precision:skills/bio-clinical-databases-tumor-mutational-burden/examples/tmb_calculation.py:76:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/bio-clinical-databases-tumor-mutational-burden/examples/tmb_calculation.py",
+      "line": 76,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/bio-comparative-genomics-positive-selection/examples/selection_analysis.py:113:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/bio-comparative-genomics-positive-selection/examples/selection_analysis.py",
+      "line": 113,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/bio-metabolomics-metabolite-annotation/examples/annotate_features.py:23:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/bio-metabolomics-metabolite-annotation/examples/annotate_features.py",
+      "line": 23,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/bio-workflows-metabolic-modeling-pipeline/examples/metabolic_modeling_workflow.py:89:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/bio-workflows-metabolic-modeling-pipeline/examples/metabolic_modeling_workflow.py",
+      "line": 89,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/biomaster-workflows/repo/agents/ToolAgent.py:70:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/biomaster-workflows/repo/agents/ToolAgent.py",
+      "line": 70,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/biomcp-server/repo/src/biomcp/http_client.py:225:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/biomcp-server/repo/src/biomcp/http_client.py",
+      "line": 225,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/biomcp-server/repo/src/biomcp/openfda/drug_shortages.py:320:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/biomcp-server/repo/src/biomcp/openfda/drug_shortages.py",
+      "line": 320,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:skills/biomcp-server/repo/src/biomcp/openfda/drug_shortages_helpers.py:100:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "skills/biomcp-server/repo/src/biomcp/openfda/drug_shortages_helpers.py",
+      "line": 100,
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/antibody-design-agent/MAGE/repo/generate_antibodies.py:14:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/antibody-design-agent/MAGE/repo/generate_antibodies.py",
+      "line": 14,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/arboreto/scripts/basic_grn_inference.py:67:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/arboreto/scripts/basic_grn_inference.py",
+      "line": 67,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bayesian-optimizer/bayesian_optimization.py:104:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bayesian-optimizer/bayesian_optimization.py",
+      "line": 104,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-alignment-filtering/examples/filter_bam.py:56:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-alignment-filtering/examples/filter_bam.py",
+      "line": 56,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-alignment-validation/examples/validate_alignment.py:92:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-alignment-validation/examples/validate_alignment.py",
+      "line": 92,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-bedgraph-handling/examples/bedgraph_operations.py:60:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-bedgraph-handling/examples/bedgraph_operations.py",
+      "line": 60,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-chipseq-qc/examples/chipseq_qc.py:33:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-chipseq-qc/examples/chipseq_qc.py",
+      "line": 33,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-clinical-databases-tumor-mutational-burden/examples/tmb_calculation.py:161:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-clinical-databases-tumor-mutational-burden/examples/tmb_calculation.py",
+      "line": 161,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-orchestrator/orchestrator.py:287:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-orchestrator/orchestrator.py",
+      "line": 287,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-research-tools-biomarker-signature-studio/scripts/biomarker_signature_studio.py:90:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-research-tools-biomarker-signature-studio/scripts/biomarker_signature_studio.py",
+      "line": 90,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:skills/bio-sequence-similarity/examples/find_orthologs.py:42:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/bio-sequence-similarity/examples/find_orthologs.py",
+      "line": 42,
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:41:001",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 41,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:86:002",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 86,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:132:003",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 132,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:196:004",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 196,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:257:005",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 257,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:322:006",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 322,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:365:007",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 365,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:413:008",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 413,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:443:009",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 443,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:473:010",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 473,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py:506:011",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_oncokb_integration.py",
+      "line": 506,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:33:001",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 33,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:51:002",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 51,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:67:003",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 67,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:85:004",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 85,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:101:005",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 101,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:118:006",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 118,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:141:007",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 141,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:154:008",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 154,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:172:009",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 172,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:skills/biomcp-server/repo/tests/integration/test_openfda_integration.py:198:010",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.4.5",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "skills/biomcp-server/repo/tests/integration/test_openfda_integration.py",
+      "line": 198,
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected."
+    }
+  ],
+  "omitted_finding_count": 509,
+  "provider_request": {
+    "provider": "none",
+    "model": null,
+    "base_url": null,
+    "api_key_present": false,
+    "timeout_sec": 60,
+    "max_tokens": 2048,
+    "runtime": null,
+    "registry": [
+      {
+        "provider": "none",
+        "provider_class": "offline_stub",
+        "network_required": false,
+        "implemented": true
+      },
+      {
+        "provider": "openai",
+        "provider_class": "cloud_native",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "anthropic",
+        "provider_class": "cloud_native",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "gemini",
+        "provider_class": "cloud_native",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "openai_compatible",
+        "provider_class": "openai_compatible",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "ollama",
+        "provider_class": "local_server",
+        "network_required": true,
+        "implemented": false
+      },
+      {
+        "provider": "local_runtime",
+        "provider_class": "local_runtime",
+        "network_required": false,
+        "implemented": false
+      }
+    ],
+    "status": "offline_ready"
+  }
+}
