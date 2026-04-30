@@ -10,6 +10,17 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.3.1] - 2026-04-30
+
+### Fixed
+- Improved local-10 benchmark alignment by detecting clinical-adjacent skill-catalog surfaces such as AutoDock, nnU-Net, pydicom, drug docking, and medical imaging.
+- Excluded obvious placeholder/test credential values from the C1 penalty while keeping them visible in the evidence ledger as non-applicable evidence.
+
+### Added
+- Added local-10 control benchmark summaries and before/after comparison artifacts for the CA/C1 precision patch.
+
+---
+
 ## [1.3.0] - 2026-04-30
 
 ### Added
@@ -31,7 +42,6 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Improved AST detection for direct `ArgumentParser()` imports and mock-style assertion calls.
 - Removed duplicated detector constants from scanner internals by centralizing shared patterns.
 - Reduced nested complexity in explain rendering, AST visiting, dependency-pinning detection, and fallback PDF page-stream generation; local slop scan reports all Python files clean.
-- Improved local-10 benchmark alignment by detecting clinical-adjacent skill-catalog surfaces such as AutoDock, nnU-Net, pydicom, drug docking, and medical imaging, and by excluding obvious placeholder/test credential values from the C1 penalty while keeping them visible in the evidence ledger.
 
 ---
 

@@ -44,7 +44,7 @@ def collect_stage4_findings(
     rubric["stage_4_raw_total"] = {
         "score": raw_total,
         "max": 100,
-        "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0.",
+        "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score.",
     }
     return raw_total, replication_tier(raw_total), rubric
 
