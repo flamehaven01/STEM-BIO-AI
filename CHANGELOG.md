@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.4.4] - 2026-04-30
+
+### Added
+- Added provider-budgeted advisory packets capped to 40 ranked evidence findings for practical Gemini/Qwen-style context budgets.
+- Added `allowed_finding_ids` to advisory input packets so providers can copy exact citation IDs instead of shortening detector names.
+- Added `provider_prompt_contract` guidance documenting strict JSON output, exact citation-copying, no score override, and clinical/regulatory claim boundaries.
+- Added regression and release validation coverage for deterministic provider packet budgets and citation allowlists.
+
+### Changed
+- `--advisory packet` now emits the provider-budgeted packet profile by default while preserving full audit JSON separately.
+
+---
+
 ## [1.4.3] - 2026-04-30
 
 ### Added

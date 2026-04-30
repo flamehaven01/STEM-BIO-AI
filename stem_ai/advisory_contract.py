@@ -8,6 +8,7 @@ from typing import Any
 
 ADVISORY_SCHEMA_VERSION = "stem-ai-advisory-v1.4"
 MAX_ADVISORY_FINDINGS = 200
+MAX_PROVIDER_ADVISORY_FINDINGS = 40
 
 _SEVERITY_RANK = {"error": 0, "warn": 1, "info": 2}
 _STATUS_RANK = {
@@ -41,21 +42,17 @@ def cited_finding_ids(advisory: dict[str, Any]) -> set[str]:
     return cited
 
 
-def build_advisory_input(result: dict[str, Any]) -> dict[str, Any]:
+def build_advisory_input(
+    result: dict[str, Any],
+    max_findings: int = MAX_ADVISORY_FINDINGS,
+    packet_profile: str = "full",
+) -> dict[str, Any]:
     """Build a deterministic, bounded packet for future AI advisory adapters."""
-    findings = sorted(
-        result.get("evidence_ledger", []),
-        key=lambda item: (
-            _SEVERITY_RANK.get(str(item.get("severity", "")).lower(), 9),
-            _STATUS_RANK.get(str(item.get("status", "")).lower(), 9),
-            str(item.get("detector", "")),
-            str(item.get("file", "")),
-            int(item.get("line", 0) or 0),
-            str(item.get("finding_id", "")),
-        ),
-    )[:MAX_ADVISORY_FINDINGS]
+    findings = _ranked_findings(result)[:max_findings]
+    advisory_findings = [_advisory_finding(finding) for finding in findings]
     return {
         "schema_version": "stem-ai-advisory-input-v1.4",
+        "packet_profile": packet_profile,
         "policy": _policy(),
         "target": {
             "name": result.get("target", {}).get("name"),
@@ -71,9 +68,37 @@ def build_advisory_input(result: dict[str, Any]) -> dict[str, Any]:
         "reasoning_model": result.get("reasoning_model", {}),
         "stage_4_rubric": result.get("stage_4_rubric", {}),
         "ast_signal_summary": result.get("ast_signal_summary", {}),
-        "evidence_ledger": [_advisory_finding(finding) for finding in findings],
+        "allowed_finding_ids": [str(finding["finding_id"]) for finding in advisory_findings],
+        "provider_prompt_contract": _provider_prompt_contract(),
+        "evidence_ledger": advisory_findings,
         "omitted_finding_count": max(0, len(result.get("evidence_ledger", [])) - len(findings)),
     }
+
+
+def build_provider_advisory_input(
+    result: dict[str, Any],
+    max_findings: int = MAX_PROVIDER_ADVISORY_FINDINGS,
+) -> dict[str, Any]:
+    """Build a smaller provider-facing packet tuned for real LLM context budgets."""
+    return build_advisory_input(
+        result,
+        max_findings=max_findings,
+        packet_profile="provider_budgeted",
+    )
+
+
+def _ranked_findings(result: dict[str, Any]) -> list[dict[str, Any]]:
+    return sorted(
+        result.get("evidence_ledger", []),
+        key=lambda item: (
+            _SEVERITY_RANK.get(str(item.get("severity", "")).lower(), 9),
+            _STATUS_RANK.get(str(item.get("status", "")).lower(), 9),
+            str(item.get("detector", "")),
+            str(item.get("file", "")),
+            int(item.get("line", 0) or 0),
+            str(item.get("finding_id", "")),
+        ),
+    )
 
 
 def validate_advisory_output(result: dict[str, Any], advisory: dict[str, Any]) -> dict[str, Any]:
@@ -237,4 +262,22 @@ def _policy() -> dict[str, bool]:
         "requires_finding_id_citations": True,
         "raw_repo_text_allowed": False,
         "clinical_claims_allowed": False,
+    }
+
+
+def _provider_prompt_contract() -> dict[str, Any]:
+    return {
+        "response_format": "strict_json_object_only",
+        "max_reviewer_notes": 2,
+        "max_inspection_priorities": 2,
+        "citation_rule": "Each cites entry must be copied exactly from allowed_finding_ids.",
+        "forbidden_citations": [
+            "detector names",
+            "shortened finding IDs",
+            "file names",
+            "categories",
+            "uncited claims",
+        ],
+        "score_rule": "Do not modify or override final_score, formal_tier, replication_score, or replication_tier.",
+        "claim_boundary": "Do not make clinical safety, efficacy, regulatory, deployment, or medical-advice claims.",
     }

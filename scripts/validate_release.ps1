@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.4.3",
+    [string]$ExpectedVersion = "1.4.4",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -117,6 +117,11 @@ try {
         Assert-True ($packet.provider_request.provider -eq "none") "default provider should be none"
         Assert-True ($packet.provider_request.registry.Count -ge 7) "provider registry too small"
         Assert-True ($null -ne $packet.evidence_ledger -and $packet.evidence_ledger.Count -gt 0) "packet evidence ledger missing"
+        Assert-True ($packet.packet_profile -eq "provider_budgeted") "packet profile should be provider_budgeted"
+        Assert-True ($packet.evidence_ledger.Count -le 40) "provider packet should be capped to 40 findings"
+        Assert-True ($packet.allowed_finding_ids.Count -eq $packet.evidence_ledger.Count) "allowed_finding_ids count mismatch"
+        Assert-True ($null -ne $packet.provider_prompt_contract) "provider_prompt_contract missing"
+        Assert-True ([string]$packet.provider_prompt_contract.citation_rule -match "allowed_finding_ids") "citation rule must mention allowed_finding_ids"
         $packetText = Get-Content -LiteralPath $packetFiles[0].FullName -Raw
         Assert-True (-not $packetText.Contains('"snippet"')) "packet must not include raw snippets"
     }

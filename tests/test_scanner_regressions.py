@@ -6,6 +6,7 @@ import json
 import stem_ai.detectors as detectors
 from stem_ai.advisory_contract import (
     build_advisory_input,
+    build_provider_advisory_input,
     known_finding_ids,
     validate_advisory_output,
 )
@@ -484,6 +485,8 @@ def test_advisory_input_omits_raw_repo_snippets_by_default(tmp_path: Path) -> No
     assert "snippet" not in serialized
     assert sentinel not in serialized
     assert packet["evidence_ledger"]
+    assert packet["allowed_finding_ids"] == [f["finding_id"] for f in packet["evidence_ledger"]]
+    assert packet["provider_prompt_contract"]["citation_rule"].startswith("Each cites entry")
 
 
 def test_advisory_validation_rejects_unknown_citation_and_missing_cites(tmp_path: Path) -> None:
@@ -583,9 +586,12 @@ def test_advisory_packet_mode_adds_provider_request_without_ai_output(tmp_path: 
 
     assert "ai_advisory" not in result
     assert packet["schema_version"] == "stem-ai-advisory-input-v1.4"
+    assert packet["packet_profile"] == "provider_budgeted"
     assert packet["provider_request"]["provider"] == "none"
     assert packet["provider_request"]["status"] == "offline_ready"
     assert packet["evidence_ledger"]
+    assert len(packet["evidence_ledger"]) <= 40
+    assert packet["allowed_finding_ids"] == [f["finding_id"] for f in packet["evidence_ledger"]]
 
 
 def test_cli_advisory_packet_writes_standalone_input_packet(tmp_path: Path) -> None:
@@ -599,6 +605,24 @@ def test_cli_advisory_packet_writes_standalone_input_packet(tmp_path: Path) -> N
     packet = json.loads(packet_path.read_text(encoding="utf-8"))
     assert packet["policy"]["requires_finding_id_citations"] is True
     assert packet["provider_request"]["registry"]
+    assert packet["packet_profile"] == "provider_budgeted"
+    assert len(packet["evidence_ledger"]) <= 40
+
+
+def test_provider_advisory_input_budget_and_allowed_ids_are_deterministic(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(tmp_path / "requirements.txt", "\n".join(f"dep{i}>=1.0" for i in range(60)))
+    result = audit_repository(tmp_path)
+
+    packet_a = build_provider_advisory_input(result)
+    packet_b = build_provider_advisory_input(result)
+
+    assert packet_a == packet_b
+    assert packet_a["packet_profile"] == "provider_budgeted"
+    assert len(packet_a["evidence_ledger"]) <= 40
+    assert packet_a["omitted_finding_count"] > 0
+    assert packet_a["allowed_finding_ids"] == [finding["finding_id"] for finding in packet_a["evidence_ledger"]]
+    assert "shortened finding IDs" in packet_a["provider_prompt_contract"]["forbidden_citations"]
 
 
 def test_advisory_response_file_validates_provider_json_without_network(tmp_path: Path) -> None:
