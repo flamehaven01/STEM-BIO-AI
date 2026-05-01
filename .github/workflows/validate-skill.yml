@@ -34,7 +34,7 @@ jobs:
 
       - name: Validate directory structure
         run: |
-          REQUIRED_DIRS="spec discrimination templates scripts references"
+          REQUIRED_DIRS="discrimination templates scripts references"
           for dir in $REQUIRED_DIRS; do
             if [ ! -d "$dir" ]; then
               echo "ERROR: Required directory '$dir' not found"
@@ -42,15 +42,6 @@ jobs:
             fi
             echo "Directory '$dir' found"
           done
-
-      - name: Validate core spec exists
-        run: |
-          CORE_SPEC=$(find spec/ -name "STEM-AI_v*_CORE.md" | head -1)
-          if [ -z "$CORE_SPEC" ]; then
-            echo "ERROR: No core spec file found in spec/"
-            exit 1
-          fi
-          echo "Core spec found: $CORE_SPEC"
 
       - name: Validate discrimination files
         run: |

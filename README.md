@@ -102,6 +102,33 @@ Stage 4 is reported as `replication_score` / `replication_tier` and does **not**
 
 ---
 
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Target repository] --> B[LOCAL_ANALYSIS scanner]
+    B --> C[Stage 1\nREADME evidence]
+    B --> D[Stage 2R\nRepo-local consistency]
+    B --> E[Stage 3\nCode/bio responsibility]
+    B --> F[Stage 4\nReplication lane]
+    B --> K[C1–C4\nCode integrity]
+    C --> G[Weighted evidence score]
+    D --> G
+    E --> G
+    K --> G
+    F --> H[replication_score / tier]
+    G --> I[JSON result]
+    H --> I
+    I --> L[Evidence ledger]
+    I --> M[Explain trace]
+    G --> N[Markdown report]
+    G --> O[PDF packet]
+```
+
+Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem_ai/detectors.py`, `stem_ai/detector_surface.py`, `stem_ai/detector_ast.py`, `stem_ai/detector_stage4.py`, `stem_ai/evidence.py`, `stem_ai/app.py`
+
+---
+
 ## Output Artifacts
 
 Each run writes to `--out DIR` (default: `stem_output/`).
@@ -219,33 +246,6 @@ Run locally:
 pip install -e .[demo]
 python app.py
 ```
-
----
-
-## Architecture
-
-```mermaid
-flowchart LR
-    A[Target repository] --> B[LOCAL_ANALYSIS scanner]
-    B --> C[Stage 1\nREADME evidence]
-    B --> D[Stage 2R\nRepo-local consistency]
-    B --> E[Stage 3\nCode/bio responsibility]
-    B --> F[Stage 4\nReplication lane]
-    B --> K[C1–C4\nCode integrity]
-    C --> G[Weighted evidence score]
-    D --> G
-    E --> G
-    K --> G
-    F --> H[replication_score / tier]
-    G --> I[JSON result]
-    H --> I
-    I --> L[Evidence ledger]
-    I --> M[Explain trace]
-    G --> N[Markdown report]
-    G --> O[PDF packet]
-```
-
-Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem_ai/detectors.py`, `stem_ai/detector_surface.py`, `stem_ai/detector_ast.py`, `stem_ai/detector_stage4.py`, `stem_ai/evidence.py`, `stem_ai/app.py`
 
 ---
 
