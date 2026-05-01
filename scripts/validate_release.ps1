@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.5.0",
+    [string]$ExpectedVersion = "1.5.1",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -48,7 +48,9 @@ try {
     }
 
     Invoke-Step "package build" {
-        python -m build --no-isolation
+        python scripts\build_stdlib_package.py
+        Assert-True (Test-Path -LiteralPath (Join-Path $repoRoot "dist\stem_ai-$ExpectedVersion-py3-none-any.whl")) "Wheel artifact missing"
+        Assert-True (Test-Path -LiteralPath (Join-Path $repoRoot "dist\stem_ai-$ExpectedVersion.tar.gz")) "sdist artifact missing"
     }
 
     Invoke-Step "local audit artifacts with --explain" {

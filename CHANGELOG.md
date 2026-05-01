@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.1] - 2026-05-01
+
+### Changed
+- Promoted the active MICA memory layer to v1.5.1 snapshots and updated `memory/mica.yaml` to load the current archive, playbook, and lessons files.
+- Updated release metadata, README badge/citation, and release validation defaults from v1.5.0 to v1.5.1.
+
+### Added
+- Added v1.5.1 memory provenance entries covering the post-v1.5.0 memory alignment commit and current release metadata.
+- Added `MANIFEST.in` to bound source-distribution inputs and exclude generated audit/build/temp artifacts from release packaging.
+- Added a stdlib package-build path used by release validation to avoid local setuptools frontend hangs in Python 3.14 environments.
+
+---
+
 ## [1.5.0] - 2026-04-30
 
 ### Added

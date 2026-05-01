@@ -1,0 +1,23 @@
+include CHANGELOG.md
+include CONTRIBUTING.md
+include LICENSE
+include README.md
+include pyproject.toml
+include requirements.txt
+
+recursive-include stem_ai *.py
+recursive-include tests *.py
+
+prune .git
+prune .github
+prune .pytest_cache
+prune __pycache__
+prune audits
+prune build
+prune dist
+prune tmp
+prune stem_output*
+prune stem_ai.egg-info
+
+global-exclude *.py[cod]
+global-exclude __pycache__
