@@ -238,6 +238,10 @@ Full contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
 
 Live demo: [huggingface.co/spaces/Flamehaven/stem-bio-ai](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
+<p align="center">
+  <img src="docs/assets/HF-STEM-BIO_AI.png" alt="STEM BIO-AI Hugging Face Space" width="760">
+</p>
+
 The Space runs the same deterministic local scanner on public GitHub repositories. No provider API call is made.
 
 Run locally:
