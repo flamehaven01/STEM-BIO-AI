@@ -44,3 +44,6 @@ EXACT_PINNED_DEP = re.compile(r"(^|[A-Za-z0-9_.\-\]\)])\s*(==|===|@)\s*[^,\s;]+|
 LOOSE_DEP = re.compile(r"(>=|<=|~=|!=|>|<)")
 PATIENT_METADATA = re.compile(r"(patient_|patient age|patient_sex|sample_id|collection_date|pregnan|municipality|lab_id)", re.I)
 FAIL_OPEN = re.compile(r"(except(?:\s+Exception)?\s*:\s*(?:\r?\n\s*)?(?:pass|return\s+True))")
+CHANGELOG_BUG_TERMS = re.compile(r"\b(fix(?:ed|es)?|bug|patch|regression|hotfix|breaking change|security|vulnerability|CVE)\b", re.I)
+DATA_SOURCE_TERMS = re.compile(r"\b(IRB|institutional review board|data source|data availability|zenodo|figshare|GEO|SRA|PhysioNet|MIMIC|ClinicalTrials|dataset citation|download.*dataset)\b", re.I)
+BIAS_MEASUREMENT_TERMS = re.compile(r"\b(subgroup analysis|demographic parity|equalized odds|disparate impact|per[- ]subgroup|cohort validation|AUROC|AUC score|performance gap|calibration curve|Brier score|tested on [0-9]+ patient)\b", re.I)

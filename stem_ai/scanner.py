@@ -15,8 +15,11 @@ from .advisory_response import validate_advisory_response_file
 from .detectors import collect_evidence_bundle
 from .patterns import (
     BIAS_LIMITATION_TERMS,
+    BIAS_MEASUREMENT_TERMS,
     BIO_TERMS,
+    CHANGELOG_BUG_TERMS,
     COI_FUNDING_TERMS,
+    DATA_SOURCE_TERMS,
     DEMOGRAPHIC_BIAS_TERMS,
     DISCLAIMER_TERMS,
     EXACT_PINNED_DEP,
@@ -96,7 +99,7 @@ def audit_repository(
         clinical_adjacent,
         has_disclaimer,
     )
-    stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text)
+    stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text, changelog_text)
     code_integrity = _code_integrity(target, dep_text, code_text)
     evidence_ledger, ast_signal_summary, stage_4 = collect_evidence_bundle(target)
 
@@ -323,15 +326,19 @@ def _unsupported_workflow_claim(readme: str, docs_text: str, package_text: str, 
     return claimed and not supported
 
 
-def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str, test_text: str, dep_text: str) -> tuple[int, dict[str, Any]]:
+def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str, test_text: str, dep_text: str, changelog_text: str = "") -> tuple[int, dict[str, Any]]:
     ci = 15 if workflow_text else 0
     normalized_test_text = test_text.replace("_", " ")
     tests = 15 if test_text and BIO_TERMS.search(normalized_test_text) else 8 if test_text else 0
+
     changelog_path = next((p for p in [target / "CHANGELOG.md", target / "CHANGELOG", target / "NEWS.md"] if p.exists()), None)
-    changelog = 15 if changelog_path else 0
-    provenance = 15 if dep_text else 0
+    changelog, changelog_evidence = _score_changelog(changelog_path, changelog_text)
+
+    provenance, provenance_evidence = _score_provenance(dep_text, readme, docs_text)
+
     bias_text = "\n".join([readme, docs_text])
-    bias = 15 if BIAS_LIMITATION_TERMS.search(bias_text) else 0
+    bias, bias_evidence = _score_bias(bias_text, test_text)
+
     coi_text = "\n".join([readme, docs_text, _read_first(target, ["FUNDING.md", "CITATION.cff", "AUTHORS.md"])])
     coi = 5 if COI_FUNDING_TERMS.search(coi_text) else 0
     raw_score = ci + tests + changelog + provenance + bias + coi
@@ -340,13 +347,39 @@ def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str
     rubric = {
         "T1_CI_CD": {"score": ci, "max": 15, "evidence": "Workflow files detected." if ci else "No workflow files detected."},
         "T2_domain_tests": {"score": tests, "max": 15, "evidence": "Domain-specific test text detected." if tests == 15 else "Tests present but domain specificity is limited." if tests else "No tests detected."},
-        "T3_changelog_release_hygiene": {"score": changelog, "max": 15, "evidence": str(changelog_path.name) if changelog_path else "No changelog detected."},
-        "B1_data_provenance_controls": {"score": provenance, "max": 15, "evidence": "Dependency/provenance manifest detected." if provenance else "No dependency/provenance manifest detected."},
-        "B2_bias_limitations": {"score": bias, "max": 15, "evidence": "Bias, limitation, or validation-boundary language detected." if bias else "No bias/limitations language detected by local CLI scan."},
+        "T3_changelog_release_hygiene": {"score": changelog, "max": 15, "evidence": changelog_evidence},
+        "B1_data_provenance_controls": {"score": provenance, "max": 15, "evidence": provenance_evidence},
+        "B2_bias_limitations": {"score": bias, "max": 15, "evidence": bias_evidence},
         "B3_coi_funding": {"score": coi, "max": 5, "evidence": "COI, funding, sponsor, or acknowledgement language detected." if coi else "No COI/funding disclosure detected by local CLI scan."},
         "stage_3_raw_total": {"score": raw_score, "max": raw_max, "evidence": "Raw rubric total before normalization to 100."},
     }
     return _clamp(score), rubric
+
+
+def _score_changelog(changelog_path: Path | None, changelog_text: str) -> tuple[int, str]:
+    if not changelog_path:
+        return 0, "No changelog detected."
+    text = changelog_text or _read_text(changelog_path)
+    if CHANGELOG_BUG_TERMS.search(text):
+        return 15, f"{changelog_path.name} contains bug-fix, patch, or security entries."
+    return 5, f"{changelog_path.name} exists but no bug-fix or patch entries detected."
+
+
+def _score_provenance(dep_text: str, readme: str, docs_text: str) -> tuple[int, str]:
+    if not dep_text:
+        return 0, "No dependency/provenance manifest detected."
+    surface = "\n".join([readme, docs_text])
+    if DATA_SOURCE_TERMS.search(surface):
+        return 15, "Dependency manifest detected with data source, IRB, or dataset citation language."
+    return 10, "Dependency manifest detected; no explicit data source or IRB citation found."
+
+
+def _score_bias(bias_text: str, test_text: str) -> tuple[int, str]:
+    if not BIAS_LIMITATION_TERMS.search(bias_text):
+        return 0, "No bias/limitations language detected by local CLI scan."
+    if BIAS_MEASUREMENT_TERMS.search(bias_text) or (test_text and BIAS_LIMITATION_TERMS.search(test_text)):
+        return 15, "Bias/limitations language with measurement evidence or test coverage detected."
+    return 8, "Bias/limitations language detected; no quantitative measurement evidence found."
 
 
 def _code_integrity(target: Path, dep_text: str, code_text: str) -> dict[str, Any]:

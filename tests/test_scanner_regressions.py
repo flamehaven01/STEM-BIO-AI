@@ -29,7 +29,7 @@ from stem_ai.reasoning_model import (
     unique_token_count,
 )
 from stem_ai.render import _explain_status_label, render_explain, render_markdown
-from stem_ai.scanner import _score_stage_2r, audit_repository
+from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
 
 
 def _write(path: Path, text: str) -> None:
@@ -75,12 +75,14 @@ def test_stage_3_full_rubric_can_reach_100(tmp_path: Path) -> None:
         tmp_path / "README.md",
         "Bioinformatics repository for viral genome analysis.\n"
         "Limitations and validation boundaries are documented.\n"
+        "Subgroup analysis shows performance gap across demographic groups.\n"
+        "Data availability: dataset deposited on Zenodo. IRB approved.\n"
         "Funding and competing interest disclosures are provided.\n",
     )
     _write(tmp_path / "requirements.txt", "numpy==1.26.4\n")
     _write(tmp_path / ".github" / "workflows" / "ci.yml", "name: test\n")
     _write(tmp_path / "tests" / "test_domain.py", "def test_viral_genome_variant_pipeline(): pass\n")
-    _write(tmp_path / "CHANGELOG.md", "# Changelog\n")
+    _write(tmp_path / "CHANGELOG.md", "# Changelog\n\n## v1.0.1\n- Fixed bug in variant calling pipeline.\n")
 
     result = audit_repository(tmp_path)
 
@@ -972,3 +974,37 @@ def test_stage2r_workflow_claim_with_code_surface_is_not_penalized() -> None:
 
     assert score == 60
     assert "R2R_D4_unsupported_workflow_claim" not in rubric
+
+
+def test_stage3_changelog_three_tiers(tmp_path: Path) -> None:
+    no_changelog, _ = _score_changelog(None, "")
+    bare_path = tmp_path / "CHANGELOG.md"
+    bare_path.write_text("# Changelog\n", encoding="utf-8")
+    bare_score, _ = _score_changelog(bare_path, "# Changelog")
+    bug_path = tmp_path / "CHANGELOG_bugs.md"
+    bug_path.write_text("# Changelog\n\n## v1.0.1\n- Fixed bug in pipeline.\n", encoding="utf-8")
+    bug_score, _ = _score_changelog(bug_path, "# Changelog\n\n## v1.0.1\n- Fixed bug in pipeline.")
+
+    assert no_changelog == 0
+    assert bare_score == 5
+    assert bug_score == 15
+
+
+def test_stage3_provenance_three_tiers() -> None:
+    no_dep, _ = _score_provenance("", "", "")
+    basic, _ = _score_provenance("numpy==1.26.4", "Bioinformatics repo.", "")
+    with_source, _ = _score_provenance("numpy==1.26.4", "Data from Zenodo. IRB approved.", "")
+
+    assert no_dep == 0
+    assert basic == 10
+    assert with_source == 15
+
+
+def test_stage3_bias_three_tiers() -> None:
+    no_bias, _ = _score_bias("No relevant language here.", "")
+    vocab_only, _ = _score_bias("Model has known limitations in edge cases.", "")
+    with_measurement, _ = _score_bias("Model has known limitations. Subgroup analysis shows performance gap.", "")
+
+    assert no_bias == 0
+    assert vocab_only == 8
+    assert with_measurement == 15
