@@ -1,2 +1,2 @@
-gradio>=5.0,<6
+gradio==5.29.0
 reportlab>=4.0
