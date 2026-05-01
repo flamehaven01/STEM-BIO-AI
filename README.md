@@ -1,7 +1,7 @@
 # STEM BIO-AI
 
 <p align="center">
-  <img src="docs/assets/logo.png" alt="STEM BIO-AI logo" width="520">
+  <img src="docs/assets/logo.png" alt="STEM BIO-AI logo" width="390">
 </p>
 
 <p align="center">
