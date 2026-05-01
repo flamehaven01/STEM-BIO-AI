@@ -183,90 +183,76 @@ def run_demo(repo_url: str, level: int):
 
 _CSS = """
 .hero {
-  padding: 28px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #10233f 0%, #17616f 52%, #d7a84a 100%);
+  padding: 28px 32px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #10233f 0%, #17616f 55%, #d7a84a 100%);
   color: white;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
-.hero h1 { font-size: 42px; line-height: 1.05; margin: 0 0 10px; }
-.hero p { font-size: 17px; max-width: 820px; margin: 0; }
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-  margin: 20px 0;
-}
-.info-card {
-  border: 1px solid #dde6ef;
-  border-radius: 14px;
-  padding: 16px;
-  background: #ffffff;
-  color: #111827;
-  min-height: 132px;
-  box-shadow: 0 8px 24px rgba(16, 35, 63, 0.08);
-}
-.info-card b {
-  color: #0f172a;
-  display: block;
-  font-size: 15px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-.info-card span {
-  color: #1f2937;
-  font-size: 14px;
-  line-height: 1.45;
-}
-.info-card .cli-command {
-  background: #dbeafe;
-  border: 1px solid #93c5fd;
-  border-radius: 7px;
-  color: #0f172a;
-  display: inline-block;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 13px;
-  font-weight: 800;
-  margin: 3px 0;
-  padding: 3px 7px;
-}
+.hero h1 { font-size: 40px; line-height: 1.05; margin: 0 0 10px; font-weight: 800; }
+.hero p  { font-size: 16px; max-width: 820px; margin: 0; opacity: 0.92; line-height: 1.6; }
 """
+
+_CARD_STYLE = (
+    "border:1px solid #dde6ef;border-radius:13px;padding:18px 20px;"
+    "background:#ffffff;box-shadow:0 4px 18px rgba(16,35,63,0.08);"
+    "display:flex;flex-direction:column;gap:8px;"
+)
+_CARD_TITLE = (
+    "font-size:12px;font-weight:800;text-transform:uppercase;"
+    "letter-spacing:0.06em;color:#10233f;margin:0;"
+)
+_CARD_BODY = "font-size:13.5px;color:#374151;line-height:1.55;margin:0;"
+_CODE_PILL = (
+    "display:inline-block;background:#dbeafe;border:1px solid #93c5fd;"
+    "border-radius:6px;padding:2px 8px;font-family:ui-monospace,monospace;"
+    "font-size:12.5px;font-weight:700;color:#1e40af;"
+)
 
 with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5", css=_CSS) as demo:
     gr.HTML(
         """
         <div class="hero">
-          <h1>STEM BIO-AI <span style="font-size:22px;font-weight:400;opacity:0.75">v1.5.5</span></h1>
+          <h1>STEM BIO-AI <span style="font-size:20px;font-weight:400;opacity:0.7">v1.5.5</span></h1>
           <p>Deterministic evidence-surface scanner for bio/medical AI repositories.
-          No LLM. No API key. No model runtime.
-          Clone a public GitHub repo, inspect its observable evidence surface (README, docs, CI,
-          tests, changelogs, dependency manifests), and return a scored T0–T4 triage tier with
-          full JSON, Markdown, and PDF artifacts.</p>
+          No LLM &nbsp;·&nbsp; No API key &nbsp;·&nbsp; No model runtime &nbsp;·&nbsp; No secrets sent anywhere.<br>
+          Scans README, docs, CI, tests, changelogs, and manifests — returns a T0–T4 triage tier
+          with JSON, Markdown, and PDF artifacts.</p>
         </div>
         """
     )
     gr.HTML(
-        """
-        <div class="info-grid">
-          <div class="info-card"><b>No API key required</b>
-          <span>Clones a public GitHub repository and runs a fully deterministic local scanner.
-          Does not call OpenAI, Anthropic, GitHub API, or any external service.</span></div>
-
-          <div class="info-card"><b>What STEM scans</b>
-          <span>Stage 1: README hype/responsibility signals (H1–H6 penalties, R1–R5 credits).
-          Stage 2R: repo-local consistency. Stage 3: CI, domain tests, changelog hygiene,
-          data provenance, bias measurement. Stage 4: replication evidence lane.</span></div>
-
-          <div class="info-card"><b>Triage tiers</b>
-          <span>T0 Rejected · T1 Quarantine · T2 Caution · T3 Supervised ·
-          T4 Candidate. Clinical-adjacent repos without a disclaimer are hard-capped at T2.
-          A T4 score is not a clinical safety rating.</span></div>
-
-          <div class="info-card"><b>Local CLI</b>
-          <span>Use <code class="cli-command">stem &lt;folder&gt; --level 3 --format all --explain</code>
-          locally to generate downloadable JSON, Markdown, PDF, and proof-trace artifacts.</span></div>
+        f"""
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:4px 0 22px;">
+          <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">No API key required</p>
+            <p style="{_CARD_BODY}">Clones a public GitHub repository and runs a fully
+            deterministic local scanner. Does not call OpenAI, Anthropic,
+            GitHub API, or any external service.</p>
+          </div>
+          <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">What STEM scans</p>
+            <p style="{_CARD_BODY}">
+              <b>S1</b> README hype/responsibility (H1–H6 penalties, R1–R5 credits) &nbsp;
+              <b>S2R</b> Repo-local consistency &nbsp;
+              <b>S3</b> CI · tests · changelog hygiene · data provenance · bias measurement &nbsp;
+              <b>S4</b> Replication evidence lane
+            </p>
+          </div>
+          <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">Triage tiers</p>
+            <p style="{_CARD_BODY}">
+              <b>T0</b> Rejected &nbsp;<b>T1</b> Quarantine &nbsp;<b>T2</b> Caution<br>
+              <b>T3</b> Supervised &nbsp;<b>T4</b> Candidate<br>
+              <span style="color:#6b7280;font-size:12.5px;">Clinical-adjacent repos without a disclaimer
+              are hard-capped at T2. T4 is not a clinical safety rating.</span>
+            </p>
+          </div>
+          <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">Local CLI</p>
+            <p style="{_CARD_BODY}">Run locally for downloadable artifacts:</p>
+            <code style="{_CODE_PILL}">stem &lt;folder&gt; --level 3 --format all --explain</code>
+          </div>
         </div>
         """
     )
