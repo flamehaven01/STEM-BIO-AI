@@ -50,12 +50,40 @@ def _finding_cards(result: dict) -> str:
     score = result["score"]
     classification = result["classification"]
     integrity = result["code_integrity"]
+    s3 = result.get("stage_3_rubric", {})
+
+    # Stage scores
+    stage_lines = [
+        "| Stage | Score |",
+        "|-------|------:|",
+        f"| Stage 1 README Evidence | `{score['stage_1_readme_intent']} / 100` |",
+        f"| Stage 2R Repo Consistency | `{score['stage_2_repo_local_consistency']} / 100` |",
+        f"| Stage 3 Code/Bio Responsibility | `{score['stage_3_code_bio']} / 100` |",
+    ]
+
+    # Stage 3 3-tier detail
+    t3_score = s3.get("T3_changelog_release_hygiene", {}).get("score", 0)
+    b1_score = s3.get("B1_data_provenance_controls", {}).get("score", 0)
+    b2_score = s3.get("B2_bias_limitations", {}).get("score", 0)
+
+    # Replication lane
+    rep_score = result.get("replication_score", "n/a")
+    rep_tier = result.get("replication_tier", "n/a")
+
+    # Code integrity
     warnings = [
         f"**{key.replace('_', ' ')}**: `{item['status']}`"
         for key, item in integrity.items()
         if item.get("status") != "PASS"
     ]
     warning_text = "\n".join(f"- {line}" for line in warnings) or "- No C1-C4 warning/fail status detected."
+
+    # Notable signals
+    risks = result.get("notable_risks", [])
+    positives = result.get("notable_positive_evidence", [])
+    risk_text = "\n".join(f"- {r}" for r in risks[:4]) or "- None detected."
+    pos_text = "\n".join(f"- {p}" for p in positives[:4]) or "- None detected."
+
     return "\n".join(
         [
             "### Audit Snapshot",
@@ -64,8 +92,23 @@ def _finding_cards(result: dict) -> str:
             f"- **Clinical adjacency:** `{classification['ca_severity']}`",
             f"- **Use scope:** {score['use_scope']}",
             "",
-            "### Code Integrity Signals",
+            "### Stage Scores",
+            *stage_lines,
+            "",
+            "### Stage 3 Detail",
+            f"- T3 Changelog hygiene: `{t3_score}` &nbsp; B1 Data provenance: `{b1_score}` &nbsp; B2 Bias measurement: `{b2_score}`",
+            "",
+            "### Replication Lane (Stage 4)",
+            f"- Score: `{rep_score}` &nbsp; Tier: `{rep_tier}`",
+            "",
+            "### Code Integrity",
             warning_text,
+            "",
+            "### Notable Risks",
+            risk_text,
+            "",
+            "### Positive Evidence",
+            pos_text,
         ]
     )
 
@@ -73,12 +116,19 @@ def _finding_cards(result: dict) -> str:
 def _json_preview(result: dict) -> str:
     preview = {
         "schema_version": result["schema_version"],
-        "stem_bio_ai_version": result["stem_ai_version"],
+        "stem_ai_version": result["stem_ai_version"],
         "target": result["target"],
         "classification": result["classification"],
         "score": result["score"],
+        "replication_score": result.get("replication_score"),
+        "replication_tier": result.get("replication_tier"),
+        "stage_1_rubric": result.get("stage_1_rubric", {}),
         "stage_2r_rubric": result.get("stage_2r_rubric", {}),
+        "stage_3_rubric": result.get("stage_3_rubric", {}),
+        "stage_4_rubric": result.get("stage_4_rubric", {}),
         "code_integrity": result.get("code_integrity", {}),
+        "notable_positive_evidence": result.get("notable_positive_evidence", []),
+        "notable_risks": result.get("notable_risks", []),
     }
     return json.dumps(preview, indent=2)
 
@@ -184,35 +234,39 @@ _CSS = """
 }
 """
 
-with gr.Blocks(title="STEM BIO-AI Local Evidence Scan") as demo:
+with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5") as demo:
     gr.HTML(
         """
         <div class="hero">
-          <h1>STEM BIO-AI</h1>
-          <p>Contract-bound evidence-surface scan for open-source bio/medical AI repositories.
-          Clone a public GitHub repo, inspect its visible evidence surface, and return
-          JSON, Markdown, and PDF review artifacts.</p>
+          <h1>STEM BIO-AI <span style="font-size:22px;font-weight:400;opacity:0.75">v1.5.5</span></h1>
+          <p>Deterministic evidence-surface scanner for bio/medical AI repositories.
+          No LLM. No API key. No model runtime.
+          Clone a public GitHub repo, inspect its observable evidence surface (README, docs, CI,
+          tests, changelogs, dependency manifests), and return a scored T0–T4 triage tier with
+          full JSON, Markdown, and PDF artifacts.</p>
         </div>
         """
     )
     gr.HTML(
         """
         <div class="info-grid">
-          <div class="info-card"><b>No API key required</b><br/>
-          <span>The Space clones a public GitHub repository and runs a deterministic local scanner.
-          It does not call OpenAI, Anthropic, or the GitHub API.</span></div>
+          <div class="info-card"><b>No API key required</b>
+          <span>Clones a public GitHub repository and runs a fully deterministic local scanner.
+          Does not call OpenAI, Anthropic, GitHub API, or any external service.</span></div>
 
-          <div class="info-card"><b>What STEM checks</b><br/>
-          <span>README evidence signal, repo-local consistency, CI/tests/docs, dependency hygiene,
-          clinical boundary language, and C1-C4 code-integrity signals.</span></div>
+          <div class="info-card"><b>What STEM scans</b>
+          <span>Stage 1: README hype/responsibility signals (H1–H6 penalties, R1–R5 credits).
+          Stage 2R: repo-local consistency. Stage 3: CI, domain tests, changelog hygiene,
+          data provenance, bias measurement. Stage 4: replication evidence lane.</span></div>
 
-          <div class="info-card"><b>Tier meaning</b><br/>
-          <span>T0: insufficient evidence. T1: quarantine. T2: caution. T3: consider.
-          T4: strong observable evidence.</span></div>
+          <div class="info-card"><b>Triage tiers</b>
+          <span>T0 Rejected · T1 Quarantine · T2 Caution · T3 Supervised ·
+          T4 Candidate. Clinical-adjacent repos without a disclaimer are hard-capped at T2.
+          A T4 score is not a clinical safety rating.</span></div>
 
-          <div class="info-card"><b>CLI for artifacts</b><br/>
-          <span>Use <code class="cli-command">stem &lt;folder&gt; --level 3 --format all</code> locally to generate
-          JSON, Markdown, and PDF files.</span></div>
+          <div class="info-card"><b>Local CLI</b>
+          <span>Use <code class="cli-command">stem &lt;folder&gt; --level 3 --format all --explain</code>
+          locally to generate downloadable JSON, Markdown, PDF, and proof-trace artifacts.</span></div>
         </div>
         """
     )
