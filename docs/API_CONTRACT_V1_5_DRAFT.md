@@ -1,6 +1,8 @@
 # STEM BIO-AI v1.5 Public API Contract Draft
 
-Status: draft, not stable API.
+**Superseded by `docs/API_CONTRACT.md` (stable, v1.5.5). This file is retained for historical reference only.**
+
+Status: superseded.
 
 v1.5 keeps the scanner core deterministic. Public integrations should treat the following surfaces as draft contracts until a later stable declaration.
 

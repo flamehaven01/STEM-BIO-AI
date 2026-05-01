@@ -95,7 +95,7 @@ Stage 4 is intentionally not folded into the final score in v1.3. It is reported
 
 `ai_advisory` is optional and omitted by default. `--advisory validate` runs an offline contract validator only; `--advisory packet` writes a sanitized `{stem}_advisory_input.json` for future adapters. The packet is provider-budgeted by default, capped to 40 evidence findings, and includes `allowed_finding_ids` plus a prompt contract requiring exact citation copying. `--advisory-response FILE` validates a provider-produced JSON advisory response against the current audit's evidence ledger without calling any provider. No Gemini, OpenAI, Claude, Kimi, Qwen, Ollama, or local model call is made by the core scanner. The contract reserves provider-neutral space for future adapters and rejects advisory output that lacks valid `finding_id` citations, attempts to override scores, or makes uncited clinical/regulatory claims.
 
-Python integration surfaces are documented as a draft, not a stable SDK, in `docs/API_CONTRACT_V1_5_DRAFT.md`.
+Python integration surfaces are documented in `docs/API_CONTRACT.md` (stable, v1.5.5).
 
 ## Triage Tiers
 
