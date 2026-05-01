@@ -10,6 +10,18 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.2] - 2026-05-01
+
+### Added
+- Added Stage 1 H1-H6 hype-claim penalties for clinical certainty, regulatory approval, autonomous replacement, breakthrough marketing, universal generalization, and perfect-accuracy language.
+- Added Stage 1 R1-R5 responsibility signals for limitations sections, regulatory frameworks, clinical disclaimers, demographic-bias boundaries, and reproducibility provisions.
+- Added `stage_1_rubric` JSON output and matching evidence-ledger detectors for the new Stage 1 scoring surface.
+
+### Changed
+- Moved `spec/` to local-only private material by ignoring it in Git and removing tracked spec files from the release tree.
+
+---
+
 ## [1.5.1] - 2026-05-01
 
 ### Changed

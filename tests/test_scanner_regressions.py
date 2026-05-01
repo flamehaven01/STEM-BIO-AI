@@ -182,6 +182,56 @@ def test_evidence_ledger_and_ast_summary_are_observation_only(tmp_path: Path) ->
     )
 
 
+def test_stage1_hype_penalties_reduce_readme_evidence_score(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical platform with clinically proven diagnostic grade results.\n"
+        "FDA approved autonomous clinical decision support for any patient.\n"
+        "Revolutionary model with 100% accurate predictions.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    rubric = result["stage_1_rubric"]
+    detectors_seen = {finding["detector"] for finding in result["evidence_ledger"]}
+
+    assert result["score"]["stage_1_readme_intent"] == 0
+    assert rubric["H1_clinical_certainty_hype"]["score"] == -10
+    assert rubric["H2_regulatory_approval_hype"]["score"] == -10
+    assert rubric["H3_autonomous_replacement_hype"]["score"] == -10
+    assert rubric["H4_breakthrough_marketing_hype"]["score"] == -5
+    assert rubric["H5_universal_generalization_hype"]["score"] == -5
+    assert rubric["H6_perfect_accuracy_hype"]["score"] == -10
+    assert rubric["R2_regulatory_framework"]["score"] == -10
+    assert rubric["R3_clinical_disclaimer"]["score"] == -10
+    assert "S1_H1_clinical_certainty_hype" in detectors_seen
+    assert "S1_H6_perfect_accuracy_hype" in detectors_seen
+
+
+def test_stage1_responsibility_signals_can_reach_cap(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical repository for viral genome analysis.\n\n"
+        "## Limitations\n"
+        "Known limitations and validation boundaries are documented by subgroup.\n"
+        "Research use only, not for clinical use.\n"
+        "Regulatory framework references SaMD, IRB, and TRIPOD-AI.\n"
+        "Reproducibility provisions include deterministic random seed and environment.yml.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    rubric = result["stage_1_rubric"]
+    detectors_seen = {finding["detector"] for finding in result["evidence_ledger"]}
+
+    assert result["score"]["stage_1_readme_intent"] == 100
+    assert rubric["R1_limitations_section"]["score"] == 15
+    assert rubric["R2_regulatory_framework"]["score"] == 15
+    assert rubric["R3_clinical_disclaimer"]["score"] == 10
+    assert rubric["R4_demographic_bias_boundary"]["score"] == 10
+    assert rubric["R5_reproducibility_provisions"]["score"] == 10
+    assert "S1_R1_limitations_section" in detectors_seen
+    assert "S1_R5_reproducibility_provisions" in detectors_seen
+
+
 def test_finding_id_uses_posix_paths_and_per_file_occurrence_index() -> None:
     finding_id = make_finding_id("B2_bias_limitations", "docs\\guide.md", 12, 2)
 

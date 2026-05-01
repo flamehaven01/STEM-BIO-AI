@@ -21,10 +21,20 @@ from .patterns import (
     BIAS_LIMITATION_TERMS,
     BIO_TERMS,
     COI_FUNDING_TERMS,
+    DEMOGRAPHIC_BIAS_TERMS,
     DISCLAIMER_TERMS,
     FAIL_OPEN,
+    HYPE_AUTONOMOUS_REPLACEMENT,
+    HYPE_BREAKTHROUGH,
+    HYPE_CLINICAL_CERTAINTY,
+    HYPE_PERFECT_ACCURACY,
+    HYPE_REGULATORY_APPROVAL,
+    HYPE_UNIVERSAL_GENERALIZATION,
+    LIMITATIONS_SECTION,
     PATIENT_METADATA,
     PLACEHOLDER_SECRET_VALUES,
+    REGULATORY_FRAMEWORK_TERMS,
+    REPRODUCIBILITY_TERMS,
     SECRET_TERMS,
 )
 
@@ -47,6 +57,16 @@ def collect_surface_findings(
 
     regex_detector(target, findings, counters, "S1_readme_bio_terms", "bio_terms_v1", BIO_TERMS, readme_paths, "README exposes bio/medical vocabulary.")
     regex_detector(target, findings, counters, "S1_clinical_boundary", "clinical_boundary_v1", DISCLAIMER_TERMS, [*readme_paths, *docs_paths], "Explicit non-clinical or non-diagnostic boundary language detected.")
+    regex_detector(target, findings, counters, "S1_H1_clinical_certainty_hype", "hype_clinical_certainty_v1", HYPE_CLINICAL_CERTAINTY, readme_paths, "Clinical certainty or deployment-readiness claim detected.")
+    regex_detector(target, findings, counters, "S1_H2_regulatory_approval_hype", "hype_regulatory_approval_v1", HYPE_REGULATORY_APPROVAL, readme_paths, "Regulatory approval or clearance claim detected.")
+    regex_detector(target, findings, counters, "S1_H3_autonomous_replacement_hype", "hype_autonomous_replacement_v1", HYPE_AUTONOMOUS_REPLACEMENT, readme_paths, "Autonomous clinician-replacement claim detected.")
+    regex_detector(target, findings, counters, "S1_H4_breakthrough_marketing_hype", "hype_breakthrough_marketing_v1", HYPE_BREAKTHROUGH, readme_paths, "Marketing hype language detected.")
+    regex_detector(target, findings, counters, "S1_H5_universal_generalization_hype", "hype_universal_generalization_v1", HYPE_UNIVERSAL_GENERALIZATION, readme_paths, "Universal generalization claim detected.")
+    regex_detector(target, findings, counters, "S1_H6_perfect_accuracy_hype", "hype_perfect_accuracy_v1", HYPE_PERFECT_ACCURACY, readme_paths, "Perfect or guaranteed accuracy claim detected.")
+    regex_detector(target, findings, counters, "S1_R1_limitations_section", "limitations_section_v1", LIMITATIONS_SECTION, readme_paths, "Explicit limitations or validation-boundary section detected.")
+    regex_detector(target, findings, counters, "S1_R2_regulatory_framework", "regulatory_framework_v1", REGULATORY_FRAMEWORK_TERMS, [*readme_paths, *docs_paths], "Regulatory, IRB, SaMD, or clinical-reporting framework language detected.")
+    regex_detector(target, findings, counters, "S1_R4_demographic_bias_boundary", "demographic_bias_boundary_v1", DEMOGRAPHIC_BIAS_TERMS, [*readme_paths, *docs_paths], "Demographic, subgroup, fairness, bias, or validation-cohort language detected.")
+    regex_detector(target, findings, counters, "S1_R5_reproducibility_provisions", "reproducibility_provisions_v1", REPRODUCIBILITY_TERMS, [*readme_paths, *docs_paths], "Reproducibility, replication, seed, lockfile, or checksum language detected.")
     file_presence_detector(target, findings, counters, "S3_T1_workflow_files", "workflow_presence_v1", workflow_paths, "Workflow file exists.")
     regex_line_detector(target, findings, counters, "S3_T2_domain_tests", "domain_tests_bio_terms_v1", BIO_TERMS, test_paths, "Domain-specific test text detected.", normalize_underscores=True)
     file_presence_detector(target, findings, counters, "S3_T3_changelog_release_hygiene", "changelog_presence_v1", changelog_paths, "Changelog or release-history file exists.")

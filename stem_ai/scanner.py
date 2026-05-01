@@ -17,12 +17,22 @@ from .patterns import (
     BIAS_LIMITATION_TERMS,
     BIO_TERMS,
     COI_FUNDING_TERMS,
+    DEMOGRAPHIC_BIAS_TERMS,
     DISCLAIMER_TERMS,
     EXACT_PINNED_DEP,
     FAIL_OPEN,
+    HYPE_AUTONOMOUS_REPLACEMENT,
+    HYPE_BREAKTHROUGH,
+    HYPE_CLINICAL_CERTAINTY,
+    HYPE_PERFECT_ACCURACY,
+    HYPE_REGULATORY_APPROVAL,
+    HYPE_UNIVERSAL_GENERALIZATION,
+    LIMITATIONS_SECTION,
     LOOSE_DEP,
     PATIENT_METADATA,
     PLACEHOLDER_SECRET_VALUES,
+    REGULATORY_FRAMEWORK_TERMS,
+    REPRODUCIBILITY_TERMS,
     SECRET_TERMS,
     SKIP_DIRS,
     TEXT_EXTENSIONS,
@@ -70,7 +80,7 @@ def audit_repository(
     has_disclaimer = bool(DISCLAIMER_TERMS.search(readme + "\n" + docs_text))
     t0_hard_floor = _t0_hard_floor(surface_text, ca_severity, has_disclaimer)
 
-    stage_1 = _score_stage_1(readme, package_text, clinical_adjacent, has_disclaimer)
+    stage_1, stage_1_rubric = _score_stage_1(readme, docs_text, package_text, ca_severity, has_disclaimer)
     stage_2r, stage_2r_rubric = _score_stage_2r(readme, docs_text, package_text, workflow_text, test_text, clinical_adjacent, has_disclaimer)
     stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text)
     code_integrity = _code_integrity(target, dep_text, code_text)
@@ -116,6 +126,7 @@ def audit_repository(
             "use_scope": _use_scope(final_score),
         },
         "stage_2r_rubric": stage_2r_rubric,
+        "stage_1_rubric": stage_1_rubric,
         "stage_3_rubric": stage_3_rubric,
         "replication_score": stage_4["replication_score"],
         "replication_tier": stage_4["replication_tier"],
@@ -129,7 +140,7 @@ def audit_repository(
         "file_hashes_sha256": _hash_key_files(target),
         "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
         "measurement_basis": {
-            "stage_1": "BIO_TERMS regex match in README; disclaimer phrase presence/absence",
+            "stage_1": "README/package bio-domain regex; hype-claim penalties; limitation, regulatory, disclaimer, demographic-bias, and reproducibility responsibility signals",
             "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
             "stage_3_T1": ".github/workflows/ directory contains files",
             "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
@@ -157,17 +168,55 @@ def audit_repository(
     return result
 
 
-def _score_stage_1(readme: str, package_text: str, clinical_adjacent: bool, has_disclaimer: bool) -> int:
+def _score_stage_1(readme: str, docs_text: str, package_text: str, ca_severity: str, has_disclaimer: bool) -> tuple[int, dict[str, Any]]:
+    clinical_adjacent = ca_severity != "none"
+    responsibility_text = "\n".join([readme, docs_text])
     score = 60
+    items: dict[str, Any] = {"baseline": {"score": 60, "evidence": "Non-nascent README evidence baseline."}}
     if readme and BIO_TERMS.search(readme):
-        score += 10
+        score += _add_stage1_item(items, "S1_domain_readme", 10, "README exposes bio/medical domain vocabulary.")
     if package_text and BIO_TERMS.search(package_text):
-        score += 5
-    if clinical_adjacent and not has_disclaimer:
-        score -= 10
+        score += _add_stage1_item(items, "S1_domain_package", 5, "Package metadata exposes bio/medical domain vocabulary.")
+    hype_penalties = (
+        ("H1_clinical_certainty_hype", HYPE_CLINICAL_CERTAINTY, -10, "Clinical certainty or deployment-readiness claim detected."),
+        ("H2_regulatory_approval_hype", HYPE_REGULATORY_APPROVAL, -10, "Regulatory approval or clearance claim detected."),
+        ("H3_autonomous_replacement_hype", HYPE_AUTONOMOUS_REPLACEMENT, -10, "Autonomous clinician-replacement claim detected."),
+        ("H4_breakthrough_marketing_hype", HYPE_BREAKTHROUGH, -5, "Marketing hype language detected."),
+        ("H5_universal_generalization_hype", HYPE_UNIVERSAL_GENERALIZATION, -5, "Universal generalization claim detected."),
+        ("H6_perfect_accuracy_hype", HYPE_PERFECT_ACCURACY, -10, "Perfect or guaranteed accuracy claim detected."),
+    )
+    for key, pattern, penalty, evidence in hype_penalties:
+        if pattern.search(readme):
+            score += _add_stage1_item(items, key, penalty, evidence)
+    if LIMITATIONS_SECTION.search(readme):
+        score += _add_stage1_item(items, "R1_limitations_section", 15, "README contains an explicit limitations or validation-boundary section.")
+    if REGULATORY_FRAMEWORK_TERMS.search(responsibility_text):
+        score += _add_stage1_item(items, "R2_regulatory_framework", 15, "Regulatory, IRB, SaMD, or clinical-reporting framework language detected.")
+    elif ca_severity == "CA-DIRECT":
+        score += _add_stage1_item(items, "R2_regulatory_framework", -10, "CA-DIRECT surface lacks regulatory or governance framework language.")
+    elif ca_severity == "CA-INDIRECT":
+        score += _add_stage1_item(items, "R2_regulatory_framework", -5, "CA-INDIRECT surface lacks regulatory or governance framework language.")
+    if has_disclaimer:
+        score += _add_stage1_item(items, "R3_clinical_disclaimer", 10, "Explicit non-clinical or non-diagnostic boundary detected.")
+    elif ca_severity == "CA-DIRECT":
+        score += _add_stage1_item(items, "R3_clinical_disclaimer", -10, "CA-DIRECT surface lacks explicit non-clinical or non-diagnostic boundary.")
+    elif ca_severity == "CA-INDIRECT":
+        score += _add_stage1_item(items, "R3_clinical_disclaimer", -5, "CA-INDIRECT surface lacks explicit non-clinical or non-diagnostic boundary.")
+    if DEMOGRAPHIC_BIAS_TERMS.search(responsibility_text):
+        score += _add_stage1_item(items, "R4_demographic_bias_boundary", 10, "Demographic, subgroup, fairness, bias, or validation-cohort language detected.")
+    if REPRODUCIBILITY_TERMS.search(responsibility_text):
+        score += _add_stage1_item(items, "R5_reproducibility_provisions", 10, "Reproducibility, replication, seed, lockfile, or checksum language detected.")
     if not readme:
-        score -= 20
-    return _clamp(score)
+        score += _add_stage1_item(items, "S1_missing_readme", -20, "No root README detected.")
+    final = _clamp(score)
+    items["calculation"] = f"60 plus Stage 1 evidence additions/deductions = {final}"
+    items["stage_1_score"] = final
+    return final, items
+
+
+def _add_stage1_item(items: dict[str, Any], key: str, score: int, evidence: str) -> int:
+    items[key] = {"score": score, "evidence": evidence}
+    return score
 
 
 def _score_stage_2r(readme: str, docs_text: str, package_text: str, workflow_text: str, test_text: str, clinical_adjacent: bool, has_disclaimer: bool) -> tuple[int, dict[str, Any]]:

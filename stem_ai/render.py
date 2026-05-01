@@ -154,6 +154,11 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         lines.append(f"- {risk}")
 
     if mode == "detailed":
+        lines.extend(["", "## Stage 1 Evidence"])
+        for key, item in result.get("stage_1_rubric", {}).items():
+            if isinstance(item, dict):
+                score_value = item.get("score", "")
+                lines.append(f"- **{key}:** {score_value} — {item.get('evidence', '')}")
         lines.extend(["", "## Stage 2R Evidence"])
         for key, item in result["stage_2r_rubric"].items():
             if isinstance(item, dict):
@@ -695,39 +700,39 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
     # ── Stage 1 ──────────────────────────────────────────────────────────────
     story += _sec_hdr("Stage 1 — README Evidence Signal  |  Weight: 0.40", _TEAL)
 
-    s1_items: list[tuple[str, str, str, str]] = [
-        ("Baseline",
-         "+60", _DGRAY,
-         "All non-nascent repositories start at 60."),
-        ("README present",
-         "+0" if readme_present else "-20", _GREEN if readme_present else _RED,
-         "README.md detected in repository root." if readme_present
-         else "No README found — major deduction applied."),
-        ("BIO/medical domain terms in README",
-         "+10 / 0", _TEAL,
-         "Scan for: bio, medical, clinical, virus, viral, genome, sequenc, variant, "
-         "patient, diagnos, treatment. Adds +10 if any match found in README text."),
-        ("BIO/medical domain terms in package metadata",
-         "+5 / 0", _TEAL,
-         "Same term scan applied to pyproject.toml / setup.py / setup.cfg / package.json. "
-         "Adds +5 if any match found."),
-        ("Clinical-adjacent without explicit disclaimer",
-         "-10 / 0", _RED if (ca and not has_disc) else _DGRAY,
-         "PENALTY applied: clinical-adjacent terms detected in README/docs/code "
-         "but no 'research use only' or 'not for clinical use' boundary found."
-         if (ca and not has_disc) else
-         "Not triggered (disclaimer present or not clinical-adjacent)."),
+    s1_rubric = result.get("stage_1_rubric", {})
+    s1_order = [
+        ("baseline", "Baseline"),
+        ("S1_missing_readme", "README present"),
+        ("S1_domain_readme", "BIO/medical terms in README"),
+        ("S1_domain_package", "BIO/medical terms in package"),
+        ("H1_clinical_certainty_hype", "H1: Clinical Certainty Hype"),
+        ("H2_regulatory_approval_hype", "H2: Regulatory Approval Hype"),
+        ("H3_autonomous_replacement_hype", "H3: Autonomous Replacement Hype"),
+        ("H4_breakthrough_marketing_hype", "H4: Marketing Hype"),
+        ("H5_universal_generalization_hype", "H5: Universal Generalization"),
+        ("H6_perfect_accuracy_hype", "H6: Perfect Accuracy Claim"),
+        ("R1_limitations_section", "R1: Limitations Section"),
+        ("R2_regulatory_framework", "R2: Regulatory Framework"),
+        ("R3_clinical_disclaimer", "R3: Clinical Boundary"),
+        ("R4_demographic_bias_boundary", "R4: Bias / Subgroup Boundary"),
+        ("R5_reproducibility_provisions", "R5: Reproducibility Provisions"),
     ]
-    # Infer approximate calculation display
-    base = 60
-    calc_note = (
-        f"Baseline 60"
-        + (" + 10 (BIO/README)" if s1 > base else "")
-        + (" + 5 (BIO/pkg)" if s1 > 70 else "")
-        + (" - 10 (CA, no disclaimer)" if ca and not has_disc else "")
-        + (" - 20 (no README)" if not readme_present else "")
-        + f" = {s1} / 100"
-    )
+    s1_items: list[tuple[str, str, str, str]] = []
+    for key, label in s1_order:
+        item = s1_rubric.get(key)
+        if not item:
+            continue
+        pts = item.get("score", 0)
+        col = _RED if pts < 0 else _GREEN if pts > 0 else _DGRAY
+        s1_items.append((label, f"{pts:+d}", col, item.get("evidence", "")))
+    if not s1_items:
+        s1_items = [
+            ("Baseline", "+60", _DGRAY, "All non-nascent repositories start at 60."),
+            ("README present", "+0" if readme_present else "-20", _GREEN if readme_present else _RED,
+             "README.md detected in repository root." if readme_present else "No README found — major deduction applied."),
+        ]
+    calc_note = s1_rubric.get("calculation", f"Stage 1 evidence score = {s1} / 100")
 
     chip1 = _mini_score("S1 Score", s1, 100, _TEAL)
     tbl1 = _rubric_rows(s1_items, "S1")
