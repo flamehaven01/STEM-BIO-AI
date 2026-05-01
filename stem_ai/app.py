@@ -234,7 +234,7 @@ _CSS = """
 }
 """
 
-with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5") as demo:
+with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5", css=_CSS) as demo:
     gr.HTML(
         """
         <div class="hero">
@@ -336,4 +336,4 @@ with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5") as demo:
 
 def launch_demo() -> None:
     """Launch the Space UI."""
-    demo.queue().launch(css=_CSS, server_name="0.0.0.0", server_port=7860)
+    demo.queue().launch(server_name="0.0.0.0", server_port=7860)
