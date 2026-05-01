@@ -35,6 +35,9 @@ from .patterns import (
     REPRODUCIBILITY_TERMS,
     SECRET_TERMS,
     SKIP_DIRS,
+    STAGE2R_CLINICAL_DEPLOYMENT_CLAIMS,
+    STAGE2R_ENTRYPOINT_TERMS,
+    STAGE2R_WORKFLOW_CLAIMS,
     TEXT_EXTENSIONS,
 )
 from .reasoning_model import build_reasoning_model
@@ -71,6 +74,7 @@ def audit_repository(
     dep_text = _read_first(target, ["environment.yml", "requirements.txt", "pyproject.toml", "setup.cfg"])
     workflow_text = _read_many(target / ".github" / "workflows", max_files=20)
     test_text = _read_many(target / "tests", max_files=40)
+    changelog_text = _read_first(target, ["CHANGELOG.md", "CHANGELOG", "NEWS.md"])
     code_text = _read_many(target, max_files=200, suffixes={".py", ".sh"})
 
     repo_name = _repo_name(target)
@@ -81,7 +85,17 @@ def audit_repository(
     t0_hard_floor = _t0_hard_floor(surface_text, ca_severity, has_disclaimer)
 
     stage_1, stage_1_rubric = _score_stage_1(readme, docs_text, package_text, ca_severity, has_disclaimer)
-    stage_2r, stage_2r_rubric = _score_stage_2r(readme, docs_text, package_text, workflow_text, test_text, clinical_adjacent, has_disclaimer)
+    stage_2r, stage_2r_rubric = _score_stage_2r(
+        readme,
+        docs_text,
+        package_text,
+        workflow_text,
+        test_text,
+        changelog_text,
+        code_text,
+        clinical_adjacent,
+        has_disclaimer,
+    )
     stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text)
     code_integrity = _code_integrity(target, dep_text, code_text)
     evidence_ledger, ast_signal_summary, stage_4 = collect_evidence_bundle(target)
@@ -141,7 +155,7 @@ def audit_repository(
         "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
         "measurement_basis": {
             "stage_1": "README/package bio-domain regex; hype-claim penalties; limitation, regulatory, disclaimer, demographic-bias, and reproducibility responsibility signals",
-            "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
+            "stage_2r": "Repo-local consistency checks across README, package metadata, docs, changelog, test/CI files, and deterministic contradiction/staleness/workflow-support heuristics",
             "stage_3_T1": ".github/workflows/ directory contains files",
             "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
             "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
@@ -219,7 +233,17 @@ def _add_stage1_item(items: dict[str, Any], key: str, score: int, evidence: str)
     return score
 
 
-def _score_stage_2r(readme: str, docs_text: str, package_text: str, workflow_text: str, test_text: str, clinical_adjacent: bool, has_disclaimer: bool) -> tuple[int, dict[str, Any]]:
+def _score_stage_2r(
+    readme: str,
+    docs_text: str,
+    package_text: str,
+    workflow_text: str,
+    test_text: str,
+    changelog_text: str,
+    code_text: str,
+    clinical_adjacent: bool,
+    has_disclaimer: bool,
+) -> tuple[int, dict[str, Any]]:
     items: dict[str, Any] = {"baseline": {"score": 60, "evidence": "Non-nascent local repository baseline."}}
     score = 60
     if readme and package_text and _shared_terms(readme, package_text):
@@ -228,8 +252,16 @@ def _score_stage_2r(readme: str, docs_text: str, package_text: str, workflow_tex
         score += _add_stage2r_item(items, "R2R_2_readme_docs_alignment", 10, "README has domain overlap with docs/tutorial/troubleshooting surfaces.")
     if (workflow_text or test_text) and re.search(r"(test|pytest|unittest|ci|workflow)", readme + workflow_text + test_text, re.I):
         score += _add_stage2r_item(items, "R2R_3_readme_test_ci_alignment", 10, "Test/CI surfaces are present and locally consistent.")
+    if _limitation_repeated(readme, docs_text, changelog_text):
+        score += _add_stage2r_item(items, "R2R_4_limitation_repetition", 10, "Limitation or validation-boundary language repeats across independent repository surfaces.")
+    if _has_internal_clinical_contradiction(readme, docs_text, package_text, has_disclaimer):
+        score += _add_stage2r_item(items, "R2R_D1_internal_clinical_boundary_contradiction", -20, "Explicit clinical-use boundary conflicts with clinical deployment or decision-support claims.")
     if clinical_adjacent and not has_disclaimer:
         score += _add_stage2r_item(items, "R2R_D2_missing_clinical_use_boundary", -20, "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
+    if _version_mismatch(readme, package_text):
+        score += _add_stage2r_item(items, "R2R_D3_stale_metadata", -10, "README version metadata conflicts with package metadata version.")
+    if _unsupported_workflow_claim(readme, docs_text, package_text, workflow_text, test_text, code_text):
+        score += _add_stage2r_item(items, "R2R_D4_unsupported_workflow_claim", -15, "README/docs claim runnable workflow, CLI, test, or demo support without matching local support surfaces.")
     final = _clamp(score)
     items["calculation"] = f"60 plus local consistency additions/deductions = {final}"
     items["stage_2r_score"] = final
@@ -248,6 +280,47 @@ def _stage2r_verdict(score: int) -> str:
     if score >= 60:
         return "Mixed Local Consistency"
     return "Local Contradiction / Insufficient Consistency"
+
+
+def _limitation_repeated(readme: str, docs_text: str, changelog_text: str) -> bool:
+    lanes = [
+        bool(_has_limitation_language(readme)),
+        bool(_has_limitation_language(docs_text)),
+        bool(_has_limitation_language(changelog_text)),
+    ]
+    return sum(lanes) >= 2
+
+
+def _has_limitation_language(text: str) -> bool:
+    return bool(text and (LIMITATIONS_SECTION.search(text) or BIAS_LIMITATION_TERMS.search(text)))
+
+
+def _has_internal_clinical_contradiction(readme: str, docs_text: str, package_text: str, has_disclaimer: bool) -> bool:
+    if not has_disclaimer:
+        return False
+    return bool(STAGE2R_CLINICAL_DEPLOYMENT_CLAIMS.search("\n".join([readme, docs_text, package_text])))
+
+
+def _version_mismatch(readme: str, package_text: str) -> bool:
+    readme_version = _readme_version(readme)
+    package_version = _package_version(package_text)
+    return bool(readme_version and package_version and readme_version != package_version)
+
+
+def _readme_version(text: str) -> str | None:
+    match = re.search(r"(?im)\b(?:version|release)\s*[:= ]\s*v?([0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)\b", text)
+    return match.group(1).lower() if match else None
+
+
+def _package_version(text: str) -> str | None:
+    match = re.search(r"(?im)^\s*version\s*=\s*['\"]v?([0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)['\"]", text)
+    return match.group(1).lower() if match else None
+
+
+def _unsupported_workflow_claim(readme: str, docs_text: str, package_text: str, workflow_text: str, test_text: str, code_text: str) -> bool:
+    claimed = bool(STAGE2R_WORKFLOW_CLAIMS.search("\n".join([readme, docs_text])))
+    supported = bool(workflow_text or test_text or code_text or STAGE2R_ENTRYPOINT_TERMS.search(package_text))
+    return claimed and not supported
 
 
 def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str, test_text: str, dep_text: str) -> tuple[int, dict[str, Any]]:

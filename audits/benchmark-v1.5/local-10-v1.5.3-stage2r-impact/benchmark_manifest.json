@@ -1,0 +1,140 @@
+{
+  "schema_version": "stem-bio-ai-benchmark-v1.5-local10-stage2r-impact",
+  "generated_at": "2026-05-01",
+  "stem_ai_version": "1.5.3",
+  "benchmark_type": "local10_stage2r_impact",
+  "baseline_comparison": "audits/benchmark-v1.5/local-10-v1.5.2-stage1-impact",
+  "repo_count": 10,
+  "repos": [
+    {
+      "repo": "snap-stanford/Biomni",
+      "local_name": "Biomni",
+      "local_path": "D:\\Sanctum\\Extra Repo\\Biomni",
+      "remote": "https://github.com/snap-stanford/Biomni",
+      "commit": "400c1f366b96a35ca253e13c9b06c5076af41d65",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "SakanaAI/AI-Scientist",
+      "local_name": "AI-Scientist",
+      "local_path": "D:\\Sanctum\\Extra Repo\\AI-Scientist",
+      "remote": "https://github.com/SakanaAI/AI-Scientist",
+      "commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "lsq2wal/CellAgent",
+      "local_name": "CellAgent",
+      "local_path": "D:\\Sanctum\\Extra Repo\\CellAgent",
+      "remote": "https://github.com/lsq2wal/CellAgent",
+      "commit": "e1c6ad49a1c3d9a1f5861c082d1f830861714f58",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "ClawBio/ClawBio",
+      "local_name": "ClawBio",
+      "local_path": "D:\\Sanctum\\Extra Repo\\ClawBio",
+      "remote": "https://github.com/ClawBio/ClawBio",
+      "commit": "c2a73bd621edab1db823315007abdc5649af9b1f",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "wu-yc/LabClaw",
+      "local_name": "LabClaw",
+      "local_path": "D:\\Sanctum\\Extra Repo\\LabClaw",
+      "remote": "https://github.com/wu-yc/LabClaw",
+      "commit": "5b0edf9a75a1a8f88ced9a9af03d86eab6054a6b",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "K-Dense-AI/claude-scientific-skills",
+      "local_name": "claude-scientific-skills",
+      "local_path": "D:\\Sanctum\\Extra Repo\\claude-scientific-skills",
+      "remote": "https://github.com/K-Dense-AI/claude-scientific-skills",
+      "commit": "c84622c08adb7a4619bb0bbfcf43224541ef22dd",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "jaechang-hits/SciAgent-Skills",
+      "local_name": "SciAgent-Skills",
+      "local_path": "D:\\Sanctum\\Extra Repo\\SciAgent-Skills",
+      "remote": "https://github.com/jaechang-hits/SciAgent-Skills",
+      "commit": "cbc4117a17f5d65546f84a01597ab03af4399440",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "bio-xyz/BioAgents",
+      "local_name": "BioAgents",
+      "local_path": "D:\\Sanctum\\Extra Repo\\BioAgents",
+      "remote": "https://github.com/bio-xyz/BioAgents",
+      "commit": "84ade8cd5296d6471a5e3ef5c8426c5d0c09db69",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "Runchuan-BU/BioClaw",
+      "local_name": "BioClaw",
+      "local_path": "D:\\Sanctum\\Extra Repo\\BioClaw",
+      "remote": "https://github.com/Runchuan-BU/BioClaw",
+      "commit": "dfbcebfa452e39fdc616fde936ac803adaf60c75",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    },
+    {
+      "repo": "FreedomIntelligence/OpenClaw-Medical-Skills",
+      "local_name": "OpenClaw-Medical-Skills",
+      "local_path": "D:\\Sanctum\\Extra Repo\\OpenClaw-Medical-Skills",
+      "remote": "https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills",
+      "commit": "bbc8290fe18e2d9a0128fd78de96323533a48191",
+      "selected_by": [
+        "local-control:v1.0.4-manual-audit",
+        "available-local-clone",
+        "bio-ai-agent-or-skill-repo"
+      ],
+      "exception_note": "Selected from existing 10-repository STEM-AI v1.0.4 manual audit control set."
+    }
+  ]
+}

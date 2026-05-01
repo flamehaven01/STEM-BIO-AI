@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.3] - 2026-05-01
+
+### Added
+- Added Stage 2R limitation-repetition credit across README, docs, and changelog surfaces.
+- Added Stage 2R deductions for internal clinical-boundary contradictions, stale README/package version metadata, and unsupported workflow/test/CLI claims.
+- Added regression coverage for the new Stage 2R R4/D1/D3/D4 scoring paths.
+- Added `scripts/benchmark_local10_stage2r_impact.py` and local-10 v1.5.3 Stage 2R impact artifacts.
+
+### Changed
+- Updated Stage 2R measurement documentation from simple vocabulary overlap to repo-local consistency plus deterministic contradiction/staleness/workflow-support checks.
+
+---
+
 ## [1.5.2] - 2026-05-01
 
 ### Added

@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.5.2",
+    [string]$ExpectedVersion = "1.5.3",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -180,9 +180,28 @@ try {
     if ($WithSlop -and (Test-Path -LiteralPath $SlopDetectorPath)) {
         Invoke-Step "slop detector clean scan" {
             $slopOut = Join-Path $outDir "slop_report.json"
+            $slopConfig = Join-Path $outDir "slop_config.yaml"
+            @"
+ignore:
+  - ".git/**"
+  - "**/.git/**"
+  - "__pycache__/**"
+  - "**/__pycache__/**"
+  - ".pytest_cache/**"
+  - "tmp/**"
+  - "**/tmp/**"
+  - "dist/**"
+  - "build/**"
+  - "*.egg-info/**"
+  - "audits/**"
+  - "stem_output*/**"
+  - ".venv/**"
+  - "venv/**"
+  - "node_modules/**"
+"@ | Set-Content -LiteralPath $slopConfig -Encoding UTF8
             Push-Location $SlopDetectorPath
             try {
-                python -m slop_detector.cli --project $repoRoot --json --output $slopOut
+                python -m slop_detector.cli --project $repoRoot --config $slopConfig --json --output $slopOut
             }
             finally {
                 Pop-Location

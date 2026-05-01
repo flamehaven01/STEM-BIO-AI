@@ -10,7 +10,7 @@
 [![Skill Validation](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/validate-skill.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stable](https://img.shields.io/badge/stable-v1.5.2-informational.svg)](CHANGELOG.md)
+[![Stable](https://img.shields.io/badge/stable-v1.5.3-informational.svg)](CHANGELOG.md)
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Space-yellow.svg)](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
 
 Bio/medical AI repositories can look credible at the README layer while leaving gaps in code, CI, dependency hygiene, replication evidence, or clinical-use boundaries. STEM BIO-AI scans the visible repository surface for observable evidence signals using local file reads, deterministic pattern matching, and stdlib AST parsing — no LLM, no API, no runtime execution.
@@ -80,7 +80,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 | Stage | Weight | Signal Measured |
 |---|---:|---|
 | Stage 1: README Evidence | 40% | Bio-domain vocabulary; hype penalties; limitation, regulatory, disclaimer, demographic-bias, and reproducibility responsibility signals |
-| Stage 2R: Repo-Local Consistency | 20% | Vocabulary overlap across README, docs, package metadata, CI, tests |
+| Stage 2R: Repo-Local Consistency | 20% | Vocabulary overlap across README, docs, package metadata, CI, tests, plus limitation repetition and contradiction/staleness/workflow-support checks |
 | Stage 3: Code / Bio Responsibility | 40% | CI presence; test domain coverage; changelog; dependency manifest; bias/COI language |
 | Stage 4: Replication Evidence | Separate lane | Containers; reproducibility targets; lock/pin/hash evidence; dataset/model references; citation/CLI/seed/example signals; license/use-scope restriction evidence |
 | C1-C4: Code Integrity | Advisory / penalty | Hardcoded secrets; dependency pinning; deprecated patient paths; fail-open exceptions |
@@ -117,7 +117,7 @@ Scores reflect observable repository signals only. Each item below describes wha
 | Stage 1 domain signal | Bio-domain keyword regex match in README and package metadata |
 | Stage 1 hype/responsibility | H1-H6 hype-claim regex penalties plus R1-R5 responsibility evidence for limitations, regulatory framing, clinical boundary, demographic bias, and reproducibility |
 | Stage 1 boundary | Disclaimer phrase match (`not for clinical`, `research use only`, etc.) |
-| Stage 2R consistency | Set intersection of bio-domain vocabulary across README, docs, package, tests |
+| Stage 2R consistency | Set intersection of bio-domain vocabulary across README, docs, package, tests; repeated limitation language across surfaces; penalties for internal clinical-boundary contradictions, stale README/package versions, and unsupported workflow/test/CLI claims |
 | T1 CI/CD | `.github/workflows/` directory contains at least one file |
 | T2 Domain Tests | `tests/` directory text contains bio-domain vocabulary (regex) |
 | T3 Changelog | `CHANGELOG.md`, `CHANGELOG`, or `NEWS.md` file exists |
@@ -246,7 +246,7 @@ Maintained by Flamehaven - [flamehaven01](https://github.com/flamehaven01)
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.5.2},
+  version = {1.5.3},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

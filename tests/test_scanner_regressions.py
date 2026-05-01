@@ -875,7 +875,7 @@ def test_stage2r_refactor_preserves_score_and_rubric() -> None:
     tests = "pytest bio sequencing"
 
     score, rubric = _score_stage_2r(
-        readme, docs, package, workflow, tests,
+        readme, docs, package, workflow, tests, "", "",
         clinical_adjacent=True,
         has_disclaimer=False,
     )
@@ -886,3 +886,89 @@ def test_stage2r_refactor_preserves_score_and_rubric() -> None:
     assert rubric["R2R_3_readme_test_ci_alignment"]["score"] == 10
     assert rubric["R2R_D2_missing_clinical_use_boundary"]["score"] == -20
     assert rubric["verdict"] == "Mixed Local Consistency"
+
+
+def test_stage2r_limitation_repetition_adds_signal() -> None:
+    score, rubric = _score_stage_2r(
+        "Bio sequencing package.\n## Limitations\nResearch validation only.",
+        "Validation cohort limitations are documented.",
+        "bio sequencing cli",
+        "",
+        "",
+        "Known limitations fixed across releases.",
+        "",
+        clinical_adjacent=False,
+        has_disclaimer=False,
+    )
+
+    assert score == 85
+    assert rubric["R2R_4_limitation_repetition"]["score"] == 10
+
+
+def test_stage2r_internal_clinical_boundary_contradiction_penalizes() -> None:
+    score, rubric = _score_stage_2r(
+        "Research use only. This package provides clinical decision support for diagnosis.",
+        "",
+        "bio diagnosis cli",
+        "",
+        "",
+        "",
+        "",
+        clinical_adjacent=True,
+        has_disclaimer=True,
+    )
+
+    assert score == 40
+    assert rubric["R2R_D1_internal_clinical_boundary_contradiction"]["score"] == -20
+    assert "R2R_D2_missing_clinical_use_boundary" not in rubric
+
+
+def test_stage2r_stale_metadata_penalizes_version_mismatch() -> None:
+    score, rubric = _score_stage_2r(
+        "Bio repository.\nVersion: 1.0.0\n",
+        "",
+        "version = \"2.0.0\"\n",
+        "",
+        "",
+        "",
+        "",
+        clinical_adjacent=False,
+        has_disclaimer=False,
+    )
+
+    assert score == 50
+    assert rubric["R2R_D3_stale_metadata"]["score"] == -10
+
+
+def test_stage2r_unsupported_workflow_claim_penalizes_missing_surfaces() -> None:
+    score, rubric = _score_stage_2r(
+        "Bio repository with a runnable CLI workflow demo and pytest test suite.",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        clinical_adjacent=False,
+        has_disclaimer=False,
+    )
+
+    assert score == 45
+    assert rubric["R2R_D4_unsupported_workflow_claim"]["score"] == -15
+
+
+def test_stage2r_workflow_claim_with_code_surface_is_not_penalized() -> None:
+    score, rubric = _score_stage_2r(
+        "Bio repository with a runnable CLI workflow demo.",
+        "Run python run_mcp_server.py to start the tool.",
+        "",
+        "",
+        "",
+        "",
+        "if __name__ == '__main__':\n    main()\n",
+        clinical_adjacent=False,
+        has_disclaimer=False,
+    )
+
+    assert score == 60
+    assert "R2R_D4_unsupported_workflow_claim" not in rubric
