@@ -10,6 +10,36 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.5] - 2026-05-01
+
+### Added
+- Added `docs/API_CONTRACT.md`: stable public contract with Locked/Additive/Internal field classifications, full `EvidenceFinding` record specification, Advisory Protocol (6 non-negotiable rules), Python API signatures, tier definitions, and additive-only compatibility policy.
+
+### Changed
+- Superseded `docs/API_CONTRACT_V1_5_DRAFT.md` (retained for historical reference).
+- Updated README: professional bio/medical AI structure, v1.5.5 badge and citation, Detection table moved to collapsible section, Advisory Contract section with enforcement rules, removed stale v1.3 references.
+- Bumped version to 1.5.5 (aligning package version with v1.5.4 code tag that was released without a version bump).
+
+---
+
+## [1.5.4] - 2026-05-01
+
+### Added
+- Refined Stage 3 T3, B1, and B2 scoring from binary to three-tier:
+  - T3 Changelog: 0 (absent) / +5 (exists, no bug entries) / +15 (bug-fix, patch, or security entries present).
+  - B1 Data Provenance: 0 (no manifest) / +10 (manifest present) / +15 (manifest + IRB or dataset-citation language).
+  - B2 Bias/Limitations: 0 (no vocabulary) / +8 (vocabulary only) / +15 (vocabulary + quantitative measurement evidence).
+- Added `CHANGELOG_BUG_TERMS`, `DATA_SOURCE_TERMS`, and `BIAS_MEASUREMENT_TERMS` regex patterns.
+- Added `_score_changelog`, `_score_provenance`, and `_score_bias` helper functions extracted from `_score_stage_3`.
+- Added unit tests for each three-tier scoring path (9 new test cases).
+- Added `scripts/benchmark_local10_stage3_3tier_impact.py` and local-10 v1.5.4 Stage 3 three-tier impact benchmark artifacts.
+- Added `docs/SCORING_RATIONALE.md`: formula derivation, baseline-60 convention, tier boundary justification (anchored to scoring baseline ± offsets), Stage 1–4 rationale, score-cap policy, and calibration gap disclosures.
+
+### Changed
+- Local-10 benchmark: 0 tier changes vs v1.5.3 baseline; mean score delta −0.9 (bare provenance manifests no longer earn full B1 credit without dataset citation language).
+
+---
+
 ## [1.5.3] - 2026-05-01
 
 ### Added
