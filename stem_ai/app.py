@@ -284,7 +284,7 @@ with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5", css=_CSS) as dem
             )
     with gr.Row():
         run_button = gr.Button("Run live GitHub audit", variant="primary", scale=2)
-        clear_button = gr.ClearButton(value="Clear", scale=1)
+        clear_button = gr.Button("Clear", scale=1)
     score_output = gr.Textbox(label="Final Score", interactive=False)
     snapshot_output = gr.Markdown(label="Audit Snapshot")
     with gr.Tabs():
@@ -305,18 +305,20 @@ with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5", css=_CSS) as dem
             with gr.Row():
                 json_output = gr.Textbox(label="JSON artifact", interactive=False)
                 pdf_output = gr.Textbox(label="PDF artifact", interactive=False)
-    click_kwargs = {
-        "fn": run_demo,
-        "inputs": [repo_input, level_input],
-        "outputs": [score_output, snapshot_output, report_output, json_preview, json_output, pdf_output],
-        "queue": True,
-    }
+
+    _all_outputs = [score_output, snapshot_output, report_output, json_preview, json_output, pdf_output]
 
     run_button.click(
-        **click_kwargs,
+        fn=run_demo,
+        inputs=[repo_input, level_input],
+        outputs=_all_outputs,
+        queue=True,
     )
-    clear_button.add(
-        [repo_input, score_output, snapshot_output, report_output, json_preview, json_output, pdf_output]
+    clear_button.click(
+        fn=lambda: ["", "", "", "", "", ""],
+        inputs=[],
+        outputs=_all_outputs,
+        queue=False,
     )
 
 
