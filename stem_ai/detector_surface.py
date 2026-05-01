@@ -19,8 +19,11 @@ from .detector_utils import (
 )
 from .patterns import (
     BIAS_LIMITATION_TERMS,
+    BIAS_MEASUREMENT_TERMS,
     BIO_TERMS,
+    CHANGELOG_BUG_TERMS,
     COI_FUNDING_TERMS,
+    DATA_SOURCE_TERMS,
     DEMOGRAPHIC_BIAS_TERMS,
     DISCLAIMER_TERMS,
     FAIL_OPEN,
@@ -70,8 +73,11 @@ def collect_surface_findings(
     file_presence_detector(target, findings, counters, "S3_T1_workflow_files", "workflow_presence_v1", workflow_paths, "Workflow file exists.")
     regex_line_detector(target, findings, counters, "S3_T2_domain_tests", "domain_tests_bio_terms_v1", BIO_TERMS, test_paths, "Domain-specific test text detected.", normalize_underscores=True)
     file_presence_detector(target, findings, counters, "S3_T3_changelog_release_hygiene", "changelog_presence_v1", changelog_paths, "Changelog or release-history file exists.")
+    regex_detector(target, findings, counters, "S3_T3_changelog_bugfix_evidence", "changelog_bugfix_terms_v1", CHANGELOG_BUG_TERMS, changelog_paths, "Bug-fix, patch, or security entry detected in changelog.")
     file_presence_detector(target, findings, counters, "S3_B1_dependency_manifest", "dependency_manifest_presence_v1", dep_paths, "Dependency or environment manifest exists.")
+    regex_detector(target, findings, counters, "S3_B1_data_source_language", "data_source_terms_v1", DATA_SOURCE_TERMS, [*readme_paths, *docs_paths], "Data source, dataset citation, IRB, or provenance language detected.")
     regex_detector(target, findings, counters, "S3_B2_bias_limitations", "bias_limitations_v2", BIAS_LIMITATION_TERMS, [*readme_paths, *docs_paths], "Bias, limitation, or validation-boundary language detected.")
+    regex_detector(target, findings, counters, "S3_B2_measurement_evidence", "bias_measurement_terms_v1", BIAS_MEASUREMENT_TERMS, [*readme_paths, *docs_paths, *test_paths], "Quantitative bias/limitation measurement or related test evidence detected.")
     regex_detector(target, findings, counters, "S3_B3_coi_funding", "coi_funding_v1", COI_FUNDING_TERMS, [*readme_paths, *docs_paths, *funding_paths], "COI, funding, sponsor, or acknowledgement language detected.")
     regex_detector(target, findings, counters, "S2_package_bio_terms", "package_bio_terms_v1", BIO_TERMS, package_paths, "Package metadata exposes bio/medical vocabulary.")
     credential_detector(target, findings, counters, code_paths)

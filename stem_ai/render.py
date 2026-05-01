@@ -861,14 +861,14 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         "T3_changelog_release_hygiene": "A CHANGELOG tracks which version fixed which defect — "
                     "essential for regulatory traceability and reproducibility audits. "
                     "CHANGELOG.md, CHANGELOG, or NEWS.md all qualify.",
-        "B1_data_provenance_controls": "Pinned or checksummed dependency manifests "
-                    "(requirements.txt, pyproject.toml, environment.yml) ensure reproducible environments. "
-                    "Score 10 if manifest detected; max 15 requires hash-pinning evidence.",
+        "B1_data_provenance_controls": "Dependency manifests "
+                    "(requirements.txt, pyproject.toml, environment.yml) establish reproducibility context. "
+                    "Score 10 if manifest detected; max 15 requires data-source, dataset-citation, or IRB language.",
         "B2_bias_limitations": "Documentation of algorithmic bias, limitations, "
-                    "or model boundary conditions. Requires manual review of README, model cards, "
-                    "or supplementary docs — not detectable by local CLI scan.",
+                    "or model boundary conditions. Score 8 for boundary language; max 15 requires "
+                    "measurement evidence such as subgroup analysis, calibration, or test coverage.",
         "B3_coi_funding": "Conflict of interest and funding disclosure in README or FUNDING.md. "
-                    "Required for institutional review context — not detectable by local CLI scan.",
+                    "Required for institutional review context and detected by local text scan.",
     }
 
     t_items: list[tuple[str, str, str, str]] = []

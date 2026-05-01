@@ -6,6 +6,7 @@ from pathlib import Path
 from uuid import uuid4
 import json
 
+from . import __version__
 from .cli import _LEVEL_MAP
 from .render import render_markdown, write_outputs
 from .scanner import audit_repository
@@ -209,11 +210,11 @@ _CODE_PILL = (
     "font-size:12.5px;font-weight:700;color:#1e40af;"
 )
 
-with gr.Blocks(title="STEM BIO-AI — Evidence Scanner v1.5.5", css=_CSS) as demo:
+with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", css=_CSS) as demo:
     gr.HTML(
-        """
+        f"""
         <div class="hero">
-          <h1>STEM BIO-AI <span style="font-size:20px;font-weight:400;opacity:0.7">v1.5.5</span></h1>
+          <h1>STEM BIO-AI <span style="font-size:20px;font-weight:400;opacity:0.7">v{__version__}</span></h1>
           <p>Deterministic evidence-surface scanner for bio/medical AI repositories.
           No LLM &nbsp;·&nbsp; No API key &nbsp;·&nbsp; No model runtime &nbsp;·&nbsp; No secrets sent anywhere.<br>
           Scans README, docs, CI, tests, changelogs, and manifests — returns a T0–T4 triage tier

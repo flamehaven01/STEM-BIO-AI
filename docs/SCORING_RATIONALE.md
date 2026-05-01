@@ -1,6 +1,6 @@
 # STEM BIO-AI Scoring Rationale
 
-Version: 1.5.3
+Version: 1.5.6
 Status: Authoritative design record. Update with each structural score change.
 
 ---
@@ -138,19 +138,19 @@ D1 (internal contradiction) and D2 (missing boundary) are both -20 because they 
 
 ## 7. Stage 3: Engineering Accountability
 
-Stage 3 is a binary rubric. Each item is fully present or absent. No partial credit is awarded.
+Stage 3 is a deterministic engineering-accountability rubric. T1, T2, and B3 remain presence-oriented; T3, B1, and B2 use bounded three-tier scoring.
 
-### Rationale for binary scoring
+### Rationale for bounded partial scoring
 
-The items in Stage 3 are verifiable file-system facts. A CHANGELOG either exists or it does not. A CI workflow either exists or it does not. Partial credit would require content-level judgment (is this a good CHANGELOG?) that the local CLI cannot make deterministically. Binary scoring trades precision for reproducibility.
+The local CLI still avoids semantic quality judgments. Partial credit is allowed only where deterministic text evidence is available: a changelog can be present with or without bug-fix/security entries, a dependency manifest can be present with or without data-source/IRB language, and limitations language can appear with or without measurement evidence. This improves precision while keeping the scan reproducible.
 
 | Item | Max pts | Trigger | Rationale |
 |------|---------|---------|-----------|
 | T1 CI/CD | 15 | Workflow files in .github/workflows/ | Automated testing is the baseline of professional software hygiene |
 | T2 Domain tests | 15 (8 partial) | test/ dir with bio-domain vocabulary (or generic tests) | Tests that cover domain-specific outputs, not just infrastructure |
-| T3 Changelog | 15 | CHANGELOG.md, CHANGELOG, or NEWS.md present | Release history transparency; indicates the author tracks changes intentionally |
-| B1 Dependency provenance | 15 | requirements.txt, pyproject.toml, or environment.yml present | Reproducibility requires declared dependencies |
-| B2 Bias/limitations | 15 | Bias or limitation vocabulary in README or docs | Consistent with R1/R4 in Stage 1; enforces cross-stage requirement |
+| T3 Changelog | 0 / 5 / 15 | Absent / present / present with bug-fix, patch, or security entries | Release history transparency; stronger credit when corrective maintenance is visible |
+| B1 Dependency provenance | 0 / 10 / 15 | No manifest / manifest present / manifest plus data-source, dataset citation, or IRB language | Reproducibility requires declared dependencies; bio/medical provenance also needs data-source context |
+| B2 Bias/limitations | 0 / 8 / 15 | No vocabulary / bias or limitation vocabulary / vocabulary plus measurement evidence or test coverage | Consistent with R1/R4 in Stage 1; stronger credit requires measurement or test evidence |
 | B3 COI/funding | 5 | COI, funding, or sponsor language in README/docs/FUNDING.md | Lower max reflects that COI disclosure is less universally expected than technical hygiene |
 
 Raw max = 80. Normalized to 100: `round((raw / 80) * 100)`.
@@ -221,8 +221,8 @@ The 40/55/70/85 thresholds are internally consistent (anchored to baseline 60) b
 **H1–H6 and R1–R5 point values are asserted, not derived.**
 The penalty/bonus magnitudes reflect the relative severity of each signal (clinical certainty hype is penalized more than marketing language) but have not been calibrated against observed harm rates.
 
-**Stage 3 binary scoring loses depth information.**
-The CLI cannot currently distinguish a comprehensive CHANGELOG from a single-entry stub, or a single domain-specific test from a full regression suite. Both score the same. This is a precision tradeoff for determinism.
+**Stage 3 bounded scoring still loses depth information.**
+The CLI now distinguishes basic presence from stronger deterministic evidence for T3, B1, and B2. It still cannot judge whether a changelog is comprehensive, whether data-source language is sufficient for a specific institution, or whether a small domain test suite is scientifically adequate. This remains a precision tradeoff for determinism.
 
 **Local-10 benchmark validates consistency, not correctness.**
 The ten-repo benchmark (within-1-tier 100% after v1.3.1) tests that the scorer is internally stable. It does not test whether the tier assignments are clinically meaningful.

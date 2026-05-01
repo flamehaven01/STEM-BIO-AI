@@ -1,6 +1,6 @@
 # STEM BIO-AI v1.5 Public API Contract Draft
 
-**Superseded by `docs/API_CONTRACT.md` (stable, v1.5.5). This file is retained for historical reference only.**
+**Superseded by `docs/API_CONTRACT.md` (stable, v1.5.6). This file is retained for historical reference only.**
 
 Status: superseded.
 

@@ -18,7 +18,14 @@ TEXT_EXTENSIONS = {
 }
 SKIP_DIRS = {".git", "__pycache__", ".mypy_cache", ".pytest_cache", "node_modules", ".venv", "venv"}
 BIO_TERMS = re.compile(r"\b(bio|medical|clinical|virus|viral|genome|sequenc|variant|patient|diagnos|treatment)\b", re.I)
-DISCLAIMER_TERMS = re.compile(r"(not for clinical|not for diagnostic|research use only|not medical advice)", re.I)
+DISCLAIMER_TERMS = re.compile(
+    r"(not for clinical|not for diagnostic|research use only|not medical advice|"
+    r"not a medical device|not intended for clinical|not clinically validated|"
+    r"not a clinical validation tool|not a regulatory submission|"
+    r"not a substitute for clinical judgment|does not provide clinical diagnos(?:is|es)|"
+    r"does not mean .*safe for clinical deployment|clinical deployment .*requires independent expert validation)",
+    re.I,
+)
 BIAS_LIMITATION_TERMS = re.compile(r"\b(bias|fairness|limitation|limitations|generalizability|generalisation|not validated|validation cohort)\b", re.I)
 COI_FUNDING_TERMS = re.compile(r"\b(conflict of interest|competing interest|funding|grant|sponsor|acknowledg(?:e)?ments?)\b", re.I)
 HYPE_CLINICAL_CERTAINTY = re.compile(r"\b(clinically proven|clinically validated|clinical grade|diagnostic grade|safe for clinical deployment|deployment ready)\b", re.I)

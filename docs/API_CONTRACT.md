@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.5.4
+Version: 1.5.6
 Status: **Stable**
 Supersedes: `docs/API_CONTRACT_V1_5_DRAFT.md`
 
@@ -57,7 +57,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.4"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.5.4"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.5.6"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |

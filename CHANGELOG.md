@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.6] - 2026-05-01
+
+### Fixed
+- Reduced CA-DIRECT/T0 hard-floor false positives from framework meta-documentation such as scoring tables, regex descriptions, advisory contracts, and diagnostic-layer labels.
+- Expanded clinical-boundary detection for phrases such as "not a medical device", "not intended for clinical use", "not clinically validated", and "does not provide clinical diagnoses".
+- Updated stale public contract, scoring rationale, release validation default, measurement-basis text, and PDF Stage 3 explanatory copy to match v1.5.5/v1.5.6 behavior.
+
+### Added
+- Added regression coverage proving real direct clinical claims still trigger the T0 floor while framework self-documentation does not.
+- Added `scripts/benchmark_local10_ca_fp_impact.py` and local-10 v1.5.6 CA false-positive impact artifacts.
+
+---
+
 ## [1.5.5] - 2026-05-01
 
 ### Added

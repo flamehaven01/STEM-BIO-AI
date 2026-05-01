@@ -53,14 +53,27 @@ CA_INDIRECT_TERMS = re.compile(
     re.I,
 )
 CA_DIRECT_TERMS = re.compile(
-    r"\b(diagnos(?:is|tic)|clinical decision|decision support|patient-facing|triage|risk score|"
+    r"\b(diagnosis|diagnostic\s+(?:tool|model|system|decision|support|pipeline|classifier|prediction|screening|test|use|grade|claim)|"
+    r"clinical decision|decision support|patient-facing|(?:clinical|patient|emergency|medical)\s+triage|"
+    r"triage\s+(?:tool|model|system|decision|support|prediction|risk)|risk score|"
     r"treatment recommendation|treatment guidance|drug recommendation|pharmacogenomic|pharmacogenetic|"
     r"DPYD|CYP2D6|CPIC|FDA clearance|CE mark)\b",
     re.I,
 )
 T0_HARD_FLOOR_TERMS = re.compile(
-    r"\b(autonomous|automated|without clinician|clinical decision support|diagnos(?:is|tic)|"
-    r"treatment recommendation|triage|risk score)\b",
+    r"\b(autonomous|automated|without clinician|clinical decision support|diagnosis|"
+    r"diagnostic\s+(?:tool|model|system|decision|support|pipeline|classifier|prediction|screening|test|use)|"
+    r"treatment recommendation|(?:clinical|patient|emergency|medical)\s+triage|"
+    r"triage\s+(?:tool|model|system|decision|support|prediction|risk)|risk score)\b",
+    re.I,
+)
+META_EVIDENCE_LINE = re.compile(
+    r"(regex|detector|pattern|schema|contract|rubric|score component|detection method|"
+    r"CA severity|CA-DIRECT|CA-INDIRECT|T0_HARD_FLOOR_TERMS|Stage 1 hype|hype penalties|"
+    r"triage tiers|review priority|Executive / triage|diagnostic layer|"
+    r"does not mean|clinical deployment .*requires independent expert validation|"
+    r"framework's primary question|does not need|Clinically validated; safe|"
+    r"prohibited .*claims|rejected by the validator|forbidden citations)",
     re.I,
 )
 
@@ -161,9 +174,9 @@ def audit_repository(
             "stage_2r": "Repo-local consistency checks across README, package metadata, docs, changelog, test/CI files, and deterministic contradiction/staleness/workflow-support heuristics",
             "stage_3_T1": ".github/workflows/ directory contains files",
             "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
-            "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
-            "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
-            "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
+            "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists; max credit requires bug-fix, patch, or security entries",
+            "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists; max credit requires data-source, dataset-citation, or IRB language",
+            "stage_3_B2": "bias/limitation vocabulary present in README and docs; max credit requires quantitative measurement evidence or related test coverage",
             "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
             "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, license/use-scope restriction evidence, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
@@ -203,7 +216,7 @@ def _score_stage_1(readme: str, docs_text: str, package_text: str, ca_severity: 
         ("H6_perfect_accuracy_hype", HYPE_PERFECT_ACCURACY, -10, "Perfect or guaranteed accuracy claim detected."),
     )
     for key, pattern, penalty, evidence in hype_penalties:
-        if pattern.search(readme):
+        if _has_claim_match(pattern, readme):
             score += _add_stage1_item(items, key, penalty, evidence)
     if LIMITATIONS_SECTION.search(readme):
         score += _add_stage1_item(items, "R1_limitations_section", 15, "README contains an explicit limitations or validation-boundary section.")
@@ -550,15 +563,19 @@ def _is_unpinned_dependency(line: str) -> bool:
 
 
 def _classify_ca_severity(surface_text: str) -> str:
-    if CA_DIRECT_TERMS.search(surface_text):
+    if _has_claim_match(CA_DIRECT_TERMS, surface_text):
         return "CA-DIRECT"
-    if CA_INDIRECT_TERMS.search(surface_text):
+    if _has_claim_match(CA_INDIRECT_TERMS, surface_text):
         return "CA-INDIRECT"
     return "none"
 
 
 def _t0_hard_floor(surface_text: str, ca_severity: str, has_disclaimer: bool) -> bool:
-    return ca_severity == "CA-DIRECT" and not has_disclaimer and bool(T0_HARD_FLOOR_TERMS.search(surface_text))
+    return ca_severity == "CA-DIRECT" and not has_disclaimer and _has_claim_match(T0_HARD_FLOOR_TERMS, surface_text)
+
+
+def _has_claim_match(pattern: re.Pattern[str], text: str) -> bool:
+    return any(pattern.search(line) and not META_EVIDENCE_LINE.search(line) for line in text.splitlines())
 
 
 def _score_cap(ca_severity: str, has_disclaimer: bool, t0_hard_floor: bool) -> int | None:

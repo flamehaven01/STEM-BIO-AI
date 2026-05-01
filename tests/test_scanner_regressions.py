@@ -70,6 +70,43 @@ def test_direct_clinical_claim_triggers_t0_floor(tmp_path: Path) -> None:
     assert result["score"]["formal_tier"].startswith("T0")
 
 
+def test_framework_meta_documentation_does_not_trigger_ca_floor(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Triage Tiers\n"
+        "A T4 score means strong observable evidence signals. It does not mean the repository is safe for clinical deployment -- that requires independent expert validation.\n"
+        "| Stage 1 hype penalties (H1-H6) | Regex: clinical certainty, regulatory approval, breakthrough marketing, perfect accuracy claims |\n"
+        "| CA severity | Clinical/diagnostic phrase regex in README, docs, and package metadata |\n",
+    )
+    _write(
+        tmp_path / "docs" / "API_CONTRACT.md",
+        "| `reasoning_model` | object | Diagnostic layer (observation-only, does not affect score) |\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["classification"]["ca_severity"] == "none"
+    assert result["classification"]["t0_hard_floor"] is False
+    assert result["classification"]["score_cap"] is None
+    assert "H1_clinical_certainty_hype" not in result["stage_1_rubric"]
+    assert "H4_breakthrough_marketing_hype" not in result["stage_1_rubric"]
+    assert "H6_perfect_accuracy_hype" not in result["stage_1_rubric"]
+
+
+def test_expanded_clinical_boundary_phrases_count_as_disclaimer(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio clinical decision support research package. This is not a medical device and does not provide clinical diagnoses.\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["classification"]["ca_severity"] == "CA-DIRECT"
+    assert result["classification"]["has_explicit_clinical_boundary"] is True
+    assert result["classification"]["t0_hard_floor"] is False
+    assert result["classification"]["score_cap"] is None
+
+
 def test_stage_3_full_rubric_can_reach_100(tmp_path: Path) -> None:
     _write(
         tmp_path / "README.md",
@@ -241,9 +278,14 @@ def test_finding_id_uses_posix_paths_and_per_file_occurrence_index() -> None:
 
 
 def test_evidence_ledger_covers_scored_stage3_and_c1_c4_components(tmp_path: Path) -> None:
-    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(
+        tmp_path / "README.md",
+        "Bio repository for molecular analysis.\n"
+        "Data availability: dataset deposited on Zenodo with IRB approval.\n"
+        "Limitations include subgroup analysis and calibration curve review.\n",
+    )
     _write(tmp_path / "requirements.txt", "numpy>=1.26\n")
-    _write(tmp_path / "CHANGELOG.md", "# Changelog\n")
+    _write(tmp_path / "CHANGELOG.md", "# Changelog\n\n## 1.0.1\n- Fixed bug in calibration pipeline.\n")
     _write(tmp_path / "tests" / "test_domain.py", "def test_viral_genome_variant_pipeline():\n    assert True\n")
     _write(tmp_path / "legacy" / "metadata.py", "patient_age = 42\n")
     secret = "sk-" + "abcdefghijklmnopqrstuv"
@@ -262,6 +304,9 @@ def test_evidence_ledger_covers_scored_stage3_and_c1_c4_components(tmp_path: Pat
 
     assert "S3_T2_domain_tests" in detectors_seen
     assert "S3_T3_changelog_release_hygiene" in detectors_seen
+    assert "S3_T3_changelog_bugfix_evidence" in detectors_seen
+    assert "S3_B1_data_source_language" in detectors_seen
+    assert "S3_B2_measurement_evidence" in detectors_seen
     assert "C1_hardcoded_credentials" in detectors_seen
     assert "C2_dependency_pinning" in detectors_seen
     assert "C3_dead_or_deprecated_patient_adjacent_paths" in detectors_seen
