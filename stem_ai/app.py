@@ -209,6 +209,15 @@ _CODE_PILL = (
     "border-radius:6px;padding:2px 8px;font-family:ui-monospace,monospace;"
     "font-size:12.5px;font-weight:700;color:#1e40af;"
 )
+_STAGE_BADGE = (
+    "display:inline-block;background:#e0f2fe;border:1px solid #0284c7;"
+    "border-radius:5px;padding:1px 6px;margin-right:4px;"
+    "font-size:12px;font-weight:900;color:#075985;"
+)
+_TIER_BADGE = (
+    "display:inline-block;border-radius:5px;padding:1px 6px;margin:2px 4px 2px 0;"
+    "font-size:12px;font-weight:900;color:#ffffff;"
+)
 
 with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", css=_CSS) as demo:
     gr.HTML(
@@ -234,18 +243,21 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", css=_CS
           <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">What STEM scans</p>
             <p style="{_CARD_BODY}">
-              <b>S1</b> README hype/responsibility (H1–H6 penalties, R1–R5 credits) &nbsp;
-              <b>S2R</b> Repo-local consistency &nbsp;
-              <b>S3</b> CI · tests · changelog hygiene · data provenance · bias measurement &nbsp;
-              <b>S4</b> Replication evidence lane
+              <span style="{_STAGE_BADGE}">S1</span> README hype/responsibility (H1–H6 penalties, R1–R5 credits) &nbsp;
+              <span style="{_STAGE_BADGE}">S2R</span> Repo-local consistency &nbsp;
+              <span style="{_STAGE_BADGE}">S3</span> CI · tests · changelog hygiene · data provenance · bias measurement &nbsp;
+              <span style="{_STAGE_BADGE}">S4</span> Replication evidence lane
             </p>
           </div>
           <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">Triage tiers</p>
             <p style="{_CARD_BODY}">
-              <b>T0</b> Rejected &nbsp;<b>T1</b> Quarantine &nbsp;<b>T2</b> Caution<br>
-              <b>T3</b> Supervised &nbsp;<b>T4</b> Candidate<br>
-              <span style="color:#6b7280;font-size:12.5px;">Clinical-adjacent repos without a disclaimer
+              <span style="{_TIER_BADGE}background:#b91c1c;">T0</span> Rejected
+              <span style="{_TIER_BADGE}background:#c2410c;">T1</span> Quarantine
+              <span style="{_TIER_BADGE}background:#b45309;">T2</span> Caution<br>
+              <span style="{_TIER_BADGE}background:#0f766e;">T3</span> Supervised
+              <span style="{_TIER_BADGE}background:#15803d;">T4</span> Candidate<br>
+              <span style="color:#374151;font-size:12.5px;">Clinical-adjacent repos without a disclaimer
               are hard-capped at T2. T4 is not a clinical safety rating.</span>
             </p>
           </div>
