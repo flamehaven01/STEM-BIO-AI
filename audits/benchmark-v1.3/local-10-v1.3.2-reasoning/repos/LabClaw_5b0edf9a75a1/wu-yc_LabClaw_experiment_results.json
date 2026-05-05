@@ -1,0 +1,709 @@
+{
+  "schema_version": "stem-ai-local-cli-result-v1.3",
+  "stem_ai_version": "1.3.2",
+  "generated_at_local": "2026-04-30",
+  "execution_mode": "LOCAL_ANALYSIS",
+  "target": {
+    "name": "wu-yc/LabClaw",
+    "local_path": "D:\\Sanctum\\Extra Repo\\LabClaw",
+    "remote": "https://github.com/wu-yc/LabClaw",
+    "branch": "main",
+    "commit": "5b0edf9a75a1a8f88ced9a9af03d86eab6054a6b",
+    "file_count": 247
+  },
+  "classification": {
+    "clinical_adjacent": false,
+    "ca_severity": "none",
+    "t0_hard_floor": false,
+    "score_cap": null,
+    "has_explicit_clinical_boundary": false
+  },
+  "score": {
+    "stage_1_readme_intent": 40,
+    "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
+    "stage_2_repo_local_consistency": 60,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_3_code_bio": 0,
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "risk_penalty": 0,
+    "raw_score_before_floor": 28,
+    "final_score": 28,
+    "formal_tier": "T0 Rejected",
+    "use_scope": "Do not rely on this repository without independent expert validation."
+  },
+  "stage_2r_rubric": {
+    "baseline": {
+      "score": 60,
+      "evidence": "Non-nascent local repository baseline."
+    },
+    "calculation": "60 plus local consistency additions/deductions = 60",
+    "stage_2r_score": 60,
+    "verdict": "Mixed Local Consistency"
+  },
+  "stage_3_rubric": {
+    "T1_CI_CD": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No workflow files detected."
+    },
+    "T2_domain_tests": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No tests detected."
+    },
+    "T3_changelog_release_hygiene": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No changelog detected."
+    },
+    "B1_data_provenance_controls": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No dependency/provenance manifest detected."
+    },
+    "B2_bias_limitations": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No bias/limitations language detected by local CLI scan."
+    },
+    "B3_coi_funding": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No COI/funding disclosure detected by local CLI scan."
+    },
+    "stage_3_raw_total": {
+      "score": 0,
+      "max": 80,
+      "evidence": "Raw rubric total before normalization to 100."
+    }
+  },
+  "replication_score": 0,
+  "replication_tier": "R0",
+  "stage_4_rubric": {
+    "S4_container_environment": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_container_environment."
+    },
+    "S4_make_reproduce_target": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No Makefile detected."
+    },
+    "S4_environment_lock_evidence": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No environment, dependency, or lock manifest detected."
+    },
+    "S4_exact_dependency_pins_or_hashes": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No dependency manifest detected."
+    },
+    "S4_readme_reproducibility_section": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README detected."
+    },
+    "S4_checksum_files": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_checksum_files."
+    },
+    "S4_dataset_url": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README/docs files detected."
+    },
+    "S4_model_weight_url_or_checksum": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README/docs or checksum files detected."
+    },
+    "S4_citation_cff": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_citation_cff."
+    },
+    "S4_cli_entrypoint": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No package metadata or Python AST surface detected."
+    },
+    "S4_seed_setting": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No deterministic seed setting detected."
+    },
+    "S4_runnable_examples": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_runnable_examples."
+    },
+    "stage_4_raw_total": {
+      "score": 0,
+      "max": 100,
+      "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score."
+    }
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        "No direct credential patterns detected by local CLI scan."
+      ]
+    },
+    "C2_dependency_pinning": {
+      "status": "PASS",
+      "evidence": [
+        "Dependency manifest appears pinned or not present."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No deprecated patient-adjacent metadata patterns detected."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No broad fail-open exception pattern detected."
+      ]
+    }
+  },
+  "evidence_ledger": [
+    {
+      "finding_id": "S1_readme_bio_terms:.:0:001",
+      "detector": "S1_readme_bio_terms",
+      "detector_version": "1.3.2",
+      "pattern_id": "bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_readme_bio_terms."
+    },
+    {
+      "finding_id": "S1_clinical_boundary:.:0:001",
+      "detector": "S1_clinical_boundary",
+      "detector_version": "1.3.2",
+      "pattern_id": "clinical_boundary_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_clinical_boundary."
+    },
+    {
+      "finding_id": "S3_T1_workflow_files:.:0:001",
+      "detector": "S3_T1_workflow_files",
+      "detector_version": "1.3.2",
+      "pattern_id": "workflow_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_T1_workflow_files."
+    },
+    {
+      "finding_id": "S3_T2_domain_tests:.:0:001",
+      "detector": "S3_T2_domain_tests",
+      "detector_version": "1.3.2",
+      "pattern_id": "domain_tests_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_T2_domain_tests."
+    },
+    {
+      "finding_id": "S3_T3_changelog_release_hygiene:.:0:001",
+      "detector": "S3_T3_changelog_release_hygiene",
+      "detector_version": "1.3.2",
+      "pattern_id": "changelog_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_T3_changelog_release_hygiene."
+    },
+    {
+      "finding_id": "S3_B1_dependency_manifest:.:0:001",
+      "detector": "S3_B1_dependency_manifest",
+      "detector_version": "1.3.2",
+      "pattern_id": "dependency_manifest_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_B1_dependency_manifest."
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:.:0:001",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.2",
+      "pattern_id": "bias_limitations_v2",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_B2_bias_limitations."
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:.:0:001",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.2",
+      "pattern_id": "coi_funding_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_B3_coi_funding."
+    },
+    {
+      "finding_id": "S2_package_bio_terms:.:0:001",
+      "detector": "S2_package_bio_terms",
+      "detector_version": "1.3.2",
+      "pattern_id": "package_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S2_package_bio_terms."
+    },
+    {
+      "finding_id": "C1_hardcoded_credentials:.:0:001",
+      "detector": "C1_hardcoded_credentials",
+      "detector_version": "1.3.2",
+      "pattern_id": "credential_pattern_v2",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No hardcoded credential evidence detected for C1_hardcoded_credentials."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:.:0:001",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.2",
+      "pattern_id": "loose_dependency_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "dependency",
+      "explanation": "No dependency manifest detected."
+    },
+    {
+      "finding_id": "C3_dead_or_deprecated_patient_adjacent_paths:.:0:001",
+      "detector": "C3_dead_or_deprecated_patient_adjacent_paths",
+      "detector_version": "1.3.2",
+      "pattern_id": "deprecated_patient_metadata_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths."
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:.:0:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.2",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C4_exception_handling_clinical_adjacent_paths."
+    },
+    {
+      "finding_id": "S4_container_environment:.:0:001",
+      "detector": "S4_container_environment",
+      "detector_version": "1.3.2",
+      "pattern_id": "container_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_container_environment."
+    },
+    {
+      "finding_id": "S4_make_reproduce_target:.:0:001",
+      "detector": "S4_make_reproduce_target",
+      "detector_version": "1.3.2",
+      "pattern_id": "make_reproduce_target_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No Makefile detected."
+    },
+    {
+      "finding_id": "S4_environment_lock_evidence:.:0:001",
+      "detector": "S4_environment_lock_evidence",
+      "detector_version": "1.3.2",
+      "pattern_id": "environment_lock_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No environment, dependency, or lock manifest detected."
+    },
+    {
+      "finding_id": "S4_exact_dependency_pins_or_hashes:.:0:001",
+      "detector": "S4_exact_dependency_pins_or_hashes",
+      "detector_version": "1.3.2",
+      "pattern_id": "exact_pin_or_hash_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No dependency manifest detected."
+    },
+    {
+      "finding_id": "S4_readme_reproducibility_section:.:0:001",
+      "detector": "S4_readme_reproducibility_section",
+      "detector_version": "1.3.2",
+      "pattern_id": "readme_repro_heading_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No README detected."
+    },
+    {
+      "finding_id": "S4_checksum_files:.:0:001",
+      "detector": "S4_checksum_files",
+      "detector_version": "1.3.2",
+      "pattern_id": "checksum_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_checksum_files."
+    },
+    {
+      "finding_id": "S4_dataset_url:.:0:001",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.2",
+      "pattern_id": "dataset_url_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No README/docs files detected."
+    },
+    {
+      "finding_id": "S4_model_weight_url_or_checksum:.:0:001",
+      "detector": "S4_model_weight_url_or_checksum",
+      "detector_version": "1.3.2",
+      "pattern_id": "model_weight_url_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No README/docs or checksum files detected."
+    },
+    {
+      "finding_id": "S4_citation_cff:.:0:001",
+      "detector": "S4_citation_cff",
+      "detector_version": "1.3.2",
+      "pattern_id": "citation_cff_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_citation_cff."
+    },
+    {
+      "finding_id": "S4_cli_entrypoint:.:0:001",
+      "detector": "S4_cli_entrypoint",
+      "detector_version": "1.3.2",
+      "pattern_id": "cli_entrypoint_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No package metadata or Python AST surface detected."
+    },
+    {
+      "finding_id": "S4_seed_setting:.:0:001",
+      "detector": "S4_seed_setting",
+      "detector_version": "1.3.2",
+      "pattern_id": "ast_seed_setting_stage4_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No deterministic seed setting evidence detected by AST summary."
+    },
+    {
+      "finding_id": "S4_runnable_examples:.:0:001",
+      "detector": "S4_runnable_examples",
+      "detector_version": "1.3.2",
+      "pattern_id": "runnable_example_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_runnable_examples."
+    }
+  ],
+  "detector_summary": {
+    "total_findings": 25,
+    "by_status": {
+      "not_detected": 18,
+      "absent": 7
+    },
+    "by_detector": {
+      "S1_readme_bio_terms": {
+        "not_detected": 1
+      },
+      "S1_clinical_boundary": {
+        "not_detected": 1
+      },
+      "S3_T1_workflow_files": {
+        "not_detected": 1
+      },
+      "S3_T2_domain_tests": {
+        "not_detected": 1
+      },
+      "S3_T3_changelog_release_hygiene": {
+        "not_detected": 1
+      },
+      "S3_B1_dependency_manifest": {
+        "not_detected": 1
+      },
+      "S3_B2_bias_limitations": {
+        "not_detected": 1
+      },
+      "S3_B3_coi_funding": {
+        "not_detected": 1
+      },
+      "S2_package_bio_terms": {
+        "not_detected": 1
+      },
+      "C1_hardcoded_credentials": {
+        "not_detected": 1
+      },
+      "C2_dependency_pinning": {
+        "absent": 1
+      },
+      "C3_dead_or_deprecated_patient_adjacent_paths": {
+        "not_detected": 1
+      },
+      "C4_exception_handling_clinical_adjacent_paths": {
+        "not_detected": 1
+      },
+      "S4_container_environment": {
+        "not_detected": 1
+      },
+      "S4_make_reproduce_target": {
+        "absent": 1
+      },
+      "S4_environment_lock_evidence": {
+        "not_detected": 1
+      },
+      "S4_exact_dependency_pins_or_hashes": {
+        "absent": 1
+      },
+      "S4_readme_reproducibility_section": {
+        "absent": 1
+      },
+      "S4_checksum_files": {
+        "not_detected": 1
+      },
+      "S4_dataset_url": {
+        "absent": 1
+      },
+      "S4_model_weight_url_or_checksum": {
+        "absent": 1
+      },
+      "S4_citation_cff": {
+        "not_detected": 1
+      },
+      "S4_cli_entrypoint": {
+        "absent": 1
+      },
+      "S4_seed_setting": {
+        "not_detected": 1
+      },
+      "S4_runnable_examples": {
+        "not_detected": 1
+      }
+    }
+  },
+  "ast_signal_summary": {
+    "files_total": 0,
+    "files_considered": 0,
+    "files_parsed": 0,
+    "files_skipped_size": 0,
+    "syntax_errors": 0,
+    "file_limit_exceeded": false,
+    "test_functions": 0,
+    "assertion_tests": 0,
+    "public_functions": 0,
+    "docstring_functions": 0,
+    "annotated_functions": 0,
+    "seed_settings": 0,
+    "argparse_cli": false,
+    "portable_model_loading": 0,
+    "fail_open_handlers": 0,
+    "docstring_coverage": null,
+    "type_annotation_coverage": null
+  },
+  "notable_positive_evidence": [
+    "No strong positive local evidence detected by the CLI scan."
+  ],
+  "notable_risks": [
+    "No major local risks detected by the CLI scan."
+  ],
+  "file_hashes_sha256": {},
+  "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
+  "measurement_basis": {
+    "stage_1": "BIO_TERMS regex match in README; disclaimer phrase presence/absence",
+    "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
+    "stage_3_T1": ".github/workflows/ directory contains files",
+    "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
+    "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
+    "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
+    "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
+    "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+    "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
+    "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
+    "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...), excluding obvious placeholder/test values such as super-secret, dummy, fake, and example keys",
+    "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
+    "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
+    "C4": "except Exception: pass or except: pass pattern (regex)",
+    "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer"
+  },
+  "reasoning_model": {
+    "version": "stem-bio-ai-reasoning-v1.3.2",
+    "policy": {
+      "mode": "diagnostic_only",
+      "final_score_override": false,
+      "uses_ai": false,
+      "weights": "uncalibrated_initial_priors_pending_benchmark_calibration"
+    },
+    "evidence_budget": {
+      "confidence": 0.28,
+      "required_bits": 0.4739,
+      "observed_bits": 6.4094,
+      "unique_token_count": 84,
+      "deficit": -5.9355,
+      "budget_deficit_max": 1.0,
+      "flagged": false,
+      "status": "supported",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "confidence_envelope": {
+      "confidence": 0.28,
+      "evidence_count": 25,
+      "lower": 0.1819,
+      "upper": 0.3781,
+      "margin": 0.0981,
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "lane_coherence": {
+      "stage_scores": {
+        "stage_1_readme_evidence": 0.4,
+        "stage_2_repo_local_consistency": 0.6,
+        "stage_3_code_bio": 0.0,
+        "stage_4_replication": 0.0
+      },
+      "pairs": [
+        {
+          "pair": "stage_1_readme_evidence:stage_3_code_bio",
+          "left": 0.4,
+          "right": 0.0,
+          "coherence": 0.6
+        },
+        {
+          "pair": "stage_3_code_bio:stage_4_replication",
+          "left": 0.0,
+          "right": 0.0,
+          "coherence": 1.0
+        }
+      ],
+      "overall": 0.8,
+      "status": "coherent",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "uncertainty_budget": {
+      "stage_std": 0.2598,
+      "manual_review_required_ratio": 0.0,
+      "error_ratio": 0.0,
+      "uncertainty": 0.3712,
+      "status": "review_advised",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "evidence_risk_gate": {
+      "components": {
+        "missing_required_boundary_ratio": 0.0,
+        "contradiction_ratio": 0.2,
+        "manual_review_required_ratio": 0.0,
+        "parse_error_ratio": 0.0
+      },
+      "evidence_risk": 0.06,
+      "risk_gate": 0.6,
+      "risk_gate_factor": 0.9,
+      "status": "within_gate",
+      "basis": "diagnostic_only_uncalibrated_initial_prior"
+    },
+    "benchmark_alignment": null
+  }
+}

@@ -1,0 +1,3065 @@
+STEM BIO-AI Explain Report
+Target  : ClawBio/ClawBio
+Score   : 54 / 100  (T1 Quarantine)
+Replic  : 55 / 100  (R2)
+========================================================================
+
+S1_readme_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_readme_bio_terms:.:0:001
+         pattern : bio_terms_v1
+         reason  : No evidence detected for S1_readme_bio_terms.
+
+S1_clinical_boundary  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_clinical_boundary:.:0:001
+         pattern : clinical_boundary_v1
+         reason  : No evidence detected for S1_clinical_boundary.
+
+S3_T1_workflow_files  [DETECTED]  (1 finding)
+  [001]  .github/workflows/ci.yml
+         finding_id: S3_T1_workflow_files:.github/workflows/ci.yml:0:001
+         pattern : workflow_presence_v1
+         snippet : ".github/workflows/ci.yml"
+         reason  : Workflow file exists.
+
+S3_T2_domain_tests  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T2_domain_tests:.:0:001
+         pattern : domain_tests_bio_terms_v1
+         reason  : No evidence detected for S3_T2_domain_tests.
+
+S3_T3_changelog_release_hygiene  [DETECTED]  (1 finding)
+  [001]  CHANGELOG.md
+         finding_id: S3_T3_changelog_release_hygiene:CHANGELOG.md:0:001
+         pattern : changelog_presence_v1
+         snippet : "CHANGELOG.md"
+         reason  : Changelog or release-history file exists.
+
+S3_B1_dependency_manifest  [DETECTED]  (1 finding)
+  [001]  requirements.txt
+         finding_id: S3_B1_dependency_manifest:requirements.txt:0:001
+         pattern : dependency_manifest_presence_v1
+         snippet : "requirements.txt"
+         reason  : Dependency or environment manifest exists.
+
+S3_B2_bias_limitations  [DETECTED]  (1 finding)
+  [001]  docs/dorahacks-buidl-submission.md:190
+         finding_id: S3_B2_bias_limitations:docs/dorahacks-buidl-submission.md:190:001
+         pattern : bias_limitations_v2
+         snippet : "ClawBio is AI agents for good in healthcare. PharmGx Reporter prevents adverse drug reactions (7% of the population at risk for CYP2D6-related prescribing errors). Equity Scorer..."
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : bias
+
+S3_B3_coi_funding  [DETECTED]  (1 finding)
+  [001]  docs/dorahacks-buidl-submission.md:117
+         finding_id: S3_B3_coi_funding:docs/dorahacks-buidl-submission.md:117:001
+         pattern : coi_funding_v1
+         snippet : "This turns every ClawBio report into a **verifiable scientific credential**. Reviewers don't need to trust the author — they verify the hash. Journals don't need to host supplem..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Funding
+
+S2_package_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S2_package_bio_terms:.:0:001
+         pattern : package_bio_terms_v1
+         reason  : No evidence detected for S2_package_bio_terms.
+
+C1_hardcoded_credentials  [NOT_APPLICABLE]  (3 findings)
+  [001]  skills/illumina-bridge/tests/test_illumina_bridge.py:303
+         finding_id: C1_hardcoded_credentials:skills/illumina-bridge/tests/test_illumina_bridge.py:303:001
+         pattern : credential_pattern_v2
+         snippet : "provider = ICAMetadataProvider(api_key="super-secret-key", session=session)"
+         reason  : Credential-like placeholder in test/example context ignored for C1 penalty.
+         match      : api_key="super-secret-key
+         placeholder      : True
+  [002]  skills/illumina-bridge/tests/test_illumina_bridge.py:311
+         finding_id: C1_hardcoded_credentials:skills/illumina-bridge/tests/test_illumina_bridge.py:311:002
+         pattern : credential_pattern_v2
+         snippet : "provider = ICAMetadataProvider(api_key="super-secret-key", session=session)"
+         reason  : Credential-like placeholder in test/example context ignored for C1 penalty.
+         match      : api_key="super-secret-key
+         placeholder      : True
+  [003]  skills/illumina-bridge/tests/test_illumina_bridge.py:318
+         finding_id: C1_hardcoded_credentials:skills/illumina-bridge/tests/test_illumina_bridge.py:318:003
+         pattern : credential_pattern_v2
+         snippet : "provider = ICAMetadataProvider(api_key="super-secret-key")"
+         reason  : Credential-like placeholder in test/example context ignored for C1 penalty.
+         match      : api_key="super-secret-key
+         placeholder      : True
+
+C2_dependency_pinning  [DETECTED]  (7 findings)
+  [001]  requirements.txt:1
+         finding_id: C2_dependency_pinning:requirements.txt:1:001
+         pattern : loose_dependency_v1
+         snippet : "biopython>=1.82"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : biopython>=1.82
+  [002]  requirements.txt:2
+         finding_id: C2_dependency_pinning:requirements.txt:2:002
+         pattern : loose_dependency_v1
+         snippet : "pandas>=2.0"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : pandas>=2.0
+  [003]  requirements.txt:3
+         finding_id: C2_dependency_pinning:requirements.txt:3:003
+         pattern : loose_dependency_v1
+         snippet : "numpy>=1.24"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : numpy>=1.24
+  [004]  requirements.txt:4
+         finding_id: C2_dependency_pinning:requirements.txt:4:004
+         pattern : loose_dependency_v1
+         snippet : "scikit-learn>=1.3"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : scikit-learn>=1.3
+  [005]  requirements.txt:5
+         finding_id: C2_dependency_pinning:requirements.txt:5:005
+         pattern : loose_dependency_v1
+         snippet : "matplotlib>=3.7"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : matplotlib>=3.7
+  [006]  requirements.txt:6
+         finding_id: C2_dependency_pinning:requirements.txt:6:006
+         pattern : loose_dependency_v1
+         snippet : "openai>=1.0"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : openai>=1.0
+  [007]  requirements.txt:7
+         finding_id: C2_dependency_pinning:requirements.txt:7:007
+         pattern : loose_dependency_v1
+         snippet : "pydeseq2>=0.4"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : pydeseq2>=0.4
+
+C3_dead_or_deprecated_patient_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C3_dead_or_deprecated_patient_adjacent_paths:.:0:001
+         pattern : deprecated_patient_metadata_v1
+         reason  : No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths.
+
+C4_exception_handling_clinical_adjacent_paths  [DETECTED]  (7 findings)
+  [001]  bot/roboterri_whatsapp.py:400
+         finding_id: C4_exception_handling_clinical_adjacent_paths:bot/roboterri_whatsapp.py:400:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  clawbio.py:824
+         finding_id: C4_exception_handling_clinical_adjacent_paths:clawbio.py:824:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  skills/data-extractor/core/digitizer.py:1994
+         finding_id: C4_exception_handling_clinical_adjacent_paths:skills/data-extractor/core/digitizer.py:1994:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [002]  skills/data-extractor/core/digitizer.py:1999
+         finding_id: C4_exception_handling_clinical_adjacent_paths:skills/data-extractor/core/digitizer.py:1999:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [003]  skills/data-extractor/core/digitizer.py:2025
+         finding_id: C4_exception_handling_clinical_adjacent_paths:skills/data-extractor/core/digitizer.py:2025:003
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+            pass
+  [001]  skills/galaxy-bridge/galaxy_bridge.py:205
+         finding_id: C4_exception_handling_clinical_adjacent_paths:skills/galaxy-bridge/galaxy_bridge.py:205:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+            pass
+  [001]  skills/gwas-prs/gwas_prs.py:1131
+         finding_id: C4_exception_handling_clinical_adjacent_paths:skills/gwas-prs/gwas_prs.py:1131:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+
+AST_fail_open_precision  [DETECTED]  (32 findings)
+  [001]  bot/roboterri.py:133
+         finding_id: AST_fail_open_precision:bot/roboterri.py:133:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  bot/roboterri.py:711
+         finding_id: AST_fail_open_precision:bot/roboterri.py:711:002
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  bot/roboterri.py:823
+         finding_id: AST_fail_open_precision:bot/roboterri.py:823:003
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [004]  bot/roboterri.py:819
+         finding_id: AST_fail_open_precision:bot/roboterri.py:819:004
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  bot/roboterri_discord.py:162
+         finding_id: AST_fail_open_precision:bot/roboterri_discord.py:162:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  bot/roboterri_discord.py:734
+         finding_id: AST_fail_open_precision:bot/roboterri_discord.py:734:002
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  bot/roboterri_discord.py:846
+         finding_id: AST_fail_open_precision:bot/roboterri_discord.py:846:003
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [004]  bot/roboterri_discord.py:842
+         finding_id: AST_fail_open_precision:bot/roboterri_discord.py:842:004
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  bot/roboterri_whatsapp.py:156
+         finding_id: AST_fail_open_precision:bot/roboterri_whatsapp.py:156:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  bot/roboterri_whatsapp.py:400
+         finding_id: AST_fail_open_precision:bot/roboterri_whatsapp.py:400:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  bot/roboterri_whatsapp.py:898
+         finding_id: AST_fail_open_precision:bot/roboterri_whatsapp.py:898:003
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [004]  bot/roboterri_whatsapp.py:976
+         finding_id: AST_fail_open_precision:bot/roboterri_whatsapp.py:976:004
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [005]  bot/roboterri_whatsapp.py:996
+         finding_id: AST_fail_open_precision:bot/roboterri_whatsapp.py:996:005
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [006]  bot/roboterri_whatsapp.py:1002
+         finding_id: AST_fail_open_precision:bot/roboterri_whatsapp.py:1002:006
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  clawbio.py:824
+         finding_id: AST_fail_open_precision:clawbio.py:824:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scripts/generate_catalog.py:257
+         finding_id: AST_fail_open_precision:scripts/generate_catalog.py:257:001
+         pattern : ast_fail_open_v1
+         snippet : "except (json.JSONDecodeError, KeyError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scripts/lint_skills.py:56
+         finding_id: AST_fail_open_precision:scripts/lint_skills.py:56:001
+         pattern : ast_fail_open_v1
+         snippet : "except ImportError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/clinpgx/clinpgx.py:89
+         finding_id: AST_fail_open_precision:skills/clinpgx/clinpgx.py:89:001
+         pattern : ast_fail_open_v1
+         snippet : "except (json.JSONDecodeError, KeyError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/data-extractor/core/digitizer.py:1152
+         finding_id: AST_fail_open_precision:skills/data-extractor/core/digitizer.py:1152:001
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  skills/data-extractor/core/digitizer.py:2211
+         finding_id: AST_fail_open_precision:skills/data-extractor/core/digitizer.py:2211:002
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  skills/data-extractor/core/digitizer.py:1994
+         finding_id: AST_fail_open_precision:skills/data-extractor/core/digitizer.py:1994:003
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [004]  skills/data-extractor/core/digitizer.py:1999
+         finding_id: AST_fail_open_precision:skills/data-extractor/core/digitizer.py:1999:004
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [005]  skills/data-extractor/core/digitizer.py:2025
+         finding_id: AST_fail_open_precision:skills/data-extractor/core/digitizer.py:2025:005
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [006]  skills/data-extractor/core/digitizer.py:2055
+         finding_id: AST_fail_open_precision:skills/data-extractor/core/digitizer.py:2055:006
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/diff-visualizer/diff_visualizer.py:37
+         finding_id: AST_fail_open_precision:skills/diff-visualizer/diff_visualizer.py:37:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/galaxy-bridge/galaxy_bridge.py:205
+         finding_id: AST_fail_open_precision:skills/galaxy-bridge/galaxy_bridge.py:205:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/gwas-lookup/api/base_client.py:75
+         finding_id: AST_fail_open_precision:skills/gwas-lookup/api/base_client.py:75:001
+         pattern : ast_fail_open_v1
+         snippet : "except (json.JSONDecodeError, KeyError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/gwas-prs/gwas_prs.py:182
+         finding_id: AST_fail_open_precision:skills/gwas-prs/gwas_prs.py:182:001
+         pattern : ast_fail_open_v1
+         snippet : "except (json.JSONDecodeError, KeyError):"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  skills/gwas-prs/gwas_prs.py:486
+         finding_id: AST_fail_open_precision:skills/gwas-prs/gwas_prs.py:486:002
+         pattern : ast_fail_open_v1
+         snippet : "except (ValueError, IndexError):"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  skills/gwas-prs/gwas_prs.py:1131
+         finding_id: AST_fail_open_precision:skills/gwas-prs/gwas_prs.py:1131:003
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/illumina-bridge/illumina_providers.py:248
+         finding_id: AST_fail_open_precision:skills/illumina-bridge/illumina_providers.py:248:001
+         pattern : ast_fail_open_v1
+         snippet : "except (FileNotFoundError, json.JSONDecodeError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  skills/nutrigx_advisor/generate_report.py:309
+         finding_id: AST_fail_open_precision:skills/nutrigx_advisor/generate_report.py:309:001
+         pattern : ast_fail_open_v1
+         snippet : "except ImportError:"
+         reason  : Fail-open exception handler detected by AST.
+
+AST_argparse_cli  [DETECTED]  (23 findings)
+  [001]  clawbio.py:834
+         finding_id: AST_argparse_cli:clawbio.py:834:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/bio-orchestrator/orchestrator.py:483
+         finding_id: AST_argparse_cli:skills/bio-orchestrator/orchestrator.py:483:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Bio Orchestrator: route bioinformatics requests")"
+         reason  : argparse CLI interface detected.
+  [001]  skills/claw-ancestry-pca/ancestry_pca.py:520
+         finding_id: AST_argparse_cli:skills/claw-ancestry-pca/ancestry_pca.py:520:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/claw-metagenomics/metagenomics_profiler.py:1312
+         finding_id: AST_argparse_cli:skills/claw-metagenomics/metagenomics_profiler.py:1312:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/clinpgx/clinpgx.py:601
+         finding_id: AST_argparse_cli:skills/clinpgx/clinpgx.py:601:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/data-extractor/data_extractor.py:24
+         finding_id: AST_argparse_cli:skills/data-extractor/data_extractor.py:24:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/diff-visualizer/diff_visualizer.py:2022
+         finding_id: AST_argparse_cli:skills/diff-visualizer/diff_visualizer.py:2022:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/equity-scorer/equity_scorer.py:1090
+         finding_id: AST_argparse_cli:skills/equity-scorer/equity_scorer.py:1090:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/galaxy-bridge/galaxy_bridge.py:441
+         finding_id: AST_argparse_cli:skills/galaxy-bridge/galaxy_bridge.py:441:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/galaxy-bridge/generate_curated_skills.py:220
+         finding_id: AST_argparse_cli:skills/galaxy-bridge/generate_curated_skills.py:220:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Generate curated Galaxy tool profiles")"
+         reason  : argparse CLI interface detected.
+  [001]  skills/galaxy-bridge/generate_galaxy_catalog.py:117
+         finding_id: AST_argparse_cli:skills/galaxy-bridge/generate_galaxy_catalog.py:117:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Generate Galaxy tool catalog")"
+         reason  : argparse CLI interface detected.
+  [001]  skills/genome-compare/genome_compare.py:951
+         finding_id: AST_argparse_cli:skills/genome-compare/genome_compare.py:951:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/gwas-lookup/gwas_lookup.py:315
+         finding_id: AST_argparse_cli:skills/gwas-lookup/gwas_lookup.py:315:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/gwas-prs/gwas_prs.py:938
+         finding_id: AST_argparse_cli:skills/gwas-prs/gwas_prs.py:938:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/illumina-bridge/illumina_bridge.py:473
+         finding_id: AST_argparse_cli:skills/illumina-bridge/illumina_bridge.py:473:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/nutrigx_advisor/examples/generate_patient.py:231
+         finding_id: AST_argparse_cli:skills/nutrigx_advisor/examples/generate_patient.py:231:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/nutrigx_advisor/nutrigx_advisor.py:32
+         finding_id: AST_argparse_cli:skills/nutrigx_advisor/nutrigx_advisor.py:32:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/pharmgx-reporter/pharmgx_reporter.py:1706
+         finding_id: AST_argparse_cli:skills/pharmgx-reporter/pharmgx_reporter.py:1706:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/profile-report/profile_report.py:733
+         finding_id: AST_argparse_cli:skills/profile-report/profile_report.py:733:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/rnaseq-de/rnaseq_de.py:596
+         finding_id: AST_argparse_cli:skills/rnaseq-de/rnaseq_de.py:596:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="RNA-seq differential expression (bulk + pseudo-bulk)")"
+         reason  : argparse CLI interface detected.
+  [001]  skills/scrna-embedding/scrna_embedding.py:876
+         finding_id: AST_argparse_cli:skills/scrna-embedding/scrna_embedding.py:876:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/scrna-orchestrator/scrna_orchestrator.py:1520
+         finding_id: AST_argparse_cli:skills/scrna-orchestrator/scrna_orchestrator.py:1520:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  skills/ukb-navigator/ukb_navigator.py:305
+         finding_id: AST_argparse_cli:skills/ukb-navigator/ukb_navigator.py:305:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+
+AST_assertion_tests  [DETECTED]  (407 findings)
+  [001]  clawbio/common/tests/test_html_report.py:17
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:17:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_doctype_and_closing_tags(self):"
+         reason  : Test function with assertion detected.
+         function      : test_doctype_and_closing_tags
+  [002]  clawbio/common/tests/test_html_report.py:23
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:23:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_skill_in_subtitle(self):"
+         reason  : Test function with assertion detected.
+         function      : test_skill_in_subtitle
+  [003]  clawbio/common/tests/test_html_report.py:29
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:29:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_metadata_rendering(self):"
+         reason  : Test function with assertion detected.
+         function      : test_metadata_rendering
+  [004]  clawbio/common/tests/test_html_report.py:35
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:35:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_html_escape_in_metadata(self):"
+         reason  : Test function with assertion detected.
+         function      : test_html_escape_in_metadata
+  [005]  clawbio/common/tests/test_html_report.py:42
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:42:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cards_with_correct_classes(self):"
+         reason  : Test function with assertion detected.
+         function      : test_cards_with_correct_classes
+  [006]  clawbio/common/tests/test_html_report.py:54
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:54:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_basic_table(self):"
+         reason  : Test function with assertion detected.
+         function      : test_basic_table
+  [007]  clawbio/common/tests/test_html_report.py:60
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:60:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_badge_column(self):"
+         reason  : Test function with assertion detected.
+         function      : test_badge_column
+  [008]  clawbio/common/tests/test_html_report.py:73
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:73:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_avoid_alert(self):"
+         reason  : Test function with assertion detected.
+         function      : test_avoid_alert
+  [009]  clawbio/common/tests/test_html_report.py:79
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:79:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_caution_alert(self):"
+         reason  : Test function with assertion detected.
+         function      : test_caution_alert
+  [010]  clawbio/common/tests/test_html_report.py:85
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:85:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_disclaimer_present(self):"
+         reason  : Test function with assertion detected.
+         function      : test_disclaimer_present
+  [011]  clawbio/common/tests/test_html_report.py:92
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:92:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_writes_to_disk(self):"
+         reason  : Test function with assertion detected.
+         function      : test_writes_to_disk
+  [012]  clawbio/common/tests/test_html_report.py:99
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:99:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_creates_parent_dirs(self):"
+         reason  : Test function with assertion detected.
+         function      : test_creates_parent_dirs
+  [013]  clawbio/common/tests/test_html_report.py:107
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:107:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_header_renders_gradient_div(self):"
+         reason  : Test function with assertion detected.
+         function      : test_header_renders_gradient_div
+  [014]  clawbio/common/tests/test_html_report.py:112
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:112:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_header_suppresses_default_h1(self):"
+         reason  : Test function with assertion detected.
+         function      : test_header_suppresses_default_h1
+  [015]  clawbio/common/tests/test_html_report.py:119
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:119:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_subtitle_rendered(self):"
+         reason  : Test function with assertion detected.
+         function      : test_subtitle_rendered
+  [016]  clawbio/common/tests/test_html_report.py:126
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:126:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_svg_present(self):"
+         reason  : Test function with assertion detected.
+         function      : test_svg_present
+  [017]  clawbio/common/tests/test_html_report.py:130
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:130:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_segments_rendered(self):"
+         reason  : Test function with assertion detected.
+         function      : test_segments_rendered
+  [018]  clawbio/common/tests/test_html_report.py:135
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:135:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_legend_items(self):"
+         reason  : Test function with assertion detected.
+         function      : test_legend_items
+  [019]  clawbio/common/tests/test_html_report.py:141
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:141:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_zero_segment_skipped(self):"
+         reason  : Test function with assertion detected.
+         function      : test_zero_segment_skipped
+  [020]  clawbio/common/tests/test_html_report.py:149
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:149:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_bar_renders(self):"
+         reason  : Test function with assertion detected.
+         function      : test_bar_renders
+  [021]  clawbio/common/tests/test_html_report.py:154
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:154:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_percentage_calculation(self):"
+         reason  : Test function with assertion detected.
+         function      : test_percentage_calculation
+  [022]  clawbio/common/tests/test_html_report.py:159
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:159:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_zero_max_no_crash(self):"
+         reason  : Test function with assertion detected.
+         function      : test_zero_max_no_crash
+  [023]  clawbio/common/tests/test_html_report.py:165
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:165:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_renders_grid(self):"
+         reason  : Test function with assertion detected.
+         function      : test_renders_grid
+  [024]  clawbio/common/tests/test_html_report.py:171
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:171:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_items_appear(self):"
+         reason  : Test function with assertion detected.
+         function      : test_items_appear
+  [025]  clawbio/common/tests/test_html_report.py:179
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:179:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_mobile_wrapper(self):"
+         reason  : Test function with assertion detected.
+         function      : test_mobile_wrapper
+  [026]  clawbio/common/tests/test_html_report.py:183
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:183:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_row_classes(self):"
+         reason  : Test function with assertion detected.
+         function      : test_row_classes
+  [027]  clawbio/common/tests/test_html_report.py:192
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:192:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_badge_still_works(self):"
+         reason  : Test function with assertion detected.
+         function      : test_badge_still_works
+  [028]  clawbio/common/tests/test_html_report.py:202
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:202:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_footer_renders(self):"
+         reason  : Test function with assertion detected.
+         function      : test_footer_renders
+  [029]  clawbio/common/tests/test_html_report.py:208
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:208:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_suppresses_default_footer(self):"
+         reason  : Test function with assertion detected.
+         function      : test_suppresses_default_footer
+  [030]  clawbio/common/tests/test_html_report.py:216
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:216:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_print_css_present(self):"
+         reason  : Test function with assertion detected.
+         function      : test_print_css_present
+  [031]  clawbio/common/tests/test_html_report.py:222
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:222:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_css_classes_present(self):"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_css_classes_present
+  [032]  clawbio/common/tests/test_html_report.py:238
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:238:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_old_css_variables_aliased(self):"
+         reason  : Test function with assertion detected.
+         function      : test_old_css_variables_aliased
+  [033]  clawbio/common/tests/test_html_report.py:244
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:244:033
+         pattern : ast_assertion_test_v1
+         snippet : "def test_chaining(self):"
+         reason  : Test function with assertion detected.
+         function      : test_chaining
+  [034]  clawbio/common/tests/test_html_report.py:259
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_html_report.py:259:034
+         pattern : ast_assertion_test_v1
+         snippet : "def test_full_premium_chaining(self):"
+         reason  : Test function with assertion detected.
+         function      : test_full_premium_chaining
+  [001]  clawbio/common/tests/test_rec_shortener.py:21
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:21:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_intermediate_metabolizer(self):"
+         reason  : Test function with assertion detected.
+         function      : test_intermediate_metabolizer
+  [002]  clawbio/common/tests/test_rec_shortener.py:26
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:26:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_poor_metabolizer(self):"
+         reason  : Test function with assertion detected.
+         function      : test_poor_metabolizer
+  [003]  clawbio/common/tests/test_rec_shortener.py:31
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:31:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_normal_metabolizer(self):"
+         reason  : Test function with assertion detected.
+         function      : test_normal_metabolizer
+  [004]  clawbio/common/tests/test_rec_shortener.py:35
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:35:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_match(self):"
+         reason  : Test function with assertion detected.
+         function      : test_no_match
+  [005]  clawbio/common/tests/test_rec_shortener.py:40
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:40:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_empty_html(self):"
+         reason  : Test function with assertion detected.
+         function      : test_empty_html
+  [006]  clawbio/common/tests/test_rec_shortener.py:43
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:43:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_empty_phenotype(self):"
+         reason  : Test function with assertion detected.
+         function      : test_empty_phenotype
+  [007]  clawbio/common/tests/test_rec_shortener.py:46
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:46:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_table(self):"
+         reason  : Test function with assertion detected.
+         function      : test_no_table
+  [008]  clawbio/common/tests/test_rec_shortener.py:53
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:53:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cpic_prioritised(self):"
+         reason  : Test function with assertion detected.
+         function      : test_cpic_prioritised
+  [009]  clawbio/common/tests/test_rec_shortener.py:82
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:82:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_match_returns_empty(self):"
+         reason  : Test function with assertion detected.
+         function      : test_no_match_returns_empty
+  [010]  clawbio/common/tests/test_rec_shortener.py:90
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:90:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_fallback_to_dpwg(self):"
+         reason  : Test function with assertion detected.
+         function      : test_fallback_to_dpwg
+  [011]  clawbio/common/tests/test_rec_shortener.py:115
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:115:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_vkorc1_sensitivity(self):"
+         reason  : Test function with assertion detected.
+         function      : test_vkorc1_sensitivity
+  [012]  clawbio/common/tests/test_rec_shortener.py:126
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:126:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp3a5_expressor(self):"
+         reason  : Test function with assertion detected.
+         function      : test_cyp3a5_expressor
+  [013]  clawbio/common/tests/test_rec_shortener.py:137
+         finding_id: AST_assertion_tests:clawbio/common/tests/test_rec_shortener.py:137:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_slco1b1_function(self):"
+         reason  : Test function with assertion detected.
+         function      : test_slco1b1_function
+  [001]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:86
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:86:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_csv_parsing(self, pop_map_csv):"
+         reason  : Test function with assertion detected.
+         function      : test_csv_parsing
+  [002]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:94
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:94:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_tsv_parsing(self, pop_map_tsv):"
+         reason  : Test function with assertion detected.
+         function      : test_tsv_parsing
+  [003]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:100
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:100:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_infer_from_prefix(self):"
+         reason  : Test function with assertion detected.
+         function      : test_infer_from_prefix
+  [004]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:108
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:108:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_missing_file_infers(self):"
+         reason  : Test function with assertion detected.
+         function      : test_missing_file_infers
+  [005]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:115
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:115:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_flexible_column_names(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_flexible_column_names
+  [006]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:131
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:131:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_basic_shape(self, small_geno_matrix):"
+         reason  : Test function with assertion detected.
+         function      : test_basic_shape
+  [007]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:136
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:136:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_deterministic(self, small_geno_matrix):"
+         reason  : Test function with assertion detected.
+         function      : test_deterministic
+  [008]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:142
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:142:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_variance_sums_to_one_or_less(self, small_geno_matrix):"
+         reason  : Test function with assertion detected.
+         function      : test_variance_sums_to_one_or_less
+  [009]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:146
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:146:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_variance_decreasing(self, small_geno_matrix):"
+         reason  : Test function with assertion detected.
+         function      : test_variance_decreasing
+  [010]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:151
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:151:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_missing_data_handling(self, geno_with_missing):"
+         reason  : Test function with assertion detected.
+         function      : test_missing_data_handling
+  [011]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:156
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:156:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_component_clamping(self, small_geno_matrix):"
+         reason  : Test function with assertion detected.
+         function      : test_component_clamping
+  [012]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:161
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:161:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_all_missing_column(self):"
+         reason  : Test function with assertion detected.
+         function      : test_all_missing_column
+  [013]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:167
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:167:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_single_component(self, small_geno_matrix):"
+         reason  : Test function with assertion detected.
+         function      : test_single_component
+  [014]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:179
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:179:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_has_header(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_has_header
+  [015]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:195
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:195:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_has_disclaimer(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_has_disclaimer
+  [016]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:210
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:210:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_has_variance_table(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_has_variance_table
+  [017]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:226
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:226:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_has_population_table(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_has_population_table
+  [018]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:243
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:243:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_figure_section_when_generated(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_figure_section_when_generated
+  [019]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:258
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:258:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_references(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_references
+  [020]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:284
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:284:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_coordinates_csv_written(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_coordinates_csv_written
+  [021]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:296
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:296:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_variance_csv_written(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_variance_csv_written
+  [022]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:315
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:315:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_full_report(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_full_report
+  [023]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:330
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:330:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_result_json(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_result_json
+  [024]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:340
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:340:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_summary_mode(self):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_summary_mode
+  [025]  skills/claw-ancestry-pca/tests/test_ancestry_pca.py:349
+         finding_id: AST_assertion_tests:skills/claw-ancestry-pca/tests/test_ancestry_pca.py:349:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_populations_detected(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_populations_detected
+  [001]  skills/clinpgx/tests/test_clinpgx.py:84
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:84:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_gene_summary():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_gene_summary
+  [002]  skills/clinpgx/tests/test_clinpgx.py:95
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:95:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_gene_summary_missing_fields():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_gene_summary_missing_fields
+  [003]  skills/clinpgx/tests/test_clinpgx.py:104
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:104:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_annotation_row():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_annotation_row
+  [004]  skills/clinpgx/tests/test_clinpgx.py:114
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:114:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_annotation_row_multiple_chemicals():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_annotation_row_multiple_chemicals
+  [005]  skills/clinpgx/tests/test_clinpgx.py:124
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:124:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_annotation_row_string_evidence_level():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_annotation_row_string_evidence_level
+  [006]  skills/clinpgx/tests/test_clinpgx.py:131
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:131:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_guideline_row():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_guideline_row
+  [007]  skills/clinpgx/tests/test_clinpgx.py:142
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:142:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_label_row():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_label_row
+  [008]  skills/clinpgx/tests/test_clinpgx.py:156
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:156:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cache_key_deterministic(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_cache_key_deterministic
+  [009]  skills/clinpgx/tests/test_clinpgx.py:164
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:164:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cache_key_differs_for_different_params(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_cache_key_differs_for_different_params
+  [010]  skills/clinpgx/tests/test_clinpgx.py:172
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:172:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cache_round_trip(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_cache_round_trip
+  [011]  skills/clinpgx/tests/test_clinpgx.py:180
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:180:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cache_miss_returns_none(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_cache_miss_returns_none
+  [012]  skills/clinpgx/tests/test_clinpgx.py:186
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:186:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cache_expired_returns_none(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_cache_expired_returns_none
+  [013]  skills/clinpgx/tests/test_clinpgx.py:198
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:198:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cache_disabled(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_cache_disabled
+  [014]  skills/clinpgx/tests/test_clinpgx.py:223
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:223:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_query_gene_found():"
+         reason  : Test function with assertion detected.
+         function      : test_query_gene_found
+  [015]  skills/clinpgx/tests/test_clinpgx.py:235
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:235:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_query_gene_not_found():"
+         reason  : Test function with assertion detected.
+         function      : test_query_gene_not_found
+  [016]  skills/clinpgx/tests/test_clinpgx.py:244
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:244:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_query_drug_found():"
+         reason  : Test function with assertion detected.
+         function      : test_query_drug_found
+  [017]  skills/clinpgx/tests/test_clinpgx.py:255
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:255:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_query_drug_not_found():"
+         reason  : Test function with assertion detected.
+         function      : test_query_drug_not_found
+  [018]  skills/clinpgx/tests/test_clinpgx.py:294
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:294:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_text_summary_gene_found():"
+         reason  : Test function with assertion detected.
+         function      : test_text_summary_gene_found
+  [019]  skills/clinpgx/tests/test_clinpgx.py:302
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:302:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_text_summary_gene_not_found():"
+         reason  : Test function with assertion detected.
+         function      : test_text_summary_gene_not_found
+  [020]  skills/clinpgx/tests/test_clinpgx.py:308
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:308:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_text_summary_drug_found():"
+         reason  : Test function with assertion detected.
+         function      : test_text_summary_drug_found
+  [021]  skills/clinpgx/tests/test_clinpgx.py:315
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:315:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_text_summary_drug_not_found():"
+         reason  : Test function with assertion detected.
+         function      : test_text_summary_drug_not_found
+  [022]  skills/clinpgx/tests/test_clinpgx.py:321
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:321:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_text_summary_footer():"
+         reason  : Test function with assertion detected.
+         function      : test_text_summary_footer
+  [023]  skills/clinpgx/tests/test_clinpgx.py:328
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:328:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_markdown_report_gene_sections():"
+         reason  : Test function with assertion detected.
+         function      : test_markdown_report_gene_sections
+  [024]  skills/clinpgx/tests/test_clinpgx.py:340
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:340:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_markdown_report_drug_sections():"
+         reason  : Test function with assertion detected.
+         function      : test_markdown_report_drug_sections
+  [025]  skills/clinpgx/tests/test_clinpgx.py:348
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:348:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_markdown_report_not_found_gene():"
+         reason  : Test function with assertion detected.
+         function      : test_markdown_report_not_found_gene
+  [026]  skills/clinpgx/tests/test_clinpgx.py:356
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:356:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_markdown_report_disclaimer():"
+         reason  : Test function with assertion detected.
+         function      : test_markdown_report_disclaimer
+  [027]  skills/clinpgx/tests/test_clinpgx.py:362
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:362:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_markdown_report_attribution():"
+         reason  : Test function with assertion detected.
+         function      : test_markdown_report_attribution
+  [028]  skills/clinpgx/tests/test_clinpgx.py:372
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:372:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_csv_creates_file(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_write_csv_creates_file
+  [029]  skills/clinpgx/tests/test_clinpgx.py:385
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:385:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_csv_empty_rows(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_write_csv_empty_rows
+  [030]  skills/clinpgx/tests/test_clinpgx.py:392
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:392:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_tables(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_write_tables
+  [031]  skills/clinpgx/tests/test_clinpgx.py:402
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:402:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_tables_combines_gene_and_drug(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_write_tables_combines_gene_and_drug
+  [032]  skills/clinpgx/tests/test_clinpgx.py:414
+         finding_id: AST_assertion_tests:skills/clinpgx/tests/test_clinpgx.py:414:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_tables_no_data(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_write_tables_no_data
+  [001]  skills/data-extractor/tests/test_extractor.py:16
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:16:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_models_import():"
+         reason  : Test function with assertion detected.
+         function      : test_models_import
+  [002]  skills/data-extractor/tests/test_extractor.py:25
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:25:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_plot_type_enum():"
+         reason  : Test function with assertion detected.
+         function      : test_plot_type_enum
+  [003]  skills/data-extractor/tests/test_extractor.py:40
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:40:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extracted_data_model():"
+         reason  : Test function with assertion detected.
+         function      : test_extracted_data_model
+  [004]  skills/data-extractor/tests/test_extractor.py:68
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:68:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cv_calibration_import():"
+         reason  : Test function with assertion detected.
+         function      : test_cv_calibration_import
+  [005]  skills/data-extractor/tests/test_extractor.py:81
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:81:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_digitizer_prompts():"
+         reason  : Test function with assertion detected.
+         function      : test_digitizer_prompts
+  [006]  skills/data-extractor/tests/test_extractor.py:90
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:90:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_export_csv(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_export_csv
+  [007]  skills/data-extractor/tests/test_extractor.py:118
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:118:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_export_json(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_export_json
+  [008]  skills/data-extractor/tests/test_extractor.py:143
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:143:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_api_run_no_input():"
+         reason  : Test function with assertion detected.
+         function      : test_api_run_no_input
+  [009]  skills/data-extractor/tests/test_extractor.py:152
+         finding_id: AST_assertion_tests:skills/data-extractor/tests/test_extractor.py:152:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_validate_extraction():"
+         reason  : Test function with assertion detected.
+         function      : test_validate_extraction
+  [001]  skills/diff-visualizer/tests/test_diff_visualizer.py:68
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:68:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_bulk_table_input_outputs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_bulk_table_input_outputs
+  [002]  skills/diff-visualizer/tests/test_diff_visualizer.py:99
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:99:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_rnaseq_output_dir_autodetected_and_heatmap_skip_is_reported(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_rnaseq_output_dir_autodetected_and_heatmap_skip_is_reported
+  [003]  skills/diff-visualizer/tests/test_diff_visualizer.py:134
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:134:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_scrna_contrast_table_input_outputs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_scrna_contrast_table_input_outputs
+  [004]  skills/diff-visualizer/tests/test_diff_visualizer.py:155
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:155:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_scrna_markers_with_adata_generate_enhanced_plots(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_scrna_markers_with_adata_generate_enhanced_plots
+  [005]  skills/diff-visualizer/tests/test_diff_visualizer.py:213
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:213:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_detection_precedence_prefers_finished_tables(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_detection_precedence_prefers_finished_tables
+  [006]  skills/diff-visualizer/tests/test_diff_visualizer.py:236
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:236:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_non_empty_output_dir_is_rejected(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_non_empty_output_dir_is_rejected
+  [007]  skills/diff-visualizer/tests/test_diff_visualizer.py:253
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:253:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_missing_required_columns_fail_with_actionable_error(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_missing_required_columns_fail_with_actionable_error
+  [008]  skills/diff-visualizer/tests/test_diff_visualizer.py:262
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:262:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clawbio_runner_demo_modes_pass(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_clawbio_runner_demo_modes_pass
+  [009]  skills/diff-visualizer/tests/test_diff_visualizer.py:276
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:276:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_bulk_volcano_display_cap_handles_extreme_outliers(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_bulk_volcano_display_cap_handles_extreme_outliers
+  [010]  skills/diff-visualizer/tests/test_diff_visualizer.py:299
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:299:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_bulk_visualization_filter_respects_min_basemean(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_bulk_visualization_filter_respects_min_basemean
+  [011]  skills/diff-visualizer/tests/test_diff_visualizer.py:325
+         finding_id: AST_assertion_tests:skills/diff-visualizer/tests/test_diff_visualizer.py:325:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_orchestrator_routes_visualization_queries_without_breaking_analysis_routes():"
+         reason  : Test function with assertion detected.
+         function      : test_orchestrator_routes_visualization_queries_without_breaking_analysis_routes
+  [001]  skills/equity-scorer/tests/test_equity_scorer.py:42
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:42:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_vcf_returns_correct_shape():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_vcf_returns_correct_shape
+  [002]  skills/equity-scorer/tests/test_equity_scorer.py:50
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:50:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_vcf_genotype_range():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_vcf_genotype_range
+  [003]  skills/equity-scorer/tests/test_equity_scorer.py:58
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:58:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_vcf_sample_names():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_vcf_sample_names
+  [004]  skills/equity-scorer/tests/test_equity_scorer.py:68
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:68:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_load_population_map_from_csv():"
+         reason  : Test function with assertion detected.
+         function      : test_load_population_map_from_csv
+  [005]  skills/equity-scorer/tests/test_equity_scorer.py:77
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:77:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_load_population_map_infers_from_ids():"
+         reason  : Test function with assertion detected.
+         function      : test_load_population_map_infers_from_ids
+  [006]  skills/equity-scorer/tests/test_equity_scorer.py:85
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:85:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_ancestry_csv():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_ancestry_csv
+  [007]  skills/equity-scorer/tests/test_equity_scorer.py:105
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:105:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_allele_frequencies_range():"
+         reason  : Test function with assertion detected.
+         function      : test_allele_frequencies_range
+  [008]  skills/equity-scorer/tests/test_equity_scorer.py:115
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:115:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heterozygosity_values():"
+         reason  : Test function with assertion detected.
+         function      : test_heterozygosity_values
+  [009]  skills/equity-scorer/tests/test_equity_scorer.py:123
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:123:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heterozygosity_all_pops_present():"
+         reason  : Test function with assertion detected.
+         function      : test_heterozygosity_all_pops_present
+  [010]  skills/equity-scorer/tests/test_equity_scorer.py:132
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:132:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_fst_symmetric():"
+         reason  : Test function with assertion detected.
+         function      : test_fst_symmetric
+  [011]  skills/equity-scorer/tests/test_equity_scorer.py:138
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:138:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_fst_non_negative():"
+         reason  : Test function with assertion detected.
+         function      : test_fst_non_negative
+  [012]  skills/equity-scorer/tests/test_equity_scorer.py:144
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:144:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_fst_diagonal_zero():"
+         reason  : Test function with assertion detected.
+         function      : test_fst_diagonal_zero
+  [013]  skills/equity-scorer/tests/test_equity_scorer.py:152
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:152:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pca_shape():"
+         reason  : Test function with assertion detected.
+         function      : test_pca_shape
+  [014]  skills/equity-scorer/tests/test_equity_scorer.py:160
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:160:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pca_variance_sums_to_at_most_one():"
+         reason  : Test function with assertion detected.
+         function      : test_pca_variance_sums_to_at_most_one
+  [015]  skills/equity-scorer/tests/test_equity_scorer.py:168
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:168:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_representation_index_range():"
+         reason  : Test function with assertion detected.
+         function      : test_representation_index_range
+  [016]  skills/equity-scorer/tests/test_equity_scorer.py:175
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:175:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_representation_index_perfect():"
+         reason  : Test function with assertion detected.
+         function      : test_representation_index_perfect
+  [017]  skills/equity-scorer/tests/test_equity_scorer.py:184
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:184:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heterozygosity_balance_range():"
+         reason  : Test function with assertion detected.
+         function      : test_heterozygosity_balance_range
+  [018]  skills/equity-scorer/tests/test_equity_scorer.py:190
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:190:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heterozygosity_balance_empty():"
+         reason  : Test function with assertion detected.
+         function      : test_heterozygosity_balance_empty
+  [019]  skills/equity-scorer/tests/test_equity_scorer.py:194
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:194:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_fst_coverage():"
+         reason  : Test function with assertion detected.
+         function      : test_fst_coverage
+  [020]  skills/equity-scorer/tests/test_equity_scorer.py:200
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:200:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_geographic_spread():"
+         reason  : Test function with assertion detected.
+         function      : test_geographic_spread
+  [021]  skills/equity-scorer/tests/test_equity_scorer.py:208
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:208:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heim_score_structure():"
+         reason  : Test function with assertion detected.
+         function      : test_heim_score_structure
+  [022]  skills/equity-scorer/tests/test_equity_scorer.py:219
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:219:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heim_score_range():"
+         reason  : Test function with assertion detected.
+         function      : test_heim_score_range
+  [023]  skills/equity-scorer/tests/test_equity_scorer.py:226
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:226:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_heim_score_custom_weights():"
+         reason  : Test function with assertion detected.
+         function      : test_heim_score_custom_weights
+  [024]  skills/equity-scorer/tests/test_equity_scorer.py:237
+         finding_id: AST_assertion_tests:skills/equity-scorer/tests/test_equity_scorer.py:237:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_end_to_end_demo_vcf():"
+         reason  : Test function with assertion detected.
+         function      : test_end_to_end_demo_vcf
+  [001]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:120
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:120:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_catalog_loads(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_catalog_loads
+  [002]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:127
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:127:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_catalog_missing_exits(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_catalog_missing_exits
+  [003]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:137
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:137:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_search_finds_fastqc(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_search_finds_fastqc
+  [004]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:144
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:144:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_search_metagenomics(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_search_metagenomics
+  [005]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:152
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:152:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_search_no_results(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_search_no_results
+  [006]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:158
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:158:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_search_case_insensitive(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_search_case_insensitive
+  [007]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:165
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:165:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_search_by_description(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_search_by_description
+  [008]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:174
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:174:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_list_categories(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_list_categories
+  [009]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:184
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:184:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_find_by_exact_id(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_find_by_exact_id
+  [010]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:194
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:194:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_find_by_partial_id(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_find_by_partial_id
+  [011]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:201
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:201:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_not_found(self, catalog_file):"
+         reason  : Test function with assertion detected.
+         function      : test_not_found
+  [012]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:209
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:209:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_runs(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_runs
+  [013]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:215
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:215:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_creates_html(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_creates_html
+  [014]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:223
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:223:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_creates_result_json(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_creates_result_json
+  [015]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:231
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:231:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_creates_reproducibility(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_creates_reproducibility
+  [016]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:236
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:236:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_creates_fastq(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_creates_fastq
+  [017]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:247
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:247:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_report_demo(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_write_report_demo
+  [018]  skills/galaxy-bridge/tests/test_galaxy_bridge.py:256
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_galaxy_bridge.py:256:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_report_success(self, tmp_output):"
+         reason  : Test function with assertion detected.
+         function      : test_write_report_success
+  [001]  skills/galaxy-bridge/tests/test_tool_recommender.py:148
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:148:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dedup_reduces_count(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dedup_reduces_count
+  [002]  skills/galaxy-bridge/tests/test_tool_recommender.py:154
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:154:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dedup_picks_latest_version(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dedup_picks_latest_version
+  [003]  skills/galaxy-bridge/tests/test_tool_recommender.py:160
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:160:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dedup_preserves_version_count(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dedup_preserves_version_count
+  [004]  skills/galaxy-bridge/tests/test_tool_recommender.py:166
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:166:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_version_sort_key(self):"
+         reason  : Test function with assertion detected.
+         function      : test_version_sort_key
+  [005]  skills/galaxy-bridge/tests/test_tool_recommender.py:173
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:173:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_tool_base_key(self):"
+         reason  : Test function with assertion detected.
+         function      : test_tool_base_key
+  [006]  skills/galaxy-bridge/tests/test_tool_recommender.py:179
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:179:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_non_toolshed_id_unchanged(self):"
+         reason  : Test function with assertion detected.
+         function      : test_non_toolshed_id_unchanged
+  [007]  skills/galaxy-bridge/tests/test_tool_recommender.py:185
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:185:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_qc_matches(self):"
+         reason  : Test function with assertion detected.
+         function      : test_qc_matches
+  [008]  skills/galaxy-bridge/tests/test_tool_recommender.py:191
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:191:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_metagenomics_matches(self):"
+         reason  : Test function with assertion detected.
+         function      : test_metagenomics_matches
+  [009]  skills/galaxy-bridge/tests/test_tool_recommender.py:197
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:197:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_variant_calling_matches(self):"
+         reason  : Test function with assertion detected.
+         function      : test_variant_calling_matches
+  [010]  skills/galaxy-bridge/tests/test_tool_recommender.py:203
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:203:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_wes_matches(self):"
+         reason  : Test function with assertion detected.
+         function      : test_wes_matches
+  [011]  skills/galaxy-bridge/tests/test_tool_recommender.py:209
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:209:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_match_returns_empty(self):"
+         reason  : Test function with assertion detected.
+         function      : test_no_match_returns_empty
+  [012]  skills/galaxy-bridge/tests/test_tool_recommender.py:216
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:216:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_qc_recommends_fastqc(self):"
+         reason  : Test function with assertion detected.
+         function      : test_qc_recommends_fastqc
+  [013]  skills/galaxy-bridge/tests/test_tool_recommender.py:222
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:222:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_metagenomics_recommends_kraken2(self):"
+         reason  : Test function with assertion detected.
+         function      : test_metagenomics_recommends_kraken2
+  [014]  skills/galaxy-bridge/tests/test_tool_recommender.py:228
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:228:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_variant_calling_recommends_freebayes(self):"
+         reason  : Test function with assertion detected.
+         function      : test_variant_calling_recommends_freebayes
+  [015]  skills/galaxy-bridge/tests/test_tool_recommender.py:234
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:234:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_format_filter_bam(self):"
+         reason  : Test function with assertion detected.
+         function      : test_format_filter_bam
+  [016]  skills/galaxy-bridge/tests/test_tool_recommender.py:241
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:241:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_returns_explanations(self):"
+         reason  : Test function with assertion detected.
+         function      : test_returns_explanations
+  [017]  skills/galaxy-bridge/tests/test_tool_recommender.py:247
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:247:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_max_results(self):"
+         reason  : Test function with assertion detected.
+         function      : test_max_results
+  [018]  skills/galaxy-bridge/tests/test_tool_recommender.py:252
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:252:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_wes_novogene_context(self):"
+         reason  : Test function with assertion detected.
+         function      : test_wes_novogene_context
+  [019]  skills/galaxy-bridge/tests/test_tool_recommender.py:269
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:269:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_topic_resolution(self):"
+         reason  : Test function with assertion detected.
+         function      : test_topic_resolution
+  [020]  skills/galaxy-bridge/tests/test_tool_recommender.py:273
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:273:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_operation_resolution(self):"
+         reason  : Test function with assertion detected.
+         function      : test_operation_resolution
+  [021]  skills/galaxy-bridge/tests/test_tool_recommender.py:277
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:277:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_resolve_edam_on_tool(self):"
+         reason  : Test function with assertion detected.
+         function      : test_resolve_edam_on_tool
+  [022]  skills/galaxy-bridge/tests/test_tool_recommender.py:286
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:286:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_rnaseq_workflow(self):"
+         reason  : Test function with assertion detected.
+         function      : test_rnaseq_workflow
+  [023]  skills/galaxy-bridge/tests/test_tool_recommender.py:292
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:292:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_metagenomics_workflow(self):"
+         reason  : Test function with assertion detected.
+         function      : test_metagenomics_workflow
+  [024]  skills/galaxy-bridge/tests/test_tool_recommender.py:298
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:298:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_wes_workflow(self):"
+         reason  : Test function with assertion detected.
+         function      : test_wes_workflow
+  [025]  skills/galaxy-bridge/tests/test_tool_recommender.py:306
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:306:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_workflow_has_steps(self):"
+         reason  : Test function with assertion detected.
+         function      : test_workflow_has_steps
+  [026]  skills/galaxy-bridge/tests/test_tool_recommender.py:315
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:315:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_match_returns_empty(self):"
+         reason  : Test function with assertion detected.
+         function      : test_no_match_returns_empty
+  [027]  skills/galaxy-bridge/tests/test_tool_recommender.py:322
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:322:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_double_extension_fastq_gz(self):"
+         reason  : Test function with assertion detected.
+         function      : test_double_extension_fastq_gz
+  [028]  skills/galaxy-bridge/tests/test_tool_recommender.py:326
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:326:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_single_extension_bam(self):"
+         reason  : Test function with assertion detected.
+         function      : test_single_extension_bam
+  [029]  skills/galaxy-bridge/tests/test_tool_recommender.py:330
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:330:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_vcf_gz(self):"
+         reason  : Test function with assertion detected.
+         function      : test_vcf_gz
+  [030]  skills/galaxy-bridge/tests/test_tool_recommender.py:334
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:334:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_simple_vcf(self):"
+         reason  : Test function with assertion detected.
+         function      : test_simple_vcf
+  [031]  skills/galaxy-bridge/tests/test_tool_recommender.py:340
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:340:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_toolshed_slug(self):"
+         reason  : Test function with assertion detected.
+         function      : test_toolshed_slug
+  [032]  skills/galaxy-bridge/tests/test_tool_recommender.py:345
+         finding_id: AST_assertion_tests:skills/galaxy-bridge/tests/test_tool_recommender.py:345:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_simple_slug(self):"
+         reason  : Test function with assertion detected.
+         function      : test_simple_slug
+  [001]  skills/genome-compare/tests/test_genome_compare.py:40
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:40:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_reference_loads():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_reference_loads
+  [002]  skills/genome-compare/tests/test_genome_compare.py:46
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:46:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_demo_patient():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_demo_patient
+  [003]  skills/genome-compare/tests/test_genome_compare.py:52
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:52:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_returns_chromosome_metadata():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_returns_chromosome_metadata
+  [004]  skills/genome-compare/tests/test_genome_compare.py:62
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:62:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_skips_comments():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_skips_comments
+  [005]  skills/genome-compare/tests/test_genome_compare.py:74
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:74:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_identical_homozygous():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_identical_homozygous
+  [006]  skills/genome-compare/tests/test_genome_compare.py:79
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:79:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_identical_heterozygous():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_identical_heterozygous
+  [007]  skills/genome-compare/tests/test_genome_compare.py:84
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:84:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_het_order_independent():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_het_order_independent
+  [008]  skills/genome-compare/tests/test_genome_compare.py:89
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:89:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_one_shared():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_one_shared
+  [009]  skills/genome-compare/tests/test_genome_compare.py:94
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:94:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_none_shared():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_none_shared
+  [010]  skills/genome-compare/tests/test_genome_compare.py:99
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:99:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_haploid_match():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_haploid_match
+  [011]  skills/genome-compare/tests/test_genome_compare.py:104
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:104:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ibs_haploid_mismatch():"
+         reason  : Test function with assertion detected.
+         function      : test_ibs_haploid_mismatch
+  [012]  skills/genome-compare/tests/test_genome_compare.py:109
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:109:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_compute_ibs_score_range():"
+         reason  : Test function with assertion detected.
+         function      : test_compute_ibs_score_range
+  [013]  skills/genome-compare/tests/test_genome_compare.py:119
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:119:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_compute_ibs_self_gives_one():"
+         reason  : Test function with assertion detected.
+         function      : test_compute_ibs_self_gives_one
+  [014]  skills/genome-compare/tests/test_genome_compare.py:132
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:132:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_count_alt_direct():"
+         reason  : Test function with assertion detected.
+         function      : test_count_alt_direct
+  [015]  skills/genome-compare/tests/test_genome_compare.py:137
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:137:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_count_alt_hom_ref():"
+         reason  : Test function with assertion detected.
+         function      : test_count_alt_hom_ref
+  [016]  skills/genome-compare/tests/test_genome_compare.py:142
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:142:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_count_alt_hom_alt():"
+         reason  : Test function with assertion detected.
+         function      : test_count_alt_hom_alt
+  [017]  skills/genome-compare/tests/test_genome_compare.py:147
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:147:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_count_alt_skips_ambiguous():"
+         reason  : Test function with assertion detected.
+         function      : test_count_alt_skips_ambiguous
+  [018]  skills/genome-compare/tests/test_genome_compare.py:152
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:152:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_count_alt_skips_cg_ambiguous():"
+         reason  : Test function with assertion detected.
+         function      : test_count_alt_skips_cg_ambiguous
+  [019]  skills/genome-compare/tests/test_genome_compare.py:162
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:162:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_per_chromosome_keys():"
+         reason  : Test function with assertion detected.
+         function      : test_per_chromosome_keys
+  [020]  skills/genome-compare/tests/test_genome_compare.py:172
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:172:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_per_chromosome_ibs_range():"
+         reason  : Test function with assertion detected.
+         function      : test_per_chromosome_ibs_range
+  [021]  skills/genome-compare/tests/test_genome_compare.py:186
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:186:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_load_aims_panel():"
+         reason  : Test function with assertion detected.
+         function      : test_load_aims_panel
+  [022]  skills/genome-compare/tests/test_genome_compare.py:198
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:198:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ancestry_proportions_sum_to_one():"
+         reason  : Test function with assertion detected.
+         function      : test_ancestry_proportions_sum_to_one
+  [023]  skills/genome-compare/tests/test_genome_compare.py:207
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:207:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ancestry_returns_all_populations():"
+         reason  : Test function with assertion detected.
+         function      : test_ancestry_returns_all_populations
+  [024]  skills/genome-compare/tests/test_genome_compare.py:216
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:216:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_patient_eur_is_top():"
+         reason  : Test function with assertion detected.
+         function      : test_demo_patient_eur_is_top
+  [025]  skills/genome-compare/tests/test_genome_compare.py:230
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:230:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_contains_key_sections():"
+         reason  : Test function with assertion detected.
+         function      : test_report_contains_key_sections
+  [026]  skills/genome-compare/tests/test_genome_compare.py:245
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:245:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_contains_disclaimer():"
+         reason  : Test function with assertion detected.
+         function      : test_report_contains_disclaimer
+  [027]  skills/genome-compare/tests/test_genome_compare.py:251
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:251:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_contains_methods():"
+         reason  : Test function with assertion detected.
+         function      : test_report_contains_methods
+  [028]  skills/genome-compare/tests/test_genome_compare.py:263
+         finding_id: AST_assertion_tests:skills/genome-compare/tests/test_genome_compare.py:263:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_end_to_end_demo():"
+         reason  : Test function with assertion detected.
+         function      : test_end_to_end_demo
+  [001]  skills/gwas-lookup/tests/test_gwas_lookup.py:32
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:32:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_gwas_sorts_by_pval():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_gwas_sorts_by_pval
+  [002]  skills/gwas-lookup/tests/test_gwas_lookup.py:45
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:45:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_gwas_includes_both_sources():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_gwas_includes_both_sources
+  [003]  skills/gwas-lookup/tests/test_gwas_lookup.py:58
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:58:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_gwas_flags_significant():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_gwas_flags_significant
+  [004]  skills/gwas-lookup/tests/test_gwas_lookup.py:73
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:73:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_phewas_structure():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_phewas_structure
+  [005]  skills/gwas-lookup/tests/test_gwas_lookup.py:88
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:88:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_eqtls():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_eqtls
+  [006]  skills/gwas-lookup/tests/test_gwas_lookup.py:102
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:102:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_all_structure():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_all_structure
+  [007]  skills/gwas-lookup/tests/test_gwas_lookup.py:132
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:132:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_with_error_api():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_with_error_api
+  [008]  skills/gwas-lookup/tests/test_gwas_lookup.py:155
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:155:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_merge_with_all_errors():"
+         reason  : Test function with assertion detected.
+         function      : test_merge_with_all_errors
+  [009]  skills/gwas-lookup/tests/test_gwas_lookup.py:177
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:177:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_includes_disclaimer():"
+         reason  : Test function with assertion detected.
+         function      : test_report_includes_disclaimer
+  [010]  skills/gwas-lookup/tests/test_gwas_lookup.py:190
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:190:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_includes_variant_info():"
+         reason  : Test function with assertion detected.
+         function      : test_report_includes_variant_info
+  [011]  skills/gwas-lookup/tests/test_gwas_lookup.py:204
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:204:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_includes_gwas_table():"
+         reason  : Test function with assertion detected.
+         function      : test_report_includes_gwas_table
+  [012]  skills/gwas-lookup/tests/test_gwas_lookup.py:217
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:217:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_write_tables(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_write_tables
+  [013]  skills/gwas-lookup/tests/test_gwas_lookup.py:234
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:234:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_data_loads():"
+         reason  : Test function with assertion detected.
+         function      : test_demo_data_loads
+  [014]  skills/gwas-lookup/tests/test_gwas_lookup.py:244
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:244:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_data_has_all_sources():"
+         reason  : Test function with assertion detected.
+         function      : test_demo_data_has_all_sources
+  [015]  skills/gwas-lookup/tests/test_gwas_lookup.py:256
+         finding_id: AST_assertion_tests:skills/gwas-lookup/tests/test_gwas_lookup.py:256:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_full_pipeline(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_full_pipeline
+  [001]  skills/gwas-prs/tests/test_gwas_prs.py:29
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:29:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_detect_23andme_format(self):"
+         reason  : Test function with assertion detected.
+         function      : test_detect_23andme_format
+  [002]  skills/gwas-prs/tests/test_gwas_prs.py:40
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:40:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_detect_ancestry_format(self):"
+         reason  : Test function with assertion detected.
+         function      : test_detect_ancestry_format
+  [003]  skills/gwas-prs/tests/test_gwas_prs.py:50
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:50:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_23andme_file(self):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_23andme_file
+  [004]  skills/gwas-prs/tests/test_gwas_prs.py:60
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:60:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_genotype_skips_invalid(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_genotype_skips_invalid
+  [005]  skills/gwas-prs/tests/test_gwas_prs.py:90
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:90:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_scoring_file(self):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_scoring_file
+  [006]  skills/gwas-prs/tests/test_gwas_prs.py:101
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:101:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_scoring_file_metadata(self):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_scoring_file_metadata
+  [007]  skills/gwas-prs/tests/test_gwas_prs.py:110
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:110:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_scoring_file_missing_rsid(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_scoring_file_missing_rsid
+  [008]  skills/gwas-prs/tests/test_gwas_prs.py:133
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:133:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dosage_homozygous_effect(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dosage_homozygous_effect
+  [009]  skills/gwas-prs/tests/test_gwas_prs.py:137
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:137:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dosage_heterozygous(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dosage_heterozygous
+  [010]  skills/gwas-prs/tests/test_gwas_prs.py:141
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:141:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dosage_homozygous_other(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dosage_homozygous_other
+  [011]  skills/gwas-prs/tests/test_gwas_prs.py:145
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:145:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dosage_hemizygous(self):"
+         reason  : Test function with assertion detected.
+         function      : test_dosage_hemizygous
+  [012]  skills/gwas-prs/tests/test_gwas_prs.py:158
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:158:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_calculate_prs_basic(self):"
+         reason  : Test function with assertion detected.
+         function      : test_calculate_prs_basic
+  [013]  skills/gwas-prs/tests/test_gwas_prs.py:171
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:171:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_calculate_prs_overlap(self):"
+         reason  : Test function with assertion detected.
+         function      : test_calculate_prs_overlap
+  [014]  skills/gwas-prs/tests/test_gwas_prs.py:185
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:185:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_calculate_prs_no_overlap(self):"
+         reason  : Test function with assertion detected.
+         function      : test_calculate_prs_no_overlap
+  [015]  skills/gwas-prs/tests/test_gwas_prs.py:195
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:195:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_calculate_prs_partial_overlap(self):"
+         reason  : Test function with assertion detected.
+         function      : test_calculate_prs_partial_overlap
+  [016]  skills/gwas-prs/tests/test_gwas_prs.py:218
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:218:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_percentile_from_z_zero(self):"
+         reason  : Test function with assertion detected.
+         function      : test_percentile_from_z_zero
+  [017]  skills/gwas-prs/tests/test_gwas_prs.py:223
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:223:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_percentile_from_z_positive(self):"
+         reason  : Test function with assertion detected.
+         function      : test_percentile_from_z_positive
+  [018]  skills/gwas-prs/tests/test_gwas_prs.py:228
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:228:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_assign_risk_category_low(self):"
+         reason  : Test function with assertion detected.
+         function      : test_assign_risk_category_low
+  [019]  skills/gwas-prs/tests/test_gwas_prs.py:233
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:233:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_assign_risk_category_average(self):"
+         reason  : Test function with assertion detected.
+         function      : test_assign_risk_category_average
+  [020]  skills/gwas-prs/tests/test_gwas_prs.py:247
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:247:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_search_traits(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_search_traits
+  [021]  skills/gwas-prs/tests/test_gwas_prs.py:264
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:264:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_get_score_metadata(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_get_score_metadata
+  [022]  skills/gwas-prs/tests/test_gwas_prs.py:281
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:281:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_rate_limiting(self, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_rate_limiting
+  [023]  skills/gwas-prs/tests/test_gwas_prs.py:357
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:357:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_generate_report_contains_header(self):"
+         reason  : Test function with assertion detected.
+         function      : test_generate_report_contains_header
+  [024]  skills/gwas-prs/tests/test_gwas_prs.py:365
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:365:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_generate_report_contains_disclaimer(self):"
+         reason  : Test function with assertion detected.
+         function      : test_generate_report_contains_disclaimer
+  [025]  skills/gwas-prs/tests/test_gwas_prs.py:373
+         finding_id: AST_assertion_tests:skills/gwas-prs/tests/test_gwas_prs.py:373:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_generate_report_score_table(self):"
+         reason  : Test function with assertion detected.
+         function      : test_generate_report_score_table
+  [001]  skills/illumina-bridge/tests/test_illumina_bridge.py:122
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:122:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_discover_bundle_artifacts_success(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_discover_bundle_artifacts_success
+  [002]  skills/illumina-bridge/tests/test_illumina_bridge.py:129
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:129:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_discover_bundle_artifacts_explicit_override_precedence(copied_bundle, tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_discover_bundle_artifacts_explicit_override_precedence
+  [003]  skills/illumina-bridge/tests/test_illumina_bridge.py:136
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:136:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_discover_bundle_missing_sample_sheet_fails(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_discover_bundle_missing_sample_sheet_fails
+  [004]  skills/illumina-bridge/tests/test_illumina_bridge.py:142
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:142:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_discover_bundle_missing_vcf_fails(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_discover_bundle_missing_vcf_fails
+  [005]  skills/illumina-bridge/tests/test_illumina_bridge.py:148
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:148:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_sample_sheet_extracts_rows():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_sample_sheet_extracts_rows
+  [006]  skills/illumina-bridge/tests/test_illumina_bridge.py:155
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:155:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_sample_sheet_merges_basespace_sections(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_sample_sheet_merges_basespace_sections
+  [007]  skills/illumina-bridge/tests/test_illumina_bridge.py:169
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:169:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_qc_metrics_json_normalizes_fixture():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_qc_metrics_json_normalizes_fixture
+  [008]  skills/illumina-bridge/tests/test_illumina_bridge.py:176
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:176:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_qc_metrics_tsv_normalizes_metrics_output(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_qc_metrics_tsv_normalizes_metrics_output
+  [009]  skills/illumina-bridge/tests/test_illumina_bridge.py:188
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:188:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_qc_metrics_malformed_json_raises(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_qc_metrics_malformed_json_raises
+  [010]  skills/illumina-bridge/tests/test_illumina_bridge.py:195
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:195:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_discover_bundle_prefers_primary_result_vcf(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_discover_bundle_prefers_primary_result_vcf
+  [011]  skills/illumina-bridge/tests/test_illumina_bridge.py:216
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:216:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_build_summary_and_data_is_deterministic(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_build_summary_and_data_is_deterministic
+  [012]  skills/illumina-bridge/tests/test_illumina_bridge.py:255
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:255:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_merges_project_run_and_sample_metadata(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_merges_project_run_and_sample_metadata
+  [013]  skills/illumina-bridge/tests/test_illumina_bridge.py:272
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:272:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_missing_api_key_yields_warning(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_missing_api_key_yields_warning
+  [014]  skills/illumina-bridge/tests/test_illumina_bridge.py:285
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:285:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_network_failure_yields_warning(copied_bundle, monkeypatch):"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_network_failure_yields_warning
+  [015]  skills/illumina-bridge/tests/test_illumina_bridge.py:301
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:301:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_does_not_store_api_key_in_session_headers():"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_does_not_store_api_key_in_session_headers
+  [016]  skills/illumina-bridge/tests/test_illumina_bridge.py:309
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:309:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_fetch_json_sends_api_key_per_request():"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_fetch_json_sends_api_key_per_request
+  [017]  skills/illumina-bridge/tests/test_illumina_bridge.py:317
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:317:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_repr_redacts_api_key():"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_repr_redacts_api_key
+  [018]  skills/illumina-bridge/tests/test_illumina_bridge.py:324
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:324:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_invalid_base_url_falls_back_with_warning(copied_bundle):"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_invalid_base_url_falls_back_with_warning
+  [019]  skills/illumina-bridge/tests/test_illumina_bridge.py:346
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:346:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_ica_provider_accepts_trusted_illumina_base_url():"
+         reason  : Test function with assertion detected.
+         function      : test_ica_provider_accepts_trusted_illumina_base_url
+  [020]  skills/illumina-bridge/tests/test_illumina_bridge.py:357
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:357:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_import_bundle_demo_creates_standard_outputs(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_import_bundle_demo_creates_standard_outputs
+  [021]  skills/illumina-bridge/tests/test_illumina_bridge.py:372
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:372:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_import_bundle_with_basespace_style_inputs_creates_standard_outputs(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_import_bundle_with_basespace_style_inputs_creates_standard_outputs
+  [022]  skills/illumina-bridge/tests/test_illumina_bridge.py:397
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:397:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clawbio_run_illumina_input_bundle_completes(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_clawbio_run_illumina_input_bundle_completes
+  [023]  skills/illumina-bridge/tests/test_illumina_bridge.py:421
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:421:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_orchestrator_routes_illumina_keywords():"
+         reason  : Test function with assertion detected.
+         function      : test_orchestrator_routes_illumina_keywords
+  [024]  skills/illumina-bridge/tests/test_illumina_bridge.py:428
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:428:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_orchestrator_routes_illumina_bundle_directory():"
+         reason  : Test function with assertion detected.
+         function      : test_orchestrator_routes_illumina_bundle_directory
+  [025]  skills/illumina-bridge/tests/test_illumina_bridge.py:433
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:433:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_security_filter_rejects_unsupported_flags_for_illumina(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_security_filter_rejects_unsupported_flags_for_illumina
+  [026]  skills/illumina-bridge/tests/test_illumina_bridge.py:445
+         finding_id: AST_assertion_tests:skills/illumina-bridge/tests/test_illumina_bridge.py:445:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_sample_manifest_csv_contains_expected_columns(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_sample_manifest_csv_contains_expected_columns
+  [001]  skills/nutrigx_advisor/tests/test_nutrigx.py:32
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:32:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_23andme():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_23andme
+  [002]  skills/nutrigx_advisor/tests/test_nutrigx.py:39
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:39:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_all_panel_snps_present():"
+         reason  : Test function with assertion detected.
+         function      : test_all_panel_snps_present
+  [003]  skills/nutrigx_advisor/tests/test_nutrigx.py:49
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:49:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_mthfr_heterozygous():"
+         reason  : Test function with assertion detected.
+         function      : test_mthfr_heterozygous
+  [004]  skills/nutrigx_advisor/tests/test_nutrigx.py:59
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:59:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_vdr_homozygous_risk():"
+         reason  : Test function with assertion detected.
+         function      : test_vdr_homozygous_risk
+  [005]  skills/nutrigx_advisor/tests/test_nutrigx.py:69
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:69:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_aldh2_ref_homozygous():"
+         reason  : Test function with assertion detected.
+         function      : test_aldh2_ref_homozygous
+  [006]  skills/nutrigx_advisor/tests/test_nutrigx.py:83
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:83:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_scores_structure():"
+         reason  : Test function with assertion detected.
+         function      : test_scores_structure
+  [007]  skills/nutrigx_advisor/tests/test_nutrigx.py:98
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:98:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_vitamin_d_elevated():"
+         reason  : Test function with assertion detected.
+         function      : test_vitamin_d_elevated
+  [008]  skills/nutrigx_advisor/tests/test_nutrigx.py:107
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:107:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_alcohol_low_or_moderate():"
+         reason  : Test function with assertion detected.
+         function      : test_alcohol_low_or_moderate
+  [009]  skills/nutrigx_advisor/tests/test_nutrigx.py:117
+         finding_id: AST_assertion_tests:skills/nutrigx_advisor/tests/test_nutrigx.py:117:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_folate_not_low():"
+         reason  : Test function with assertion detected.
+         function      : test_folate_not_low
+  [001]  skills/pharmgx-reporter/tests/test_pharmgx.py:38
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:38:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_detect_format_23andme():"
+         reason  : Test function with assertion detected.
+         function      : test_detect_format_23andme
+  [002]  skills/pharmgx-reporter/tests/test_pharmgx.py:43
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:43:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_file_finds_all_pgx_snps():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_file_finds_all_pgx_snps
+  [003]  skills/pharmgx-reporter/tests/test_pharmgx.py:52
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:52:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_file_genotype_values():"
+         reason  : Test function with assertion detected.
+         function      : test_parse_file_genotype_values
+  [004]  skills/pharmgx-reporter/tests/test_pharmgx.py:75
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:75:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp2c19_diplotype():"
+         reason  : Test function with assertion detected.
+         function      : test_cyp2c19_diplotype
+  [005]  skills/pharmgx-reporter/tests/test_pharmgx.py:81
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:81:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp2d6_diplotype():"
+         reason  : Test function with assertion detected.
+         function      : test_cyp2d6_diplotype
+  [006]  skills/pharmgx-reporter/tests/test_pharmgx.py:87
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:87:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_vkorc1_genotype():"
+         reason  : Test function with assertion detected.
+         function      : test_vkorc1_genotype
+  [007]  skills/pharmgx-reporter/tests/test_pharmgx.py:93
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:93:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_slco1b1_genotype():"
+         reason  : Test function with assertion detected.
+         function      : test_slco1b1_genotype
+  [008]  skills/pharmgx-reporter/tests/test_pharmgx.py:99
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:99:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp3a5_diplotype():"
+         reason  : Test function with assertion detected.
+         function      : test_cyp3a5_diplotype
+  [009]  skills/pharmgx-reporter/tests/test_pharmgx.py:107
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:107:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp2c19_intermediate():"
+         reason  : Test function with assertion detected.
+         function      : test_cyp2c19_intermediate
+  [010]  skills/pharmgx-reporter/tests/test_pharmgx.py:112
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:112:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp2d6_intermediate():"
+         reason  : Test function with assertion detected.
+         function      : test_cyp2d6_intermediate
+  [011]  skills/pharmgx-reporter/tests/test_pharmgx.py:118
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:118:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_vkorc1_high_sensitivity():"
+         reason  : Test function with assertion detected.
+         function      : test_vkorc1_high_sensitivity
+  [012]  skills/pharmgx-reporter/tests/test_pharmgx.py:124
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:124:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_slco1b1_normal():"
+         reason  : Test function with assertion detected.
+         function      : test_slco1b1_normal
+  [013]  skills/pharmgx-reporter/tests/test_pharmgx.py:130
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:130:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_cyp3a5_nonexpressor():"
+         reason  : Test function with assertion detected.
+         function      : test_cyp3a5_nonexpressor
+  [014]  skills/pharmgx-reporter/tests/test_pharmgx.py:135
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:135:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_dpyd_normal():"
+         reason  : Test function with assertion detected.
+         function      : test_dpyd_normal
+  [015]  skills/pharmgx-reporter/tests/test_pharmgx.py:141
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:141:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_tpmt_normal():"
+         reason  : Test function with assertion detected.
+         function      : test_tpmt_normal
+  [016]  skills/pharmgx-reporter/tests/test_pharmgx.py:148
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:148:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_drug_lookup_returns_all_categories():"
+         reason  : Test function with assertion detected.
+         function      : test_drug_lookup_returns_all_categories
+  [017]  skills/pharmgx-reporter/tests/test_pharmgx.py:158
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:158:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clopidogrel_caution_for_intermediate():"
+         reason  : Test function with assertion detected.
+         function      : test_clopidogrel_caution_for_intermediate
+  [018]  skills/pharmgx-reporter/tests/test_pharmgx.py:166
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:166:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_codeine_caution_for_intermediate_cyp2d6():"
+         reason  : Test function with assertion detected.
+         function      : test_codeine_caution_for_intermediate_cyp2d6
+  [019]  skills/pharmgx-reporter/tests/test_pharmgx.py:174
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:174:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_simvastatin_standard_for_normal_slco1b1():"
+         reason  : Test function with assertion detected.
+         function      : test_simvastatin_standard_for_normal_slco1b1
+  [020]  skills/pharmgx-reporter/tests/test_pharmgx.py:184
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:184:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_phenotype_key_mapping():"
+         reason  : Test function with assertion detected.
+         function      : test_phenotype_key_mapping
+  [021]  skills/pharmgx-reporter/tests/test_pharmgx.py:194
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:194:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_contains_key_sections():"
+         reason  : Test function with assertion detected.
+         function      : test_report_contains_key_sections
+  [022]  skills/pharmgx-reporter/tests/test_pharmgx.py:208
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:208:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_contains_disclaimer():"
+         reason  : Test function with assertion detected.
+         function      : test_report_contains_disclaimer
+  [023]  skills/pharmgx-reporter/tests/test_pharmgx.py:218
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:218:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_all_genes_have_phenotype_mappings():"
+         reason  : Test function with assertion detected.
+         function      : test_all_genes_have_phenotype_mappings
+  [024]  skills/pharmgx-reporter/tests/test_pharmgx.py:225
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:225:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_all_guideline_drugs_reference_valid_genes():"
+         reason  : Test function with assertion detected.
+         function      : test_all_guideline_drugs_reference_valid_genes
+  [025]  skills/pharmgx-reporter/tests/test_pharmgx.py:236
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:236:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_enrich_returns_dict():"
+         reason  : Test function with assertion detected.
+         function      : test_enrich_returns_dict
+  [026]  skills/pharmgx-reporter/tests/test_pharmgx.py:244
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:244:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_cell_html_empty():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_cell_html_empty
+  [027]  skills/pharmgx-reporter/tests/test_pharmgx.py:251
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:251:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_cell_html_no_data():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_cell_html_no_data
+  [028]  skills/pharmgx-reporter/tests/test_pharmgx.py:256
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:256:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_cell_html_full():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_cell_html_full
+  [029]  skills/pharmgx-reporter/tests/test_pharmgx.py:277
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:277:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_level_html_verified():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_level_html_verified
+  [030]  skills/pharmgx-reporter/tests/test_pharmgx.py:286
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:286:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_level_html_unverified():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_level_html_unverified
+  [031]  skills/pharmgx-reporter/tests/test_pharmgx.py:294
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:294:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_level_html_empty():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_level_html_empty
+  [032]  skills/pharmgx-reporter/tests/test_pharmgx.py:299
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:299:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_phenotype_rec():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_phenotype_rec
+  [033]  skills/pharmgx-reporter/tests/test_pharmgx.py:315
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:315:033
+         pattern : ast_assertion_test_v1
+         snippet : "def test_extract_phenotype_rec_no_match():"
+         reason  : Test function with assertion detected.
+         function      : test_extract_phenotype_rec_no_match
+  [034]  skills/pharmgx-reporter/tests/test_pharmgx.py:329
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:329:034
+         pattern : ast_assertion_test_v1
+         snippet : "def test_evidence_badge_class_mapping():"
+         reason  : Test function with assertion detected.
+         function      : test_evidence_badge_class_mapping
+  [035]  skills/pharmgx-reporter/tests/test_pharmgx.py:339
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:339:035
+         pattern : ast_assertion_test_v1
+         snippet : "def test_html_report_with_enrichment():"
+         reason  : Test function with assertion detected.
+         function      : test_html_report_with_enrichment
+  [036]  skills/pharmgx-reporter/tests/test_pharmgx.py:367
+         finding_id: AST_assertion_tests:skills/pharmgx-reporter/tests/test_pharmgx.py:367:036
+         pattern : ast_assertion_test_v1
+         snippet : "def test_html_report_without_enrichment():"
+         reason  : Test function with assertion detected.
+         function      : test_html_report_without_enrichment
+  [001]  skills/profile-report/tests/test_profile_report.py:125
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:125:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_load_valid_profile(self):"
+         reason  : Test function with assertion detected.
+         function      : test_load_valid_profile
+  [002]  skills/profile-report/tests/test_profile_report.py:132
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:132:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_load_nonexistent_profile(self):"
+         reason  : Test function with assertion detected.
+         function      : test_load_nonexistent_profile
+  [003]  skills/profile-report/tests/test_profile_report.py:144
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:144:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_with_data(self, mock_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_with_data
+  [004]  skills/profile-report/tests/test_profile_report.py:154
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:154:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_without_data(self, empty_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_without_data
+  [005]  skills/profile-report/tests/test_profile_report.py:162
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:162:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_with_data(self, full_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_with_data
+  [006]  skills/profile-report/tests/test_profile_report.py:170
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:170:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_without_data(self, empty_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_without_data
+  [007]  skills/profile-report/tests/test_profile_report.py:177
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:177:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_with_data(self, mock_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_with_data
+  [008]  skills/profile-report/tests/test_profile_report.py:185
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:185:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_without_data(self, empty_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_without_data
+  [009]  skills/profile-report/tests/test_profile_report.py:192
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:192:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_with_data(self, full_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_with_data
+  [010]  skills/profile-report/tests/test_profile_report.py:199
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:199:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_without_data(self, empty_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_without_data
+  [011]  skills/profile-report/tests/test_profile_report.py:211
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:211:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_finds_cyp1a2_overlap(self, mock_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_finds_cyp1a2_overlap
+  [012]  skills/profile-report/tests/test_profile_report.py:218
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:218:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_insights_empty(self, empty_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_no_insights_empty
+  [013]  skills/profile-report/tests/test_profile_report.py:230
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:230:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_full_report_all_skills(self, full_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_full_report_all_skills
+  [014]  skills/profile-report/tests/test_profile_report.py:242
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:242:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_partial_report(self, mock_profile: dict):"
+         reason  : Test function with assertion detected.
+         function      : test_partial_report
+  [015]  skills/profile-report/tests/test_profile_report.py:255
+         finding_id: AST_assertion_tests:skills/profile-report/tests/test_profile_report.py:255:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_build_demo_profile(self):"
+         reason  : Test function with assertion detected.
+         function      : test_build_demo_profile
+  [001]  skills/rnaseq-de/tests/test_rnaseq_de.py:30
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:30:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_formula_parsing():"
+         reason  : Test function with assertion detected.
+         function      : test_formula_parsing
+  [002]  skills/rnaseq-de/tests/test_rnaseq_de.py:35
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:35:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_contrast_parsing():"
+         reason  : Test function with assertion detected.
+         function      : test_contrast_parsing
+  [003]  skills/rnaseq-de/tests/test_rnaseq_de.py:42
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:42:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_loaders_and_alignment():"
+         reason  : Test function with assertion detected.
+         function      : test_loaders_and_alignment
+  [004]  skills/rnaseq-de/tests/test_rnaseq_de.py:57
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:57:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_qc_and_filtering():"
+         reason  : Test function with assertion detected.
+         function      : test_qc_and_filtering
+  [005]  skills/rnaseq-de/tests/test_rnaseq_de.py:66
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:66:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_simple_detects_direction():"
+         reason  : Test function with assertion detected.
+         function      : test_de_simple_detects_direction
+  [006]  skills/rnaseq-de/tests/test_rnaseq_de.py:81
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:81:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_run_analysis_writes_outputs(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_run_analysis_writes_outputs
+  [007]  skills/rnaseq-de/tests/test_rnaseq_de.py:100
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:100:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_run_analysis_pseudobulk_fixture(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_run_analysis_pseudobulk_fixture
+  [008]  skills/rnaseq-de/tests/test_rnaseq_de.py:119
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:119:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_result_json_contains_summary(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_result_json_contains_summary
+  [009]  skills/rnaseq-de/tests/test_rnaseq_de.py:135
+         finding_id: AST_assertion_tests:skills/rnaseq-de/tests/test_rnaseq_de.py:135:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pydeseq2_reports_lfc_shrinkage(tmp_path):"
+         reason  : Test function with assertion detected.
+         function      : test_pydeseq2_reports_lfc_shrinkage
+  [001]  skills/scrna-embedding/tests/test_scrna_embedding.py:142
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:142:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_end_to_end_outputs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_end_to_end_outputs
+  [002]  skills/scrna-embedding/tests/test_scrna_embedding.py:190
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:190:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_batch_outputs_and_result_metadata(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_batch_outputs_and_result_metadata
+  [003]  skills/scrna-embedding/tests/test_scrna_embedding.py:230
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:230:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_h5ad_input_runs_with_batch_key(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_h5ad_input_runs_with_batch_key
+  [004]  skills/scrna-embedding/tests/test_scrna_embedding.py:265
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:265:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_layer_allows_processed_x_when_raw_counts_layer_is_selected(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_layer_allows_processed_x_when_raw_counts_layer_is_selected
+  [005]  skills/scrna-embedding/tests/test_scrna_embedding.py:295
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:295:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_processed_input_rejected_without_raw_layer(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_processed_input_rejected_without_raw_layer
+  [006]  skills/scrna-embedding/tests/test_scrna_embedding.py:307
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:307:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_10x_directory_input_runs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_10x_directory_input_runs
+  [007]  skills/scrna-embedding/tests/test_scrna_embedding.py:333
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:333:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_matrix_mtx_gz_input_runs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_matrix_mtx_gz_input_runs
+  [008]  skills/scrna-embedding/tests/test_scrna_embedding.py:358
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:358:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_non_empty_output_dir_rejected(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_non_empty_output_dir_rejected
+  [009]  skills/scrna-embedding/tests/test_scrna_embedding.py:369
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:369:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_commands_sh_quotes_output_path(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_commands_sh_quotes_output_path
+  [010]  skills/scrna-embedding/tests/test_scrna_embedding.py:393
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:393:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clawbio_runner_accepts_whitelisted_embedding_flags(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_clawbio_runner_accepts_whitelisted_embedding_flags
+  [011]  skills/scrna-embedding/tests/test_scrna_embedding.py:421
+         finding_id: AST_assertion_tests:skills/scrna-embedding/tests/test_scrna_embedding.py:421:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_orchestrator_routes_embedding_keywords_to_new_skill():"
+         reason  : Test function with assertion detected.
+         function      : test_orchestrator_routes_embedding_keywords_to_new_skill
+  [001]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:230
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:230:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_end_to_end_outputs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_end_to_end_outputs
+  [002]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:253
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:253:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_summary_in_result_json(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_summary_in_result_json
+  [003]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:267
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:267:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_prefers_pbmc3k_when_available(monkeypatch: pytest.MonkeyPatch):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_prefers_pbmc3k_when_available
+  [004]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:297
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:297:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_pbmc3k_failure_falls_back_to_synthetic(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_pbmc3k_failure_falls_back_to_synthetic
+  [005]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:320
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:320:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_markers_csv_tsv_schema_match(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_markers_csv_tsv_schema_match
+  [006]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:332
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:332:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_two_group_outputs_and_result_metadata(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_de_two_group_outputs_and_result_metadata
+  [007]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:382
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:382:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_volcano_generated_when_requested(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_de_volcano_generated_when_requested
+  [008]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:415
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:415:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_report_contains_key_stats(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_report_contains_key_stats
+  [009]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:429
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:429:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_checksums_contains_key_outputs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_checksums_contains_key_outputs
+  [010]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:442
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:442:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_non_h5ad_input_rejected(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_non_h5ad_input_rejected
+  [011]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:452
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:452:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_10x_mtx_directory_input_runs_end_to_end(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_10x_mtx_directory_input_runs_end_to_end
+  [012]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:501
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:501:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_load_data_accepts_direct_prefixed_gz_mtx_file(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_load_data_accepts_direct_prefixed_gz_mtx_file
+  [013]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:523
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:523:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_tiny_dataset_no_pca_crash(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_tiny_dataset_no_pca_crash
+  [014]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:565
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:565:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_processed_input_rejected_early_with_actionable_message(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_processed_input_rejected_early_with_actionable_message
+  [015]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:592
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:592:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_commands_sh_quotes_demo_output_path(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_commands_sh_quotes_demo_output_path
+  [016]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:602
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:602:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_commands_sh_contains_contrast_flags_when_enabled(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_commands_sh_contains_contrast_flags_when_enabled
+  [017]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:631
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:631:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_demo_doublet_detection_outputs_summary_metadata(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_demo_doublet_detection_outputs_summary_metadata
+  [018]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:657
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:657:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_doublet_and_de_can_run_together(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_doublet_and_de_can_run_together
+  [019]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:680
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:680:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_requires_all_group_flags(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_de_requires_all_group_flags
+  [020]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:696
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:696:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_volcano_requires_de_flags(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_de_volcano_requires_de_flags
+  [021]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:704
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:704:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_groupby_missing_rejected(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_de_groupby_missing_rejected
+  [022]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:724
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:724:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_de_groups_missing_rejected(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_de_groups_missing_rejected
+  [023]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:744
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:744:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clawbio_run_scrna_accepts_whitelisted_tuning_flags(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_clawbio_run_scrna_accepts_whitelisted_tuning_flags
+  [024]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:771
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:771:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clawbio_run_scrna_accepts_whitelisted_feature_flags(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_clawbio_run_scrna_accepts_whitelisted_feature_flags
+  [025]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:801
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:801:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_clawbio_run_scrna_accepts_whitelisted_contrast_flags(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_clawbio_run_scrna_accepts_whitelisted_contrast_flags
+  [026]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:827
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:827:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_doublet_missing_dependency_message(monkeypatch: pytest.MonkeyPatch):"
+         reason  : Test function with assertion detected.
+         function      : test_doublet_missing_dependency_message
+  [027]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:847
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:847:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_parse_args_annotation_defaults_and_override(monkeypatch: pytest.MonkeyPatch):"
+         reason  : Test function with assertion detected.
+         function      : test_parse_args_annotation_defaults_and_override
+  [028]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:872
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:872:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_celltypist_annotation_pipeline_writes_cluster_summary("
+         reason  : Test function with assertion detected.
+         function      : test_celltypist_annotation_pipeline_writes_cluster_summary
+  [029]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:974
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:974:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_annotation_missing_local_model_fails_actionably(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_annotation_missing_local_model_fails_actionably
+  [030]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:993
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:993:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_orchestrator_no_rds_extension_route():"
+         reason  : Test function with assertion detected.
+         function      : test_orchestrator_no_rds_extension_route
+  [031]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1001
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1001:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_10x_directory_input_runs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_10x_directory_input_runs
+  [032]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1027
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1027:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_integrated_latent_input_auto_mode_runs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_integrated_latent_input_auto_mode_runs
+  [033]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1064
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1064:033
+         pattern : ast_assertion_test_v1
+         snippet : "def test_integrated_latent_input_explicit_and_none_modes(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_integrated_latent_input_explicit_and_none_modes
+  [034]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1117
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1117:034
+         pattern : ast_assertion_test_v1
+         snippet : "def test_matrix_mtx_gz_input_runs(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_matrix_mtx_gz_input_runs
+  [035]  skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1143
+         finding_id: AST_assertion_tests:skills/scrna-orchestrator/tests/test_scrna_orchestrator.py:1143:035
+         pattern : ast_assertion_test_v1
+         snippet : "def test_legacy_de_flags_still_work_for_contrastive_markers(tmp_path: Path):"
+         reason  : Test function with assertion detected.
+         function      : test_legacy_de_flags_still_work_for_contrastive_markers
+
+AST_seed_setting  [DETECTED]  (2 findings)
+  [001]  examples/generate_demo_vcf.py:23
+         finding_id: AST_seed_setting:examples/generate_demo_vcf.py:23:001
+         pattern : ast_seed_setting_v1
+         snippet : "random.seed(42) # reproducible demo"
+         reason  : Deterministic random seed setting call detected.
+  [001]  skills/galaxy-bridge/galaxy_bridge.py:339
+         finding_id: AST_seed_setting:skills/galaxy-bridge/galaxy_bridge.py:339:001
+         pattern : ast_seed_setting_v1
+         snippet : "random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+
+S4_container_environment  [DETECTED]  (1 finding)
+  [001]  Dockerfile
+         finding_id: S4_container_environment:Dockerfile:0:001
+         pattern : container_file_v1
+         snippet : "Dockerfile"
+         reason  : Container or compose file exists.
+
+S4_make_reproduce_target  [DETECTED]  (2 findings)
+  [001]  Makefile:6
+         finding_id: S4_make_reproduce_target:Makefile:6:001
+         pattern : make_reproduce_target_v1
+         snippet : "test:"
+         reason  : Makefile target supporting reproduction, evaluation, benchmark, or test detected.
+         target      : test
+  [001]  makefile:6
+         finding_id: S4_make_reproduce_target:makefile:6:001
+         pattern : make_reproduce_target_v1
+         snippet : "test:"
+         reason  : Makefile target supporting reproduction, evaluation, benchmark, or test detected.
+         target      : test
+
+S4_environment_lock_evidence  [DETECTED]  (1 finding)
+  [001]  requirements.txt
+         finding_id: S4_environment_lock_evidence:requirements.txt:0:001
+         pattern : environment_lock_file_v1
+         snippet : "requirements.txt"
+         reason  : Environment, dependency, or lock manifest detected.
+
+S4_exact_dependency_pins_or_hashes  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_exact_dependency_pins_or_hashes:.:0:001
+         pattern : exact_pin_or_hash_v1
+         reason  : Dependency manifests exist but no exact pins or hashes were detected.
+
+S4_readme_reproducibility_section  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_readme_reproducibility_section:.:0:001
+         pattern : readme_repro_heading_v1
+         reason  : No README detected.
+
+S4_checksum_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_checksum_files:.:0:001
+         pattern : checksum_file_v1
+         reason  : No evidence detected for S4_checksum_files.
+
+S4_dataset_url  [DETECTED]  (2 findings)
+  [001]  docs/demo-genome.md:3
+         finding_id: S4_dataset_url:docs/demo-genome.md:3:001
+         pattern : dataset_url_v1
+         snippet : "ClawBio's demo data comes from a **real human genome**: the 23andMe genotype of Manuel Corpas, published under a CC0 (public domain) license as part of the [Corpasome](https://l..."
+         reason  : Dataset URL or data source reference detected.
+         url      : https://link.springer.com/article/10.1186/1751-0473-8-13
+  [002]  docs/demo-genome.md:18
+         finding_id: S4_dataset_url:docs/demo-genome.md:18:002
+         pattern : dataset_url_v1
+         snippet : "**[23andMe SNP chip genotype data — doi:10.6084/m9.figshare.693052](https://figshare.com/articles/dataset/23andMe_SNP_chip_genotype_data/92682)**"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://figshare.com/articles/dataset/23andMe_SNP_chip_genotype_data/92682
+
+S4_model_weight_url_or_checksum  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_model_weight_url_or_checksum:.:0:001
+         pattern : model_weight_url_v1
+         reason  : Documentation exists but no model artifact URL/checksum evidence was detected.
+
+S4_citation_cff  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_citation_cff:.:0:001
+         pattern : citation_cff_v1
+         reason  : No evidence detected for S4_citation_cff.
+
+S4_cli_entrypoint  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_cli_entrypoint:.:0:001
+         pattern : cli_entrypoint_v1
+         reason  : argparse CLI evidence detected by AST summary.
+         source      : ast_signal_summary
+
+S4_seed_setting  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_seed_setting:.:0:001
+         pattern : ast_seed_setting_stage4_v1
+         reason  : Deterministic seed setting evidence detected by AST summary.
+         seed_settings      : 2
+
+S4_runnable_examples  [DETECTED]  (2 findings)
+  [001]  examples/demo_report/report.md
+         finding_id: S4_runnable_examples:examples/demo_report/report.md:0:001
+         pattern : runnable_example_file_v1
+         snippet : "examples/demo_report/report.md"
+         reason  : Runnable example, notebook, or demo file exists.
+  [001]  examples/generate_demo_vcf.py
+         finding_id: S4_runnable_examples:examples/generate_demo_vcf.py:0:001
+         pattern : runnable_example_file_v1
+         snippet : "examples/generate_demo_vcf.py"
+         reason  : Runnable example, notebook, or demo file exists.
+
+========================================================================
+AST Signal Summary
+
+  files_total                        102
+  files_considered                   102
+  files_parsed                       102
+  files_skipped_size                 0
+  syntax_errors                      0
+  file_limit_exceeded                False
+  test_functions                     408
+  assertion_tests                    407
+  public_functions                   910
+  docstring_functions                583
+  annotated_functions                502
+  seed_settings                      2
+  argparse_cli                       True
+  portable_model_loading             0
+  fail_open_handlers                 32
+  docstring_coverage                 0.6407
+  type_annotation_coverage           0.5516
+
+========================================================================
+Stage 4 Replication Rubric
+
+  S4_container_environment                    10 / 10   Container or compose file exists.
+  S4_make_reproduce_target                    10 / 10   Makefile reproduction/evaluation target detected.
+  S4_environment_lock_evidence                10 / 10   Environment, dependency, or lock manifest detected.
+  S4_exact_dependency_pins_or_hashes           0 / 10   Dependency manifests exist but no exact pins or hashes were detected.
+  S4_readme_reproducibility_section            0 / 10   No README detected.
+  S4_checksum_files                            0 / 10   No evidence detected for S4_checksum_files.
+  S4_dataset_url                              10 / 10   Dataset URL or data source reference detected.
+  S4_model_weight_url_or_checksum              0 / 10   Documentation exists but no model artifact URL/checksum evidence was detected.
+  S4_citation_cff                              0 / 5    No evidence detected for S4_citation_cff.
+  S4_cli_entrypoint                            5 / 5    CLI entry point or argparse interface detected.
+  S4_seed_setting                              5 / 5    Deterministic seed setting detected.
+  S4_runnable_examples                         5 / 5    Runnable example, notebook, or demo file exists.
+  stage_4_raw_total                           55 / 100  Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0.
+
+========================================================================
+DISCLAIMER: Evidence-surface pre-screen only.
+Not clinical certification, regulatory clearance, or medical advice.

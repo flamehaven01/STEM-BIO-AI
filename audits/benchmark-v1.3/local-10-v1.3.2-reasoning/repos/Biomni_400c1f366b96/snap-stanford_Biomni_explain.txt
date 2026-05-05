@@ -1,0 +1,624 @@
+STEM BIO-AI Explain Report
+Target  : snap-stanford/Biomni
+Score   : 36 / 100  (T0 Rejected)
+Replic  : 20 / 100  (R0)
+========================================================================
+
+S1_readme_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_readme_bio_terms:.:0:001
+         pattern : bio_terms_v1
+         reason  : No evidence detected for S1_readme_bio_terms.
+
+S1_clinical_boundary  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_clinical_boundary:.:0:001
+         pattern : clinical_boundary_v1
+         reason  : No evidence detected for S1_clinical_boundary.
+
+S3_T1_workflow_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T1_workflow_files:.:0:001
+         pattern : workflow_presence_v1
+         reason  : No evidence detected for S3_T1_workflow_files.
+
+S3_T2_domain_tests  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T2_domain_tests:.:0:001
+         pattern : domain_tests_bio_terms_v1
+         reason  : No evidence detected for S3_T2_domain_tests.
+
+S3_T3_changelog_release_hygiene  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T3_changelog_release_hygiene:.:0:001
+         pattern : changelog_presence_v1
+         reason  : No evidence detected for S3_T3_changelog_release_hygiene.
+
+S3_B1_dependency_manifest  [DETECTED]  (1 finding)
+  [001]  pyproject.toml
+         finding_id: S3_B1_dependency_manifest:pyproject.toml:0:001
+         pattern : dependency_manifest_presence_v1
+         snippet : "pyproject.toml"
+         reason  : Dependency or environment manifest exists.
+
+S3_B2_bias_limitations  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B2_bias_limitations:.:0:001
+         pattern : bias_limitations_v2
+         reason  : No evidence detected for S3_B2_bias_limitations.
+
+S3_B3_coi_funding  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B3_coi_funding:.:0:001
+         pattern : coi_funding_v1
+         reason  : No evidence detected for S3_B3_coi_funding.
+
+S2_package_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S2_package_bio_terms:.:0:001
+         pattern : package_bio_terms_v1
+         reason  : No evidence detected for S2_package_bio_terms.
+
+C1_hardcoded_credentials  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C1_hardcoded_credentials:.:0:001
+         pattern : credential_pattern_v2
+         reason  : No hardcoded credential evidence detected for C1_hardcoded_credentials.
+
+C2_dependency_pinning  [DETECTED]  (49 findings)
+  [001]  pyproject.toml:2
+         finding_id: C2_dependency_pinning:pyproject.toml:2:001
+         pattern : loose_dependency_v1
+         snippet : "requires = ["setuptools>=61.0", "wheel"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : setuptools>=61.0
+  [002]  pyproject.toml:2
+         finding_id: C2_dependency_pinning:pyproject.toml:2:002
+         pattern : loose_dependency_v1
+         snippet : "requires = ["setuptools>=61.0", "wheel"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : wheel
+  [003]  pyproject.toml:3
+         finding_id: C2_dependency_pinning:pyproject.toml:3:003
+         pattern : loose_dependency_v1
+         snippet : "build-backend = "setuptools.build_meta""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : setuptools.build_meta
+  [004]  pyproject.toml:6
+         finding_id: C2_dependency_pinning:pyproject.toml:6:004
+         pattern : loose_dependency_v1
+         snippet : "name = "biomni""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : biomni
+  [005]  pyproject.toml:7
+         finding_id: C2_dependency_pinning:pyproject.toml:7:005
+         pattern : loose_dependency_v1
+         snippet : "dynamic = ["version"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : version
+  [006]  pyproject.toml:8
+         finding_id: C2_dependency_pinning:pyproject.toml:8:006
+         pattern : loose_dependency_v1
+         snippet : "description = "Biomni""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : Biomni
+  [007]  pyproject.toml:9
+         finding_id: C2_dependency_pinning:pyproject.toml:9:007
+         pattern : loose_dependency_v1
+         snippet : "readme = "README.md""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : README.md
+  [008]  pyproject.toml:10
+         finding_id: C2_dependency_pinning:pyproject.toml:10:008
+         pattern : loose_dependency_v1
+         snippet : "license = "Apache-2.0""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : Apache-2.0
+  [009]  pyproject.toml:11
+         finding_id: C2_dependency_pinning:pyproject.toml:11:009
+         pattern : loose_dependency_v1
+         snippet : "license-files = ["LICENSE"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : LICENSE
+  [010]  pyproject.toml:15
+         finding_id: C2_dependency_pinning:pyproject.toml:15:010
+         pattern : loose_dependency_v1
+         snippet : "requires-python = ">=3.11""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : >=3.11
+  [011]  pyproject.toml:16
+         finding_id: C2_dependency_pinning:pyproject.toml:16:011
+         pattern : loose_dependency_v1
+         snippet : "dependencies = ["pydantic", "langchain", "python-dotenv"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : pydantic
+  [012]  pyproject.toml:16
+         finding_id: C2_dependency_pinning:pyproject.toml:16:012
+         pattern : loose_dependency_v1
+         snippet : "dependencies = ["pydantic", "langchain", "python-dotenv"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : langchain
+  [013]  pyproject.toml:16
+         finding_id: C2_dependency_pinning:pyproject.toml:16:013
+         pattern : loose_dependency_v1
+         snippet : "dependencies = ["pydantic", "langchain", "python-dotenv"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : python-dotenv
+  [014]  pyproject.toml:23
+         finding_id: C2_dependency_pinning:pyproject.toml:23:014
+         pattern : loose_dependency_v1
+         snippet : "gradio = ["gradio>=5.0,<6.0"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : gradio>=5.0,<6.0
+  [015]  pyproject.toml:29
+         finding_id: C2_dependency_pinning:pyproject.toml:29:015
+         pattern : loose_dependency_v1
+         snippet : "version = {attr = "biomni.version.__version__"}"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : biomni.version.__version__
+  [016]  pyproject.toml:35
+         finding_id: C2_dependency_pinning:pyproject.toml:35:016
+         pattern : loose_dependency_v1
+         snippet : "src = ["src"]"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : src
+  [017]  pyproject.toml:43
+         finding_id: C2_dependency_pinning:pyproject.toml:43:017
+         pattern : loose_dependency_v1
+         snippet : ""F", # Errors detected by Pyflakes"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : F
+  [018]  pyproject.toml:44
+         finding_id: C2_dependency_pinning:pyproject.toml:44:018
+         pattern : loose_dependency_v1
+         snippet : ""E", # Error detected by Pycodestyle"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : E
+  [019]  pyproject.toml:45
+         finding_id: C2_dependency_pinning:pyproject.toml:45:019
+         pattern : loose_dependency_v1
+         snippet : ""W", # Warning detected by Pycodestyle"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : W
+  [020]  pyproject.toml:46
+         finding_id: C2_dependency_pinning:pyproject.toml:46:020
+         pattern : loose_dependency_v1
+         snippet : ""I", # isort"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : I
+  [021]  pyproject.toml:48
+         finding_id: C2_dependency_pinning:pyproject.toml:48:021
+         pattern : loose_dependency_v1
+         snippet : ""B", # flake8-bugbear"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : B
+  [022]  pyproject.toml:49
+         finding_id: C2_dependency_pinning:pyproject.toml:49:022
+         pattern : loose_dependency_v1
+         snippet : ""TID", # flake8-tidy-imports"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : TID
+  [023]  pyproject.toml:50
+         finding_id: C2_dependency_pinning:pyproject.toml:50:023
+         pattern : loose_dependency_v1
+         snippet : ""C4", # flake8-comprehensions"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : C4
+  [024]  pyproject.toml:51
+         finding_id: C2_dependency_pinning:pyproject.toml:51:024
+         pattern : loose_dependency_v1
+         snippet : ""BLE", # flake8-blind-except"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : BLE
+  [025]  pyproject.toml:52
+         finding_id: C2_dependency_pinning:pyproject.toml:52:025
+         pattern : loose_dependency_v1
+         snippet : ""UP", # pyupgrade"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : UP
+  [026]  pyproject.toml:53
+         finding_id: C2_dependency_pinning:pyproject.toml:53:026
+         pattern : loose_dependency_v1
+         snippet : ""RUF100", # Report unused noqa directives"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : RUF100
+  [027]  pyproject.toml:54
+         finding_id: C2_dependency_pinning:pyproject.toml:54:027
+         pattern : loose_dependency_v1
+         snippet : ""TCH", # Typing imports"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : TCH
+  [028]  pyproject.toml:61
+         finding_id: C2_dependency_pinning:pyproject.toml:61:028
+         pattern : loose_dependency_v1
+         snippet : ""E501","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : E501
+  [029]  pyproject.toml:63
+         finding_id: C2_dependency_pinning:pyproject.toml:63:029
+         pattern : loose_dependency_v1
+         snippet : ""E731","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : E731
+  [030]  pyproject.toml:65
+         finding_id: C2_dependency_pinning:pyproject.toml:65:030
+         pattern : loose_dependency_v1
+         snippet : ""E741","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : E741
+  [031]  pyproject.toml:67
+         finding_id: C2_dependency_pinning:pyproject.toml:67:031
+         pattern : loose_dependency_v1
+         snippet : ""D104","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D104
+  [032]  pyproject.toml:69
+         finding_id: C2_dependency_pinning:pyproject.toml:69:032
+         pattern : loose_dependency_v1
+         snippet : ""D100","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D100
+  [033]  pyproject.toml:71
+         finding_id: C2_dependency_pinning:pyproject.toml:71:033
+         pattern : loose_dependency_v1
+         snippet : ""D107","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D107
+  [034]  pyproject.toml:73
+         finding_id: C2_dependency_pinning:pyproject.toml:73:034
+         pattern : loose_dependency_v1
+         snippet : ""B008","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : B008
+  [035]  pyproject.toml:75
+         finding_id: C2_dependency_pinning:pyproject.toml:75:035
+         pattern : loose_dependency_v1
+         snippet : ""D105","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D105
+  [036]  pyproject.toml:77
+         finding_id: C2_dependency_pinning:pyproject.toml:77:036
+         pattern : loose_dependency_v1
+         snippet : ""D400","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D400
+  [037]  pyproject.toml:79
+         finding_id: C2_dependency_pinning:pyproject.toml:79:037
+         pattern : loose_dependency_v1
+         snippet : ""D401","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D401
+  [038]  pyproject.toml:82
+         finding_id: C2_dependency_pinning:pyproject.toml:82:038
+         pattern : loose_dependency_v1
+         snippet : ""D203","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D203
+  [039]  pyproject.toml:84
+         finding_id: C2_dependency_pinning:pyproject.toml:84:039
+         pattern : loose_dependency_v1
+         snippet : ""D213","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : D213
+  [040]  pyproject.toml:86
+         finding_id: C2_dependency_pinning:pyproject.toml:86:040
+         pattern : loose_dependency_v1
+         snippet : ""N813","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : N813
+  [041]  pyproject.toml:88
+         finding_id: C2_dependency_pinning:pyproject.toml:88:041
+         pattern : loose_dependency_v1
+         snippet : ""E402","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : E402
+  [042]  pyproject.toml:90
+         finding_id: C2_dependency_pinning:pyproject.toml:90:042
+         pattern : loose_dependency_v1
+         snippet : ""PLR0913","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : PLR0913
+  [043]  pyproject.toml:92
+         finding_id: C2_dependency_pinning:pyproject.toml:92:043
+         pattern : loose_dependency_v1
+         snippet : ""PLR0912","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : PLR0912
+  [044]  pyproject.toml:94
+         finding_id: C2_dependency_pinning:pyproject.toml:94:044
+         pattern : loose_dependency_v1
+         snippet : ""PLR2004","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : PLR2004
+  [045]  pyproject.toml:96
+         finding_id: C2_dependency_pinning:pyproject.toml:96:045
+         pattern : loose_dependency_v1
+         snippet : ""PLR0915","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : PLR0915
+  [046]  pyproject.toml:98
+         finding_id: C2_dependency_pinning:pyproject.toml:98:046
+         pattern : loose_dependency_v1
+         snippet : ""PLC0206","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : PLC0206
+  [047]  pyproject.toml:100
+         finding_id: C2_dependency_pinning:pyproject.toml:100:047
+         pattern : loose_dependency_v1
+         snippet : ""PLC0415","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : PLC0415
+  [048]  pyproject.toml:102
+         finding_id: C2_dependency_pinning:pyproject.toml:102:048
+         pattern : loose_dependency_v1
+         snippet : ""BLE001","
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : BLE001
+  [049]  pyproject.toml:104
+         finding_id: C2_dependency_pinning:pyproject.toml:104:049
+         pattern : loose_dependency_v1
+         snippet : ""B005""
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : B005
+
+C3_dead_or_deprecated_patient_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C3_dead_or_deprecated_patient_adjacent_paths:.:0:001
+         pattern : deprecated_patient_metadata_v1
+         reason  : No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths.
+
+C4_exception_handling_clinical_adjacent_paths  [DETECTED]  (2 findings)
+  [001]  biomni/tool/cancer_biology.py:243
+         finding_id: C4_exception_handling_clinical_adjacent_paths:biomni/tool/cancer_biology.py:243:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  biomni/tool/pharmacology.py:1858
+         finding_id: C4_exception_handling_clinical_adjacent_paths:biomni/tool/pharmacology.py:1858:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+
+AST_fail_open_precision  [DETECTED]  (12 findings)
+  [001]  biomni/agent/a1.py:2136
+         finding_id: AST_fail_open_precision:biomni/agent/a1.py:2136:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  biomni/tool/bioengineering.py:548
+         finding_id: AST_fail_open_precision:biomni/tool/bioengineering.py:548:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  biomni/tool/cancer_biology.py:243
+         finding_id: AST_fail_open_precision:biomni/tool/cancer_biology.py:243:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  biomni/tool/cancer_biology.py:1043
+         finding_id: AST_fail_open_precision:biomni/tool/cancer_biology.py:1043:002
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.CalledProcessError, FileNotFoundError):"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  biomni/tool/cancer_biology.py:1059
+         finding_id: AST_fail_open_precision:biomni/tool/cancer_biology.py:1059:003
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.CalledProcessError, FileNotFoundError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  biomni/tool/lab_automation.py:544
+         finding_id: AST_fail_open_precision:biomni/tool/lab_automation.py:544:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  biomni/tool/pharmacology.py:1858
+         finding_id: AST_fail_open_precision:biomni/tool/pharmacology.py:1858:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  biomni/tool/pharmacology.py:953
+         finding_id: AST_fail_open_precision:biomni/tool/pharmacology.py:953:002
+         pattern : ast_fail_open_v1
+         snippet : "except (ValueError, TypeError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  biomni/tool/support_tools.py:74
+         finding_id: AST_fail_open_precision:biomni/tool/support_tools.py:74:001
+         pattern : ast_fail_open_v1
+         snippet : "except ImportError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  biomni/tool/support_tools.py:122
+         finding_id: AST_fail_open_precision:biomni/tool/support_tools.py:122:002
+         pattern : ast_fail_open_v1
+         snippet : "except ImportError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  biomni/utils.py:973
+         finding_id: AST_fail_open_precision:biomni/utils.py:973:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  biomni/utils.py:964
+         finding_id: AST_fail_open_precision:biomni/utils.py:964:002
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+
+AST_argparse_cli  [DETECTED]  (3 findings)
+  [001]  biomni/biorxiv_scripts/extract_biorxiv_tasks.py:27
+         finding_id: AST_argparse_cli:biomni/biorxiv_scripts/extract_biorxiv_tasks.py:27:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Extract tasks from bioRxiv papers in a specific subject area.")"
+         reason  : argparse CLI interface detected.
+  [001]  biomni/biorxiv_scripts/generate_function.py:14
+         finding_id: AST_argparse_cli:biomni/biorxiv_scripts/generate_function.py:14:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Generate Python functions given task descriptions")"
+         reason  : argparse CLI interface detected.
+  [001]  biomni/biorxiv_scripts/process_all_subjects.py:48
+         finding_id: AST_argparse_cli:biomni/biorxiv_scripts/process_all_subjects.py:48:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Process all bioRxiv subjects and extract tasks from papers.")"
+         reason  : argparse CLI interface detected.
+
+AST_seed_setting  [DETECTED]  (6 findings)
+  [001]  biomni/task/hle.py:6
+         finding_id: AST_seed_setting:biomni/task/hle.py:6:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  biomni/task/lab_bench.py:6
+         finding_id: AST_seed_setting:biomni/task/lab_bench.py:6:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [002]  biomni/task/lab_bench.py:36
+         finding_id: AST_seed_setting:biomni/task/lab_bench.py:36:002
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  biomni/tool/biochemistry.py:526
+         finding_id: AST_seed_setting:biomni/tool/biochemistry.py:526:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42) # For reproducibility"
+         reason  : Deterministic random seed setting call detected.
+  [001]  biomni/tool/immunology.py:1025
+         finding_id: AST_seed_setting:biomni/tool/immunology.py:1025:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  biomni/tool/microbiology.py:720
+         finding_id: AST_seed_setting:biomni/tool/microbiology.py:720:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42) # For reproducibility"
+         reason  : Deterministic random seed setting call detected.
+
+S4_container_environment  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_container_environment:.:0:001
+         pattern : container_file_v1
+         reason  : No evidence detected for S4_container_environment.
+
+S4_make_reproduce_target  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_make_reproduce_target:.:0:001
+         pattern : make_reproduce_target_v1
+         reason  : No Makefile detected.
+
+S4_environment_lock_evidence  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_environment_lock_evidence:.:0:001
+         pattern : environment_lock_file_v1
+         reason  : No environment, dependency, or lock manifest detected.
+
+S4_exact_dependency_pins_or_hashes  [DETECTED]  (1 finding)
+  [001]  pyproject.toml:13
+         finding_id: S4_exact_dependency_pins_or_hashes:pyproject.toml:13:001
+         pattern : exact_pin_or_hash_v1
+         snippet : "{name = "Biomni Team", email = "kexinh@cs.stanford.edu"}"
+         reason  : Exact dependency pin or hash evidence detected.
+
+S4_readme_reproducibility_section  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_readme_reproducibility_section:.:0:001
+         pattern : readme_repro_heading_v1
+         reason  : No README detected.
+
+S4_checksum_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_checksum_files:.:0:001
+         pattern : checksum_file_v1
+         reason  : No evidence detected for S4_checksum_files.
+
+S4_dataset_url  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_dataset_url:.:0:001
+         pattern : dataset_url_v1
+         reason  : Documentation exists but no dataset URL or data source URL was detected.
+
+S4_model_weight_url_or_checksum  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_model_weight_url_or_checksum:.:0:001
+         pattern : model_weight_url_v1
+         reason  : Documentation exists but no model artifact URL/checksum evidence was detected.
+
+S4_citation_cff  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_citation_cff:.:0:001
+         pattern : citation_cff_v1
+         reason  : No evidence detected for S4_citation_cff.
+
+S4_cli_entrypoint  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_cli_entrypoint:.:0:001
+         pattern : cli_entrypoint_v1
+         reason  : argparse CLI evidence detected by AST summary.
+         source      : ast_signal_summary
+
+S4_seed_setting  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_seed_setting:.:0:001
+         pattern : ast_seed_setting_stage4_v1
+         reason  : Deterministic seed setting evidence detected by AST summary.
+         seed_settings      : 6
+
+S4_runnable_examples  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_runnable_examples:.:0:001
+         pattern : runnable_example_file_v1
+         reason  : No evidence detected for S4_runnable_examples.
+
+========================================================================
+AST Signal Summary
+
+  files_total                        77
+  files_considered                   77
+  files_parsed                       77
+  files_skipped_size                 0
+  syntax_errors                      0
+  file_limit_exceeded                False
+  test_functions                     2
+  assertion_tests                    0
+  public_functions                   504
+  docstring_functions                371
+  annotated_functions                167
+  seed_settings                      6
+  argparse_cli                       True
+  portable_model_loading             0
+  fail_open_handlers                 12
+  docstring_coverage                 0.7361
+  type_annotation_coverage           0.3313
+
+========================================================================
+Stage 4 Replication Rubric
+
+  S4_container_environment                     0 / 10   No evidence detected for S4_container_environment.
+  S4_make_reproduce_target                     0 / 10   No Makefile detected.
+  S4_environment_lock_evidence                 0 / 10   No environment, dependency, or lock manifest detected.
+  S4_exact_dependency_pins_or_hashes          10 / 10   Exact dependency pin or hash evidence detected.
+  S4_readme_reproducibility_section            0 / 10   No README detected.
+  S4_checksum_files                            0 / 10   No evidence detected for S4_checksum_files.
+  S4_dataset_url                               0 / 10   Documentation exists but no dataset URL or data source URL was detected.
+  S4_model_weight_url_or_checksum              0 / 10   Documentation exists but no model artifact URL/checksum evidence was detected.
+  S4_citation_cff                              0 / 5    No evidence detected for S4_citation_cff.
+  S4_cli_entrypoint                            5 / 5    CLI entry point or argparse interface detected.
+  S4_seed_setting                              5 / 5    Deterministic seed setting detected.
+  S4_runnable_examples                         0 / 5    No evidence detected for S4_runnable_examples.
+  stage_4_raw_total                           20 / 100  Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score.
+
+========================================================================
+Reasoning Diagnostics
+
+  version                         stem-bio-ai-reasoning-v1.3.2
+  mode                            diagnostic_only
+  final_score_override            False
+  evidence_budget                 supported
+  confidence_envelope             unknown
+  lane_coherence                  coherent
+  uncertainty_budget              review_advised
+  evidence_risk_gate              within_gate
+
+========================================================================
+DISCLAIMER: Evidence-surface pre-screen only.
+Not clinical certification, regulatory clearance, or medical advice.

@@ -1,6 +1,6 @@
 # STEM BIO-AI Scoring Rationale
 
-Version: 1.5.7
+Version: 1.5.8
 Status: Authoritative design record. Update with each structural score change.
 
 ---

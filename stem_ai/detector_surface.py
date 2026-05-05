@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import re
 from collections.abc import Iterable
 from pathlib import Path
@@ -7,12 +8,13 @@ from pathlib import Path
 from .evidence import EvidenceFinding
 from .detector_utils import (
     add_finding,
-    dependency_entries,
     existing_named_files,
+    is_fixture_like_path,
     is_unpinned_dependency,
     iter_code_files,
     iter_deprecated_files,
     iter_text_files,
+    manifest_dependency_entries,
     read_text,
     relative_path,
     source_line,
@@ -26,7 +28,6 @@ from .patterns import (
     DATA_SOURCE_TERMS,
     DEMOGRAPHIC_BIAS_TERMS,
     DISCLAIMER_TERMS,
-    FAIL_OPEN,
     HYPE_AUTONOMOUS_REPLACEMENT,
     HYPE_BREAKTHROUGH,
     HYPE_CLINICAL_CERTAINTY,
@@ -83,7 +84,7 @@ def collect_surface_findings(
     credential_detector(target, findings, counters, code_paths)
     dependency_pinning_detector(target, findings, counters, dep_paths)
     regex_detector(target, findings, counters, "C3_dead_or_deprecated_patient_adjacent_paths", "deprecated_patient_metadata_v1", PATIENT_METADATA, deprecated_paths, "Patient-adjacent metadata pattern detected in deprecated/legacy/archive path.")
-    regex_detector(target, findings, counters, "C4_exception_handling_clinical_adjacent_paths", "fail_open_exception_v1", FAIL_OPEN, code_paths, "Fail-open exception pattern detected in code text.")
+    fail_open_detector(target, findings, counters, code_paths)
 
 
 def regex_detector(
@@ -158,15 +159,15 @@ def _check_unpinned_deps_in_file(
     counters: dict[tuple[str, str], int],
 ) -> bool:
     found = False
-    for line_number, line in enumerate(read_text(path).splitlines(), start=1):
-        for entry in dependency_entries(line):
-            if not is_unpinned_dependency(entry):
-                continue
-            found = True
-            add_finding(target, findings, counters, "C2_dependency_pinning",
-                        "loose_dependency_v1", "detected", "warn", path, line_number,
-                        line, "dependency", "Unpinned or loosely pinned dependency detected.",
-                        {"dependency": entry})
+    text = read_text(path)
+    for line_number, entry, snippet in manifest_dependency_entries(path, text):
+        if not is_unpinned_dependency(entry):
+            continue
+        found = True
+        add_finding(target, findings, counters, "C2_dependency_pinning",
+                    "loose_dependency_v1", "detected", "warn", path, line_number,
+                    snippet, "dependency", "Unpinned or loosely pinned dependency detected.",
+                    {"dependency": entry})
     return found
 
 
@@ -183,12 +184,13 @@ def credential_detector(
         lines = text.splitlines()
         for match in SECRET_TERMS.finditer(text):
             line = text.count("\n", 0, match.start()) + 1
-            status = "not_applicable" if PLACEHOLDER_SECRET_VALUES.search(match.group(0)) else "detected"
+            placeholder = PLACEHOLDER_SECRET_VALUES.search(match.group(0)) is not None
+            fixture_like = is_fixture_like_path(path)
+            status = "not_applicable" if placeholder or fixture_like else "detected"
             severity = "info" if status == "not_applicable" else "warn"
             explanation = (
-                "Credential-like placeholder in test/example context ignored for C1 penalty."
-                if status == "not_applicable"
-                else "Hardcoded credential-like pattern detected."
+                "Credential-like placeholder or test/example fixture ignored for C1 penalty."
+                if status == "not_applicable" else "Hardcoded credential-like pattern detected."
             )
             detected = detected or status == "detected"
             placeholders = placeholders or status == "not_applicable"
@@ -205,7 +207,7 @@ def credential_detector(
                 source_line(lines, line),
                 "regex",
                 explanation,
-                {"match": match.group(0), "placeholder": status == "not_applicable"},
+                {"match": match.group(0), "placeholder": placeholder, "fixture_context": fixture_like},
             )
     if not detected and not placeholders:
         add_finding(
@@ -222,6 +224,71 @@ def credential_detector(
             "regex",
             "No hardcoded credential evidence detected for C1_hardcoded_credentials.",
         )
+
+
+def fail_open_detector(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    paths: Iterable[Path],
+) -> None:
+    detected = False
+    for path in sorted(set(paths), key=lambda p: relative_path(target, p).as_posix()):
+        if path.suffix.lower() != ".py":
+            continue
+        text = read_text(path)
+        if not text:
+            continue
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            continue
+        lines = text.splitlines()
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.ExceptHandler) or not _is_fail_open_handler(node):
+                continue
+            detected = True
+            line = getattr(node, "lineno", 0)
+            add_finding(
+                target,
+                findings,
+                counters,
+                "C4_exception_handling_clinical_adjacent_paths",
+                "fail_open_exception_v2",
+                "detected",
+                "warn",
+                path,
+                line,
+                source_line(lines, line),
+                "ast",
+                "Fail-open exception handler detected in executable Python code.",
+            )
+    if not detected:
+        add_finding(
+            target,
+            findings,
+            counters,
+            "C4_exception_handling_clinical_adjacent_paths",
+            "fail_open_exception_v2",
+            "not_detected",
+            "info",
+            Path("."),
+            0,
+            "",
+            "ast",
+            "No fail-open exception handler detected in executable Python code.",
+        )
+
+
+def _is_fail_open_handler(node: ast.ExceptHandler) -> bool:
+    if not node.body:
+        return False
+    for child in node.body:
+        if isinstance(child, ast.Pass):
+            return True
+        if isinstance(child, ast.Return) and isinstance(child.value, ast.Constant) and child.value.value is True:
+            return True
+    return False
 
 
 def file_presence_detector(

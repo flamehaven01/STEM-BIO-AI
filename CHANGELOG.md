@@ -10,6 +10,23 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.8] - 2026-05-05
+
+### Fixed
+- Narrowed `C2_dependency_pinning` to real dependency-manifest surfaces so non-dependency `pyproject.toml` metadata lines such as `name`, `version`, `readme`, and `keywords` no longer count as loose dependencies.
+- Exempted realistic credential fixtures under test/example paths from `C1_hardcoded_credentials` penalties while keeping production-path `sk-*`, `AKIA*`, `ghp_*`, and `api_key=` detections active.
+- Replaced broad text-level `C4` matching with AST-backed executable fail-open handler detection so string literals and detector-explanation text containing `except: pass` no longer trigger warnings.
+- Removed the Gradio 6 runtime warning in the Hugging Face demo by routing CSS through the correct `Blocks`/`launch` compatibility path.
+- Fixed long-standing package manifest drift so PyPI artifacts include `SKILL.md`, active `memory/` files, and public `docs/` contract files instead of shipping a code-only package surface.
+
+### Added
+- Added regression coverage for credential-fixture exemption, pyproject metadata precision, executable fail-open detection, and non-executable `except: pass` string immunity.
+
+### Changed
+- Improved detector honesty on final dogfooding targets: `Sidrce` now clears prior `C1/C2/C4` false positives and moves from `52 / T1` to `62 / T2` under the corrected scanner.
+
+---
+
 ## [1.5.7] - 2026-05-05
 
 ### Added
@@ -17,9 +34,11 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Added exported advisory contract schemas (`contract_schemas`) so downstream validators can consume stable input/output packet shapes without reading repository code.
 - Added secret-free provider request schema export and deterministic provider argument validation metadata under `provider_request`.
 - Added regression coverage for advisory contract schema export, provider request validation, advisory packet allowlist mismatch, and invalid payload-shape handling.
+- Added `docs/MICA_MEMORY.md` documenting active-vs-archived memory policy, `mica.yaml` loader responsibility, and release rotation rules.
 
 ### Changed
 - Updated README, API contract, scoring rationale version markers, and release validation defaults for the v1.5.7 advisory contract-hardening release.
+- Rotated the active MICA memory layer to v1.5.7 and updated `memory/mica.yaml` / `SKILL.md` so the loader follows the active files instead of stale hard-coded memory filenames.
 
 ### Fixed
 - Hardened advisory validation so malformed provider payload shapes are rejected as structured contract errors instead of causing a validator crash.

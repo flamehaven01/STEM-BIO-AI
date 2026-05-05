@@ -1,0 +1,978 @@
+STEM BIO-AI Explain Report
+Target  : SakanaAI/AI-Scientist
+Score   : 36 / 100  (T0 Rejected)
+Replic  : 20 / 100  (R0)
+========================================================================
+
+S1_readme_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_readme_bio_terms:.:0:001
+         pattern : bio_terms_v1
+         reason  : No evidence detected for S1_readme_bio_terms.
+
+S1_clinical_boundary  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_clinical_boundary:.:0:001
+         pattern : clinical_boundary_v1
+         reason  : No evidence detected for S1_clinical_boundary.
+
+S3_T1_workflow_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T1_workflow_files:.:0:001
+         pattern : workflow_presence_v1
+         reason  : No evidence detected for S3_T1_workflow_files.
+
+S3_T2_domain_tests  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T2_domain_tests:.:0:001
+         pattern : domain_tests_bio_terms_v1
+         reason  : No evidence detected for S3_T2_domain_tests.
+
+S3_T3_changelog_release_hygiene  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T3_changelog_release_hygiene:.:0:001
+         pattern : changelog_presence_v1
+         reason  : No evidence detected for S3_T3_changelog_release_hygiene.
+
+S3_B1_dependency_manifest  [DETECTED]  (1 finding)
+  [001]  requirements.txt
+         finding_id: S3_B1_dependency_manifest:requirements.txt:0:001
+         pattern : dependency_manifest_presence_v1
+         snippet : "requirements.txt"
+         reason  : Dependency or environment manifest exists.
+
+S3_B2_bias_limitations  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B2_bias_limitations:.:0:001
+         pattern : bias_limitations_v2
+         reason  : No evidence detected for S3_B2_bias_limitations.
+
+S3_B3_coi_funding  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B3_coi_funding:.:0:001
+         pattern : coi_funding_v1
+         reason  : No evidence detected for S3_B3_coi_funding.
+
+S2_package_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S2_package_bio_terms:.:0:001
+         pattern : package_bio_terms_v1
+         reason  : No evidence detected for S2_package_bio_terms.
+
+C1_hardcoded_credentials  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C1_hardcoded_credentials:.:0:001
+         pattern : credential_pattern_v2
+         reason  : No hardcoded credential evidence detected for C1_hardcoded_credentials.
+
+C2_dependency_pinning  [DETECTED]  (15 findings)
+  [001]  requirements.txt:2
+         finding_id: C2_dependency_pinning:requirements.txt:2:001
+         pattern : loose_dependency_v1
+         snippet : "anthropic"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : anthropic
+  [002]  requirements.txt:3
+         finding_id: C2_dependency_pinning:requirements.txt:3:002
+         pattern : loose_dependency_v1
+         snippet : "aider-chat"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : aider-chat
+  [003]  requirements.txt:4
+         finding_id: C2_dependency_pinning:requirements.txt:4:003
+         pattern : loose_dependency_v1
+         snippet : "backoff"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : backoff
+  [004]  requirements.txt:5
+         finding_id: C2_dependency_pinning:requirements.txt:5:004
+         pattern : loose_dependency_v1
+         snippet : "openai"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : openai
+  [005]  requirements.txt:6
+         finding_id: C2_dependency_pinning:requirements.txt:6:005
+         pattern : loose_dependency_v1
+         snippet : "google-generativeai"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : google-generativeai
+  [006]  requirements.txt:8
+         finding_id: C2_dependency_pinning:requirements.txt:8:006
+         pattern : loose_dependency_v1
+         snippet : "matplotlib"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : matplotlib
+  [007]  requirements.txt:9
+         finding_id: C2_dependency_pinning:requirements.txt:9:007
+         pattern : loose_dependency_v1
+         snippet : "pypdf"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : pypdf
+  [008]  requirements.txt:10
+         finding_id: C2_dependency_pinning:requirements.txt:10:008
+         pattern : loose_dependency_v1
+         snippet : "pymupdf4llm"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : pymupdf4llm
+  [009]  requirements.txt:12
+         finding_id: C2_dependency_pinning:requirements.txt:12:009
+         pattern : loose_dependency_v1
+         snippet : "torch"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : torch
+  [010]  requirements.txt:13
+         finding_id: C2_dependency_pinning:requirements.txt:13:010
+         pattern : loose_dependency_v1
+         snippet : "numpy"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : numpy
+  [011]  requirements.txt:14
+         finding_id: C2_dependency_pinning:requirements.txt:14:011
+         pattern : loose_dependency_v1
+         snippet : "transformers"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : transformers
+  [012]  requirements.txt:15
+         finding_id: C2_dependency_pinning:requirements.txt:15:012
+         pattern : loose_dependency_v1
+         snippet : "datasets"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : datasets
+  [013]  requirements.txt:16
+         finding_id: C2_dependency_pinning:requirements.txt:16:013
+         pattern : loose_dependency_v1
+         snippet : "tiktoken"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : tiktoken
+  [014]  requirements.txt:17
+         finding_id: C2_dependency_pinning:requirements.txt:17:014
+         pattern : loose_dependency_v1
+         snippet : "wandb"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : wandb
+  [015]  requirements.txt:18
+         finding_id: C2_dependency_pinning:requirements.txt:18:015
+         pattern : loose_dependency_v1
+         snippet : "tqdm"
+         reason  : Unpinned or loosely pinned dependency detected.
+         dependency      : tqdm
+
+C3_dead_or_deprecated_patient_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C3_dead_or_deprecated_patient_adjacent_paths:.:0:001
+         pattern : deprecated_patient_metadata_v1
+         reason  : No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths.
+
+C4_exception_handling_clinical_adjacent_paths  [DETECTED]  (6 findings)
+  [001]  review_iclr_bench/iclr_analysis.py:173
+         finding_id: C4_exception_handling_clinical_adjacent_paths:review_iclr_bench/iclr_analysis.py:173:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  templates/tensorf/dataLoader/colmap2nerf.py:61
+         finding_id: C4_exception_handling_clinical_adjacent_paths:templates/tensorf/dataLoader/colmap2nerf.py:61:001
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+        pass
+  [002]  templates/tensorf/dataLoader/colmap2nerf.py:91
+         finding_id: C4_exception_handling_clinical_adjacent_paths:templates/tensorf/dataLoader/colmap2nerf.py:91:002
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+        pass
+  [003]  templates/tensorf/dataLoader/colmap2nerf.py:98
+         finding_id: C4_exception_handling_clinical_adjacent_paths:templates/tensorf/dataLoader/colmap2nerf.py:98:003
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+        pass
+  [001]  templates/tensorf/renderer.py:33
+         finding_id: C4_exception_handling_clinical_adjacent_paths:templates/tensorf/renderer.py:33:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [002]  templates/tensorf/renderer.py:99
+         finding_id: C4_exception_handling_clinical_adjacent_paths:templates/tensorf/renderer.py:99:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+
+AST_argparse_cli  [DETECTED]  (75 findings)
+  [001]  ai_scientist/generate_ideas.py:500
+         finding_id: AST_argparse_cli:ai_scientist/generate_ideas.py:500:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Generate AI scientist ideas")"
+         reason  : argparse CLI interface detected.
+  [001]  ai_scientist/perform_writeup.py:521
+         finding_id: AST_argparse_cli:ai_scientist/perform_writeup.py:521:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Perform writeup for a project")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/adaptive_dual_scale_denoising/experiment.py:202
+         finding_id: AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/experiment.py:202:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/adaptive_dual_scale_denoising/run_1.py:200
+         finding_id: AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_1.py:200:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/adaptive_dual_scale_denoising/run_2.py:200
+         finding_id: AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_2.py:200:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/adaptive_dual_scale_denoising/run_3.py:200
+         finding_id: AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_3.py:200:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/adaptive_dual_scale_denoising/run_4.py:200
+         finding_id: AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_4.py:200:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/adaptive_dual_scale_denoising/run_5.py:202
+         finding_id: AST_argparse_cli:example_papers/adaptive_dual_scale_denoising/run_5.py:202:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/data_augmentation_grokking/experiment.py:445
+         finding_id: AST_argparse_cli:example_papers/data_augmentation_grokking/experiment.py:445:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/data_augmentation_grokking/run_1.py:410
+         finding_id: AST_argparse_cli:example_papers/data_augmentation_grokking/run_1.py:410:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/data_augmentation_grokking/run_2.py:440
+         finding_id: AST_argparse_cli:example_papers/data_augmentation_grokking/run_2.py:440:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/data_augmentation_grokking/run_3.py:446
+         finding_id: AST_argparse_cli:example_papers/data_augmentation_grokking/run_3.py:446:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/data_augmentation_grokking/run_4.py:445
+         finding_id: AST_argparse_cli:example_papers/data_augmentation_grokking/run_4.py:445:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/data_augmentation_grokking/run_5.py:445
+         finding_id: AST_argparse_cli:example_papers/data_augmentation_grokking/run_5.py:445:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/dual_expert_denoiser/experiment.py:192
+         finding_id: AST_argparse_cli:example_papers/dual_expert_denoiser/experiment.py:192:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/dual_expert_denoiser/run_1.py:186
+         finding_id: AST_argparse_cli:example_papers/dual_expert_denoiser/run_1.py:186:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/dual_expert_denoiser/run_2.py:188
+         finding_id: AST_argparse_cli:example_papers/dual_expert_denoiser/run_2.py:188:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/dual_expert_denoiser/run_3.py:192
+         finding_id: AST_argparse_cli:example_papers/dual_expert_denoiser/run_3.py:192:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/dual_expert_denoiser/run_4.py:192
+         finding_id: AST_argparse_cli:example_papers/dual_expert_denoiser/run_4.py:192:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/dual_expert_denoiser/run_5.py:192
+         finding_id: AST_argparse_cli:example_papers/dual_expert_denoiser/run_5.py:192:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/gan_diffusion/experiment.py:168
+         finding_id: AST_argparse_cli:example_papers/gan_diffusion/experiment.py:168:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/gan_diffusion/run_1.py:168
+         finding_id: AST_argparse_cli:example_papers/gan_diffusion/run_1.py:168:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/gan_diffusion/run_2.py:168
+         finding_id: AST_argparse_cli:example_papers/gan_diffusion/run_2.py:168:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/gan_diffusion/run_3.py:168
+         finding_id: AST_argparse_cli:example_papers/gan_diffusion/run_3.py:168:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/gan_diffusion/run_4.py:168
+         finding_id: AST_argparse_cli:example_papers/gan_diffusion/run_4.py:168:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/gan_diffusion/run_5.py:168
+         finding_id: AST_argparse_cli:example_papers/gan_diffusion/run_5.py:168:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/grid_based_noise_adaptation/experiment.py:199
+         finding_id: AST_argparse_cli:example_papers/grid_based_noise_adaptation/experiment.py:199:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/grid_based_noise_adaptation/run_1.py:190
+         finding_id: AST_argparse_cli:example_papers/grid_based_noise_adaptation/run_1.py:190:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/grid_based_noise_adaptation/run_2.py:190
+         finding_id: AST_argparse_cli:example_papers/grid_based_noise_adaptation/run_2.py:190:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/grid_based_noise_adaptation/run_3.py:199
+         finding_id: AST_argparse_cli:example_papers/grid_based_noise_adaptation/run_3.py:199:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/grid_based_noise_adaptation/run_4.py:199
+         finding_id: AST_argparse_cli:example_papers/grid_based_noise_adaptation/run_4.py:199:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/grid_based_noise_adaptation/run_5.py:199
+         finding_id: AST_argparse_cli:example_papers/grid_based_noise_adaptation/run_5.py:199:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/layerwise_lr_grokking/experiment.py:377
+         finding_id: AST_argparse_cli:example_papers/layerwise_lr_grokking/experiment.py:377:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/layerwise_lr_grokking/run_1.py:377
+         finding_id: AST_argparse_cli:example_papers/layerwise_lr_grokking/run_1.py:377:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/layerwise_lr_grokking/run_2.py:377
+         finding_id: AST_argparse_cli:example_papers/layerwise_lr_grokking/run_2.py:377:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/layerwise_lr_grokking/run_3.py:377
+         finding_id: AST_argparse_cli:example_papers/layerwise_lr_grokking/run_3.py:377:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/layerwise_lr_grokking/run_4.py:377
+         finding_id: AST_argparse_cli:example_papers/layerwise_lr_grokking/run_4.py:377:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/mdl_grokking_correlation/experiment.py:391
+         finding_id: AST_argparse_cli:example_papers/mdl_grokking_correlation/experiment.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/mdl_grokking_correlation/run_1.py:391
+         finding_id: AST_argparse_cli:example_papers/mdl_grokking_correlation/run_1.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/mdl_grokking_correlation/run_2.py:391
+         finding_id: AST_argparse_cli:example_papers/mdl_grokking_correlation/run_2.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/mdl_grokking_correlation/run_3.py:391
+         finding_id: AST_argparse_cli:example_papers/mdl_grokking_correlation/run_3.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/mdl_grokking_correlation/run_4.py:391
+         finding_id: AST_argparse_cli:example_papers/mdl_grokking_correlation/run_4.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/mdl_grokking_correlation/run_5.py:391
+         finding_id: AST_argparse_cli:example_papers/mdl_grokking_correlation/run_5.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/multi_style_adapter/experiment.py:790
+         finding_id: AST_argparse_cli:example_papers/multi_style_adapter/experiment.py:790:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/multi_style_adapter/run_1.py:700
+         finding_id: AST_argparse_cli:example_papers/multi_style_adapter/run_1.py:700:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/multi_style_adapter/run_2.py:701
+         finding_id: AST_argparse_cli:example_papers/multi_style_adapter/run_2.py:701:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/multi_style_adapter/run_3.py:700
+         finding_id: AST_argparse_cli:example_papers/multi_style_adapter/run_3.py:700:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/multi_style_adapter/run_4.py:749
+         finding_id: AST_argparse_cli:example_papers/multi_style_adapter/run_4.py:749:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/multi_style_adapter/run_5.py:790
+         finding_id: AST_argparse_cli:example_papers/multi_style_adapter/run_5.py:790:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/rl_lr_adaptation/experiment.py:676
+         finding_id: AST_argparse_cli:example_papers/rl_lr_adaptation/experiment.py:676:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/rl_lr_adaptation/run_1.py:676
+         finding_id: AST_argparse_cli:example_papers/rl_lr_adaptation/run_1.py:676:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/rl_lr_adaptation/run_2.py:676
+         finding_id: AST_argparse_cli:example_papers/rl_lr_adaptation/run_2.py:676:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/rl_lr_adaptation/run_3.py:676
+         finding_id: AST_argparse_cli:example_papers/rl_lr_adaptation/run_3.py:676:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/rl_lr_adaptation/run_4.py:676
+         finding_id: AST_argparse_cli:example_papers/rl_lr_adaptation/run_4.py:676:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/rl_lr_adaptation/run_5.py:676
+         finding_id: AST_argparse_cli:example_papers/rl_lr_adaptation/run_5.py:676:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run experiment')"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/weight_initialization_grokking/experiment.py:387
+         finding_id: AST_argparse_cli:example_papers/weight_initialization_grokking/experiment.py:387:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/weight_initialization_grokking/run_1.py:385
+         finding_id: AST_argparse_cli:example_papers/weight_initialization_grokking/run_1.py:385:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/weight_initialization_grokking/run_2.py:387
+         finding_id: AST_argparse_cli:example_papers/weight_initialization_grokking/run_2.py:387:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/weight_initialization_grokking/run_3.py:387
+         finding_id: AST_argparse_cli:example_papers/weight_initialization_grokking/run_3.py:387:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/weight_initialization_grokking/run_4.py:387
+         finding_id: AST_argparse_cli:example_papers/weight_initialization_grokking/run_4.py:387:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  example_papers/weight_initialization_grokking/run_5.py:387
+         finding_id: AST_argparse_cli:example_papers/weight_initialization_grokking/run_5.py:387:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  experimental/launch_oe_scientist.py:30
+         finding_id: AST_argparse_cli:experimental/launch_oe_scientist.py:30:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run AI scientist experiments")"
+         reason  : argparse CLI interface detected.
+  [001]  launch_scientist.py:30
+         finding_id: AST_argparse_cli:launch_scientist.py:30:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run AI scientist experiments")"
+         reason  : argparse CLI interface detected.
+  [001]  review_iclr_bench/iclr_analysis.py:28
+         finding_id: AST_argparse_cli:review_iclr_bench/iclr_analysis.py:28:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run AI reviewer experiments")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/2d_diffusion/experiment.py:167
+         finding_id: AST_argparse_cli:templates/2d_diffusion/experiment.py:167:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  templates/MACE/experiment.py:160
+         finding_id: AST_argparse_cli:templates/MACE/experiment.py:160:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/earthquake-prediction/experiment.py:370
+         finding_id: AST_argparse_cli:templates/earthquake-prediction/experiment.py:370:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/grokking/experiment.py:374
+         finding_id: AST_argparse_cli:templates/grokking/experiment.py:374:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/mobilenetV3/experiment.py:526
+         finding_id: AST_argparse_cli:templates/mobilenetV3/experiment.py:526:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Train MobileNetV3 for Image Classification")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/nanoGPT/experiment.py:681
+         finding_id: AST_argparse_cli:templates/nanoGPT/experiment.py:681:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/nanoGPT_lite/experiment.py:681
+         finding_id: AST_argparse_cli:templates/nanoGPT_lite/experiment.py:681:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/probes/experiment.py:260
+         finding_id: AST_argparse_cli:templates/probes/experiment.py:260:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiments with demeaned probes")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/seir/experiment.py:14
+         finding_id: AST_argparse_cli:templates/seir/experiment.py:14:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Run experiment")"
+         reason  : argparse CLI interface detected.
+  [001]  templates/sketch_rnn/experiment.py:312
+         finding_id: AST_argparse_cli:templates/sketch_rnn/experiment.py:312:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser()"
+         reason  : argparse CLI interface detected.
+  [001]  templates/tensorf/dataLoader/colmap2nerf.py:25
+         finding_id: AST_argparse_cli:templates/tensorf/dataLoader/colmap2nerf.py:25:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="convert a text colmap export to nerf format transforms.json; optionally convert video to images, and optionally run colmap in the f..."
+         reason  : argparse CLI interface detected.
+
+AST_seed_setting  [DETECTED]  (45 findings)
+  [001]  example_papers/data_augmentation_grokking/experiment.py:370
+         finding_id: AST_seed_setting:example_papers/data_augmentation_grokking/experiment.py:370:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/data_augmentation_grokking/run_1.py:335
+         finding_id: AST_seed_setting:example_papers/data_augmentation_grokking/run_1.py:335:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/data_augmentation_grokking/run_2.py:365
+         finding_id: AST_seed_setting:example_papers/data_augmentation_grokking/run_2.py:365:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/data_augmentation_grokking/run_3.py:371
+         finding_id: AST_seed_setting:example_papers/data_augmentation_grokking/run_3.py:371:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/data_augmentation_grokking/run_4.py:370
+         finding_id: AST_seed_setting:example_papers/data_augmentation_grokking/run_4.py:370:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/data_augmentation_grokking/run_5.py:370
+         finding_id: AST_seed_setting:example_papers/data_augmentation_grokking/run_5.py:370:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/layerwise_lr_grokking/experiment.py:301
+         finding_id: AST_seed_setting:example_papers/layerwise_lr_grokking/experiment.py:301:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/layerwise_lr_grokking/run_1.py:301
+         finding_id: AST_seed_setting:example_papers/layerwise_lr_grokking/run_1.py:301:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/layerwise_lr_grokking/run_2.py:301
+         finding_id: AST_seed_setting:example_papers/layerwise_lr_grokking/run_2.py:301:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/layerwise_lr_grokking/run_3.py:301
+         finding_id: AST_seed_setting:example_papers/layerwise_lr_grokking/run_3.py:301:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/layerwise_lr_grokking/run_4.py:301
+         finding_id: AST_seed_setting:example_papers/layerwise_lr_grokking/run_4.py:301:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/mdl_grokking_correlation/experiment.py:312
+         finding_id: AST_seed_setting:example_papers/mdl_grokking_correlation/experiment.py:312:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/mdl_grokking_correlation/run_1.py:312
+         finding_id: AST_seed_setting:example_papers/mdl_grokking_correlation/run_1.py:312:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/mdl_grokking_correlation/run_2.py:312
+         finding_id: AST_seed_setting:example_papers/mdl_grokking_correlation/run_2.py:312:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/mdl_grokking_correlation/run_3.py:312
+         finding_id: AST_seed_setting:example_papers/mdl_grokking_correlation/run_3.py:312:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/mdl_grokking_correlation/run_4.py:312
+         finding_id: AST_seed_setting:example_papers/mdl_grokking_correlation/run_4.py:312:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/mdl_grokking_correlation/run_5.py:312
+         finding_id: AST_seed_setting:example_papers/mdl_grokking_correlation/run_5.py:312:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/multi_style_adapter/experiment.py:403
+         finding_id: AST_seed_setting:example_papers/multi_style_adapter/experiment.py:403:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/multi_style_adapter/run_1.py:398
+         finding_id: AST_seed_setting:example_papers/multi_style_adapter/run_1.py:398:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/multi_style_adapter/run_2.py:398
+         finding_id: AST_seed_setting:example_papers/multi_style_adapter/run_2.py:398:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/multi_style_adapter/run_3.py:397
+         finding_id: AST_seed_setting:example_papers/multi_style_adapter/run_3.py:397:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/multi_style_adapter/run_4.py:400
+         finding_id: AST_seed_setting:example_papers/multi_style_adapter/run_4.py:400:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/multi_style_adapter/run_5.py:403
+         finding_id: AST_seed_setting:example_papers/multi_style_adapter/run_5.py:403:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/rl_lr_adaptation/experiment.py:368
+         finding_id: AST_seed_setting:example_papers/rl_lr_adaptation/experiment.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/rl_lr_adaptation/run_1.py:368
+         finding_id: AST_seed_setting:example_papers/rl_lr_adaptation/run_1.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/rl_lr_adaptation/run_2.py:368
+         finding_id: AST_seed_setting:example_papers/rl_lr_adaptation/run_2.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/rl_lr_adaptation/run_3.py:368
+         finding_id: AST_seed_setting:example_papers/rl_lr_adaptation/run_3.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/rl_lr_adaptation/run_4.py:368
+         finding_id: AST_seed_setting:example_papers/rl_lr_adaptation/run_4.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/rl_lr_adaptation/run_5.py:368
+         finding_id: AST_seed_setting:example_papers/rl_lr_adaptation/run_5.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/weight_initialization_grokking/experiment.py:313
+         finding_id: AST_seed_setting:example_papers/weight_initialization_grokking/experiment.py:313:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/weight_initialization_grokking/run_1.py:311
+         finding_id: AST_seed_setting:example_papers/weight_initialization_grokking/run_1.py:311:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/weight_initialization_grokking/run_2.py:313
+         finding_id: AST_seed_setting:example_papers/weight_initialization_grokking/run_2.py:313:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/weight_initialization_grokking/run_3.py:313
+         finding_id: AST_seed_setting:example_papers/weight_initialization_grokking/run_3.py:313:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/weight_initialization_grokking/run_4.py:313
+         finding_id: AST_seed_setting:example_papers/weight_initialization_grokking/run_4.py:313:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  example_papers/weight_initialization_grokking/run_5.py:313
+         finding_id: AST_seed_setting:example_papers/weight_initialization_grokking/run_5.py:313:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/earthquake-prediction/experiment.py:286
+         finding_id: AST_seed_setting:templates/earthquake-prediction/experiment.py:286:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/grokking/experiment.py:303
+         finding_id: AST_seed_setting:templates/grokking/experiment.py:303:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/mobilenetV3/experiment.py:417
+         finding_id: AST_seed_setting:templates/mobilenetV3/experiment.py:417:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(config.seed)"
+         reason  : Deterministic random seed setting call detected.
+  [002]  templates/mobilenetV3/experiment.py:418
+         finding_id: AST_seed_setting:templates/mobilenetV3/experiment.py:418:002
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(config.seed)"
+         reason  : Deterministic random seed setting call detected.
+  [003]  templates/mobilenetV3/experiment.py:419
+         finding_id: AST_seed_setting:templates/mobilenetV3/experiment.py:419:003
+         pattern : ast_seed_setting_v1
+         snippet : "random.seed(config.seed)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/nanoGPT/experiment.py:368
+         finding_id: AST_seed_setting:templates/nanoGPT/experiment.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/nanoGPT_lite/experiment.py:368
+         finding_id: AST_seed_setting:templates/nanoGPT_lite/experiment.py:368:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(1337 + seed_offset)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/tensorf/dataLoader/ray_utils.py:148
+         finding_id: AST_seed_setting:templates/tensorf/dataLoader/ray_utils.py:148:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(0)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  templates/tensorf/experiment.py:333
+         finding_id: AST_seed_setting:templates/tensorf/experiment.py:333:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(seed)"
+         reason  : Deterministic random seed setting call detected.
+  [002]  templates/tensorf/experiment.py:334
+         finding_id: AST_seed_setting:templates/tensorf/experiment.py:334:002
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(seed)"
+         reason  : Deterministic random seed setting call detected.
+
+AST_fail_open_precision  [DETECTED]  (6 findings)
+  [001]  review_iclr_bench/iclr_analysis.py:173
+         finding_id: AST_fail_open_precision:review_iclr_bench/iclr_analysis.py:173:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  templates/tensorf/dataLoader/colmap2nerf.py:61
+         finding_id: AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:61:001
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  templates/tensorf/dataLoader/colmap2nerf.py:91
+         finding_id: AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:91:002
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  templates/tensorf/dataLoader/colmap2nerf.py:98
+         finding_id: AST_fail_open_precision:templates/tensorf/dataLoader/colmap2nerf.py:98:003
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  templates/tensorf/renderer.py:33
+         finding_id: AST_fail_open_precision:templates/tensorf/renderer.py:33:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  templates/tensorf/renderer.py:99
+         finding_id: AST_fail_open_precision:templates/tensorf/renderer.py:99:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+
+AST_portable_model_loading  [DETECTED]  (3 findings)
+  [001]  templates/tensorf/experiment.py:37
+         finding_id: AST_portable_model_loading:templates/tensorf/experiment.py:37:001
+         pattern : ast_torch_load_map_location_v1
+         snippet : "ckpt = torch.load(args.ckpt, map_location=device)"
+         reason  : torch.load call includes map_location.
+  [002]  templates/tensorf/experiment.py:59
+         finding_id: AST_portable_model_loading:templates/tensorf/experiment.py:59:002
+         pattern : ast_torch_load_map_location_v1
+         snippet : "ckpt = torch.load(args.ckpt, map_location=device)"
+         reason  : torch.load call includes map_location.
+  [003]  templates/tensorf/experiment.py:118
+         finding_id: AST_portable_model_loading:templates/tensorf/experiment.py:118:003
+         pattern : ast_torch_load_map_location_v1
+         snippet : "ckpt = torch.load(args.ckpt, map_location=device)"
+         reason  : torch.load call includes map_location.
+
+S4_container_environment  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_container_environment:.:0:001
+         pattern : container_file_v1
+         reason  : No evidence detected for S4_container_environment.
+
+S4_make_reproduce_target  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_make_reproduce_target:.:0:001
+         pattern : make_reproduce_target_v1
+         reason  : No Makefile detected.
+
+S4_environment_lock_evidence  [DETECTED]  (1 finding)
+  [001]  requirements.txt
+         finding_id: S4_environment_lock_evidence:requirements.txt:0:001
+         pattern : environment_lock_file_v1
+         snippet : "requirements.txt"
+         reason  : Environment, dependency, or lock manifest detected.
+
+S4_exact_dependency_pins_or_hashes  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_exact_dependency_pins_or_hashes:.:0:001
+         pattern : exact_pin_or_hash_v1
+         reason  : Dependency manifests exist but no exact pins or hashes were detected.
+
+S4_readme_reproducibility_section  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_readme_reproducibility_section:.:0:001
+         pattern : readme_repro_heading_v1
+         reason  : No README detected.
+
+S4_checksum_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_checksum_files:.:0:001
+         pattern : checksum_file_v1
+         reason  : No evidence detected for S4_checksum_files.
+
+S4_dataset_url  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_dataset_url:.:0:001
+         pattern : dataset_url_v1
+         reason  : No README/docs files detected.
+
+S4_model_weight_url_or_checksum  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_model_weight_url_or_checksum:.:0:001
+         pattern : model_weight_url_v1
+         reason  : No README/docs or checksum files detected.
+
+S4_citation_cff  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_citation_cff:.:0:001
+         pattern : citation_cff_v1
+         reason  : No evidence detected for S4_citation_cff.
+
+S4_cli_entrypoint  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_cli_entrypoint:.:0:001
+         pattern : cli_entrypoint_v1
+         reason  : argparse CLI evidence detected by AST summary.
+         source      : ast_signal_summary
+
+S4_seed_setting  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_seed_setting:.:0:001
+         pattern : ast_seed_setting_stage4_v1
+         reason  : Deterministic seed setting evidence detected by AST summary.
+         seed_settings      : 45
+
+S4_runnable_examples  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_runnable_examples:.:0:001
+         pattern : runnable_example_file_v1
+         reason  : No evidence detected for S4_runnable_examples.
+
+========================================================================
+AST Signal Summary
+
+  files_total                        131
+  files_considered                   131
+  files_parsed                       131
+  files_skipped_size                 0
+  syntax_errors                      0
+  file_limit_exceeded                False
+  test_functions                     0
+  assertion_tests                    0
+  public_functions                   1261
+  docstring_functions                93
+  annotated_functions                173
+  seed_settings                      45
+  argparse_cli                       True
+  portable_model_loading             3
+  fail_open_handlers                 6
+  docstring_coverage                 0.0738
+  type_annotation_coverage           0.1372
+
+========================================================================
+Stage 4 Replication Rubric
+
+  S4_container_environment                     0 / 10   No evidence detected for S4_container_environment.
+  S4_make_reproduce_target                     0 / 10   No Makefile detected.
+  S4_environment_lock_evidence                10 / 10   Environment, dependency, or lock manifest detected.
+  S4_exact_dependency_pins_or_hashes           0 / 10   Dependency manifests exist but no exact pins or hashes were detected.
+  S4_readme_reproducibility_section            0 / 10   No README detected.
+  S4_checksum_files                            0 / 10   No evidence detected for S4_checksum_files.
+  S4_dataset_url                               0 / 10   No README/docs files detected.
+  S4_model_weight_url_or_checksum              0 / 10   No README/docs or checksum files detected.
+  S4_citation_cff                              0 / 5    No evidence detected for S4_citation_cff.
+  S4_cli_entrypoint                            5 / 5    CLI entry point or argparse interface detected.
+  S4_seed_setting                              5 / 5    Deterministic seed setting detected.
+  S4_runnable_examples                         0 / 5    No evidence detected for S4_runnable_examples.
+  stage_4_raw_total                           20 / 100  Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0.
+
+========================================================================
+DISCLAIMER: Evidence-surface pre-screen only.
+Not clinical certification, regulatory clearance, or medical advice.

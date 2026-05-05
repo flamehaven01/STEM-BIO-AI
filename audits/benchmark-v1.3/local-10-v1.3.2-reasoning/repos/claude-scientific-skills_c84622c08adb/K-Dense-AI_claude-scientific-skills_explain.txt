@@ -1,0 +1,1683 @@
+STEM BIO-AI Explain Report
+Target  : K-Dense-AI/claude-scientific-skills
+Score   : 39 / 100  (T0 Rejected)
+Replic  : 30 / 100  (R1)
+========================================================================
+
+S1_readme_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_readme_bio_terms:.:0:001
+         pattern : bio_terms_v1
+         reason  : No evidence detected for S1_readme_bio_terms.
+
+S1_clinical_boundary  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_clinical_boundary:.:0:001
+         pattern : clinical_boundary_v1
+         reason  : No evidence detected for S1_clinical_boundary.
+
+S3_T1_workflow_files  [DETECTED]  (2 findings)
+  [001]  .github/workflows/release.yml
+         finding_id: S3_T1_workflow_files:.github/workflows/release.yml:0:001
+         pattern : workflow_presence_v1
+         snippet : ".github/workflows/release.yml"
+         reason  : Workflow file exists.
+  [001]  .github/workflows/scan-skills.yml
+         finding_id: S3_T1_workflow_files:.github/workflows/scan-skills.yml:0:001
+         pattern : workflow_presence_v1
+         snippet : ".github/workflows/scan-skills.yml"
+         reason  : Workflow file exists.
+
+S3_T2_domain_tests  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T2_domain_tests:.:0:001
+         pattern : domain_tests_bio_terms_v1
+         reason  : No evidence detected for S3_T2_domain_tests.
+
+S3_T3_changelog_release_hygiene  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T3_changelog_release_hygiene:.:0:001
+         pattern : changelog_presence_v1
+         reason  : No evidence detected for S3_T3_changelog_release_hygiene.
+
+S3_B1_dependency_manifest  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B1_dependency_manifest:.:0:001
+         pattern : dependency_manifest_presence_v1
+         reason  : No evidence detected for S3_B1_dependency_manifest.
+
+S3_B2_bias_limitations  [DETECTED]  (7 findings)
+  [001]  docs/examples.md:870
+         finding_id: S3_B2_bias_limitations:docs/examples.md:870:001
+         pattern : bias_limitations_v2
+         snippet : "- Note resistance mechanisms or limitations mentioned"
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : limitations
+  [002]  docs/examples.md:964
+         finding_id: S3_B2_bias_limitations:docs/examples.md:964:002
+         pattern : bias_limitations_v2
+         snippet : "- Use as validation cohort"
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : validation cohort
+  [003]  docs/examples.md:2380
+         finding_id: S3_B2_bias_limitations:docs/examples.md:2380:003
+         pattern : bias_limitations_v2
+         snippet : "- Model mixing and mass transfer limitations"
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : limitations
+  [004]  docs/examples.md:2524
+         finding_id: S3_B2_bias_limitations:docs/examples.md:2524:004
+         pattern : bias_limitations_v2
+         snippet : "* Heat and mass transfer limitations"
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : limitations
+  [001]  docs/scientific-skills.md:104
+         finding_id: S3_B2_bias_limitations:docs/scientific-skills.md:104:001
+         pattern : bias_limitations_v2
+         snippet : "- **PyHealth** - Comprehensive healthcare AI toolkit for developing, testing, and deploying machine learning models with clinical data. Provides specialized tools for electronic..."
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : fairness
+  [002]  docs/scientific-skills.md:104
+         finding_id: S3_B2_bias_limitations:docs/scientific-skills.md:104:002
+         pattern : bias_limitations_v2
+         snippet : "- **PyHealth** - Comprehensive healthcare AI toolkit for developing, testing, and deploying machine learning models with clinical data. Provides specialized tools for electronic..."
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : fairness
+  [003]  docs/scientific-skills.md:129
+         finding_id: S3_B2_bias_limitations:docs/scientific-skills.md:129:003
+         pattern : bias_limitations_v2
+         snippet : "- **SHAP** - Model interpretability and explainability using Shapley values from game theory. Provides unified approach to explain any ML model with TreeExplainer (fast exact ex..."
+         reason  : Bias, limitation, or validation-boundary language detected.
+         match      : fairness
+
+S3_B3_coi_funding  [DETECTED]  (17 findings)
+  [001]  docs/examples.md:30
+         finding_id: S3_B3_coi_funding:docs/examples.md:30:001
+         pattern : coi_funding_v1
+         snippet : "22. [Research Grant Writing](#research-grant-writing)"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Grant
+  [002]  docs/examples.md:30
+         finding_id: S3_B3_coi_funding:docs/examples.md:30:002
+         pattern : coi_funding_v1
+         snippet : "22. [Research Grant Writing](#research-grant-writing)"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+  [003]  docs/examples.md:816
+         finding_id: S3_B3_coi_funding:docs/examples.md:816:003
+         pattern : coi_funding_v1
+         snippet : "* Sponsor and collaborators"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Sponsor
+  [004]  docs/examples.md:886
+         finding_id: S3_B3_coi_funding:docs/examples.md:886:004
+         pattern : coi_funding_v1
+         snippet : "- Sponsor/company market share"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Sponsor
+  [005]  docs/examples.md:2791
+         finding_id: S3_B3_coi_funding:docs/examples.md:2791:005
+         pattern : coi_funding_v1
+         snippet : "## Research Grant Writing"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Grant
+  [006]  docs/examples.md:2793
+         finding_id: S3_B3_coi_funding:docs/examples.md:2793:006
+         pattern : coi_funding_v1
+         snippet : "### Example 22: NIH R01 Grant Proposal Development"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Grant
+  [007]  docs/examples.md:2795
+         finding_id: S3_B3_coi_funding:docs/examples.md:2795:007
+         pattern : coi_funding_v1
+         snippet : "**Objective**: Develop a comprehensive research grant proposal with literature review, specific aims, and budget justification."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+  [008]  docs/examples.md:2798
+         finding_id: S3_B3_coi_funding:docs/examples.md:2798:008
+         pattern : coi_funding_v1
+         snippet : "- `research-grants` - Grant writing templates and guidelines"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Grant
+  [009]  docs/examples.md:2894
+         finding_id: S3_B3_coi_funding:docs/examples.md:2894:009
+         pattern : coi_funding_v1
+         snippet : "- Complete NIH R01 grant proposal"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+  [001]  docs/open-source-sponsors.md:12
+         finding_id: S3_B3_coi_funding:docs/open-source-sponsors.md:12:001
+         pattern : coi_funding_v1
+         snippet : "2. **Sponsor maintainers** directly through GitHub Sponsors, Open Collective, or project-specific donation pages"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Sponsor
+  [002]  docs/open-source-sponsors.md:59
+         finding_id: S3_B3_coi_funding:docs/open-source-sponsors.md:59:002
+         pattern : coi_funding_v1
+         snippet : "| **PyTorch Lightning** | Deep learning framework | [GitHub](https://github.com/Lightning-AI/pytorch-lightning) - [Sponsor](https://github.com/sponsors/Lightning-AI) |"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Sponsor
+  [001]  docs/scientific-skills.md:10
+         finding_id: S3_B3_coi_funding:docs/scientific-skills.md:10:001
+         pattern : coi_funding_v1
+         snippet : "- **ClinicalTrials.gov** - Comprehensive registry of clinical studies conducted worldwide (maintained by U.S. National Library of Medicine) with API v2 access for searching tria..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : sponsor
+  [002]  docs/scientific-skills.md:24
+         finding_id: S3_B3_coi_funding:docs/scientific-skills.md:24:002
+         pattern : coi_funding_v1
+         snippet : "- **OpenAlex** - Comprehensive open catalog of 240M+ scholarly works, authors, institutions, topics, sources, publishers, and funders. Provides complete bibliometric database fo..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : funding
+  [003]  docs/scientific-skills.md:182
+         finding_id: S3_B3_coi_funding:docs/scientific-skills.md:182:003
+         pattern : coi_funding_v1
+         snippet : "- **Scientific Slides** - Build slide decks and presentations for research talks using PowerPoint and LaTeX Beamer. Features slide structure, design templates, timing guidance,..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+  [004]  docs/scientific-skills.md:183
+         finding_id: S3_B3_coi_funding:docs/scientific-skills.md:183:004
+         pattern : coi_funding_v1
+         snippet : "- **Venue Templates** - Access comprehensive LaTeX templates, formatting requirements, and submission guidelines for major scientific publication venues (Nature, Science, PLOS,..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+  [005]  docs/scientific-skills.md:183
+         finding_id: S3_B3_coi_funding:docs/scientific-skills.md:183:005
+         pattern : coi_funding_v1
+         snippet : "- **Venue Templates** - Access comprehensive LaTeX templates, formatting requirements, and submission guidelines for major scientific publication venues (Nature, Science, PLOS,..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+  [006]  docs/scientific-skills.md:196
+         finding_id: S3_B3_coi_funding:docs/scientific-skills.md:196:006
+         pattern : coi_funding_v1
+         snippet : "- **Research Grants** - Write competitive research proposals for NSF, NIH, DOE, and DARPA. Features agency-specific formatting, review criteria understanding, budget preparation..."
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : grant
+
+S2_package_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S2_package_bio_terms:.:0:001
+         pattern : package_bio_terms_v1
+         reason  : No evidence detected for S2_package_bio_terms.
+
+C1_hardcoded_credentials  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C1_hardcoded_credentials:.:0:001
+         pattern : credential_pattern_v2
+         reason  : No hardcoded credential evidence detected for C1_hardcoded_credentials.
+
+C2_dependency_pinning  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: C2_dependency_pinning:.:0:001
+         pattern : loose_dependency_v1
+         reason  : No dependency manifest detected.
+
+C3_dead_or_deprecated_patient_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C3_dead_or_deprecated_patient_adjacent_paths:.:0:001
+         pattern : deprecated_patient_metadata_v1
+         reason  : No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths.
+
+C4_exception_handling_clinical_adjacent_paths  [DETECTED]  (22 findings)
+  [001]  scientific-skills/bioservices/scripts/protein_analysis_workflow.py:47
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/bioservices/scripts/protein_analysis_workflow.py:47:001
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+            pass
+  [001]  scientific-skills/diffdock/scripts/analyze_results.py:103
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/diffdock/scripts/analyze_results.py:103:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+            pass
+  [002]  scientific-skills/diffdock/scripts/analyze_results.py:114
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/diffdock/scripts/analyze_results.py:114:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  scientific-skills/docx/scripts/office/unpack.py:87
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/unpack.py:87:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [002]  scientific-skills/docx/scripts/office/unpack.py:97
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/unpack.py:97:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  scientific-skills/docx/scripts/office/validators/base.py:138
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/base.py:138:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [001]  scientific-skills/docx/scripts/office/validators/docx.py:287
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/docx.py:287:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [002]  scientific-skills/docx/scripts/office/validators/docx.py:439
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/docx.py:439:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [001]  scientific-skills/docx/scripts/office/validators/redlining.py:56
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/redlining.py:56:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+            pass
+  [001]  scientific-skills/get-available-resources/scripts/detect_resources.py:39
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:39:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [002]  scientific-skills/get-available-resources/scripts/detect_resources.py:192
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:192:002
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+                            pass
+  [003]  scientific-skills/get-available-resources/scripts/detect_resources.py:194
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:194:003
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [004]  scientific-skills/get-available-resources/scripts/detect_resources.py:198
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:198:004
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  scientific-skills/labarchive-integration/scripts/entry_operations.py:104
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/labarchive-integration/scripts/entry_operations.py:104:001
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+                pass
+  [001]  scientific-skills/pptx/scripts/office/unpack.py:87
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/unpack.py:87:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [002]  scientific-skills/pptx/scripts/office/unpack.py:97
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/unpack.py:97:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+        pass
+  [001]  scientific-skills/pptx/scripts/office/validators/base.py:138
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/base.py:138:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [001]  scientific-skills/pptx/scripts/office/validators/docx.py:287
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/docx.py:287:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [002]  scientific-skills/pptx/scripts/office/validators/docx.py:439
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/docx.py:439:002
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+  [001]  scientific-skills/pptx/scripts/office/validators/redlining.py:56
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/redlining.py:56:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+            pass
+  [001]  scientific-skills/pymatgen/scripts/structure_analyzer.py:142
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/pymatgen/scripts/structure_analyzer.py:142:001
+         pattern : fail_open_exception_v1
+         snippet : "except:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except:
+                pass
+  [001]  scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:661
+         finding_id: C4_exception_handling_clinical_adjacent_paths:scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:661:001
+         pattern : fail_open_exception_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception pattern detected in code text.
+         match      : except Exception:
+                pass
+
+AST_argparse_cli  [DETECTED]  (116 findings)
+  [001]  scientific-skills/arboreto/scripts/basic_grn_inference.py:67
+         finding_id: AST_argparse_cli:scientific-skills/arboreto/scripts/basic_grn_inference.py:67:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/biorxiv-database/scripts/biorxiv_search.py:303
+         finding_id: AST_argparse_cli:scientific-skills/biorxiv-database/scripts/biorxiv_search.py:303:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/bioservices/scripts/batch_id_converter.py:259
+         finding_id: AST_argparse_cli:scientific-skills/bioservices/scripts/batch_id_converter.py:259:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/bioservices/scripts/compound_cross_reference.py:317
+         finding_id: AST_argparse_cli:scientific-skills/bioservices/scripts/compound_cross_reference.py:317:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/bioservices/scripts/pathway_analysis.py:239
+         finding_id: AST_argparse_cli:scientific-skills/bioservices/scripts/pathway_analysis.py:239:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/bioservices/scripts/protein_analysis_workflow.py:348
+         finding_id: AST_argparse_cli:scientific-skills/bioservices/scripts/protein_analysis_workflow.py:348:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/citation-management/scripts/doi_to_bibtex.py:101
+         finding_id: AST_argparse_cli:scientific-skills/citation-management/scripts/doi_to_bibtex.py:101:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/citation-management/scripts/extract_metadata.py:489
+         finding_id: AST_argparse_cli:scientific-skills/citation-management/scripts/extract_metadata.py:489:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/citation-management/scripts/format_bibtex.py:294
+         finding_id: AST_argparse_cli:scientific-skills/citation-management/scripts/format_bibtex.py:294:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/citation-management/scripts/search_google_scholar.py:181
+         finding_id: AST_argparse_cli:scientific-skills/citation-management/scripts/search_google_scholar.py:181:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/citation-management/scripts/search_pubmed.py:271
+         finding_id: AST_argparse_cli:scientific-skills/citation-management/scripts/search_pubmed.py:271:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/citation-management/scripts/validate_citations.py:407
+         finding_id: AST_argparse_cli:scientific-skills/citation-management/scripts/validate_citations.py:407:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py:297
+         finding_id: AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py:297:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Biomarker-based patient classification')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-decision-support/scripts/build_decision_tree.py:391
+         finding_id: AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/build_decision_tree.py:391:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Build clinical decision tree flowcharts')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py:423
+         finding_id: AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py:423:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Generate clinical cohort tables')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-decision-support/scripts/generate_survival_analysis.py:376
+         finding_id: AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/generate_survival_analysis.py:376:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Generate Kaplan-Meier survival curves')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-decision-support/scripts/validate_cds_document.py:301
+         finding_id: AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/validate_cds_document.py:301:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Validate clinical decision support documents')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/check_deidentification.py:312
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/check_deidentification.py:312:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/compliance_checker.py:48
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/compliance_checker.py:48:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Check regulatory compliance")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/extract_clinical_data.py:69
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/extract_clinical_data.py:69:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Extract clinical data")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/format_adverse_events.py:72
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/format_adverse_events.py:72:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Format AE data into tables")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/generate_report_template.py:123
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/generate_report_template.py:123:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/terminology_validator.py:73
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/terminology_validator.py:73:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Validate medical terminology")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/validate_case_report.py:288
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/validate_case_report.py:288:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/clinical-reports/scripts/validate_trial_report.py:60
+         finding_id: AST_argparse_cli:scientific-skills/clinical-reports/scripts/validate_trial_report.py:60:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Validate CSR against ICH-E3")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/cosmic-database/scripts/download_cosmic.py:167
+         finding_id: AST_argparse_cli:scientific-skills/cosmic-database/scripts/download_cosmic.py:167:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/deepchem/scripts/graph_neural_network.py:245
+         finding_id: AST_argparse_cli:scientific-skills/deepchem/scripts/graph_neural_network.py:245:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/deepchem/scripts/predict_solubility.py:159
+         finding_id: AST_argparse_cli:scientific-skills/deepchem/scripts/predict_solubility.py:159:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/deepchem/scripts/transfer_learning.py:253
+         finding_id: AST_argparse_cli:scientific-skills/deepchem/scripts/transfer_learning.py:253:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/deeptools/scripts/validate_files.py:146
+         finding_id: AST_argparse_cli:scientific-skills/deeptools/scripts/validate_files.py:146:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/deeptools/scripts/workflow_generator.py:362
+         finding_id: AST_argparse_cli:scientific-skills/deeptools/scripts/workflow_generator.py:362:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/diffdock/scripts/analyze_results.py:272
+         finding_id: AST_argparse_cli:scientific-skills/diffdock/scripts/analyze_results.py:272:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/diffdock/scripts/prepare_batch_csv.py:184
+         finding_id: AST_argparse_cli:scientific-skills/diffdock/scripts/prepare_batch_csv.py:184:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/diffdock/scripts/setup_check.py:229
+         finding_id: AST_argparse_cli:scientific-skills/diffdock/scripts/setup_check.py:229:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/docx/scripts/accept_changes.py:122
+         finding_id: AST_argparse_cli:scientific-skills/docx/scripts/accept_changes.py:122:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/docx/scripts/comment.py:294
+         finding_id: AST_argparse_cli:scientific-skills/docx/scripts/comment.py:294:001
+         pattern : ast_argparse_cli_v1
+         snippet : "p = argparse.ArgumentParser(description="Add comments to DOCX documents")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/docx/scripts/office/pack.py:132
+         finding_id: AST_argparse_cli:scientific-skills/docx/scripts/office/pack.py:132:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/docx/scripts/office/unpack.py:102
+         finding_id: AST_argparse_cli:scientific-skills/docx/scripts/office/unpack.py:102:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/docx/scripts/office/validate.py:26
+         finding_id: AST_argparse_cli:scientific-skills/docx/scripts/office/validate.py:26:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Validate Office document XML files")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/ensembl-database/scripts/ensembl_query.py:316
+         finding_id: AST_argparse_cli:scientific-skills/ensembl-database/scripts/ensembl_query.py:316:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/etetoolkit/scripts/quick_visualize.py:118
+         finding_id: AST_argparse_cli:scientific-skills/etetoolkit/scripts/quick_visualize.py:118:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/etetoolkit/scripts/tree_operations.py:134
+         finding_id: AST_argparse_cli:scientific-skills/etetoolkit/scripts/tree_operations.py:134:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/gene-database/scripts/batch_gene_lookup.py:241
+         finding_id: AST_argparse_cli:scientific-skills/gene-database/scripts/batch_gene_lookup.py:241:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/gene-database/scripts/fetch_gene_data.py:217
+         finding_id: AST_argparse_cli:scientific-skills/gene-database/scripts/fetch_gene_data.py:217:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/gene-database/scripts/query_gene.py:206
+         finding_id: AST_argparse_cli:scientific-skills/gene-database/scripts/query_gene.py:206:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/generate-image/scripts/generate_image.py:210
+         finding_id: AST_argparse_cli:scientific-skills/generate-image/scripts/generate_image.py:210:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/get-available-resources/scripts/detect_resources.py:355
+         finding_id: AST_argparse_cli:scientific-skills/get-available-resources/scripts/detect_resources.py:355:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/gget/scripts/batch_sequence_analysis.py:142
+         finding_id: AST_argparse_cli:scientific-skills/gget/scripts/batch_sequence_analysis.py:142:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/gget/scripts/enrichment_pipeline.py:170
+         finding_id: AST_argparse_cli:scientific-skills/gget/scripts/enrichment_pipeline.py:170:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/gget/scripts/gene_analysis.py:133
+         finding_id: AST_argparse_cli:scientific-skills/gget/scripts/gene_analysis.py:133:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/infographics/scripts/generate_infographic.py:100
+         finding_id: AST_argparse_cli:scientific-skills/infographics/scripts/generate_infographic.py:100:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/infographics/scripts/generate_infographic_ai.py:1175
+         finding_id: AST_argparse_cli:scientific-skills/infographics/scripts/generate_infographic_ai.py:1175:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/iso-13485-certification/scripts/gap_analyzer.py:409
+         finding_id: AST_argparse_cli:scientific-skills/iso-13485-certification/scripts/gap_analyzer.py:409:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/labarchive-integration/scripts/entry_operations.py:237
+         finding_id: AST_argparse_cli:scientific-skills/labarchive-integration/scripts/entry_operations.py:237:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/labarchive-integration/scripts/notebook_operations.py:199
+         finding_id: AST_argparse_cli:scientific-skills/labarchive-integration/scripts/notebook_operations.py:199:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/market-research-reports/scripts/generate_market_visuals.py:401
+         finding_id: AST_argparse_cli:scientific-skills/market-research-reports/scripts/generate_market_visuals.py:401:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/markitdown/scripts/batch_convert.py:137
+         finding_id: AST_argparse_cli:scientific-skills/markitdown/scripts/batch_convert.py:137:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/markitdown/scripts/convert_literature.py:181
+         finding_id: AST_argparse_cli:scientific-skills/markitdown/scripts/convert_literature.py:181:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/markitdown/scripts/convert_with_ai.py:141
+         finding_id: AST_argparse_cli:scientific-skills/markitdown/scripts/convert_with_ai.py:141:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/matplotlib/scripts/plot_template.py:352
+         finding_id: AST_argparse_cli:scientific-skills/matplotlib/scripts/plot_template.py:352:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Matplotlib plot template')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/matplotlib/scripts/style_configurator.py:341
+         finding_id: AST_argparse_cli:scientific-skills/matplotlib/scripts/style_configurator.py:341:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/medchem/scripts/filter_molecules.py:290
+         finding_id: AST_argparse_cli:scientific-skills/medchem/scripts/filter_molecules.py:290:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/neuropixels-analysis/scripts/compute_metrics.py:158
+         finding_id: AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/compute_metrics.py:158:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Compute quality metrics')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/neuropixels-analysis/scripts/explore_recording.py:148
+         finding_id: AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/explore_recording.py:148:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Explore Neuropixels recording')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/neuropixels-analysis/scripts/export_to_phy.py:58
+         finding_id: AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/export_to_phy.py:58:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Export to Phy')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/neuropixels-analysis/scripts/neuropixels_pipeline.py:408
+         finding_id: AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/neuropixels_pipeline.py:408:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/neuropixels-analysis/scripts/preprocess_recording.py:93
+         finding_id: AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/preprocess_recording.py:93:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Preprocess Neuropixels recording')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/neuropixels-analysis/scripts/run_sorting.py:80
+         finding_id: AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/run_sorting.py:80:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='Run spike sorting')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/parallel-web/scripts/parallel_web.py:468
+         finding_id: AST_argparse_cli:scientific-skills/parallel-web/scripts/parallel_web.py:468:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/perplexity-search/scripts/perplexity_search.py:137
+         finding_id: AST_argparse_cli:scientific-skills/perplexity-search/scripts/perplexity_search.py:137:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/perplexity-search/scripts/setup_env.py:106
+         finding_id: AST_argparse_cli:scientific-skills/perplexity-search/scripts/setup_env.py:106:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/phylogenetics/scripts/phylogenetic_analysis.py:205
+         finding_id: AST_argparse_cli:scientific-skills/phylogenetics/scripts/phylogenetic_analysis.py:205:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Phylogenetic analysis pipeline")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pptx/scripts/office/pack.py:132
+         finding_id: AST_argparse_cli:scientific-skills/pptx/scripts/office/pack.py:132:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pptx/scripts/office/unpack.py:102
+         finding_id: AST_argparse_cli:scientific-skills/pptx/scripts/office/unpack.py:102:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pptx/scripts/office/validate.py:26
+         finding_id: AST_argparse_cli:scientific-skills/pptx/scripts/office/validate.py:26:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Validate Office document XML files")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pptx/scripts/thumbnail.py:41
+         finding_id: AST_argparse_cli:scientific-skills/pptx/scripts/thumbnail.py:41:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pufferlib/scripts/train_template.py:167
+         finding_id: AST_argparse_cli:scientific-skills/pufferlib/scripts/train_template.py:167:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='PufferLib Training')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pydeseq2/scripts/run_deseq2_analysis.py:269
+         finding_id: AST_argparse_cli:scientific-skills/pydeseq2/scripts/run_deseq2_analysis.py:269:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pydicom/scripts/anonymize_dicom.py:92
+         finding_id: AST_argparse_cli:scientific-skills/pydicom/scripts/anonymize_dicom.py:92:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pydicom/scripts/dicom_to_image.py:114
+         finding_id: AST_argparse_cli:scientific-skills/pydicom/scripts/dicom_to_image.py:114:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pydicom/scripts/extract_metadata.py:122
+         finding_id: AST_argparse_cli:scientific-skills/pydicom/scripts/extract_metadata.py:122:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pymatgen/scripts/phase_diagram_generator.py:170
+         finding_id: AST_argparse_cli:scientific-skills/pymatgen/scripts/phase_diagram_generator.py:170:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pymatgen/scripts/structure_analyzer.py:195
+         finding_id: AST_argparse_cli:scientific-skills/pymatgen/scripts/structure_analyzer.py:195:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/pymatgen/scripts/structure_converter.py:88
+         finding_id: AST_argparse_cli:scientific-skills/pymatgen/scripts/structure_converter.py:88:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/rdkit/scripts/molecular_properties.py:206
+         finding_id: AST_argparse_cli:scientific-skills/rdkit/scripts/molecular_properties.py:206:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/rdkit/scripts/similarity_search.py:199
+         finding_id: AST_argparse_cli:scientific-skills/rdkit/scripts/similarity_search.py:199:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/rdkit/scripts/substructure_filter.py:255
+         finding_id: AST_argparse_cli:scientific-skills/rdkit/scripts/substructure_filter.py:255:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/research-lookup/research_lookup.py:442
+         finding_id: AST_argparse_cli:scientific-skills/research-lookup/research_lookup.py:442:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/research-lookup/scripts/research_lookup.py:442
+         finding_id: AST_argparse_cli:scientific-skills/research-lookup/scripts/research_lookup.py:442:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scanpy/scripts/qc_analysis.py:139
+         finding_id: AST_argparse_cli:scientific-skills/scanpy/scripts/qc_analysis.py:139:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description='QC analysis for single-cell data')"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scholar-evaluation/scripts/calculate_scores.py:306
+         finding_id: AST_argparse_cli:scientific-skills/scholar-evaluation/scripts/calculate_scores.py:306:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-schematics/scripts/generate_schematic.py:31
+         finding_id: AST_argparse_cli:scientific-skills/scientific-schematics/scripts/generate_schematic.py:31:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-schematics/scripts/generate_schematic_ai.py:755
+         finding_id: AST_argparse_cli:scientific-skills/scientific-schematics/scripts/generate_schematic_ai.py:755:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-slides/scripts/generate_slide_image.py:34
+         finding_id: AST_argparse_cli:scientific-skills/scientific-slides/scripts/generate_slide_image.py:34:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:684
+         finding_id: AST_argparse_cli:scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:684:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-slides/scripts/pdf_to_images.py:109
+         finding_id: AST_argparse_cli:scientific-skills/scientific-slides/scripts/pdf_to_images.py:109:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-slides/scripts/slides_to_pdf.py:164
+         finding_id: AST_argparse_cli:scientific-skills/scientific-slides/scripts/slides_to_pdf.py:164:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/scientific-slides/scripts/validate_presentation.py:341
+         finding_id: AST_argparse_cli:scientific-skills/scientific-slides/scripts/validate_presentation.py:341:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/timesfm-forecasting/scripts/check_system.py:492
+         finding_id: AST_argparse_cli:scientific-skills/timesfm-forecasting/scripts/check_system.py:492:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/timesfm-forecasting/scripts/forecast_csv.py:195
+         finding_id: AST_argparse_cli:scientific-skills/timesfm-forecasting/scripts/forecast_csv.py:195:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/torch-geometric/scripts/benchmark_model.py:290
+         finding_id: AST_argparse_cli:scientific-skills/torch-geometric/scripts/benchmark_model.py:290:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Benchmark GNN models")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/torch-geometric/scripts/create_gnn_template.py:489
+         finding_id: AST_argparse_cli:scientific-skills/torch-geometric/scripts/create_gnn_template.py:489:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/torch-geometric/scripts/visualize_graph.py:249
+         finding_id: AST_argparse_cli:scientific-skills/torch-geometric/scripts/visualize_graph.py:249:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Visualize PyTorch Geometric graphs")"
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/treatment-plans/scripts/check_completeness.py:248
+         finding_id: AST_argparse_cli:scientific-skills/treatment-plans/scripts/check_completeness.py:248:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/treatment-plans/scripts/generate_template.py:162
+         finding_id: AST_argparse_cli:scientific-skills/treatment-plans/scripts/generate_template.py:162:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/treatment-plans/scripts/timeline_generator.py:268
+         finding_id: AST_argparse_cli:scientific-skills/treatment-plans/scripts/timeline_generator.py:268:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/treatment-plans/scripts/validate_treatment_plan.py:304
+         finding_id: AST_argparse_cli:scientific-skills/treatment-plans/scripts/validate_treatment_plan.py:304:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/uniprot-database/scripts/uniprot_client.py:237
+         finding_id: AST_argparse_cli:scientific-skills/uniprot-database/scripts/uniprot_client.py:237:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/uspto-database/scripts/peds_client.py:218
+         finding_id: AST_argparse_cli:scientific-skills/uspto-database/scripts/peds_client.py:218:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/uspto-database/scripts/trademark_client.py:230
+         finding_id: AST_argparse_cli:scientific-skills/uspto-database/scripts/trademark_client.py:230:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/venue-templates/scripts/customize_template.py:151
+         finding_id: AST_argparse_cli:scientific-skills/venue-templates/scripts/customize_template.py:151:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/venue-templates/scripts/query_template.py:206
+         finding_id: AST_argparse_cli:scientific-skills/venue-templates/scripts/query_template.py:206:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/venue-templates/scripts/validate_format.py:214
+         finding_id: AST_argparse_cli:scientific-skills/venue-templates/scripts/validate_format.py:214:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/xlsx/scripts/office/pack.py:132
+         finding_id: AST_argparse_cli:scientific-skills/xlsx/scripts/office/pack.py:132:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/xlsx/scripts/office/unpack.py:102
+         finding_id: AST_argparse_cli:scientific-skills/xlsx/scripts/office/unpack.py:102:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser("
+         reason  : argparse CLI interface detected.
+  [001]  scientific-skills/xlsx/scripts/office/validate.py:26
+         finding_id: AST_argparse_cli:scientific-skills/xlsx/scripts/office/validate.py:26:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Validate Office document XML files")"
+         reason  : argparse CLI interface detected.
+
+AST_fail_open_precision  [DETECTED]  (44 findings)
+  [001]  scientific-skills/bioservices/scripts/protein_analysis_workflow.py:47
+         finding_id: AST_fail_open_precision:scientific-skills/bioservices/scripts/protein_analysis_workflow.py:47:001
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/citation-management/scripts/search_google_scholar.py:102
+         finding_id: AST_fail_open_precision:scientific-skills/citation-management/scripts/search_google_scholar.py:102:001
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/diffdock/scripts/analyze_results.py:114
+         finding_id: AST_fail_open_precision:scientific-skills/diffdock/scripts/analyze_results.py:114:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/diffdock/scripts/analyze_results.py:103
+         finding_id: AST_fail_open_precision:scientific-skills/diffdock/scripts/analyze_results.py:103:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/docx/scripts/comment.py:116
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/comment.py:116:001
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/docx/scripts/office/soffice.py:49
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/soffice.py:49:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/docx/scripts/office/unpack.py:87
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/unpack.py:87:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/docx/scripts/office/unpack.py:97
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/unpack.py:97:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/docx/scripts/office/validators/base.py:138
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/base.py:138:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/docx/scripts/office/validators/docx.py:287
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/docx.py:287:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/docx/scripts/office/validators/docx.py:439
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/docx.py:439:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/docx/scripts/office/validators/redlining.py:56
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/redlining.py:56:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/docx/scripts/office/validators/redlining.py:193
+         finding_id: AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/redlining.py:193:002
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.CalledProcessError, FileNotFoundError, Exception):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/get-available-resources/scripts/detect_resources.py:39
+         finding_id: AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:39:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/get-available-resources/scripts/detect_resources.py:110
+         finding_id: AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:110:002
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.TimeoutExpired, FileNotFoundError, Exception):"
+         reason  : Fail-open exception handler detected by AST.
+  [003]  scientific-skills/get-available-resources/scripts/detect_resources.py:143
+         finding_id: AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:143:003
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.TimeoutExpired, FileNotFoundError, Exception):"
+         reason  : Fail-open exception handler detected by AST.
+  [004]  scientific-skills/get-available-resources/scripts/detect_resources.py:198
+         finding_id: AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:198:004
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [005]  scientific-skills/get-available-resources/scripts/detect_resources.py:194
+         finding_id: AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:194:005
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [006]  scientific-skills/get-available-resources/scripts/detect_resources.py:192
+         finding_id: AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:192:006
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/labarchive-integration/scripts/entry_operations.py:104
+         finding_id: AST_fail_open_precision:scientific-skills/labarchive-integration/scripts/entry_operations.py:104:001
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/literature-review/scripts/search_databases.py:200
+         finding_id: AST_fail_open_precision:scientific-skills/literature-review/scripts/search_databases.py:200:001
+         pattern : ast_fail_open_v1
+         snippet : "except (ValueError, TypeError):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pptx/scripts/clean.py:122
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/clean.py:122:001
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/pptx/scripts/clean.py:165
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/clean.py:165:002
+         pattern : ast_fail_open_v1
+         snippet : "except ValueError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pptx/scripts/office/soffice.py:49
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/soffice.py:49:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pptx/scripts/office/unpack.py:87
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/unpack.py:87:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/pptx/scripts/office/unpack.py:97
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/unpack.py:97:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pptx/scripts/office/validators/base.py:138
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/base.py:138:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pptx/scripts/office/validators/docx.py:287
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/docx.py:287:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/pptx/scripts/office/validators/docx.py:439
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/docx.py:439:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pptx/scripts/office/validators/redlining.py:56
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/redlining.py:56:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/pptx/scripts/office/validators/redlining.py:193
+         finding_id: AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/redlining.py:193:002
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.CalledProcessError, FileNotFoundError, Exception):"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/pymatgen/scripts/structure_analyzer.py:142
+         finding_id: AST_fail_open_precision:scientific-skills/pymatgen/scripts/structure_analyzer.py:142:001
+         pattern : ast_fail_open_v1
+         snippet : "except:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:661
+         finding_id: AST_fail_open_precision:scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:661:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/timesfm-forecasting/scripts/check_system.py:166
+         finding_id: AST_fail_open_precision:scientific-skills/timesfm-forecasting/scripts/check_system.py:166:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/timesfm-forecasting/scripts/check_system.py:217
+         finding_id: AST_fail_open_precision:scientific-skills/timesfm-forecasting/scripts/check_system.py:217:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/timesfm-forecasting/scripts/forecast_csv.py:164
+         finding_id: AST_fail_open_precision:scientific-skills/timesfm-forecasting/scripts/forecast_csv.py:164:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/xlsx/scripts/office/soffice.py:49
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/soffice.py:49:001
+         pattern : ast_fail_open_v1
+         snippet : "except OSError:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/xlsx/scripts/office/unpack.py:87
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/unpack.py:87:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/xlsx/scripts/office/unpack.py:97
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/unpack.py:97:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/xlsx/scripts/office/validators/base.py:138
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/base.py:138:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/xlsx/scripts/office/validators/docx.py:287
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/docx.py:287:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/xlsx/scripts/office/validators/docx.py:439
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/docx.py:439:002
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [001]  scientific-skills/xlsx/scripts/office/validators/redlining.py:56
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/redlining.py:56:001
+         pattern : ast_fail_open_v1
+         snippet : "except Exception:"
+         reason  : Fail-open exception handler detected by AST.
+  [002]  scientific-skills/xlsx/scripts/office/validators/redlining.py:193
+         finding_id: AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/redlining.py:193:002
+         pattern : ast_fail_open_v1
+         snippet : "except (subprocess.CalledProcessError, FileNotFoundError, Exception):"
+         reason  : Fail-open exception handler detected by AST.
+
+AST_syntax_error  [ERROR]  (1 finding)
+  [001]  scientific-skills/brenda-database/scripts/brenda_queries.py:559
+         finding_id: AST_syntax_error:scientific-skills/brenda-database/scripts/brenda_queries.py:559:001
+         pattern : ast_parse_v1
+         snippet : "'mechanism': 'allosteric' if 'allosteric' in commentary else 'cofactor' else 'unknown',"
+         reason  : Python file could not be parsed by stdlib ast.
+         reason      : syntax_error
+
+AST_seed_setting  [DETECTED]  (12 findings)
+  [001]  scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py:314
+         finding_id: AST_seed_setting:scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py:314:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py:403
+         finding_id: AST_seed_setting:scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py:403:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/matplotlib/scripts/plot_template.py:41
+         finding_id: AST_seed_setting:scientific-skills/matplotlib/scripts/plot_template.py:41:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/matplotlib/scripts/style_configurator.py:116
+         finding_id: AST_seed_setting:scientific-skills/matplotlib/scripts/style_configurator.py:116:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/pufferlib/scripts/train_template.py:74
+         finding_id: AST_seed_setting:scientific-skills/pufferlib/scripts/train_template.py:74:001
+         pattern : ast_seed_setting_v1
+         snippet : "torch.manual_seed(args.seed)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/pymc/assets/hierarchical_model_template.py:28
+         finding_id: AST_seed_setting:scientific-skills/pymc/assets/hierarchical_model_template.py:28:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/pymc/assets/linear_regression_template.py:27
+         finding_id: AST_seed_setting:scientific-skills/pymc/assets/linear_regression_template.py:27:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/pytdc/scripts/benchmark_evaluation.py:80
+         finding_id: AST_seed_setting:scientific-skills/pytdc/scripts/benchmark_evaluation.py:80:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(seed)"
+         reason  : Deterministic random seed setting call detected.
+  [002]  scientific-skills/pytdc/scripts/benchmark_evaluation.py:135
+         finding_id: AST_seed_setting:scientific-skills/pytdc/scripts/benchmark_evaluation.py:135:002
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(seed)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/pytdc/scripts/load_and_split_data.py:136
+         finding_id: AST_seed_setting:scientific-skills/pytdc/scripts/load_and_split_data.py:136:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/simpy/scripts/basic_simulation_template.py:148
+         finding_id: AST_seed_setting:scientific-skills/simpy/scripts/basic_simulation_template.py:148:001
+         pattern : ast_seed_setting_v1
+         snippet : "random.seed(config.random_seed)"
+         reason  : Deterministic random seed setting call detected.
+  [001]  scientific-skills/statistical-analysis/scripts/assumption_checks.py:522
+         finding_id: AST_seed_setting:scientific-skills/statistical-analysis/scripts/assumption_checks.py:522:001
+         pattern : ast_seed_setting_v1
+         snippet : "np.random.seed(42)"
+         reason  : Deterministic random seed setting call detected.
+
+AST_assertion_tests  [DETECTED]  (44 findings)
+  [001]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:29
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:29:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_skill_directory_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_skill_directory_exists
+  [002]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:36
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:36:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_skill_md_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_skill_md_exists
+  [003]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:43
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:43:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_references_directory_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_references_directory_exists
+  [004]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:50
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:50:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_scripts_directory_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_scripts_directory_exists
+  [005]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:69
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:69:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_yaml_frontmatter(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_yaml_frontmatter
+  [006]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:81
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:81:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_frontmatter_has_name(self):"
+         reason  : Test function with assertion detected.
+         function      : test_frontmatter_has_name
+  [007]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:86
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:86:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_frontmatter_has_description(self):"
+         reason  : Test function with assertion detected.
+         function      : test_frontmatter_has_description
+  [008]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:99
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:99:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_frontmatter_has_license(self):"
+         reason  : Test function with assertion detected.
+         function      : test_frontmatter_has_license
+  [009]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:104
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:104:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_frontmatter_has_metadata_author(self):"
+         reason  : Test function with assertion detected.
+         function      : test_frontmatter_has_metadata_author
+  [010]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:119
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:119:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_title_heading(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_title_heading
+  [011]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:126
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:126:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_overview_section(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_overview_section
+  [012]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:134
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:134:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_quick_start_section(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_quick_start_section
+  [013]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:142
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:142:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_docker_setup(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_docker_setup
+  [014]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:147
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:147:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_api_base_url(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_api_base_url
+  [015]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:151
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:151:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_mentions_notebooklm_alternative(self):"
+         reason  : Test function with assertion detected.
+         function      : test_mentions_notebooklm_alternative
+  [016]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:159
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:159:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_mentions_self_hosted(self):"
+         reason  : Test function with assertion detected.
+         function      : test_mentions_self_hosted
+  [017]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:167
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:167:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_mentions_multiple_ai_providers(self):"
+         reason  : Test function with assertion detected.
+         function      : test_mentions_multiple_ai_providers
+  [018]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:181
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:181:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_core_features_section(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_core_features_section
+  [019]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:192
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:192:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_api_reference_section(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_api_reference_section
+  [020]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:200
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:200:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_python_code_examples(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_python_code_examples
+  [021]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:204
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:204:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_bash_code_examples(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_bash_code_examples
+  [022]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:211
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:211:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_installation_instructions(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_installation_instructions
+  [023]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:219
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:219:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_environment_variable_info(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_environment_variable_info
+  [024]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:227
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:227:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_kdense_suggestion(self):"
+         reason  : Test function with assertion detected.
+         function      : test_has_kdense_suggestion
+  [025]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:235
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:235:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_content_length_sufficient(self):"
+         reason  : Test function with assertion detected.
+         function      : test_content_length_sufficient
+  [026]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:257
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:257:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_api_reference_exists_and_comprehensive(self):"
+         reason  : Test function with assertion detected.
+         function      : test_api_reference_exists_and_comprehensive
+  [027]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:269
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:269:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_api_reference_has_http_methods(self):"
+         reason  : Test function with assertion detected.
+         function      : test_api_reference_has_http_methods
+  [028]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:279
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:279:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_examples_reference_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_examples_reference_exists
+  [029]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:285
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:285:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_configuration_reference_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_configuration_reference_exists
+  [030]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:299
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:299:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_architecture_reference_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_architecture_reference_exists
+  [031]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:330
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:330:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_notebook_management_script_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_notebook_management_script_exists
+  [032]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:336
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:336:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_source_ingestion_script_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_source_ingestion_script_exists
+  [033]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:341
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:341:033
+         pattern : ast_assertion_test_v1
+         snippet : "def test_chat_interaction_script_exists(self):"
+         reason  : Test function with assertion detected.
+         function      : test_chat_interaction_script_exists
+  [034]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:355
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:355:034
+         pattern : ast_assertion_test_v1
+         snippet : "def test_marketplace_has_open_notebook_skill(self):"
+         reason  : Test function with assertion detected.
+         function      : test_marketplace_has_open_notebook_skill
+  [035]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:365
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:365:035
+         pattern : ast_assertion_test_v1
+         snippet : "def test_marketplace_valid_json(self):"
+         reason  : Test function with assertion detected.
+         function      : test_marketplace_valid_json
+  [036]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:385
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:385:036
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_notebook_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_notebook_endpoints
+  [037]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:389
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:389:037
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_source_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_source_endpoints
+  [038]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:393
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:393:038
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_note_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_note_endpoints
+  [039]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:397
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:397:039
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_chat_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_chat_endpoints
+  [040]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:401
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:401:040
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_search_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_search_endpoints
+  [041]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:405
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:405:041
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_podcast_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_podcast_endpoints
+  [042]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:409
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:409:042
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_transformation_endpoints(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_transformation_endpoints
+  [043]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:413
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:413:043
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_model_management(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_model_management
+  [044]  scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:417
+         finding_id: AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:417:044
+         pattern : ast_assertion_test_v1
+         snippet : "def test_covers_credential_management(self):"
+         reason  : Test function with assertion detected.
+         function      : test_covers_credential_management
+
+S4_container_environment  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_container_environment:.:0:001
+         pattern : container_file_v1
+         reason  : No evidence detected for S4_container_environment.
+
+S4_make_reproduce_target  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_make_reproduce_target:.:0:001
+         pattern : make_reproduce_target_v1
+         reason  : No Makefile detected.
+
+S4_environment_lock_evidence  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_environment_lock_evidence:.:0:001
+         pattern : environment_lock_file_v1
+         reason  : No environment, dependency, or lock manifest detected.
+
+S4_exact_dependency_pins_or_hashes  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_exact_dependency_pins_or_hashes:.:0:001
+         pattern : exact_pin_or_hash_v1
+         reason  : No dependency manifest detected.
+
+S4_readme_reproducibility_section  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_readme_reproducibility_section:.:0:001
+         pattern : readme_repro_heading_v1
+         reason  : No README detected.
+
+S4_checksum_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_checksum_files:.:0:001
+         pattern : checksum_file_v1
+         reason  : No evidence detected for S4_checksum_files.
+
+S4_dataset_url  [DETECTED]  (6 findings)
+  [001]  docs/open-source-sponsors.md:27
+         finding_id: S4_dataset_url:docs/open-source-sponsors.md:27:001
+         pattern : dataset_url_v1
+         snippet : "| **AnnData** | Annotated data matrices for single-cell | [GitHub](https://github.com/scverse/anndata) |"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://github.com/scverse/anndata
+  [002]  docs/open-source-sponsors.md:33
+         finding_id: S4_dataset_url:docs/open-source-sponsors.md:33:002
+         pattern : dataset_url_v1
+         snippet : "| **deepTools** | Tools for deep-sequencing data | [GitHub](https://github.com/deeptools/deepTools) |"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://github.com/deeptools/deepTools
+  [003]  docs/open-source-sponsors.md:46
+         finding_id: S4_dataset_url:docs/open-source-sponsors.md:46:003
+         pattern : dataset_url_v1
+         snippet : "| **PyTDC** | Therapeutics Data Commons | [GitHub](https://github.com/mims-harvard/TDC) |"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://github.com/mims-harvard/TDC
+  [004]  docs/open-source-sponsors.md:52
+         finding_id: S4_dataset_url:docs/open-source-sponsors.md:52:004
+         pattern : dataset_url_v1
+         snippet : "| **matchms** | Mass spectrometry data processing | [GitHub](https://github.com/matchms/matchms) |"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://github.com/matchms/matchms
+  [005]  docs/open-source-sponsors.md:60
+         finding_id: S4_dataset_url:docs/open-source-sponsors.md:60:005
+         pattern : dataset_url_v1
+         snippet : "| **Transformers** | State-of-the-art NLP | [GitHub](https://github.com/huggingface/transformers) |"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://github.com/huggingface/transformers
+  [006]  docs/open-source-sponsors.md:81
+         finding_id: S4_dataset_url:docs/open-source-sponsors.md:81:006
+         pattern : dataset_url_v1
+         snippet : "| **GeoPandas** | Geospatial data in Python | [GitHub](https://github.com/geopandas/geopandas) |"
+         reason  : Dataset URL or data source reference detected.
+         url      : https://github.com/geopandas/geopandas
+
+S4_model_weight_url_or_checksum  [DETECTED]  (2 findings)
+  [001]  docs/open-source-sponsors.md:60
+         finding_id: S4_model_weight_url_or_checksum:docs/open-source-sponsors.md:60:001
+         pattern : model_weight_url_v1
+         snippet : "| **Transformers** | State-of-the-art NLP | [GitHub](https://github.com/huggingface/transformers) |"
+         reason  : Model weight, checkpoint, or model artifact URL detected.
+         url      : https://github.com/huggingface/transformers
+  [002]  docs/open-source-sponsors.md:64
+         finding_id: S4_model_weight_url_or_checksum:docs/open-source-sponsors.md:64:002
+         pattern : model_weight_url_v1
+         snippet : "| **SHAP** | Model interpretability | [GitHub](https://github.com/shap/shap) |"
+         reason  : Model weight, checkpoint, or model artifact URL detected.
+         url      : https://github.com/shap/shap
+
+S4_citation_cff  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_citation_cff:.:0:001
+         pattern : citation_cff_v1
+         reason  : No evidence detected for S4_citation_cff.
+
+S4_cli_entrypoint  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_cli_entrypoint:.:0:001
+         pattern : cli_entrypoint_v1
+         reason  : argparse CLI evidence detected by AST summary.
+         source      : ast_signal_summary
+
+S4_seed_setting  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_seed_setting:.:0:001
+         pattern : ast_seed_setting_stage4_v1
+         reason  : Deterministic seed setting evidence detected by AST summary.
+         seed_settings      : 12
+
+S4_runnable_examples  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_runnable_examples:.:0:001
+         pattern : runnable_example_file_v1
+         reason  : No evidence detected for S4_runnable_examples.
+
+========================================================================
+AST Signal Summary
+
+  files_total                        227
+  files_considered                   227
+  files_parsed                       226
+  files_skipped_size                 0
+  syntax_errors                      1
+  file_limit_exceeded                False
+  test_functions                     51
+  assertion_tests                    44
+  public_functions                   1222
+  docstring_functions                950
+  annotated_functions                534
+  seed_settings                      12
+  argparse_cli                       True
+  portable_model_loading             0
+  fail_open_handlers                 44
+  docstring_coverage                 0.7774
+  type_annotation_coverage           0.437
+
+========================================================================
+Stage 4 Replication Rubric
+
+  S4_container_environment                     0 / 10   No evidence detected for S4_container_environment.
+  S4_make_reproduce_target                     0 / 10   No Makefile detected.
+  S4_environment_lock_evidence                 0 / 10   No environment, dependency, or lock manifest detected.
+  S4_exact_dependency_pins_or_hashes           0 / 10   No dependency manifest detected.
+  S4_readme_reproducibility_section            0 / 10   No README detected.
+  S4_checksum_files                            0 / 10   No evidence detected for S4_checksum_files.
+  S4_dataset_url                              10 / 10   Dataset URL or data source reference detected.
+  S4_model_weight_url_or_checksum             10 / 10   Model artifact URL or checksum evidence detected.
+  S4_citation_cff                              0 / 5    No evidence detected for S4_citation_cff.
+  S4_cli_entrypoint                            5 / 5    CLI entry point or argparse interface detected.
+  S4_seed_setting                              5 / 5    Deterministic seed setting detected.
+  S4_runnable_examples                         0 / 5    No evidence detected for S4_runnable_examples.
+  stage_4_raw_total                           30 / 100  Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score.
+
+========================================================================
+Reasoning Diagnostics
+
+  version                         stem-bio-ai-reasoning-v1.3.2
+  mode                            diagnostic_only
+  final_score_override            False
+  evidence_budget                 supported
+  confidence_envelope             unknown
+  lane_coherence                  coherent
+  uncertainty_budget              stable
+  evidence_risk_gate              within_gate
+
+========================================================================
+DISCLAIMER: Evidence-surface pre-screen only.
+Not clinical certification, regulatory clearance, or medical advice.

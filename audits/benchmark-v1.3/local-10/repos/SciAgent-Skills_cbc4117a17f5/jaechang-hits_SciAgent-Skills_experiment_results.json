@@ -1,0 +1,1406 @@
+{
+  "schema_version": "stem-ai-local-cli-result-v1.3",
+  "stem_ai_version": "1.3.0",
+  "generated_at_local": "2026-04-30",
+  "execution_mode": "LOCAL_ANALYSIS",
+  "target": {
+    "name": "jaechang-hits/SciAgent-Skills",
+    "local_path": "D:\\Sanctum\\Extra Repo\\SciAgent-Skills",
+    "remote": "https://github.com/jaechang-hits/SciAgent-Skills",
+    "branch": "main",
+    "commit": "cbc4117a17f5d65546f84a01597ab03af4399440",
+    "file_count": 276
+  },
+  "classification": {
+    "clinical_adjacent": false,
+    "ca_severity": "none",
+    "t0_hard_floor": false,
+    "score_cap": null,
+    "has_explicit_clinical_boundary": false
+  },
+  "score": {
+    "stage_1_readme_intent": 70,
+    "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
+    "stage_2_repo_local_consistency": 70,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_3_code_bio": 35,
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "risk_penalty": 0,
+    "raw_score_before_floor": 56,
+    "final_score": 56,
+    "formal_tier": "T2 Caution",
+    "use_scope": "Research reference and supervised non-clinical technical review only."
+  },
+  "stage_2r_rubric": {
+    "baseline": {
+      "score": 60,
+      "evidence": "Non-nascent local repository baseline."
+    },
+    "R2R_3_readme_test_ci_alignment": {
+      "score": 10,
+      "evidence": "Test/CI surfaces are present and locally consistent."
+    },
+    "calculation": "60 plus local consistency additions/deductions = 70",
+    "stage_2r_score": 70,
+    "verdict": "Mixed Local Consistency"
+  },
+  "stage_3_rubric": {
+    "T1_CI_CD": {
+      "score": 15,
+      "max": 15,
+      "evidence": "Workflow files detected."
+    },
+    "T2_domain_tests": {
+      "score": 8,
+      "max": 15,
+      "evidence": "Tests present but domain specificity is limited."
+    },
+    "T3_changelog_release_hygiene": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No changelog detected."
+    },
+    "B1_data_provenance_controls": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No dependency/provenance manifest detected."
+    },
+    "B2_bias_limitations": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No bias/limitations language detected by local CLI scan."
+    },
+    "B3_coi_funding": {
+      "score": 5,
+      "max": 5,
+      "evidence": "COI, funding, sponsor, or acknowledgement language detected."
+    },
+    "stage_3_raw_total": {
+      "score": 28,
+      "max": 80,
+      "evidence": "Raw rubric total before normalization to 100."
+    }
+  },
+  "replication_score": 5,
+  "replication_tier": "R0",
+  "stage_4_rubric": {
+    "S4_container_environment": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_container_environment."
+    },
+    "S4_make_reproduce_target": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No Makefile detected."
+    },
+    "S4_environment_lock_evidence": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No environment, dependency, or lock manifest detected."
+    },
+    "S4_exact_dependency_pins_or_hashes": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No dependency manifest detected."
+    },
+    "S4_readme_reproducibility_section": {
+      "score": 0,
+      "max": 10,
+      "evidence": "README exists but no reproducibility or replication section heading was detected."
+    },
+    "S4_checksum_files": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_checksum_files."
+    },
+    "S4_dataset_url": {
+      "score": 0,
+      "max": 10,
+      "evidence": "Documentation exists but no dataset URL or data source URL was detected."
+    },
+    "S4_model_weight_url_or_checksum": {
+      "score": 0,
+      "max": 10,
+      "evidence": "Documentation exists but no model artifact URL/checksum evidence was detected."
+    },
+    "S4_citation_cff": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_citation_cff."
+    },
+    "S4_cli_entrypoint": {
+      "score": 5,
+      "max": 5,
+      "evidence": "CLI entry point or argparse interface detected."
+    },
+    "S4_seed_setting": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No deterministic seed setting detected."
+    },
+    "S4_runnable_examples": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_runnable_examples."
+    },
+    "stage_4_raw_total": {
+      "score": 5,
+      "max": 100,
+      "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0."
+    }
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        "No direct credential patterns detected by local CLI scan."
+      ]
+    },
+    "C2_dependency_pinning": {
+      "status": "PASS",
+      "evidence": [
+        "Dependency manifest appears pinned or not present."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No deprecated patient-adjacent metadata patterns detected."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No broad fail-open exception pattern detected."
+      ]
+    }
+  },
+  "evidence_ledger": [
+    {
+      "finding_id": "S1_readme_bio_terms:README.md:161:001",
+      "detector": "S1_readme_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "bio_terms_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "README.md",
+      "line": 161,
+      "snippet": "> \"Fit a hierarchical Bayesian model to this clinical trial data with patient-level random effects\"",
+      "match_type": "regex",
+      "explanation": "README exposes bio/medical vocabulary.",
+      "metadata": {
+        "match": "clinical"
+      }
+    },
+    {
+      "finding_id": "S1_readme_bio_terms:README.md:161:002",
+      "detector": "S1_readme_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "bio_terms_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "README.md",
+      "line": 161,
+      "snippet": "> \"Fit a hierarchical Bayesian model to this clinical trial data with patient-level random effects\"",
+      "match_type": "regex",
+      "explanation": "README exposes bio/medical vocabulary.",
+      "metadata": {
+        "match": "patient"
+      }
+    },
+    {
+      "finding_id": "S1_clinical_boundary:.:0:001",
+      "detector": "S1_clinical_boundary",
+      "detector_version": "1.3.0",
+      "pattern_id": "clinical_boundary_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_clinical_boundary."
+    },
+    {
+      "finding_id": "S3_T1_workflow_files:.github/workflows/validate.yml:0:001",
+      "detector": "S3_T1_workflow_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "workflow_presence_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".github/workflows/validate.yml",
+      "line": 0,
+      "snippet": ".github/workflows/validate.yml",
+      "match_type": "file_presence",
+      "explanation": "Workflow file exists."
+    },
+    {
+      "finding_id": "S3_T2_domain_tests:.:0:001",
+      "detector": "S3_T2_domain_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "domain_tests_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_T2_domain_tests."
+    },
+    {
+      "finding_id": "S3_T3_changelog_release_hygiene:.:0:001",
+      "detector": "S3_T3_changelog_release_hygiene",
+      "detector_version": "1.3.0",
+      "pattern_id": "changelog_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_T3_changelog_release_hygiene."
+    },
+    {
+      "finding_id": "S3_B1_dependency_manifest:.:0:001",
+      "detector": "S3_B1_dependency_manifest",
+      "detector_version": "1.3.0",
+      "pattern_id": "dependency_manifest_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_B1_dependency_manifest."
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:.:0:001",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_B2_bias_limitations."
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:README.md:199:001",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "README.md",
+      "line": 199,
+      "snippet": "## Acknowledgments",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Acknowledgments"
+      }
+    },
+    {
+      "finding_id": "S2_package_bio_terms:.:0:001",
+      "detector": "S2_package_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "package_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S2_package_bio_terms."
+    },
+    {
+      "finding_id": "C1_hardcoded_credentials:.:0:001",
+      "detector": "C1_hardcoded_credentials",
+      "detector_version": "1.3.0",
+      "pattern_id": "credential_pattern_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C1_hardcoded_credentials."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:.:0:001",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "dependency",
+      "explanation": "No dependency manifest detected."
+    },
+    {
+      "finding_id": "C3_dead_or_deprecated_patient_adjacent_paths:.:0:001",
+      "detector": "C3_dead_or_deprecated_patient_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "deprecated_patient_metadata_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths."
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:.:0:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C4_exception_handling_clinical_adjacent_paths."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scripts/blind_knowledge_test.py:243:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scripts/blind_knowledge_test.py",
+      "line": 243,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Blind knowledge test for SciCraft skills (AWS Bedrock)\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scripts/blind_knowledge_test.py:194:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scripts/blind_knowledge_test.py",
+      "line": 194,
+      "snippet": "except json.JSONDecodeError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:30:001",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 30,
+      "snippet": "def test_no_validation_errors(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_no_validation_errors"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:34:002",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 34,
+      "snippet": "def test_entries_not_empty(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_entries_not_empty"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:37:003",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 37,
+      "snippet": "def test_no_duplicate_names(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_no_duplicate_names"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:41:004",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 41,
+      "snippet": "def test_no_duplicate_paths(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_no_duplicate_paths"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:47:005",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 47,
+      "snippet": "def test_all_skill_files_exist(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_all_skill_files_exist"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:55:006",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 55,
+      "snippet": "def test_frontmatter_has_required_fields(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_frontmatter_has_required_fields"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:66:007",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 66,
+      "snippet": "def test_skill_files_not_empty(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_skill_files_not_empty"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_registry.py:78:008",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_registry.py",
+      "line": 78,
+      "snippet": "def test_all_skill_files_registered(self, entries):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_all_skill_files_registered"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:61:001",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 61,
+      "snippet": "def test_license_field_exists(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_license_field_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:69:002",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 69,
+      "snippet": "def test_description_max_length(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_description_max_length"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:80:003",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 80,
+      "snippet": "def test_name_max_length(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_name_max_length"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:99:004",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 99,
+      "snippet": "def test_sub_type_valid(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_sub_type_valid"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:106:005",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 106,
+      "snippet": "def test_type_is_skill(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_type_is_skill"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:112:006",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 112,
+      "snippet": "def test_category_matches_directory(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_category_matches_directory"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:119:007",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 119,
+      "snippet": "def test_date_added_is_valid_iso(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_date_added_is_valid_iso"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:130:008",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 130,
+      "snippet": "def test_path_matches_category(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_path_matches_category"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:152:009",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 152,
+      "snippet": "def test_has_overview(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_overview"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:158:010",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 158,
+      "snippet": "def test_has_when_to_use(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_when_to_use"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:165:011",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 165,
+      "snippet": "def test_pipeline_sections(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_pipeline_sections"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:172:012",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 172,
+      "snippet": "def test_toolkit_sections(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_toolkit_sections"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:179:013",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 179,
+      "snippet": "def test_guide_sections(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_sections"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:194:014",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 194,
+      "snippet": "def test_pipeline_workflow_steps_have_code(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_pipeline_workflow_steps_have_code"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:213:015",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 213,
+      "snippet": "def test_toolkit_core_api_modules_have_code(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_toolkit_core_api_modules_have_code"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:233:016",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 233,
+      "snippet": "def test_pipeline_code_blocks(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_pipeline_code_blocks"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:243:017",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 243,
+      "snippet": "def test_toolkit_code_blocks(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_toolkit_code_blocks"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:253:018",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 253,
+      "snippet": "def test_guide_minimum_lines(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_minimum_lines"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:263:019",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 263,
+      "snippet": "def test_references_contain_url(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_references_contain_url"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:284:020",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 284,
+      "snippet": "def test_references_minimum_three_items(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_references_minimum_three_items"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:311:021",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 311,
+      "snippet": "def test_when_to_use_minimum_items(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_when_to_use_minimum_items"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:330:022",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 330,
+      "snippet": "def test_key_parameters_minimum_rows(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_key_parameters_minimum_rows"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:356:023",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 356,
+      "snippet": "def test_troubleshooting_minimum_rows(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_troubleshooting_minimum_rows"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:379:024",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 379,
+      "snippet": "def test_description_length(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_description_length"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:392:025",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 392,
+      "snippet": "def test_pipeline_has_expected_outputs(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_pipeline_has_expected_outputs"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:403:026",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 403,
+      "snippet": "def test_guide_best_practices_minimum_items(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_best_practices_minimum_items"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:422:027",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 422,
+      "snippet": "def test_guide_common_pitfalls_minimum_items(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_common_pitfalls_minimum_items"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:441:028",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 441,
+      "snippet": "def test_guide_key_concepts_has_subsections(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_key_concepts_has_subsections"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:458:029",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 458,
+      "snippet": "def test_guide_decision_framework_has_structure(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_decision_framework_has_structure"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:480:030",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 480,
+      "snippet": "def test_guide_common_pitfalls_has_avoid_language(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_guide_common_pitfalls_has_avoid_language"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:528:031",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 528,
+      "snippet": "def test_has_core_api_section(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_core_api_section"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:542:032",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 542,
+      "snippet": "def test_has_common_workflows_or_recipes(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_common_workflows_or_recipes"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:556:033",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 556,
+      "snippet": "def test_large_toolkit_has_quick_start(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_large_toolkit_has_quick_start"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:569:034",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 569,
+      "snippet": "def test_toolkit_when_to_use_has_alternative_comparison(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_toolkit_when_to_use_has_alternative_comparison"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:600:035",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 600,
+      "snippet": "def test_pipeline_when_to_use_has_routing_guidance(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_pipeline_when_to_use_has_routing_guidance"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:tests/test_skill_quality.py:628:036",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "tests/test_skill_quality.py",
+      "line": 628,
+      "snippet": "def test_toolkit_has_common_recipes(self, entry):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_toolkit_has_common_recipes"
+      }
+    },
+    {
+      "finding_id": "S4_container_environment:.:0:001",
+      "detector": "S4_container_environment",
+      "detector_version": "1.3.0",
+      "pattern_id": "container_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_container_environment."
+    },
+    {
+      "finding_id": "S4_make_reproduce_target:.:0:001",
+      "detector": "S4_make_reproduce_target",
+      "detector_version": "1.3.0",
+      "pattern_id": "make_reproduce_target_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No Makefile detected."
+    },
+    {
+      "finding_id": "S4_environment_lock_evidence:.:0:001",
+      "detector": "S4_environment_lock_evidence",
+      "detector_version": "1.3.0",
+      "pattern_id": "environment_lock_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No environment, dependency, or lock manifest detected."
+    },
+    {
+      "finding_id": "S4_exact_dependency_pins_or_hashes:.:0:001",
+      "detector": "S4_exact_dependency_pins_or_hashes",
+      "detector_version": "1.3.0",
+      "pattern_id": "exact_pin_or_hash_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No dependency manifest detected."
+    },
+    {
+      "finding_id": "S4_readme_reproducibility_section:.:0:001",
+      "detector": "S4_readme_reproducibility_section",
+      "detector_version": "1.3.0",
+      "pattern_id": "readme_repro_heading_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "README exists but no reproducibility or replication section heading was detected."
+    },
+    {
+      "finding_id": "S4_checksum_files:.:0:001",
+      "detector": "S4_checksum_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "checksum_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_checksum_files."
+    },
+    {
+      "finding_id": "S4_dataset_url:.:0:001",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "Documentation exists but no dataset URL or data source URL was detected."
+    },
+    {
+      "finding_id": "S4_model_weight_url_or_checksum:.:0:001",
+      "detector": "S4_model_weight_url_or_checksum",
+      "detector_version": "1.3.0",
+      "pattern_id": "model_weight_url_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "Documentation exists but no model artifact URL/checksum evidence was detected."
+    },
+    {
+      "finding_id": "S4_citation_cff:.:0:001",
+      "detector": "S4_citation_cff",
+      "detector_version": "1.3.0",
+      "pattern_id": "citation_cff_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_citation_cff."
+    },
+    {
+      "finding_id": "S4_cli_entrypoint:.:0:001",
+      "detector": "S4_cli_entrypoint",
+      "detector_version": "1.3.0",
+      "pattern_id": "cli_entrypoint_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "argparse CLI evidence detected by AST summary.",
+      "metadata": {
+        "source": "ast_signal_summary"
+      }
+    },
+    {
+      "finding_id": "S4_seed_setting:.:0:001",
+      "detector": "S4_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_stage4_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No deterministic seed setting evidence detected by AST summary."
+    },
+    {
+      "finding_id": "S4_runnable_examples:.:0:001",
+      "detector": "S4_runnable_examples",
+      "detector_version": "1.3.0",
+      "pattern_id": "runnable_example_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_runnable_examples."
+    }
+  ],
+  "detector_summary": {
+    "total_findings": 72,
+    "by_status": {
+      "detected": 51,
+      "not_detected": 18,
+      "absent": 3
+    },
+    "by_detector": {
+      "S1_readme_bio_terms": {
+        "detected": 2
+      },
+      "S1_clinical_boundary": {
+        "not_detected": 1
+      },
+      "S3_T1_workflow_files": {
+        "detected": 1
+      },
+      "S3_T2_domain_tests": {
+        "not_detected": 1
+      },
+      "S3_T3_changelog_release_hygiene": {
+        "not_detected": 1
+      },
+      "S3_B1_dependency_manifest": {
+        "not_detected": 1
+      },
+      "S3_B2_bias_limitations": {
+        "not_detected": 1
+      },
+      "S3_B3_coi_funding": {
+        "detected": 1
+      },
+      "S2_package_bio_terms": {
+        "not_detected": 1
+      },
+      "C1_hardcoded_credentials": {
+        "not_detected": 1
+      },
+      "C2_dependency_pinning": {
+        "absent": 1
+      },
+      "C3_dead_or_deprecated_patient_adjacent_paths": {
+        "not_detected": 1
+      },
+      "C4_exception_handling_clinical_adjacent_paths": {
+        "not_detected": 1
+      },
+      "AST_argparse_cli": {
+        "detected": 1
+      },
+      "AST_fail_open_precision": {
+        "detected": 1
+      },
+      "AST_assertion_tests": {
+        "detected": 44
+      },
+      "S4_container_environment": {
+        "not_detected": 1
+      },
+      "S4_make_reproduce_target": {
+        "absent": 1
+      },
+      "S4_environment_lock_evidence": {
+        "not_detected": 1
+      },
+      "S4_exact_dependency_pins_or_hashes": {
+        "absent": 1
+      },
+      "S4_readme_reproducibility_section": {
+        "not_detected": 1
+      },
+      "S4_checksum_files": {
+        "not_detected": 1
+      },
+      "S4_dataset_url": {
+        "not_detected": 1
+      },
+      "S4_model_weight_url_or_checksum": {
+        "not_detected": 1
+      },
+      "S4_citation_cff": {
+        "not_detected": 1
+      },
+      "S4_cli_entrypoint": {
+        "detected": 1
+      },
+      "S4_seed_setting": {
+        "not_detected": 1
+      },
+      "S4_runnable_examples": {
+        "not_detected": 1
+      }
+    }
+  },
+  "ast_signal_summary": {
+    "files_total": 4,
+    "files_considered": 4,
+    "files_parsed": 4,
+    "files_skipped_size": 0,
+    "syntax_errors": 0,
+    "file_limit_exceeded": false,
+    "test_functions": 45,
+    "assertion_tests": 44,
+    "public_functions": 63,
+    "docstring_functions": 26,
+    "annotated_functions": 5,
+    "seed_settings": 0,
+    "argparse_cli": true,
+    "portable_model_loading": 0,
+    "fail_open_handlers": 1,
+    "docstring_coverage": 0.4127,
+    "type_annotation_coverage": 0.0794
+  },
+  "notable_positive_evidence": [
+    "CI workflow files were detected.",
+    "Test files were detected."
+  ],
+  "notable_risks": [
+    "No major local risks detected by the CLI scan."
+  ],
+  "file_hashes_sha256": {
+    "README.md": "C3B00126C61DDF45058CF35717B37B49269F0F4642FCAF51FF62B6DE961F6D0E"
+  },
+  "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
+  "measurement_basis": {
+    "stage_1": "BIO_TERMS regex match in README; disclaimer phrase presence/absence",
+    "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
+    "stage_3_T1": ".github/workflows/ directory contains files",
+    "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
+    "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
+    "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
+    "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
+    "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+    "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
+    "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
+    "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...)",
+    "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
+    "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
+    "C4": "except Exception: pass or except: pass pattern (regex)",
+    "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer"
+  }
+}

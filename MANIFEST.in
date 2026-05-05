@@ -2,8 +2,16 @@ include CHANGELOG.md
 include CONTRIBUTING.md
 include LICENSE
 include README.md
+include SKILL.md
 include pyproject.toml
 include requirements.txt
+include docs/API_CONTRACT.md
+include docs/MICA_MEMORY.md
+include docs/SCORING_RATIONALE.md
+include memory/mica.yaml
+include memory/stem-ai.mica.v1.5.8.json
+include memory/stem-ai-playbook.v1.5.8.md
+include memory/stem-ai-lessons.v1.5.8.md
 
 recursive-include stem_ai *.py
 recursive-include tests *.py

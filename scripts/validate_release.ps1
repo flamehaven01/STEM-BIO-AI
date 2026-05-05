@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.5.7",
+    [string]$ExpectedVersion = "1.5.8",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop

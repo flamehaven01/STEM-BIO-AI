@@ -1,0 +1,1717 @@
+{
+  "schema_version": "stem-ai-local-cli-result-v1.3",
+  "stem_ai_version": "1.3.0",
+  "generated_at_local": "2026-04-30",
+  "execution_mode": "LOCAL_ANALYSIS",
+  "target": {
+    "name": "snap-stanford/Biomni",
+    "local_path": "D:\\Sanctum\\Extra Repo\\Biomni",
+    "remote": "https://github.com/snap-stanford/Biomni",
+    "branch": "main",
+    "commit": "400c1f366b96a35ca253e13c9b06c5076af41d65",
+    "file_count": 231
+  },
+  "classification": {
+    "clinical_adjacent": false,
+    "ca_severity": "none",
+    "t0_hard_floor": false,
+    "score_cap": null,
+    "has_explicit_clinical_boundary": false
+  },
+  "score": {
+    "stage_1_readme_intent": 40,
+    "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
+    "stage_2_repo_local_consistency": 60,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_3_code_bio": 19,
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "risk_penalty": 0,
+    "raw_score_before_floor": 36,
+    "final_score": 36,
+    "formal_tier": "T0 Rejected",
+    "use_scope": "Do not rely on this repository without independent expert validation."
+  },
+  "stage_2r_rubric": {
+    "baseline": {
+      "score": 60,
+      "evidence": "Non-nascent local repository baseline."
+    },
+    "calculation": "60 plus local consistency additions/deductions = 60",
+    "stage_2r_score": 60,
+    "verdict": "Mixed Local Consistency"
+  },
+  "stage_3_rubric": {
+    "T1_CI_CD": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No workflow files detected."
+    },
+    "T2_domain_tests": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No tests detected."
+    },
+    "T3_changelog_release_hygiene": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No changelog detected."
+    },
+    "B1_data_provenance_controls": {
+      "score": 15,
+      "max": 15,
+      "evidence": "Dependency/provenance manifest detected."
+    },
+    "B2_bias_limitations": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No bias/limitations language detected by local CLI scan."
+    },
+    "B3_coi_funding": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No COI/funding disclosure detected by local CLI scan."
+    },
+    "stage_3_raw_total": {
+      "score": 15,
+      "max": 80,
+      "evidence": "Raw rubric total before normalization to 100."
+    }
+  },
+  "replication_score": 20,
+  "replication_tier": "R0",
+  "stage_4_rubric": {
+    "S4_container_environment": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_container_environment."
+    },
+    "S4_make_reproduce_target": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No Makefile detected."
+    },
+    "S4_environment_lock_evidence": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No environment, dependency, or lock manifest detected."
+    },
+    "S4_exact_dependency_pins_or_hashes": {
+      "score": 10,
+      "max": 10,
+      "evidence": "Exact dependency pin or hash evidence detected."
+    },
+    "S4_readme_reproducibility_section": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README detected."
+    },
+    "S4_checksum_files": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_checksum_files."
+    },
+    "S4_dataset_url": {
+      "score": 0,
+      "max": 10,
+      "evidence": "Documentation exists but no dataset URL or data source URL was detected."
+    },
+    "S4_model_weight_url_or_checksum": {
+      "score": 0,
+      "max": 10,
+      "evidence": "Documentation exists but no model artifact URL/checksum evidence was detected."
+    },
+    "S4_citation_cff": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_citation_cff."
+    },
+    "S4_cli_entrypoint": {
+      "score": 5,
+      "max": 5,
+      "evidence": "CLI entry point or argparse interface detected."
+    },
+    "S4_seed_setting": {
+      "score": 5,
+      "max": 5,
+      "evidence": "Deterministic seed setting detected."
+    },
+    "S4_runnable_examples": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_runnable_examples."
+    },
+    "stage_4_raw_total": {
+      "score": 20,
+      "max": 100,
+      "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0."
+    }
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        "No direct credential patterns detected by local CLI scan."
+      ]
+    },
+    "C2_dependency_pinning": {
+      "status": "WARN",
+      "evidence": [
+        "Unpinned or loosely pinned dependencies detected."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No deprecated patient-adjacent metadata patterns detected."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "WARN",
+      "evidence": [
+        "Fail-open exception pattern detected in code text."
+      ]
+    }
+  },
+  "evidence_ledger": [
+    {
+      "finding_id": "S1_readme_bio_terms:.:0:001",
+      "detector": "S1_readme_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_readme_bio_terms."
+    },
+    {
+      "finding_id": "S1_clinical_boundary:.:0:001",
+      "detector": "S1_clinical_boundary",
+      "detector_version": "1.3.0",
+      "pattern_id": "clinical_boundary_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_clinical_boundary."
+    },
+    {
+      "finding_id": "S3_T1_workflow_files:.:0:001",
+      "detector": "S3_T1_workflow_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "workflow_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_T1_workflow_files."
+    },
+    {
+      "finding_id": "S3_T2_domain_tests:.:0:001",
+      "detector": "S3_T2_domain_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "domain_tests_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_T2_domain_tests."
+    },
+    {
+      "finding_id": "S3_T3_changelog_release_hygiene:.:0:001",
+      "detector": "S3_T3_changelog_release_hygiene",
+      "detector_version": "1.3.0",
+      "pattern_id": "changelog_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_T3_changelog_release_hygiene."
+    },
+    {
+      "finding_id": "S3_B1_dependency_manifest:pyproject.toml:0:001",
+      "detector": "S3_B1_dependency_manifest",
+      "detector_version": "1.3.0",
+      "pattern_id": "dependency_manifest_presence_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "pyproject.toml",
+      "line": 0,
+      "snippet": "pyproject.toml",
+      "match_type": "file_presence",
+      "explanation": "Dependency or environment manifest exists."
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:.:0:001",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_B2_bias_limitations."
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:.:0:001",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_B3_coi_funding."
+    },
+    {
+      "finding_id": "S2_package_bio_terms:.:0:001",
+      "detector": "S2_package_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "package_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S2_package_bio_terms."
+    },
+    {
+      "finding_id": "C1_hardcoded_credentials:.:0:001",
+      "detector": "C1_hardcoded_credentials",
+      "detector_version": "1.3.0",
+      "pattern_id": "credential_pattern_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C1_hardcoded_credentials."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:2:001",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 2,
+      "snippet": "requires = [\"setuptools>=61.0\", \"wheel\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "setuptools>=61.0"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:2:002",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 2,
+      "snippet": "requires = [\"setuptools>=61.0\", \"wheel\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "wheel"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:3:003",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 3,
+      "snippet": "build-backend = \"setuptools.build_meta\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "setuptools.build_meta"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:6:004",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 6,
+      "snippet": "name = \"biomni\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "biomni"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:7:005",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 7,
+      "snippet": "dynamic = [\"version\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "version"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:8:006",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 8,
+      "snippet": "description = \"Biomni\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "Biomni"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:9:007",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 9,
+      "snippet": "readme = \"README.md\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "README.md"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:10:008",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 10,
+      "snippet": "license = \"Apache-2.0\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "Apache-2.0"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:11:009",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 11,
+      "snippet": "license-files = [\"LICENSE\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "LICENSE"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:15:010",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 15,
+      "snippet": "requires-python = \">=3.11\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": ">=3.11"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:16:011",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 16,
+      "snippet": "dependencies = [\"pydantic\", \"langchain\", \"python-dotenv\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "pydantic"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:16:012",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 16,
+      "snippet": "dependencies = [\"pydantic\", \"langchain\", \"python-dotenv\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "langchain"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:16:013",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 16,
+      "snippet": "dependencies = [\"pydantic\", \"langchain\", \"python-dotenv\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "python-dotenv"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:23:014",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 23,
+      "snippet": "gradio = [\"gradio>=5.0,<6.0\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "gradio>=5.0,<6.0"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:29:015",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 29,
+      "snippet": "version = {attr = \"biomni.version.__version__\"}",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "biomni.version.__version__"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:35:016",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 35,
+      "snippet": "src = [\"src\"]",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "src"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:43:017",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 43,
+      "snippet": "\"F\", # Errors detected by Pyflakes",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "F"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:44:018",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 44,
+      "snippet": "\"E\", # Error detected by Pycodestyle",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "E"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:45:019",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 45,
+      "snippet": "\"W\", # Warning detected by Pycodestyle",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "W"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:46:020",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 46,
+      "snippet": "\"I\", # isort",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "I"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:48:021",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 48,
+      "snippet": "\"B\", # flake8-bugbear",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "B"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:49:022",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 49,
+      "snippet": "\"TID\", # flake8-tidy-imports",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "TID"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:50:023",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 50,
+      "snippet": "\"C4\", # flake8-comprehensions",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "C4"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:51:024",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 51,
+      "snippet": "\"BLE\", # flake8-blind-except",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "BLE"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:52:025",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 52,
+      "snippet": "\"UP\", # pyupgrade",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "UP"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:53:026",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 53,
+      "snippet": "\"RUF100\", # Report unused noqa directives",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "RUF100"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:54:027",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 54,
+      "snippet": "\"TCH\", # Typing imports",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "TCH"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:61:028",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 61,
+      "snippet": "\"E501\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "E501"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:63:029",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 63,
+      "snippet": "\"E731\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "E731"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:65:030",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 65,
+      "snippet": "\"E741\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "E741"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:67:031",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 67,
+      "snippet": "\"D104\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D104"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:69:032",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 69,
+      "snippet": "\"D100\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D100"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:71:033",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 71,
+      "snippet": "\"D107\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D107"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:73:034",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 73,
+      "snippet": "\"B008\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "B008"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:75:035",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 75,
+      "snippet": "\"D105\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D105"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:77:036",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 77,
+      "snippet": "\"D400\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D400"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:79:037",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 79,
+      "snippet": "\"D401\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D401"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:82:038",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 82,
+      "snippet": "\"D203\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D203"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:84:039",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 84,
+      "snippet": "\"D213\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "D213"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:86:040",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 86,
+      "snippet": "\"N813\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "N813"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:88:041",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 88,
+      "snippet": "\"E402\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "E402"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:90:042",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 90,
+      "snippet": "\"PLR0913\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "PLR0913"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:92:043",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 92,
+      "snippet": "\"PLR0912\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "PLR0912"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:94:044",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 94,
+      "snippet": "\"PLR2004\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "PLR2004"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:96:045",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 96,
+      "snippet": "\"PLR0915\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "PLR0915"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:98:046",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 98,
+      "snippet": "\"PLC0206\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "PLC0206"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:100:047",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 100,
+      "snippet": "\"PLC0415\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "PLC0415"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:102:048",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 102,
+      "snippet": "\"BLE001\",",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "BLE001"
+      }
+    },
+    {
+      "finding_id": "C2_dependency_pinning:pyproject.toml:104:049",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "pyproject.toml",
+      "line": 104,
+      "snippet": "\"B005\"",
+      "match_type": "dependency",
+      "explanation": "Unpinned or loosely pinned dependency detected.",
+      "metadata": {
+        "dependency": "B005"
+      }
+    },
+    {
+      "finding_id": "C3_dead_or_deprecated_patient_adjacent_paths:.:0:001",
+      "detector": "C3_dead_or_deprecated_patient_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "deprecated_patient_metadata_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths."
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:biomni/tool/cancer_biology.py:243:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/tool/cancer_biology.py",
+      "line": 243,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:biomni/tool/pharmacology.py:1858:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/tool/pharmacology.py",
+      "line": 1858,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/agent/a1.py:2136:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/agent/a1.py",
+      "line": 2136,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:biomni/biorxiv_scripts/extract_biorxiv_tasks.py:27:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/biorxiv_scripts/extract_biorxiv_tasks.py",
+      "line": 27,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Extract tasks from bioRxiv papers in a specific subject area.\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:biomni/biorxiv_scripts/generate_function.py:14:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/biorxiv_scripts/generate_function.py",
+      "line": 14,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Generate Python functions given task descriptions\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:biomni/biorxiv_scripts/process_all_subjects.py:48:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/biorxiv_scripts/process_all_subjects.py",
+      "line": 48,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Process all bioRxiv subjects and extract tasks from papers.\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:biomni/task/hle.py:6:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/task/hle.py",
+      "line": 6,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:biomni/task/lab_bench.py:6:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/task/lab_bench.py",
+      "line": 6,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:biomni/task/lab_bench.py:36:002",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/task/lab_bench.py",
+      "line": 36,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:biomni/tool/biochemistry.py:526:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/tool/biochemistry.py",
+      "line": 526,
+      "snippet": "np.random.seed(42) # For reproducibility",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/bioengineering.py:548:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/bioengineering.py",
+      "line": 548,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/cancer_biology.py:243:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/cancer_biology.py",
+      "line": 243,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/cancer_biology.py:1043:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/cancer_biology.py",
+      "line": 1043,
+      "snippet": "except (subprocess.CalledProcessError, FileNotFoundError):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/cancer_biology.py:1059:003",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/cancer_biology.py",
+      "line": 1059,
+      "snippet": "except (subprocess.CalledProcessError, FileNotFoundError):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_seed_setting:biomni/tool/immunology.py:1025:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/tool/immunology.py",
+      "line": 1025,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/lab_automation.py:544:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/lab_automation.py",
+      "line": 544,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_seed_setting:biomni/tool/microbiology.py:720:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "biomni/tool/microbiology.py",
+      "line": 720,
+      "snippet": "np.random.seed(42) # For reproducibility",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/pharmacology.py:1858:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/pharmacology.py",
+      "line": 1858,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/pharmacology.py:953:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/pharmacology.py",
+      "line": 953,
+      "snippet": "except (ValueError, TypeError):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/support_tools.py:74:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/support_tools.py",
+      "line": 74,
+      "snippet": "except ImportError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/tool/support_tools.py:122:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/tool/support_tools.py",
+      "line": 122,
+      "snippet": "except ImportError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/utils.py:973:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/utils.py",
+      "line": 973,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:biomni/utils.py:964:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "biomni/utils.py",
+      "line": 964,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "S4_container_environment:.:0:001",
+      "detector": "S4_container_environment",
+      "detector_version": "1.3.0",
+      "pattern_id": "container_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_container_environment."
+    },
+    {
+      "finding_id": "S4_make_reproduce_target:.:0:001",
+      "detector": "S4_make_reproduce_target",
+      "detector_version": "1.3.0",
+      "pattern_id": "make_reproduce_target_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No Makefile detected."
+    },
+    {
+      "finding_id": "S4_environment_lock_evidence:.:0:001",
+      "detector": "S4_environment_lock_evidence",
+      "detector_version": "1.3.0",
+      "pattern_id": "environment_lock_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No environment, dependency, or lock manifest detected."
+    },
+    {
+      "finding_id": "S4_exact_dependency_pins_or_hashes:pyproject.toml:13:001",
+      "detector": "S4_exact_dependency_pins_or_hashes",
+      "detector_version": "1.3.0",
+      "pattern_id": "exact_pin_or_hash_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "pyproject.toml",
+      "line": 13,
+      "snippet": "{name = \"Biomni Team\", email = \"kexinh@cs.stanford.edu\"}",
+      "match_type": "dependency",
+      "explanation": "Exact dependency pin or hash evidence detected."
+    },
+    {
+      "finding_id": "S4_readme_reproducibility_section:.:0:001",
+      "detector": "S4_readme_reproducibility_section",
+      "detector_version": "1.3.0",
+      "pattern_id": "readme_repro_heading_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No README detected."
+    },
+    {
+      "finding_id": "S4_checksum_files:.:0:001",
+      "detector": "S4_checksum_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "checksum_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_checksum_files."
+    },
+    {
+      "finding_id": "S4_dataset_url:.:0:001",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "Documentation exists but no dataset URL or data source URL was detected."
+    },
+    {
+      "finding_id": "S4_model_weight_url_or_checksum:.:0:001",
+      "detector": "S4_model_weight_url_or_checksum",
+      "detector_version": "1.3.0",
+      "pattern_id": "model_weight_url_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "Documentation exists but no model artifact URL/checksum evidence was detected."
+    },
+    {
+      "finding_id": "S4_citation_cff:.:0:001",
+      "detector": "S4_citation_cff",
+      "detector_version": "1.3.0",
+      "pattern_id": "citation_cff_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_citation_cff."
+    },
+    {
+      "finding_id": "S4_cli_entrypoint:.:0:001",
+      "detector": "S4_cli_entrypoint",
+      "detector_version": "1.3.0",
+      "pattern_id": "cli_entrypoint_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "argparse CLI evidence detected by AST summary.",
+      "metadata": {
+        "source": "ast_signal_summary"
+      }
+    },
+    {
+      "finding_id": "S4_seed_setting:.:0:001",
+      "detector": "S4_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_stage4_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "Deterministic seed setting evidence detected by AST summary.",
+      "metadata": {
+        "seed_settings": 6
+      }
+    },
+    {
+      "finding_id": "S4_runnable_examples:.:0:001",
+      "detector": "S4_runnable_examples",
+      "detector_version": "1.3.0",
+      "pattern_id": "runnable_example_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_runnable_examples."
+    }
+  ],
+  "detector_summary": {
+    "total_findings": 95,
+    "by_status": {
+      "not_detected": 17,
+      "detected": 76,
+      "absent": 2
+    },
+    "by_detector": {
+      "S1_readme_bio_terms": {
+        "not_detected": 1
+      },
+      "S1_clinical_boundary": {
+        "not_detected": 1
+      },
+      "S3_T1_workflow_files": {
+        "not_detected": 1
+      },
+      "S3_T2_domain_tests": {
+        "not_detected": 1
+      },
+      "S3_T3_changelog_release_hygiene": {
+        "not_detected": 1
+      },
+      "S3_B1_dependency_manifest": {
+        "detected": 1
+      },
+      "S3_B2_bias_limitations": {
+        "not_detected": 1
+      },
+      "S3_B3_coi_funding": {
+        "not_detected": 1
+      },
+      "S2_package_bio_terms": {
+        "not_detected": 1
+      },
+      "C1_hardcoded_credentials": {
+        "not_detected": 1
+      },
+      "C2_dependency_pinning": {
+        "detected": 49
+      },
+      "C3_dead_or_deprecated_patient_adjacent_paths": {
+        "not_detected": 1
+      },
+      "C4_exception_handling_clinical_adjacent_paths": {
+        "detected": 2
+      },
+      "AST_fail_open_precision": {
+        "detected": 12
+      },
+      "AST_argparse_cli": {
+        "detected": 3
+      },
+      "AST_seed_setting": {
+        "detected": 6
+      },
+      "S4_container_environment": {
+        "not_detected": 1
+      },
+      "S4_make_reproduce_target": {
+        "absent": 1
+      },
+      "S4_environment_lock_evidence": {
+        "not_detected": 1
+      },
+      "S4_exact_dependency_pins_or_hashes": {
+        "detected": 1
+      },
+      "S4_readme_reproducibility_section": {
+        "absent": 1
+      },
+      "S4_checksum_files": {
+        "not_detected": 1
+      },
+      "S4_dataset_url": {
+        "not_detected": 1
+      },
+      "S4_model_weight_url_or_checksum": {
+        "not_detected": 1
+      },
+      "S4_citation_cff": {
+        "not_detected": 1
+      },
+      "S4_cli_entrypoint": {
+        "detected": 1
+      },
+      "S4_seed_setting": {
+        "detected": 1
+      },
+      "S4_runnable_examples": {
+        "not_detected": 1
+      }
+    }
+  },
+  "ast_signal_summary": {
+    "files_total": 77,
+    "files_considered": 77,
+    "files_parsed": 77,
+    "files_skipped_size": 0,
+    "syntax_errors": 0,
+    "file_limit_exceeded": false,
+    "test_functions": 2,
+    "assertion_tests": 0,
+    "public_functions": 504,
+    "docstring_functions": 371,
+    "annotated_functions": 167,
+    "seed_settings": 6,
+    "argparse_cli": true,
+    "portable_model_loading": 0,
+    "fail_open_handlers": 12,
+    "docstring_coverage": 0.7361,
+    "type_annotation_coverage": 0.3313
+  },
+  "notable_positive_evidence": [
+    "Package metadata was available for repo-local consistency checks.",
+    "Documentation files were detected."
+  ],
+  "notable_risks": [
+    "C2_dependency_pinning: WARN",
+    "C4_exception_handling_clinical_adjacent_paths: WARN"
+  ],
+  "file_hashes_sha256": {
+    "pyproject.toml": "E5D128303A37B768E015C5356C042D75A16D0F157506FD2396895A569A8D79E1"
+  },
+  "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
+  "measurement_basis": {
+    "stage_1": "BIO_TERMS regex match in README; disclaimer phrase presence/absence",
+    "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
+    "stage_3_T1": ".github/workflows/ directory contains files",
+    "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
+    "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
+    "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
+    "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
+    "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+    "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
+    "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
+    "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...)",
+    "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
+    "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
+    "C4": "except Exception: pass or except: pass pattern (regex)",
+    "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer"
+  }
+}

@@ -117,9 +117,9 @@ def audit_repository(
         clinical_adjacent,
         has_disclaimer,
     )
-    stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text, changelog_text)
-    code_integrity = _code_integrity(target, dep_text, code_text)
     evidence_ledger, ast_signal_summary, stage_4 = collect_evidence_bundle(target)
+    stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text, changelog_text)
+    code_integrity = _code_integrity_from_findings(evidence_ledger)
 
     weights = {"stage_1": 0.4, "stage_2": 0.2, "stage_3": 0.4}
     risk_penalty = 10 if code_integrity["C1_hardcoded_credentials"]["status"] == "FAIL" else 0
@@ -185,10 +185,10 @@ def audit_repository(
             "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
             "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, license/use-scope restriction evidence, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
-            "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...), excluding obvious placeholder/test values such as super-secret, dummy, fake, and example keys",
-            "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
+            "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...), excluding obvious placeholder/test values and test/example fixture contexts",
+            "C2": "Dependency-manifest-only pin check across requirements/environment/setup.cfg/pyproject dependency sections; ignores non-dependency metadata lines",
             "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
-            "C4": "except Exception: pass or except: pass pattern (regex)",
+            "C4": "AST-backed detection of executable fail-open Python exception handlers (except/pass or except/return True)",
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
         },
     }
@@ -402,33 +402,38 @@ def _score_bias(bias_text: str, test_text: str) -> tuple[int, str]:
     return 8, "Bias/limitations language detected; no quantitative measurement evidence found."
 
 
-def _code_integrity(target: Path, dep_text: str, code_text: str) -> dict[str, Any]:
-    secret_hits = [
-        m.group(0)[:24]
-        for m in SECRET_TERMS.finditer(code_text)
-        if not PLACEHOLDER_SECRET_VALUES.search(m.group(0))
-    ]
-    unpinned = _dependency_unpinned(dep_text)
-    deprecated_patient = bool(PATIENT_METADATA.search(_read_deprecated_text(target)))
-    fail_open = bool(FAIL_OPEN.search(code_text))
-    return {
-        "C1_hardcoded_credentials": {
-            "status": "FAIL" if secret_hits else "PASS",
-            "evidence": secret_hits or ["No direct credential patterns detected by local CLI scan."],
-        },
-        "C2_dependency_pinning": {
-            "status": "WARN" if unpinned else "PASS",
-            "evidence": ["Unpinned or loosely pinned dependencies detected."] if unpinned else ["Dependency manifest appears pinned or not present."],
-        },
-        "C3_dead_or_deprecated_patient_adjacent_paths": {
-            "status": "WARN" if deprecated_patient else "PASS",
-            "evidence": ["Deprecated patient-adjacent metadata patterns detected."] if deprecated_patient else ["No deprecated patient-adjacent metadata patterns detected."],
-        },
-        "C4_exception_handling_clinical_adjacent_paths": {
-            "status": "WARN" if fail_open else "PASS",
-            "evidence": ["Fail-open exception pattern detected in code text."] if fail_open else ["No broad fail-open exception pattern detected."],
-        },
+def _code_integrity_from_findings(evidence_ledger: list[dict[str, Any]]) -> dict[str, Any]:
+    detector_defaults = {
+        "C1_hardcoded_credentials": ("FAIL", "PASS", "No direct credential patterns detected by local CLI scan."),
+        "C2_dependency_pinning": ("WARN", "PASS", "Dependency manifest appears pinned or not present."),
+        "C3_dead_or_deprecated_patient_adjacent_paths": ("WARN", "PASS", "No deprecated patient-adjacent metadata patterns detected."),
+        "C4_exception_handling_clinical_adjacent_paths": ("WARN", "PASS", "No executable fail-open exception handler detected."),
     }
+    findings_by_detector: dict[str, list[dict[str, Any]]] = {key: [] for key in detector_defaults}
+    for finding in evidence_ledger:
+        detector = str(finding.get("detector", ""))
+        if detector in findings_by_detector:
+            findings_by_detector[detector].append(finding)
+
+    result: dict[str, Any] = {}
+    for detector, (detected_status, pass_status, pass_message) in detector_defaults.items():
+        detected = [f for f in findings_by_detector[detector] if f.get("status") == "detected"]
+        if detected:
+            evidence = [_finding_summary(f) for f in detected[:5]]
+            result[detector] = {"status": detected_status, "evidence": evidence}
+        else:
+            result[detector] = {"status": pass_status, "evidence": [pass_message]}
+    return result
+
+
+def _finding_summary(finding: dict[str, Any]) -> str:
+    file = str(finding.get("file", "."))
+    line = int(finding.get("line", 0) or 0)
+    snippet = str(finding.get("snippet", "")).strip()
+    location = file if file == "." or not line else f"{file}:{line}"
+    if snippet:
+        return f"{location} {snippet}"
+    return location
 
 
 def _list_files(root: Path) -> list[Path]:

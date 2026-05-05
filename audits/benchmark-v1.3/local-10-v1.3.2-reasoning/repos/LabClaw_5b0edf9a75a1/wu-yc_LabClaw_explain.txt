@@ -1,0 +1,207 @@
+STEM BIO-AI Explain Report
+Target  : wu-yc/LabClaw
+Score   : 28 / 100  (T0 Rejected)
+Replic  : 0 / 100  (R0)
+========================================================================
+
+S1_readme_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_readme_bio_terms:.:0:001
+         pattern : bio_terms_v1
+         reason  : No evidence detected for S1_readme_bio_terms.
+
+S1_clinical_boundary  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_clinical_boundary:.:0:001
+         pattern : clinical_boundary_v1
+         reason  : No evidence detected for S1_clinical_boundary.
+
+S3_T1_workflow_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T1_workflow_files:.:0:001
+         pattern : workflow_presence_v1
+         reason  : No evidence detected for S3_T1_workflow_files.
+
+S3_T2_domain_tests  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T2_domain_tests:.:0:001
+         pattern : domain_tests_bio_terms_v1
+         reason  : No evidence detected for S3_T2_domain_tests.
+
+S3_T3_changelog_release_hygiene  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T3_changelog_release_hygiene:.:0:001
+         pattern : changelog_presence_v1
+         reason  : No evidence detected for S3_T3_changelog_release_hygiene.
+
+S3_B1_dependency_manifest  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B1_dependency_manifest:.:0:001
+         pattern : dependency_manifest_presence_v1
+         reason  : No evidence detected for S3_B1_dependency_manifest.
+
+S3_B2_bias_limitations  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B2_bias_limitations:.:0:001
+         pattern : bias_limitations_v2
+         reason  : No evidence detected for S3_B2_bias_limitations.
+
+S3_B3_coi_funding  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B3_coi_funding:.:0:001
+         pattern : coi_funding_v1
+         reason  : No evidence detected for S3_B3_coi_funding.
+
+S2_package_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S2_package_bio_terms:.:0:001
+         pattern : package_bio_terms_v1
+         reason  : No evidence detected for S2_package_bio_terms.
+
+C1_hardcoded_credentials  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C1_hardcoded_credentials:.:0:001
+         pattern : credential_pattern_v2
+         reason  : No hardcoded credential evidence detected for C1_hardcoded_credentials.
+
+C2_dependency_pinning  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: C2_dependency_pinning:.:0:001
+         pattern : loose_dependency_v1
+         reason  : No dependency manifest detected.
+
+C3_dead_or_deprecated_patient_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C3_dead_or_deprecated_patient_adjacent_paths:.:0:001
+         pattern : deprecated_patient_metadata_v1
+         reason  : No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths.
+
+C4_exception_handling_clinical_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C4_exception_handling_clinical_adjacent_paths:.:0:001
+         pattern : fail_open_exception_v1
+         reason  : No evidence detected for C4_exception_handling_clinical_adjacent_paths.
+
+S4_container_environment  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_container_environment:.:0:001
+         pattern : container_file_v1
+         reason  : No evidence detected for S4_container_environment.
+
+S4_make_reproduce_target  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_make_reproduce_target:.:0:001
+         pattern : make_reproduce_target_v1
+         reason  : No Makefile detected.
+
+S4_environment_lock_evidence  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_environment_lock_evidence:.:0:001
+         pattern : environment_lock_file_v1
+         reason  : No environment, dependency, or lock manifest detected.
+
+S4_exact_dependency_pins_or_hashes  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_exact_dependency_pins_or_hashes:.:0:001
+         pattern : exact_pin_or_hash_v1
+         reason  : No dependency manifest detected.
+
+S4_readme_reproducibility_section  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_readme_reproducibility_section:.:0:001
+         pattern : readme_repro_heading_v1
+         reason  : No README detected.
+
+S4_checksum_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_checksum_files:.:0:001
+         pattern : checksum_file_v1
+         reason  : No evidence detected for S4_checksum_files.
+
+S4_dataset_url  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_dataset_url:.:0:001
+         pattern : dataset_url_v1
+         reason  : No README/docs files detected.
+
+S4_model_weight_url_or_checksum  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_model_weight_url_or_checksum:.:0:001
+         pattern : model_weight_url_v1
+         reason  : No README/docs or checksum files detected.
+
+S4_citation_cff  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_citation_cff:.:0:001
+         pattern : citation_cff_v1
+         reason  : No evidence detected for S4_citation_cff.
+
+S4_cli_entrypoint  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_cli_entrypoint:.:0:001
+         pattern : cli_entrypoint_v1
+         reason  : No package metadata or Python AST surface detected.
+
+S4_seed_setting  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_seed_setting:.:0:001
+         pattern : ast_seed_setting_stage4_v1
+         reason  : No deterministic seed setting evidence detected by AST summary.
+
+S4_runnable_examples  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_runnable_examples:.:0:001
+         pattern : runnable_example_file_v1
+         reason  : No evidence detected for S4_runnable_examples.
+
+========================================================================
+AST Signal Summary
+
+  files_total                        0
+  files_considered                   0
+  files_parsed                       0
+  files_skipped_size                 0
+  syntax_errors                      0
+  file_limit_exceeded                False
+  test_functions                     0
+  assertion_tests                    0
+  public_functions                   0
+  docstring_functions                0
+  annotated_functions                0
+  seed_settings                      0
+  argparse_cli                       False
+  portable_model_loading             0
+  fail_open_handlers                 0
+
+========================================================================
+Stage 4 Replication Rubric
+
+  S4_container_environment                     0 / 10   No evidence detected for S4_container_environment.
+  S4_make_reproduce_target                     0 / 10   No Makefile detected.
+  S4_environment_lock_evidence                 0 / 10   No environment, dependency, or lock manifest detected.
+  S4_exact_dependency_pins_or_hashes           0 / 10   No dependency manifest detected.
+  S4_readme_reproducibility_section            0 / 10   No README detected.
+  S4_checksum_files                            0 / 10   No evidence detected for S4_checksum_files.
+  S4_dataset_url                               0 / 10   No README/docs files detected.
+  S4_model_weight_url_or_checksum              0 / 10   No README/docs or checksum files detected.
+  S4_citation_cff                              0 / 5    No evidence detected for S4_citation_cff.
+  S4_cli_entrypoint                            0 / 5    No package metadata or Python AST surface detected.
+  S4_seed_setting                              0 / 5    No deterministic seed setting detected.
+  S4_runnable_examples                         0 / 5    No evidence detected for S4_runnable_examples.
+  stage_4_raw_total                            0 / 100  Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score.
+
+========================================================================
+Reasoning Diagnostics
+
+  version                         stem-bio-ai-reasoning-v1.3.2
+  mode                            diagnostic_only
+  final_score_override            False
+  evidence_budget                 supported
+  confidence_envelope             unknown
+  lane_coherence                  coherent
+  uncertainty_budget              review_advised
+  evidence_risk_gate              within_gate
+
+========================================================================
+DISCLAIMER: Evidence-surface pre-screen only.
+Not clinical certification, regulatory clearance, or medical advice.

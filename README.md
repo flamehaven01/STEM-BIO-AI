@@ -14,7 +14,7 @@
     <img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI">
   </a>
   <a href="CHANGELOG.md">
-    <img src="https://img.shields.io/badge/stable-v1.5.7-informational.svg" alt="v1.5.7">
+    <img src="https://img.shields.io/badge/stable-v1.5.8-informational.svg" alt="v1.5.8">
   </a>
   <a href="pyproject.toml">
     <img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+">
@@ -239,6 +239,16 @@ Full contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
 
 ---
 
+## MICA Memory Layer
+
+The repository keeps a versioned MICA memory layer under `memory/` for agent-session initialization,
+drift control, and release provenance. Historical snapshots are retained as archive; the active layer
+is selected by `memory/mica.yaml`.
+
+Operational reference: [`docs/MICA_MEMORY.md`](docs/MICA_MEMORY.md)
+
+---
+
 ## Web Demo
 
 Live demo: [huggingface.co/spaces/Flamehaven/stem-bio-ai](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
@@ -263,7 +273,8 @@ python app.py
 ```
 STEM-BIO-AI/
   stem_ai/              # Core Python package
-  docs/                 # API contract, scoring rationale, report previews
+  docs/                 # API contract, scoring rationale, MICA policy, report previews
+  memory/               # Versioned MICA archive/playbook/lessons; active layer selected by mica.yaml
   audits/               # Reference benchmark artifacts
   scripts/              # Benchmark and validation scripts
   tests/                # Regression test suite
@@ -299,7 +310,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.5.7},
+  version = {1.5.8},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

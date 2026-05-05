@@ -1,0 +1,489 @@
+STEM BIO-AI Explain Report
+Target  : jaechang-hits/SciAgent-Skills
+Score   : 56 / 100  (T2 Caution)
+Replic  : 5 / 100  (R0)
+========================================================================
+
+S1_readme_bio_terms  [DETECTED]  (2 findings)
+  [001]  README.md:161
+         finding_id: S1_readme_bio_terms:README.md:161:001
+         pattern : bio_terms_v1
+         snippet : "> "Fit a hierarchical Bayesian model to this clinical trial data with patient-level random effects""
+         reason  : README exposes bio/medical vocabulary.
+         match      : clinical
+  [002]  README.md:161
+         finding_id: S1_readme_bio_terms:README.md:161:002
+         pattern : bio_terms_v1
+         snippet : "> "Fit a hierarchical Bayesian model to this clinical trial data with patient-level random effects""
+         reason  : README exposes bio/medical vocabulary.
+         match      : patient
+
+S1_clinical_boundary  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S1_clinical_boundary:.:0:001
+         pattern : clinical_boundary_v1
+         reason  : No evidence detected for S1_clinical_boundary.
+
+S3_T1_workflow_files  [DETECTED]  (1 finding)
+  [001]  .github/workflows/validate.yml
+         finding_id: S3_T1_workflow_files:.github/workflows/validate.yml:0:001
+         pattern : workflow_presence_v1
+         snippet : ".github/workflows/validate.yml"
+         reason  : Workflow file exists.
+
+S3_T2_domain_tests  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T2_domain_tests:.:0:001
+         pattern : domain_tests_bio_terms_v1
+         reason  : No evidence detected for S3_T2_domain_tests.
+
+S3_T3_changelog_release_hygiene  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_T3_changelog_release_hygiene:.:0:001
+         pattern : changelog_presence_v1
+         reason  : No evidence detected for S3_T3_changelog_release_hygiene.
+
+S3_B1_dependency_manifest  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B1_dependency_manifest:.:0:001
+         pattern : dependency_manifest_presence_v1
+         reason  : No evidence detected for S3_B1_dependency_manifest.
+
+S3_B2_bias_limitations  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S3_B2_bias_limitations:.:0:001
+         pattern : bias_limitations_v2
+         reason  : No evidence detected for S3_B2_bias_limitations.
+
+S3_B3_coi_funding  [DETECTED]  (1 finding)
+  [001]  README.md:199
+         finding_id: S3_B3_coi_funding:README.md:199:001
+         pattern : coi_funding_v1
+         snippet : "## Acknowledgments"
+         reason  : COI, funding, sponsor, or acknowledgement language detected.
+         match      : Acknowledgments
+
+S2_package_bio_terms  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S2_package_bio_terms:.:0:001
+         pattern : package_bio_terms_v1
+         reason  : No evidence detected for S2_package_bio_terms.
+
+C1_hardcoded_credentials  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C1_hardcoded_credentials:.:0:001
+         pattern : credential_pattern_v1
+         reason  : No evidence detected for C1_hardcoded_credentials.
+
+C2_dependency_pinning  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: C2_dependency_pinning:.:0:001
+         pattern : loose_dependency_v1
+         reason  : No dependency manifest detected.
+
+C3_dead_or_deprecated_patient_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C3_dead_or_deprecated_patient_adjacent_paths:.:0:001
+         pattern : deprecated_patient_metadata_v1
+         reason  : No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths.
+
+C4_exception_handling_clinical_adjacent_paths  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: C4_exception_handling_clinical_adjacent_paths:.:0:001
+         pattern : fail_open_exception_v1
+         reason  : No evidence detected for C4_exception_handling_clinical_adjacent_paths.
+
+AST_argparse_cli  [DETECTED]  (1 finding)
+  [001]  scripts/blind_knowledge_test.py:243
+         finding_id: AST_argparse_cli:scripts/blind_knowledge_test.py:243:001
+         pattern : ast_argparse_cli_v1
+         snippet : "parser = argparse.ArgumentParser(description="Blind knowledge test for SciCraft skills (AWS Bedrock)")"
+         reason  : argparse CLI interface detected.
+
+AST_fail_open_precision  [DETECTED]  (1 finding)
+  [001]  scripts/blind_knowledge_test.py:194
+         finding_id: AST_fail_open_precision:scripts/blind_knowledge_test.py:194:001
+         pattern : ast_fail_open_v1
+         snippet : "except json.JSONDecodeError:"
+         reason  : Fail-open exception handler detected by AST.
+
+AST_assertion_tests  [DETECTED]  (44 findings)
+  [001]  tests/test_registry.py:30
+         finding_id: AST_assertion_tests:tests/test_registry.py:30:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_validation_errors(self):"
+         reason  : Test function with assertion detected.
+         function      : test_no_validation_errors
+  [002]  tests/test_registry.py:34
+         finding_id: AST_assertion_tests:tests/test_registry.py:34:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_entries_not_empty(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_entries_not_empty
+  [003]  tests/test_registry.py:37
+         finding_id: AST_assertion_tests:tests/test_registry.py:37:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_duplicate_names(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_no_duplicate_names
+  [004]  tests/test_registry.py:41
+         finding_id: AST_assertion_tests:tests/test_registry.py:41:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_no_duplicate_paths(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_no_duplicate_paths
+  [005]  tests/test_registry.py:47
+         finding_id: AST_assertion_tests:tests/test_registry.py:47:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_all_skill_files_exist(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_all_skill_files_exist
+  [006]  tests/test_registry.py:55
+         finding_id: AST_assertion_tests:tests/test_registry.py:55:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_frontmatter_has_required_fields(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_frontmatter_has_required_fields
+  [007]  tests/test_registry.py:66
+         finding_id: AST_assertion_tests:tests/test_registry.py:66:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_skill_files_not_empty(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_skill_files_not_empty
+  [008]  tests/test_registry.py:78
+         finding_id: AST_assertion_tests:tests/test_registry.py:78:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_all_skill_files_registered(self, entries):"
+         reason  : Test function with assertion detected.
+         function      : test_all_skill_files_registered
+  [001]  tests/test_skill_quality.py:61
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:61:001
+         pattern : ast_assertion_test_v1
+         snippet : "def test_license_field_exists(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_license_field_exists
+  [002]  tests/test_skill_quality.py:69
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:69:002
+         pattern : ast_assertion_test_v1
+         snippet : "def test_description_max_length(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_description_max_length
+  [003]  tests/test_skill_quality.py:80
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:80:003
+         pattern : ast_assertion_test_v1
+         snippet : "def test_name_max_length(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_name_max_length
+  [004]  tests/test_skill_quality.py:99
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:99:004
+         pattern : ast_assertion_test_v1
+         snippet : "def test_sub_type_valid(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_sub_type_valid
+  [005]  tests/test_skill_quality.py:106
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:106:005
+         pattern : ast_assertion_test_v1
+         snippet : "def test_type_is_skill(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_type_is_skill
+  [006]  tests/test_skill_quality.py:112
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:112:006
+         pattern : ast_assertion_test_v1
+         snippet : "def test_category_matches_directory(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_category_matches_directory
+  [007]  tests/test_skill_quality.py:119
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:119:007
+         pattern : ast_assertion_test_v1
+         snippet : "def test_date_added_is_valid_iso(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_date_added_is_valid_iso
+  [008]  tests/test_skill_quality.py:130
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:130:008
+         pattern : ast_assertion_test_v1
+         snippet : "def test_path_matches_category(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_path_matches_category
+  [009]  tests/test_skill_quality.py:152
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:152:009
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_overview(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_has_overview
+  [010]  tests/test_skill_quality.py:158
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:158:010
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_when_to_use(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_has_when_to_use
+  [011]  tests/test_skill_quality.py:165
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:165:011
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pipeline_sections(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_pipeline_sections
+  [012]  tests/test_skill_quality.py:172
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:172:012
+         pattern : ast_assertion_test_v1
+         snippet : "def test_toolkit_sections(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_toolkit_sections
+  [013]  tests/test_skill_quality.py:179
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:179:013
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_sections(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_sections
+  [014]  tests/test_skill_quality.py:194
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:194:014
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pipeline_workflow_steps_have_code(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_pipeline_workflow_steps_have_code
+  [015]  tests/test_skill_quality.py:213
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:213:015
+         pattern : ast_assertion_test_v1
+         snippet : "def test_toolkit_core_api_modules_have_code(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_toolkit_core_api_modules_have_code
+  [016]  tests/test_skill_quality.py:233
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:233:016
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pipeline_code_blocks(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_pipeline_code_blocks
+  [017]  tests/test_skill_quality.py:243
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:243:017
+         pattern : ast_assertion_test_v1
+         snippet : "def test_toolkit_code_blocks(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_toolkit_code_blocks
+  [018]  tests/test_skill_quality.py:253
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:253:018
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_minimum_lines(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_minimum_lines
+  [019]  tests/test_skill_quality.py:263
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:263:019
+         pattern : ast_assertion_test_v1
+         snippet : "def test_references_contain_url(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_references_contain_url
+  [020]  tests/test_skill_quality.py:284
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:284:020
+         pattern : ast_assertion_test_v1
+         snippet : "def test_references_minimum_three_items(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_references_minimum_three_items
+  [021]  tests/test_skill_quality.py:311
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:311:021
+         pattern : ast_assertion_test_v1
+         snippet : "def test_when_to_use_minimum_items(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_when_to_use_minimum_items
+  [022]  tests/test_skill_quality.py:330
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:330:022
+         pattern : ast_assertion_test_v1
+         snippet : "def test_key_parameters_minimum_rows(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_key_parameters_minimum_rows
+  [023]  tests/test_skill_quality.py:356
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:356:023
+         pattern : ast_assertion_test_v1
+         snippet : "def test_troubleshooting_minimum_rows(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_troubleshooting_minimum_rows
+  [024]  tests/test_skill_quality.py:379
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:379:024
+         pattern : ast_assertion_test_v1
+         snippet : "def test_description_length(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_description_length
+  [025]  tests/test_skill_quality.py:392
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:392:025
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pipeline_has_expected_outputs(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_pipeline_has_expected_outputs
+  [026]  tests/test_skill_quality.py:403
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:403:026
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_best_practices_minimum_items(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_best_practices_minimum_items
+  [027]  tests/test_skill_quality.py:422
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:422:027
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_common_pitfalls_minimum_items(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_common_pitfalls_minimum_items
+  [028]  tests/test_skill_quality.py:441
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:441:028
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_key_concepts_has_subsections(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_key_concepts_has_subsections
+  [029]  tests/test_skill_quality.py:458
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:458:029
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_decision_framework_has_structure(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_decision_framework_has_structure
+  [030]  tests/test_skill_quality.py:480
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:480:030
+         pattern : ast_assertion_test_v1
+         snippet : "def test_guide_common_pitfalls_has_avoid_language(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_guide_common_pitfalls_has_avoid_language
+  [031]  tests/test_skill_quality.py:528
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:528:031
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_core_api_section(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_has_core_api_section
+  [032]  tests/test_skill_quality.py:542
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:542:032
+         pattern : ast_assertion_test_v1
+         snippet : "def test_has_common_workflows_or_recipes(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_has_common_workflows_or_recipes
+  [033]  tests/test_skill_quality.py:556
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:556:033
+         pattern : ast_assertion_test_v1
+         snippet : "def test_large_toolkit_has_quick_start(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_large_toolkit_has_quick_start
+  [034]  tests/test_skill_quality.py:569
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:569:034
+         pattern : ast_assertion_test_v1
+         snippet : "def test_toolkit_when_to_use_has_alternative_comparison(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_toolkit_when_to_use_has_alternative_comparison
+  [035]  tests/test_skill_quality.py:600
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:600:035
+         pattern : ast_assertion_test_v1
+         snippet : "def test_pipeline_when_to_use_has_routing_guidance(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_pipeline_when_to_use_has_routing_guidance
+  [036]  tests/test_skill_quality.py:628
+         finding_id: AST_assertion_tests:tests/test_skill_quality.py:628:036
+         pattern : ast_assertion_test_v1
+         snippet : "def test_toolkit_has_common_recipes(self, entry):"
+         reason  : Test function with assertion detected.
+         function      : test_toolkit_has_common_recipes
+
+S4_container_environment  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_container_environment:.:0:001
+         pattern : container_file_v1
+         reason  : No evidence detected for S4_container_environment.
+
+S4_make_reproduce_target  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_make_reproduce_target:.:0:001
+         pattern : make_reproduce_target_v1
+         reason  : No Makefile detected.
+
+S4_environment_lock_evidence  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_environment_lock_evidence:.:0:001
+         pattern : environment_lock_file_v1
+         reason  : No environment, dependency, or lock manifest detected.
+
+S4_exact_dependency_pins_or_hashes  [ABSENT]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_exact_dependency_pins_or_hashes:.:0:001
+         pattern : exact_pin_or_hash_v1
+         reason  : No dependency manifest detected.
+
+S4_readme_reproducibility_section  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_readme_reproducibility_section:.:0:001
+         pattern : readme_repro_heading_v1
+         reason  : README exists but no reproducibility or replication section heading was detected.
+
+S4_checksum_files  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_checksum_files:.:0:001
+         pattern : checksum_file_v1
+         reason  : No evidence detected for S4_checksum_files.
+
+S4_dataset_url  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_dataset_url:.:0:001
+         pattern : dataset_url_v1
+         reason  : Documentation exists but no dataset URL or data source URL was detected.
+
+S4_model_weight_url_or_checksum  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_model_weight_url_or_checksum:.:0:001
+         pattern : model_weight_url_v1
+         reason  : Documentation exists but no model artifact URL/checksum evidence was detected.
+
+S4_citation_cff  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_citation_cff:.:0:001
+         pattern : citation_cff_v1
+         reason  : No evidence detected for S4_citation_cff.
+
+S4_cli_entrypoint  [DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_cli_entrypoint:.:0:001
+         pattern : cli_entrypoint_v1
+         reason  : argparse CLI evidence detected by AST summary.
+         source      : ast_signal_summary
+
+S4_seed_setting  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_seed_setting:.:0:001
+         pattern : ast_seed_setting_stage4_v1
+         reason  : No deterministic seed setting evidence detected by AST summary.
+
+S4_runnable_examples  [NOT_DETECTED]  (1 finding)
+  [001]  (repository)
+         finding_id: S4_runnable_examples:.:0:001
+         pattern : runnable_example_file_v1
+         reason  : No evidence detected for S4_runnable_examples.
+
+========================================================================
+AST Signal Summary
+
+  files_total                        4
+  files_considered                   4
+  files_parsed                       4
+  files_skipped_size                 0
+  syntax_errors                      0
+  file_limit_exceeded                False
+  test_functions                     45
+  assertion_tests                    44
+  public_functions                   63
+  docstring_functions                26
+  annotated_functions                5
+  seed_settings                      0
+  argparse_cli                       True
+  portable_model_loading             0
+  fail_open_handlers                 1
+  docstring_coverage                 0.4127
+  type_annotation_coverage           0.0794
+
+========================================================================
+Stage 4 Replication Rubric
+
+  S4_container_environment                     0 / 10   No evidence detected for S4_container_environment.
+  S4_make_reproduce_target                     0 / 10   No Makefile detected.
+  S4_environment_lock_evidence                 0 / 10   No environment, dependency, or lock manifest detected.
+  S4_exact_dependency_pins_or_hashes           0 / 10   No dependency manifest detected.
+  S4_readme_reproducibility_section            0 / 10   README exists but no reproducibility or replication section heading was detected.
+  S4_checksum_files                            0 / 10   No evidence detected for S4_checksum_files.
+  S4_dataset_url                               0 / 10   Documentation exists but no dataset URL or data source URL was detected.
+  S4_model_weight_url_or_checksum              0 / 10   Documentation exists but no model artifact URL/checksum evidence was detected.
+  S4_citation_cff                              0 / 5    No evidence detected for S4_citation_cff.
+  S4_cli_entrypoint                            5 / 5    CLI entry point or argparse interface detected.
+  S4_seed_setting                              0 / 5    No deterministic seed setting detected.
+  S4_runnable_examples                         0 / 5    No evidence detected for S4_runnable_examples.
+  stage_4_raw_total                            5 / 100  Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0.
+
+========================================================================
+DISCLAIMER: Evidence-surface pre-screen only.
+Not clinical certification, regulatory clearance, or medical advice.

@@ -12,6 +12,9 @@ Thumbs.db
 # Audit outputs (generated, not committed)
 audit_output/
 audits/fieldbioinformatics_v1_1_2/
+audits/dogfood-v1.5.7-precommit-3repo/
+audits/final-verification-v1.5.7-3repo/
+audits/final-verification-v1.5.8-3repo/
 artic-network_fieldbioinformatics_detailed_5p/
 stem_output*/
 *.audit.md
@@ -22,6 +25,9 @@ stem_output*/
 tmp/
 *.tmp
 *.bak
+.manual_verify/
+.tmp_pycompile/
+.tmp_pytest_run/
 
 # Node modules (if skills.sh used)
 node_modules/

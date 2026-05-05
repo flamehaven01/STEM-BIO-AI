@@ -186,6 +186,22 @@ def test_real_credential_like_values_still_trigger_c1_penalty(tmp_path: Path) ->
     assert result["score"]["risk_penalty"] == 10
 
 
+def test_realistic_sk_fixture_in_test_path_does_not_trigger_c1_penalty(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(
+        tmp_path / "tests" / "test_severity.py",
+        "def test_hardcoded_api_key():\n"
+        "    code = '''\\napi_key = \\\"sk-1234567890abcdef\\\"\\n'''\n",
+    )
+
+    result = audit_repository(tmp_path)
+    c1_findings = [f for f in result["evidence_ledger"] if f["detector"] == "C1_hardcoded_credentials"]
+
+    assert result["code_integrity"]["C1_hardcoded_credentials"]["status"] == "PASS"
+    assert result["score"]["risk_penalty"] == 0
+    assert any(f["status"] == "not_applicable" and f.get("metadata", {}).get("fixture_context") is True for f in c1_findings)
+
+
 def test_fail_open_detection_handles_crlf(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
     code_path = tmp_path / "pipeline.py"
@@ -194,6 +210,38 @@ def test_fail_open_detection_handles_crlf(tmp_path: Path) -> None:
     result = audit_repository(tmp_path)
 
     assert result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["status"] == "WARN"
+
+
+def test_fail_open_string_literal_in_runtime_code_does_not_trigger_c4(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
+    _write(
+        tmp_path / "patcher.py",
+        "def replacement(snippet: str) -> str:\n"
+        "    if 'except: pass' in snippet.lower():\n"
+        "        return 'raise'\n"
+        "    return snippet\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["status"] == "PASS"
+
+
+def test_pyproject_metadata_lines_do_not_trigger_c2_without_dependency_section(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
+    _write(
+        tmp_path / "pyproject.toml",
+        "[project]\n"
+        "name = \"sample-project\"\n"
+        "version = \"0.1.0\"\n"
+        "readme = \"README.md\"\n"
+        "requires-python = \">=3.11\"\n"
+        "keywords = [\"bio\", \"analysis\"]\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["code_integrity"]["C2_dependency_pinning"]["status"] == "PASS"
 
 
 def test_evidence_ledger_and_ast_summary_are_observation_only(tmp_path: Path) -> None:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import configparser
 import re
 from collections.abc import Iterable
 from pathlib import Path
@@ -11,6 +12,7 @@ from .patterns import EXACT_PINNED_DEP, LOOSE_DEP, SKIP_DIRS, TEXT_EXTENSIONS
 
 
 DETECTOR_VERSION = __version__
+FIXTURE_PATH_PARTS = {"test", "tests", "testing", "fixture", "fixtures", "example", "examples", "demo", "demos", "sample", "samples"}
 
 
 def add_finding(
@@ -131,6 +133,20 @@ def dependency_entries(line: str) -> list[str]:
     return [stripped]
 
 
+def manifest_dependency_entries(path: Path, text: str) -> list[tuple[int, str, str]]:
+    suffix = path.suffix.lower()
+    name = path.name.lower()
+    if name == "requirements.txt":
+        return _requirements_entries(text)
+    if name == "environment.yml":
+        return _environment_entries(text)
+    if name == "setup.cfg":
+        return _setup_cfg_entries(text)
+    if name == "pyproject.toml" or suffix == ".toml":
+        return _pyproject_entries(text)
+    return [(line_number, entry, snippet) for line_number, snippet in enumerate(text.splitlines(), start=1) for entry in dependency_entries(snippet)]
+
+
 def is_unpinned_dependency(line: str) -> bool:
     normalized = line.split("#", 1)[0].strip().rstrip(",")
     if not normalized or normalized.startswith(("-", "[", "{")):
@@ -140,3 +156,133 @@ def is_unpinned_dependency(line: str) -> bool:
     if LOOSE_DEP.search(normalized):
         return True
     return bool(re.match(r"^[A-Za-z0-9_.-]+(\[[^\]]+\])?(\s*;.*)?$", normalized))
+
+
+def is_fixture_like_path(path: Path) -> bool:
+    return any(part.lower() in FIXTURE_PATH_PARTS for part in path.parts)
+
+
+def _requirements_entries(text: str) -> list[tuple[int, str, str]]:
+    rows: list[tuple[int, str, str]] = []
+    for line_number, snippet in enumerate(text.splitlines(), start=1):
+        stripped = snippet.strip()
+        if not stripped or stripped.startswith("#") or stripped.startswith(("-", "--")):
+            continue
+        rows.extend((line_number, entry, snippet) for entry in dependency_entries(stripped))
+    return rows
+
+
+def _environment_entries(text: str) -> list[tuple[int, str, str]]:
+    rows: list[tuple[int, str, str]] = []
+    in_dependencies = False
+    in_pip_block = False
+    dep_indent = 0
+    pip_indent = 0
+    for line_number, snippet in enumerate(text.splitlines(), start=1):
+        raw = snippet.rstrip()
+        stripped = raw.strip()
+        indent = len(raw) - len(raw.lstrip())
+        if not stripped or stripped.startswith("#"):
+            continue
+        if stripped == "dependencies:":
+            in_dependencies = True
+            in_pip_block = False
+            dep_indent = indent
+            continue
+        if in_dependencies and indent <= dep_indent and not stripped.startswith("-"):
+            in_dependencies = False
+            in_pip_block = False
+        if not in_dependencies:
+            continue
+        if stripped == "- pip:":
+            in_pip_block = True
+            pip_indent = indent
+            continue
+        if in_pip_block and indent <= pip_indent and stripped.startswith("-"):
+            in_pip_block = False
+        if not stripped.startswith("- "):
+            continue
+        entry = stripped[2:].strip()
+        if in_pip_block or entry:
+            rows.append((line_number, entry, snippet))
+    return rows
+
+
+def _setup_cfg_entries(text: str) -> list[tuple[int, str, str]]:
+    parser = configparser.ConfigParser()
+    try:
+        parser.read_string(text)
+    except configparser.Error:
+        return []
+    rows: list[tuple[int, str, str]] = []
+    valid_sections = {"options", "options.extras_require"}
+    line_numbers = {idx + 1: line for idx, line in enumerate(text.splitlines())}
+    for section in parser.sections():
+        if section not in valid_sections:
+            continue
+        for key, value in parser.items(section):
+            if key not in {"install_requires"} and section != "options.extras_require":
+                continue
+            for raw_entry in value.splitlines():
+                entry = raw_entry.strip()
+                if not entry:
+                    continue
+                line_number = _find_line_number(line_numbers, raw_entry.strip())
+                rows.append((line_number, entry, line_numbers.get(line_number, raw_entry)))
+    return rows
+
+
+def _pyproject_entries(text: str) -> list[tuple[int, str, str]]:
+    rows: list[tuple[int, str, str]] = []
+    current_section = ""
+    collecting_array = False
+    for line_number, snippet in enumerate(text.splitlines(), start=1):
+        stripped = snippet.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if stripped.startswith("[") and stripped.endswith("]"):
+            current_section = stripped.strip("[]").strip()
+            collecting_array = False
+            continue
+        if collecting_array:
+            for entry in dependency_entries(stripped):
+                rows.append((line_number, entry, snippet))
+            if "]" in stripped:
+                collecting_array = False
+            continue
+        if current_section == "build-system" and stripped.startswith("requires"):
+            for entry in dependency_entries(stripped):
+                rows.append((line_number, entry, snippet))
+            collecting_array = "[" in stripped and "]" not in stripped
+            continue
+        if current_section == "project" and stripped.startswith("dependencies"):
+            for entry in dependency_entries(stripped):
+                rows.append((line_number, entry, snippet))
+            collecting_array = "[" in stripped and "]" not in stripped
+            continue
+        if current_section == "project.optional-dependencies":
+            if "=" not in stripped:
+                continue
+            _, rhs = stripped.split("=", 1)
+            for entry in dependency_entries(rhs):
+                rows.append((line_number, entry, snippet))
+            collecting_array = "[" in rhs and "]" not in rhs
+            continue
+        if current_section.startswith("tool.poetry") and current_section.endswith("dependencies"):
+            if "=" not in stripped:
+                continue
+            key, rhs = stripped.split("=", 1)
+            if key.strip().lower() == "python":
+                continue
+            values = [m.group(1) or m.group(2) for m in re.finditer(r'"([^"]+)"|\'([^\']+)\'', rhs)]
+            for value in values:
+                rows.append((line_number, f"{key.strip()} {value.strip()}", snippet))
+            continue
+    return rows
+
+
+def _find_line_number(lines: dict[int, str], needle: str) -> int:
+    for line_number, snippet in lines.items():
+        if needle and needle in snippet:
+            return line_number
+    return 0

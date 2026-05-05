@@ -1,0 +1,4435 @@
+{
+  "schema_version": "stem-ai-local-cli-result-v1.3",
+  "stem_ai_version": "1.3.0",
+  "generated_at_local": "2026-04-30",
+  "execution_mode": "LOCAL_ANALYSIS",
+  "target": {
+    "name": "K-Dense-AI/claude-scientific-skills",
+    "local_path": "D:\\Sanctum\\Extra Repo\\claude-scientific-skills",
+    "remote": "https://github.com/K-Dense-AI/claude-scientific-skills",
+    "branch": "main",
+    "commit": "c84622c08adb7a4619bb0bbfcf43224541ef22dd",
+    "file_count": 1335
+  },
+  "classification": {
+    "clinical_adjacent": true,
+    "ca_severity": "CA-DIRECT",
+    "t0_hard_floor": true,
+    "score_cap": 39,
+    "has_explicit_clinical_boundary": false
+  },
+  "score": {
+    "stage_1_readme_intent": 30,
+    "stage_2_cross_platform": "not_applicable_in_LOCAL_ANALYSIS",
+    "stage_2_repo_local_consistency": 50,
+    "stage_2_lane": "STAGE_2R_REPO_LOCAL_CONSISTENCY",
+    "stage_3_code_bio": 44,
+    "weights": {
+      "stage_1": 0.4,
+      "stage_2": 0.2,
+      "stage_3": 0.4
+    },
+    "risk_penalty": 0,
+    "raw_score_before_floor": 40,
+    "final_score": 39,
+    "formal_tier": "T0 Rejected",
+    "use_scope": "Do not rely on this repository without independent expert validation."
+  },
+  "stage_2r_rubric": {
+    "baseline": {
+      "score": 60,
+      "evidence": "Non-nascent local repository baseline."
+    },
+    "R2R_3_readme_test_ci_alignment": {
+      "score": 10,
+      "evidence": "Test/CI surfaces are present and locally consistent."
+    },
+    "R2R_D2_missing_clinical_use_boundary": {
+      "score": -20,
+      "evidence": "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary."
+    },
+    "calculation": "60 plus local consistency additions/deductions = 50",
+    "stage_2r_score": 50,
+    "verdict": "Local Contradiction / Insufficient Consistency"
+  },
+  "stage_3_rubric": {
+    "T1_CI_CD": {
+      "score": 15,
+      "max": 15,
+      "evidence": "Workflow files detected."
+    },
+    "T2_domain_tests": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No tests detected."
+    },
+    "T3_changelog_release_hygiene": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No changelog detected."
+    },
+    "B1_data_provenance_controls": {
+      "score": 0,
+      "max": 15,
+      "evidence": "No dependency/provenance manifest detected."
+    },
+    "B2_bias_limitations": {
+      "score": 15,
+      "max": 15,
+      "evidence": "Bias, limitation, or validation-boundary language detected."
+    },
+    "B3_coi_funding": {
+      "score": 5,
+      "max": 5,
+      "evidence": "COI, funding, sponsor, or acknowledgement language detected."
+    },
+    "stage_3_raw_total": {
+      "score": 35,
+      "max": 80,
+      "evidence": "Raw rubric total before normalization to 100."
+    }
+  },
+  "replication_score": 30,
+  "replication_tier": "R1",
+  "stage_4_rubric": {
+    "S4_container_environment": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_container_environment."
+    },
+    "S4_make_reproduce_target": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No Makefile detected."
+    },
+    "S4_environment_lock_evidence": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No environment, dependency, or lock manifest detected."
+    },
+    "S4_exact_dependency_pins_or_hashes": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No dependency manifest detected."
+    },
+    "S4_readme_reproducibility_section": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No README detected."
+    },
+    "S4_checksum_files": {
+      "score": 0,
+      "max": 10,
+      "evidence": "No evidence detected for S4_checksum_files."
+    },
+    "S4_dataset_url": {
+      "score": 10,
+      "max": 10,
+      "evidence": "Dataset URL or data source reference detected."
+    },
+    "S4_model_weight_url_or_checksum": {
+      "score": 10,
+      "max": 10,
+      "evidence": "Model artifact URL or checksum evidence detected."
+    },
+    "S4_citation_cff": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_citation_cff."
+    },
+    "S4_cli_entrypoint": {
+      "score": 5,
+      "max": 5,
+      "evidence": "CLI entry point or argparse interface detected."
+    },
+    "S4_seed_setting": {
+      "score": 5,
+      "max": 5,
+      "evidence": "Deterministic seed setting detected."
+    },
+    "S4_runnable_examples": {
+      "score": 0,
+      "max": 5,
+      "evidence": "No evidence detected for S4_runnable_examples."
+    },
+    "stage_4_raw_total": {
+      "score": 30,
+      "max": 100,
+      "evidence": "Raw Stage 4 rubric total. Stage 4 is reported separately and does not alter final score in v1.3.0."
+    }
+  },
+  "code_integrity": {
+    "C1_hardcoded_credentials": {
+      "status": "PASS",
+      "evidence": [
+        "No direct credential patterns detected by local CLI scan."
+      ]
+    },
+    "C2_dependency_pinning": {
+      "status": "PASS",
+      "evidence": [
+        "Dependency manifest appears pinned or not present."
+      ]
+    },
+    "C3_dead_or_deprecated_patient_adjacent_paths": {
+      "status": "PASS",
+      "evidence": [
+        "No deprecated patient-adjacent metadata patterns detected."
+      ]
+    },
+    "C4_exception_handling_clinical_adjacent_paths": {
+      "status": "WARN",
+      "evidence": [
+        "Fail-open exception pattern detected in code text."
+      ]
+    }
+  },
+  "evidence_ledger": [
+    {
+      "finding_id": "S1_readme_bio_terms:.:0:001",
+      "detector": "S1_readme_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_readme_bio_terms."
+    },
+    {
+      "finding_id": "S1_clinical_boundary:.:0:001",
+      "detector": "S1_clinical_boundary",
+      "detector_version": "1.3.0",
+      "pattern_id": "clinical_boundary_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S1_clinical_boundary."
+    },
+    {
+      "finding_id": "S3_T1_workflow_files:.github/workflows/release.yml:0:001",
+      "detector": "S3_T1_workflow_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "workflow_presence_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".github/workflows/release.yml",
+      "line": 0,
+      "snippet": ".github/workflows/release.yml",
+      "match_type": "file_presence",
+      "explanation": "Workflow file exists."
+    },
+    {
+      "finding_id": "S3_T1_workflow_files:.github/workflows/scan-skills.yml:0:001",
+      "detector": "S3_T1_workflow_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "workflow_presence_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".github/workflows/scan-skills.yml",
+      "line": 0,
+      "snippet": ".github/workflows/scan-skills.yml",
+      "match_type": "file_presence",
+      "explanation": "Workflow file exists."
+    },
+    {
+      "finding_id": "S3_T2_domain_tests:.:0:001",
+      "detector": "S3_T2_domain_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "domain_tests_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S3_T2_domain_tests."
+    },
+    {
+      "finding_id": "S3_T3_changelog_release_hygiene:.:0:001",
+      "detector": "S3_T3_changelog_release_hygiene",
+      "detector_version": "1.3.0",
+      "pattern_id": "changelog_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_T3_changelog_release_hygiene."
+    },
+    {
+      "finding_id": "S3_B1_dependency_manifest:.:0:001",
+      "detector": "S3_B1_dependency_manifest",
+      "detector_version": "1.3.0",
+      "pattern_id": "dependency_manifest_presence_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S3_B1_dependency_manifest."
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/examples.md:870:001",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 870,
+      "snippet": "- Note resistance mechanisms or limitations mentioned",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "limitations"
+      }
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/examples.md:964:002",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 964,
+      "snippet": "- Use as validation cohort",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "validation cohort"
+      }
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/examples.md:2380:003",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2380,
+      "snippet": "- Model mixing and mass transfer limitations",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "limitations"
+      }
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/examples.md:2524:004",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2524,
+      "snippet": "* Heat and mass transfer limitations",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "limitations"
+      }
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/scientific-skills.md:104:001",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 104,
+      "snippet": "- **PyHealth** - Comprehensive healthcare AI toolkit for developing, testing, and deploying machine learning models with clinical data. Provides specialized tools for electronic...",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "fairness"
+      }
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/scientific-skills.md:104:002",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 104,
+      "snippet": "- **PyHealth** - Comprehensive healthcare AI toolkit for developing, testing, and deploying machine learning models with clinical data. Provides specialized tools for electronic...",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "fairness"
+      }
+    },
+    {
+      "finding_id": "S3_B2_bias_limitations:docs/scientific-skills.md:129:003",
+      "detector": "S3_B2_bias_limitations",
+      "detector_version": "1.3.0",
+      "pattern_id": "bias_limitations_v2",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 129,
+      "snippet": "- **SHAP** - Model interpretability and explainability using Shapley values from game theory. Provides unified approach to explain any ML model with TreeExplainer (fast exact ex...",
+      "match_type": "regex",
+      "explanation": "Bias, limitation, or validation-boundary language detected.",
+      "metadata": {
+        "match": "fairness"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:30:001",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 30,
+      "snippet": "22. [Research Grant Writing](#research-grant-writing)",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:30:002",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 30,
+      "snippet": "22. [Research Grant Writing](#research-grant-writing)",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:816:003",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 816,
+      "snippet": "* Sponsor and collaborators",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Sponsor"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:886:004",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 886,
+      "snippet": "- Sponsor/company market share",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Sponsor"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:2791:005",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2791,
+      "snippet": "## Research Grant Writing",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:2793:006",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2793,
+      "snippet": "### Example 22: NIH R01 Grant Proposal Development",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:2795:007",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2795,
+      "snippet": "**Objective**: Develop a comprehensive research grant proposal with literature review, specific aims, and budget justification.",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:2798:008",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2798,
+      "snippet": "- `research-grants` - Grant writing templates and guidelines",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/examples.md:2894:009",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/examples.md",
+      "line": 2894,
+      "snippet": "- Complete NIH R01 grant proposal",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/open-source-sponsors.md:12:001",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 12,
+      "snippet": "2. **Sponsor maintainers** directly through GitHub Sponsors, Open Collective, or project-specific donation pages",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Sponsor"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/open-source-sponsors.md:59:002",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 59,
+      "snippet": "| **PyTorch Lightning** | Deep learning framework | [GitHub](https://github.com/Lightning-AI/pytorch-lightning) - [Sponsor](https://github.com/sponsors/Lightning-AI) |",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "Sponsor"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/scientific-skills.md:10:001",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 10,
+      "snippet": "- **ClinicalTrials.gov** - Comprehensive registry of clinical studies conducted worldwide (maintained by U.S. National Library of Medicine) with API v2 access for searching tria...",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "sponsor"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/scientific-skills.md:24:002",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 24,
+      "snippet": "- **OpenAlex** - Comprehensive open catalog of 240M+ scholarly works, authors, institutions, topics, sources, publishers, and funders. Provides complete bibliometric database fo...",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "funding"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/scientific-skills.md:182:003",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 182,
+      "snippet": "- **Scientific Slides** - Build slide decks and presentations for research talks using PowerPoint and LaTeX Beamer. Features slide structure, design templates, timing guidance,...",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/scientific-skills.md:183:004",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 183,
+      "snippet": "- **Venue Templates** - Access comprehensive LaTeX templates, formatting requirements, and submission guidelines for major scientific publication venues (Nature, Science, PLOS,...",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/scientific-skills.md:183:005",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 183,
+      "snippet": "- **Venue Templates** - Access comprehensive LaTeX templates, formatting requirements, and submission guidelines for major scientific publication venues (Nature, Science, PLOS,...",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S3_B3_coi_funding:docs/scientific-skills.md:196:006",
+      "detector": "S3_B3_coi_funding",
+      "detector_version": "1.3.0",
+      "pattern_id": "coi_funding_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/scientific-skills.md",
+      "line": 196,
+      "snippet": "- **Research Grants** - Write competitive research proposals for NSF, NIH, DOE, and DARPA. Features agency-specific formatting, review criteria understanding, budget preparation...",
+      "match_type": "regex",
+      "explanation": "COI, funding, sponsor, or acknowledgement language detected.",
+      "metadata": {
+        "match": "grant"
+      }
+    },
+    {
+      "finding_id": "S2_package_bio_terms:.:0:001",
+      "detector": "S2_package_bio_terms",
+      "detector_version": "1.3.0",
+      "pattern_id": "package_bio_terms_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for S2_package_bio_terms."
+    },
+    {
+      "finding_id": "C1_hardcoded_credentials:.:0:001",
+      "detector": "C1_hardcoded_credentials",
+      "detector_version": "1.3.0",
+      "pattern_id": "credential_pattern_v2",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No hardcoded credential evidence detected for C1_hardcoded_credentials."
+    },
+    {
+      "finding_id": "C2_dependency_pinning:.:0:001",
+      "detector": "C2_dependency_pinning",
+      "detector_version": "1.3.0",
+      "pattern_id": "loose_dependency_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "dependency",
+      "explanation": "No dependency manifest detected."
+    },
+    {
+      "finding_id": "C3_dead_or_deprecated_patient_adjacent_paths:.:0:001",
+      "detector": "C3_dead_or_deprecated_patient_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "deprecated_patient_metadata_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "regex",
+      "explanation": "No evidence detected for C3_dead_or_deprecated_patient_adjacent_paths."
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/bioservices/scripts/protein_analysis_workflow.py:47:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/bioservices/scripts/protein_analysis_workflow.py",
+      "line": 47,
+      "snippet": "except:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except:\n            pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/diffdock/scripts/analyze_results.py:103:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/diffdock/scripts/analyze_results.py",
+      "line": 103,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n            pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/diffdock/scripts/analyze_results.py:114:002",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/diffdock/scripts/analyze_results.py",
+      "line": 114,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/unpack.py:87:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/unpack.py",
+      "line": 87,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/unpack.py:97:002",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/unpack.py",
+      "line": 97,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/base.py:138:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/validators/base.py",
+      "line": 138,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/docx.py:287:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/validators/docx.py",
+      "line": 287,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/docx.py:439:002",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/validators/docx.py",
+      "line": 439,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/docx/scripts/office/validators/redlining.py:56:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/validators/redlining.py",
+      "line": 56,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n            pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:39:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 39,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:192:002",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 192,
+      "snippet": "except:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except:\n                            pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:194:003",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 194,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/get-available-resources/scripts/detect_resources.py:198:004",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 198,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/labarchive-integration/scripts/entry_operations.py:104:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/labarchive-integration/scripts/entry_operations.py",
+      "line": 104,
+      "snippet": "except:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/unpack.py:87:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/unpack.py",
+      "line": 87,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/unpack.py:97:002",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/unpack.py",
+      "line": 97,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n        pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/base.py:138:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/validators/base.py",
+      "line": 138,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/docx.py:287:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/validators/docx.py",
+      "line": 287,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/docx.py:439:002",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/validators/docx.py",
+      "line": 439,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pptx/scripts/office/validators/redlining.py:56:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/validators/redlining.py",
+      "line": 56,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n            pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/pymatgen/scripts/structure_analyzer.py:142:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pymatgen/scripts/structure_analyzer.py",
+      "line": 142,
+      "snippet": "except:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except:\n                pass"
+      }
+    },
+    {
+      "finding_id": "C4_exception_handling_clinical_adjacent_paths:scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:661:001",
+      "detector": "C4_exception_handling_clinical_adjacent_paths",
+      "detector_version": "1.3.0",
+      "pattern_id": "fail_open_exception_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py",
+      "line": 661,
+      "snippet": "except Exception:",
+      "match_type": "regex",
+      "explanation": "Fail-open exception pattern detected in code text.",
+      "metadata": {
+        "match": "except Exception:\n                pass"
+      }
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/arboreto/scripts/basic_grn_inference.py:67:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/arboreto/scripts/basic_grn_inference.py",
+      "line": 67,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/biorxiv-database/scripts/biorxiv_search.py:303:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/biorxiv-database/scripts/biorxiv_search.py",
+      "line": 303,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/bioservices/scripts/batch_id_converter.py:259:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/bioservices/scripts/batch_id_converter.py",
+      "line": 259,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/bioservices/scripts/compound_cross_reference.py:317:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/bioservices/scripts/compound_cross_reference.py",
+      "line": 317,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/bioservices/scripts/pathway_analysis.py:239:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/bioservices/scripts/pathway_analysis.py",
+      "line": 239,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/bioservices/scripts/protein_analysis_workflow.py:348:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/bioservices/scripts/protein_analysis_workflow.py",
+      "line": 348,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/bioservices/scripts/protein_analysis_workflow.py:47:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/bioservices/scripts/protein_analysis_workflow.py",
+      "line": 47,
+      "snippet": "except:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_syntax_error:scientific-skills/brenda-database/scripts/brenda_queries.py:559:001",
+      "detector": "AST_syntax_error",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_parse_v1",
+      "status": "error",
+      "severity": "warn",
+      "file": "scientific-skills/brenda-database/scripts/brenda_queries.py",
+      "line": 559,
+      "snippet": "'mechanism': 'allosteric' if 'allosteric' in commentary else 'cofactor' else 'unknown',",
+      "match_type": "ast",
+      "explanation": "Python file could not be parsed by stdlib ast.",
+      "metadata": {
+        "reason": "syntax_error"
+      }
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/citation-management/scripts/doi_to_bibtex.py:101:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/citation-management/scripts/doi_to_bibtex.py",
+      "line": 101,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/citation-management/scripts/extract_metadata.py:489:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/citation-management/scripts/extract_metadata.py",
+      "line": 489,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/citation-management/scripts/format_bibtex.py:294:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/citation-management/scripts/format_bibtex.py",
+      "line": 294,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/citation-management/scripts/search_google_scholar.py:181:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/citation-management/scripts/search_google_scholar.py",
+      "line": 181,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/citation-management/scripts/search_google_scholar.py:102:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/citation-management/scripts/search_google_scholar.py",
+      "line": 102,
+      "snippet": "except ValueError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/citation-management/scripts/search_pubmed.py:271:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/citation-management/scripts/search_pubmed.py",
+      "line": 271,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/citation-management/scripts/validate_citations.py:407:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/citation-management/scripts/validate_citations.py",
+      "line": 407,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py:297:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py",
+      "line": 297,
+      "snippet": "parser = argparse.ArgumentParser(description='Biomarker-based patient classification')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py:314:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/biomarker_classifier.py",
+      "line": 314,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/build_decision_tree.py:391:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/build_decision_tree.py",
+      "line": 391,
+      "snippet": "parser = argparse.ArgumentParser(description='Build clinical decision tree flowcharts')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py:403:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py",
+      "line": 403,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py:423:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/create_cohort_tables.py",
+      "line": 423,
+      "snippet": "parser = argparse.ArgumentParser(description='Generate clinical cohort tables')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/generate_survival_analysis.py:376:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/generate_survival_analysis.py",
+      "line": 376,
+      "snippet": "parser = argparse.ArgumentParser(description='Generate Kaplan-Meier survival curves')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-decision-support/scripts/validate_cds_document.py:301:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-decision-support/scripts/validate_cds_document.py",
+      "line": 301,
+      "snippet": "parser = argparse.ArgumentParser(description='Validate clinical decision support documents')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/check_deidentification.py:312:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/check_deidentification.py",
+      "line": 312,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/compliance_checker.py:48:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/compliance_checker.py",
+      "line": 48,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Check regulatory compliance\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/extract_clinical_data.py:69:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/extract_clinical_data.py",
+      "line": 69,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Extract clinical data\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/format_adverse_events.py:72:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/format_adverse_events.py",
+      "line": 72,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Format AE data into tables\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/generate_report_template.py:123:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/generate_report_template.py",
+      "line": 123,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/terminology_validator.py:73:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/terminology_validator.py",
+      "line": 73,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Validate medical terminology\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/validate_case_report.py:288:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/validate_case_report.py",
+      "line": 288,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/clinical-reports/scripts/validate_trial_report.py:60:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/clinical-reports/scripts/validate_trial_report.py",
+      "line": 60,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Validate CSR against ICH-E3\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/cosmic-database/scripts/download_cosmic.py:167:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/cosmic-database/scripts/download_cosmic.py",
+      "line": 167,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/deepchem/scripts/graph_neural_network.py:245:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/deepchem/scripts/graph_neural_network.py",
+      "line": 245,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/deepchem/scripts/predict_solubility.py:159:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/deepchem/scripts/predict_solubility.py",
+      "line": 159,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/deepchem/scripts/transfer_learning.py:253:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/deepchem/scripts/transfer_learning.py",
+      "line": 253,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/deeptools/scripts/validate_files.py:146:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/deeptools/scripts/validate_files.py",
+      "line": 146,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/deeptools/scripts/workflow_generator.py:362:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/deeptools/scripts/workflow_generator.py",
+      "line": 362,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/diffdock/scripts/analyze_results.py:114:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/diffdock/scripts/analyze_results.py",
+      "line": 114,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/diffdock/scripts/analyze_results.py:272:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/diffdock/scripts/analyze_results.py",
+      "line": 272,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/diffdock/scripts/analyze_results.py:103:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/diffdock/scripts/analyze_results.py",
+      "line": 103,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/diffdock/scripts/prepare_batch_csv.py:184:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/diffdock/scripts/prepare_batch_csv.py",
+      "line": 184,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/diffdock/scripts/setup_check.py:229:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/diffdock/scripts/setup_check.py",
+      "line": 229,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/docx/scripts/accept_changes.py:122:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/accept_changes.py",
+      "line": 122,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/docx/scripts/comment.py:294:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/comment.py",
+      "line": 294,
+      "snippet": "p = argparse.ArgumentParser(description=\"Add comments to DOCX documents\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/comment.py:116:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/comment.py",
+      "line": 116,
+      "snippet": "except ValueError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/docx/scripts/office/pack.py:132:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/pack.py",
+      "line": 132,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/soffice.py:49:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/soffice.py",
+      "line": 49,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/unpack.py:87:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/unpack.py",
+      "line": 87,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/unpack.py:97:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/unpack.py",
+      "line": 97,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/docx/scripts/office/unpack.py:102:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/unpack.py",
+      "line": 102,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/docx/scripts/office/validate.py:26:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/docx/scripts/office/validate.py",
+      "line": 26,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Validate Office document XML files\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/base.py:138:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/validators/base.py",
+      "line": 138,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/docx.py:287:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/validators/docx.py",
+      "line": 287,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/docx.py:439:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/validators/docx.py",
+      "line": 439,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/redlining.py:56:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/validators/redlining.py",
+      "line": 56,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/docx/scripts/office/validators/redlining.py:193:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/docx/scripts/office/validators/redlining.py",
+      "line": 193,
+      "snippet": "except (subprocess.CalledProcessError, FileNotFoundError, Exception):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/ensembl-database/scripts/ensembl_query.py:316:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/ensembl-database/scripts/ensembl_query.py",
+      "line": 316,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/etetoolkit/scripts/quick_visualize.py:118:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/etetoolkit/scripts/quick_visualize.py",
+      "line": 118,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/etetoolkit/scripts/tree_operations.py:134:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/etetoolkit/scripts/tree_operations.py",
+      "line": 134,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/gene-database/scripts/batch_gene_lookup.py:241:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/gene-database/scripts/batch_gene_lookup.py",
+      "line": 241,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/gene-database/scripts/fetch_gene_data.py:217:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/gene-database/scripts/fetch_gene_data.py",
+      "line": 217,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/gene-database/scripts/query_gene.py:206:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/gene-database/scripts/query_gene.py",
+      "line": 206,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/generate-image/scripts/generate_image.py:210:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/generate-image/scripts/generate_image.py",
+      "line": 210,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:39:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 39,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:110:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 110,
+      "snippet": "except (subprocess.TimeoutExpired, FileNotFoundError, Exception):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:143:003",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 143,
+      "snippet": "except (subprocess.TimeoutExpired, FileNotFoundError, Exception):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:198:004",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 198,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/get-available-resources/scripts/detect_resources.py:355:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 355,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:194:005",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 194,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/get-available-resources/scripts/detect_resources.py:192:006",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/get-available-resources/scripts/detect_resources.py",
+      "line": 192,
+      "snippet": "except:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/gget/scripts/batch_sequence_analysis.py:142:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/gget/scripts/batch_sequence_analysis.py",
+      "line": 142,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/gget/scripts/enrichment_pipeline.py:170:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/gget/scripts/enrichment_pipeline.py",
+      "line": 170,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/gget/scripts/gene_analysis.py:133:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/gget/scripts/gene_analysis.py",
+      "line": 133,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/infographics/scripts/generate_infographic.py:100:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/infographics/scripts/generate_infographic.py",
+      "line": 100,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/infographics/scripts/generate_infographic_ai.py:1175:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/infographics/scripts/generate_infographic_ai.py",
+      "line": 1175,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/iso-13485-certification/scripts/gap_analyzer.py:409:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/iso-13485-certification/scripts/gap_analyzer.py",
+      "line": 409,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/labarchive-integration/scripts/entry_operations.py:237:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/labarchive-integration/scripts/entry_operations.py",
+      "line": 237,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/labarchive-integration/scripts/entry_operations.py:104:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/labarchive-integration/scripts/entry_operations.py",
+      "line": 104,
+      "snippet": "except:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/labarchive-integration/scripts/notebook_operations.py:199:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/labarchive-integration/scripts/notebook_operations.py",
+      "line": 199,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/literature-review/scripts/search_databases.py:200:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/literature-review/scripts/search_databases.py",
+      "line": 200,
+      "snippet": "except (ValueError, TypeError):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/market-research-reports/scripts/generate_market_visuals.py:401:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/market-research-reports/scripts/generate_market_visuals.py",
+      "line": 401,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/markitdown/scripts/batch_convert.py:137:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/markitdown/scripts/batch_convert.py",
+      "line": 137,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/markitdown/scripts/convert_literature.py:181:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/markitdown/scripts/convert_literature.py",
+      "line": 181,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/markitdown/scripts/convert_with_ai.py:141:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/markitdown/scripts/convert_with_ai.py",
+      "line": 141,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/matplotlib/scripts/plot_template.py:41:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/matplotlib/scripts/plot_template.py",
+      "line": 41,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/matplotlib/scripts/plot_template.py:352:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/matplotlib/scripts/plot_template.py",
+      "line": 352,
+      "snippet": "parser = argparse.ArgumentParser(description='Matplotlib plot template')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/matplotlib/scripts/style_configurator.py:116:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/matplotlib/scripts/style_configurator.py",
+      "line": 116,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/matplotlib/scripts/style_configurator.py:341:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/matplotlib/scripts/style_configurator.py",
+      "line": 341,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/medchem/scripts/filter_molecules.py:290:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/medchem/scripts/filter_molecules.py",
+      "line": 290,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/compute_metrics.py:158:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/neuropixels-analysis/scripts/compute_metrics.py",
+      "line": 158,
+      "snippet": "parser = argparse.ArgumentParser(description='Compute quality metrics')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/explore_recording.py:148:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/neuropixels-analysis/scripts/explore_recording.py",
+      "line": 148,
+      "snippet": "parser = argparse.ArgumentParser(description='Explore Neuropixels recording')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/export_to_phy.py:58:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/neuropixels-analysis/scripts/export_to_phy.py",
+      "line": 58,
+      "snippet": "parser = argparse.ArgumentParser(description='Export to Phy')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/neuropixels_pipeline.py:408:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/neuropixels-analysis/scripts/neuropixels_pipeline.py",
+      "line": 408,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/preprocess_recording.py:93:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/neuropixels-analysis/scripts/preprocess_recording.py",
+      "line": 93,
+      "snippet": "parser = argparse.ArgumentParser(description='Preprocess Neuropixels recording')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/neuropixels-analysis/scripts/run_sorting.py:80:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/neuropixels-analysis/scripts/run_sorting.py",
+      "line": 80,
+      "snippet": "parser = argparse.ArgumentParser(description='Run spike sorting')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:29:001",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 29,
+      "snippet": "def test_skill_directory_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_skill_directory_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:36:002",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 36,
+      "snippet": "def test_skill_md_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_skill_md_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:43:003",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 43,
+      "snippet": "def test_references_directory_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_references_directory_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:50:004",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 50,
+      "snippet": "def test_scripts_directory_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_scripts_directory_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:69:005",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 69,
+      "snippet": "def test_has_yaml_frontmatter(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_yaml_frontmatter"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:81:006",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 81,
+      "snippet": "def test_frontmatter_has_name(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_frontmatter_has_name"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:86:007",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 86,
+      "snippet": "def test_frontmatter_has_description(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_frontmatter_has_description"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:99:008",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 99,
+      "snippet": "def test_frontmatter_has_license(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_frontmatter_has_license"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:104:009",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 104,
+      "snippet": "def test_frontmatter_has_metadata_author(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_frontmatter_has_metadata_author"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:119:010",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 119,
+      "snippet": "def test_has_title_heading(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_title_heading"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:126:011",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 126,
+      "snippet": "def test_has_overview_section(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_overview_section"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:134:012",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 134,
+      "snippet": "def test_has_quick_start_section(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_quick_start_section"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:142:013",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 142,
+      "snippet": "def test_has_docker_setup(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_docker_setup"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:147:014",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 147,
+      "snippet": "def test_has_api_base_url(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_api_base_url"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:151:015",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 151,
+      "snippet": "def test_mentions_notebooklm_alternative(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_mentions_notebooklm_alternative"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:159:016",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 159,
+      "snippet": "def test_mentions_self_hosted(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_mentions_self_hosted"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:167:017",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 167,
+      "snippet": "def test_mentions_multiple_ai_providers(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_mentions_multiple_ai_providers"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:181:018",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 181,
+      "snippet": "def test_has_core_features_section(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_core_features_section"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:192:019",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 192,
+      "snippet": "def test_has_api_reference_section(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_api_reference_section"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:200:020",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 200,
+      "snippet": "def test_has_python_code_examples(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_python_code_examples"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:204:021",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 204,
+      "snippet": "def test_has_bash_code_examples(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_bash_code_examples"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:211:022",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 211,
+      "snippet": "def test_has_installation_instructions(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_installation_instructions"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:219:023",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 219,
+      "snippet": "def test_has_environment_variable_info(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_environment_variable_info"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:227:024",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 227,
+      "snippet": "def test_has_kdense_suggestion(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_has_kdense_suggestion"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:235:025",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 235,
+      "snippet": "def test_content_length_sufficient(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_content_length_sufficient"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:257:026",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 257,
+      "snippet": "def test_api_reference_exists_and_comprehensive(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_api_reference_exists_and_comprehensive"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:269:027",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 269,
+      "snippet": "def test_api_reference_has_http_methods(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_api_reference_has_http_methods"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:279:028",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 279,
+      "snippet": "def test_examples_reference_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_examples_reference_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:285:029",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 285,
+      "snippet": "def test_configuration_reference_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_configuration_reference_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:299:030",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 299,
+      "snippet": "def test_architecture_reference_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_architecture_reference_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:330:031",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 330,
+      "snippet": "def test_notebook_management_script_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_notebook_management_script_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:336:032",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 336,
+      "snippet": "def test_source_ingestion_script_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_source_ingestion_script_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:341:033",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 341,
+      "snippet": "def test_chat_interaction_script_exists(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_chat_interaction_script_exists"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:355:034",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 355,
+      "snippet": "def test_marketplace_has_open_notebook_skill(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_marketplace_has_open_notebook_skill"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:365:035",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 365,
+      "snippet": "def test_marketplace_valid_json(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_marketplace_valid_json"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:385:036",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 385,
+      "snippet": "def test_covers_notebook_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_notebook_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:389:037",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 389,
+      "snippet": "def test_covers_source_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_source_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:393:038",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 393,
+      "snippet": "def test_covers_note_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_note_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:397:039",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 397,
+      "snippet": "def test_covers_chat_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_chat_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:401:040",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 401,
+      "snippet": "def test_covers_search_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_search_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:405:041",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 405,
+      "snippet": "def test_covers_podcast_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_podcast_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:409:042",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 409,
+      "snippet": "def test_covers_transformation_endpoints(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_transformation_endpoints"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:413:043",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 413,
+      "snippet": "def test_covers_model_management(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_model_management"
+      }
+    },
+    {
+      "finding_id": "AST_assertion_tests:scientific-skills/open-notebook/scripts/test_open_notebook_skill.py:417:044",
+      "detector": "AST_assertion_tests",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_assertion_test_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "line": 417,
+      "snippet": "def test_covers_credential_management(self):",
+      "match_type": "ast",
+      "explanation": "Test function with assertion detected.",
+      "metadata": {
+        "function": "test_covers_credential_management"
+      }
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/parallel-web/scripts/parallel_web.py:468:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/parallel-web/scripts/parallel_web.py",
+      "line": 468,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/perplexity-search/scripts/perplexity_search.py:137:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/perplexity-search/scripts/perplexity_search.py",
+      "line": 137,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/perplexity-search/scripts/setup_env.py:106:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/perplexity-search/scripts/setup_env.py",
+      "line": 106,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/phylogenetics/scripts/phylogenetic_analysis.py:205:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/phylogenetics/scripts/phylogenetic_analysis.py",
+      "line": 205,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Phylogenetic analysis pipeline\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/clean.py:122:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/clean.py",
+      "line": 122,
+      "snippet": "except ValueError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/clean.py:165:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/clean.py",
+      "line": 165,
+      "snippet": "except ValueError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pptx/scripts/office/pack.py:132:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/pack.py",
+      "line": 132,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/soffice.py:49:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/soffice.py",
+      "line": 49,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/unpack.py:87:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/unpack.py",
+      "line": 87,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/unpack.py:97:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/unpack.py",
+      "line": 97,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pptx/scripts/office/unpack.py:102:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/unpack.py",
+      "line": 102,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pptx/scripts/office/validate.py:26:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/office/validate.py",
+      "line": 26,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Validate Office document XML files\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/base.py:138:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/validators/base.py",
+      "line": 138,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/docx.py:287:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/validators/docx.py",
+      "line": 287,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/docx.py:439:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/validators/docx.py",
+      "line": 439,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/redlining.py:56:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/validators/redlining.py",
+      "line": 56,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pptx/scripts/office/validators/redlining.py:193:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pptx/scripts/office/validators/redlining.py",
+      "line": 193,
+      "snippet": "except (subprocess.CalledProcessError, FileNotFoundError, Exception):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pptx/scripts/thumbnail.py:41:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pptx/scripts/thumbnail.py",
+      "line": 41,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/pufferlib/scripts/train_template.py:74:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pufferlib/scripts/train_template.py",
+      "line": 74,
+      "snippet": "torch.manual_seed(args.seed)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pufferlib/scripts/train_template.py:167:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pufferlib/scripts/train_template.py",
+      "line": 167,
+      "snippet": "parser = argparse.ArgumentParser(description='PufferLib Training')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pydeseq2/scripts/run_deseq2_analysis.py:269:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pydeseq2/scripts/run_deseq2_analysis.py",
+      "line": 269,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pydicom/scripts/anonymize_dicom.py:92:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pydicom/scripts/anonymize_dicom.py",
+      "line": 92,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pydicom/scripts/dicom_to_image.py:114:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pydicom/scripts/dicom_to_image.py",
+      "line": 114,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pydicom/scripts/extract_metadata.py:122:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pydicom/scripts/extract_metadata.py",
+      "line": 122,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pymatgen/scripts/phase_diagram_generator.py:170:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pymatgen/scripts/phase_diagram_generator.py",
+      "line": 170,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pymatgen/scripts/structure_analyzer.py:195:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pymatgen/scripts/structure_analyzer.py",
+      "line": 195,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/pymatgen/scripts/structure_analyzer.py:142:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/pymatgen/scripts/structure_analyzer.py",
+      "line": 142,
+      "snippet": "except:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/pymatgen/scripts/structure_converter.py:88:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pymatgen/scripts/structure_converter.py",
+      "line": 88,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/pymc/assets/hierarchical_model_template.py:28:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pymc/assets/hierarchical_model_template.py",
+      "line": 28,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/pymc/assets/linear_regression_template.py:27:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pymc/assets/linear_regression_template.py",
+      "line": 27,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/pytdc/scripts/benchmark_evaluation.py:80:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pytdc/scripts/benchmark_evaluation.py",
+      "line": 80,
+      "snippet": "np.random.seed(seed)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/pytdc/scripts/benchmark_evaluation.py:135:002",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pytdc/scripts/benchmark_evaluation.py",
+      "line": 135,
+      "snippet": "np.random.seed(seed)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/pytdc/scripts/load_and_split_data.py:136:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/pytdc/scripts/load_and_split_data.py",
+      "line": 136,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/rdkit/scripts/molecular_properties.py:206:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/rdkit/scripts/molecular_properties.py",
+      "line": 206,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/rdkit/scripts/similarity_search.py:199:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/rdkit/scripts/similarity_search.py",
+      "line": 199,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/rdkit/scripts/substructure_filter.py:255:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/rdkit/scripts/substructure_filter.py",
+      "line": 255,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/research-lookup/research_lookup.py:442:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/research-lookup/research_lookup.py",
+      "line": 442,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/research-lookup/scripts/research_lookup.py:442:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/research-lookup/scripts/research_lookup.py",
+      "line": 442,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scanpy/scripts/qc_analysis.py:139:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scanpy/scripts/qc_analysis.py",
+      "line": 139,
+      "snippet": "parser = argparse.ArgumentParser(description='QC analysis for single-cell data')",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scholar-evaluation/scripts/calculate_scores.py:306:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scholar-evaluation/scripts/calculate_scores.py",
+      "line": 306,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-schematics/scripts/generate_schematic.py:31:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-schematics/scripts/generate_schematic.py",
+      "line": 31,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-schematics/scripts/generate_schematic_ai.py:755:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-schematics/scripts/generate_schematic_ai.py",
+      "line": 755,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-slides/scripts/generate_slide_image.py:34:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-slides/scripts/generate_slide_image.py",
+      "line": 34,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:684:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py",
+      "line": 684,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py:661:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/scientific-slides/scripts/generate_slide_image_ai.py",
+      "line": 661,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-slides/scripts/pdf_to_images.py:109:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-slides/scripts/pdf_to_images.py",
+      "line": 109,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-slides/scripts/slides_to_pdf.py:164:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-slides/scripts/slides_to_pdf.py",
+      "line": 164,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/scientific-slides/scripts/validate_presentation.py:341:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/scientific-slides/scripts/validate_presentation.py",
+      "line": 341,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/simpy/scripts/basic_simulation_template.py:148:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/simpy/scripts/basic_simulation_template.py",
+      "line": 148,
+      "snippet": "random.seed(config.random_seed)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_seed_setting:scientific-skills/statistical-analysis/scripts/assumption_checks.py:522:001",
+      "detector": "AST_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/statistical-analysis/scripts/assumption_checks.py",
+      "line": 522,
+      "snippet": "np.random.seed(42)",
+      "match_type": "ast",
+      "explanation": "Deterministic random seed setting call detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/timesfm-forecasting/scripts/check_system.py:166:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/timesfm-forecasting/scripts/check_system.py",
+      "line": 166,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/timesfm-forecasting/scripts/check_system.py:217:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/timesfm-forecasting/scripts/check_system.py",
+      "line": 217,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/timesfm-forecasting/scripts/check_system.py:492:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/timesfm-forecasting/scripts/check_system.py",
+      "line": 492,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/timesfm-forecasting/scripts/forecast_csv.py:195:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/timesfm-forecasting/scripts/forecast_csv.py",
+      "line": 195,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/timesfm-forecasting/scripts/forecast_csv.py:164:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/timesfm-forecasting/scripts/forecast_csv.py",
+      "line": 164,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/torch-geometric/scripts/benchmark_model.py:290:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/torch-geometric/scripts/benchmark_model.py",
+      "line": 290,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Benchmark GNN models\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/torch-geometric/scripts/create_gnn_template.py:489:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/torch-geometric/scripts/create_gnn_template.py",
+      "line": 489,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/torch-geometric/scripts/visualize_graph.py:249:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/torch-geometric/scripts/visualize_graph.py",
+      "line": 249,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Visualize PyTorch Geometric graphs\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/treatment-plans/scripts/check_completeness.py:248:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/treatment-plans/scripts/check_completeness.py",
+      "line": 248,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/treatment-plans/scripts/generate_template.py:162:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/treatment-plans/scripts/generate_template.py",
+      "line": 162,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/treatment-plans/scripts/timeline_generator.py:268:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/treatment-plans/scripts/timeline_generator.py",
+      "line": 268,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/treatment-plans/scripts/validate_treatment_plan.py:304:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/treatment-plans/scripts/validate_treatment_plan.py",
+      "line": 304,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/uniprot-database/scripts/uniprot_client.py:237:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/uniprot-database/scripts/uniprot_client.py",
+      "line": 237,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/uspto-database/scripts/peds_client.py:218:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/uspto-database/scripts/peds_client.py",
+      "line": 218,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/uspto-database/scripts/trademark_client.py:230:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/uspto-database/scripts/trademark_client.py",
+      "line": 230,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/venue-templates/scripts/customize_template.py:151:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/venue-templates/scripts/customize_template.py",
+      "line": 151,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/venue-templates/scripts/query_template.py:206:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/venue-templates/scripts/query_template.py",
+      "line": 206,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/venue-templates/scripts/validate_format.py:214:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/venue-templates/scripts/validate_format.py",
+      "line": 214,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/xlsx/scripts/office/pack.py:132:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/xlsx/scripts/office/pack.py",
+      "line": 132,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/soffice.py:49:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/soffice.py",
+      "line": 49,
+      "snippet": "except OSError:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/unpack.py:87:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/unpack.py",
+      "line": 87,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/unpack.py:97:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/unpack.py",
+      "line": 97,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/xlsx/scripts/office/unpack.py:102:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/xlsx/scripts/office/unpack.py",
+      "line": 102,
+      "snippet": "parser = argparse.ArgumentParser(",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_argparse_cli:scientific-skills/xlsx/scripts/office/validate.py:26:001",
+      "detector": "AST_argparse_cli",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_argparse_cli_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "scientific-skills/xlsx/scripts/office/validate.py",
+      "line": 26,
+      "snippet": "parser = argparse.ArgumentParser(description=\"Validate Office document XML files\")",
+      "match_type": "ast",
+      "explanation": "argparse CLI interface detected."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/base.py:138:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/validators/base.py",
+      "line": 138,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/docx.py:287:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/validators/docx.py",
+      "line": 287,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/docx.py:439:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/validators/docx.py",
+      "line": 439,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/redlining.py:56:001",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/validators/redlining.py",
+      "line": 56,
+      "snippet": "except Exception:",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "AST_fail_open_precision:scientific-skills/xlsx/scripts/office/validators/redlining.py:193:002",
+      "detector": "AST_fail_open_precision",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_fail_open_v1",
+      "status": "detected",
+      "severity": "warn",
+      "file": "scientific-skills/xlsx/scripts/office/validators/redlining.py",
+      "line": 193,
+      "snippet": "except (subprocess.CalledProcessError, FileNotFoundError, Exception):",
+      "match_type": "ast",
+      "explanation": "Fail-open exception handler detected by AST."
+    },
+    {
+      "finding_id": "S4_container_environment:.:0:001",
+      "detector": "S4_container_environment",
+      "detector_version": "1.3.0",
+      "pattern_id": "container_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_container_environment."
+    },
+    {
+      "finding_id": "S4_make_reproduce_target:.:0:001",
+      "detector": "S4_make_reproduce_target",
+      "detector_version": "1.3.0",
+      "pattern_id": "make_reproduce_target_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No Makefile detected."
+    },
+    {
+      "finding_id": "S4_environment_lock_evidence:.:0:001",
+      "detector": "S4_environment_lock_evidence",
+      "detector_version": "1.3.0",
+      "pattern_id": "environment_lock_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No environment, dependency, or lock manifest detected."
+    },
+    {
+      "finding_id": "S4_exact_dependency_pins_or_hashes:.:0:001",
+      "detector": "S4_exact_dependency_pins_or_hashes",
+      "detector_version": "1.3.0",
+      "pattern_id": "exact_pin_or_hash_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No dependency manifest detected."
+    },
+    {
+      "finding_id": "S4_readme_reproducibility_section:.:0:001",
+      "detector": "S4_readme_reproducibility_section",
+      "detector_version": "1.3.0",
+      "pattern_id": "readme_repro_heading_v1",
+      "status": "absent",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "No README detected."
+    },
+    {
+      "finding_id": "S4_checksum_files:.:0:001",
+      "detector": "S4_checksum_files",
+      "detector_version": "1.3.0",
+      "pattern_id": "checksum_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_checksum_files."
+    },
+    {
+      "finding_id": "S4_dataset_url:docs/open-source-sponsors.md:27:001",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 27,
+      "snippet": "| **AnnData** | Annotated data matrices for single-cell | [GitHub](https://github.com/scverse/anndata) |",
+      "match_type": "regex",
+      "explanation": "Dataset URL or data source reference detected.",
+      "metadata": {
+        "url": "https://github.com/scverse/anndata"
+      }
+    },
+    {
+      "finding_id": "S4_dataset_url:docs/open-source-sponsors.md:33:002",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 33,
+      "snippet": "| **deepTools** | Tools for deep-sequencing data | [GitHub](https://github.com/deeptools/deepTools) |",
+      "match_type": "regex",
+      "explanation": "Dataset URL or data source reference detected.",
+      "metadata": {
+        "url": "https://github.com/deeptools/deepTools"
+      }
+    },
+    {
+      "finding_id": "S4_dataset_url:docs/open-source-sponsors.md:46:003",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 46,
+      "snippet": "| **PyTDC** | Therapeutics Data Commons | [GitHub](https://github.com/mims-harvard/TDC) |",
+      "match_type": "regex",
+      "explanation": "Dataset URL or data source reference detected.",
+      "metadata": {
+        "url": "https://github.com/mims-harvard/TDC"
+      }
+    },
+    {
+      "finding_id": "S4_dataset_url:docs/open-source-sponsors.md:52:004",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 52,
+      "snippet": "| **matchms** | Mass spectrometry data processing | [GitHub](https://github.com/matchms/matchms) |",
+      "match_type": "regex",
+      "explanation": "Dataset URL or data source reference detected.",
+      "metadata": {
+        "url": "https://github.com/matchms/matchms"
+      }
+    },
+    {
+      "finding_id": "S4_dataset_url:docs/open-source-sponsors.md:60:005",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 60,
+      "snippet": "| **Transformers** | State-of-the-art NLP | [GitHub](https://github.com/huggingface/transformers) |",
+      "match_type": "regex",
+      "explanation": "Dataset URL or data source reference detected.",
+      "metadata": {
+        "url": "https://github.com/huggingface/transformers"
+      }
+    },
+    {
+      "finding_id": "S4_dataset_url:docs/open-source-sponsors.md:81:006",
+      "detector": "S4_dataset_url",
+      "detector_version": "1.3.0",
+      "pattern_id": "dataset_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 81,
+      "snippet": "| **GeoPandas** | Geospatial data in Python | [GitHub](https://github.com/geopandas/geopandas) |",
+      "match_type": "regex",
+      "explanation": "Dataset URL or data source reference detected.",
+      "metadata": {
+        "url": "https://github.com/geopandas/geopandas"
+      }
+    },
+    {
+      "finding_id": "S4_model_weight_url_or_checksum:docs/open-source-sponsors.md:60:001",
+      "detector": "S4_model_weight_url_or_checksum",
+      "detector_version": "1.3.0",
+      "pattern_id": "model_weight_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 60,
+      "snippet": "| **Transformers** | State-of-the-art NLP | [GitHub](https://github.com/huggingface/transformers) |",
+      "match_type": "regex",
+      "explanation": "Model weight, checkpoint, or model artifact URL detected.",
+      "metadata": {
+        "url": "https://github.com/huggingface/transformers"
+      }
+    },
+    {
+      "finding_id": "S4_model_weight_url_or_checksum:docs/open-source-sponsors.md:64:002",
+      "detector": "S4_model_weight_url_or_checksum",
+      "detector_version": "1.3.0",
+      "pattern_id": "model_weight_url_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": "docs/open-source-sponsors.md",
+      "line": 64,
+      "snippet": "| **SHAP** | Model interpretability | [GitHub](https://github.com/shap/shap) |",
+      "match_type": "regex",
+      "explanation": "Model weight, checkpoint, or model artifact URL detected.",
+      "metadata": {
+        "url": "https://github.com/shap/shap"
+      }
+    },
+    {
+      "finding_id": "S4_citation_cff:.:0:001",
+      "detector": "S4_citation_cff",
+      "detector_version": "1.3.0",
+      "pattern_id": "citation_cff_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_citation_cff."
+    },
+    {
+      "finding_id": "S4_cli_entrypoint:.:0:001",
+      "detector": "S4_cli_entrypoint",
+      "detector_version": "1.3.0",
+      "pattern_id": "cli_entrypoint_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "argparse CLI evidence detected by AST summary.",
+      "metadata": {
+        "source": "ast_signal_summary"
+      }
+    },
+    {
+      "finding_id": "S4_seed_setting:.:0:001",
+      "detector": "S4_seed_setting",
+      "detector_version": "1.3.0",
+      "pattern_id": "ast_seed_setting_stage4_v1",
+      "status": "detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "aggregate",
+      "explanation": "Deterministic seed setting evidence detected by AST summary.",
+      "metadata": {
+        "seed_settings": 12
+      }
+    },
+    {
+      "finding_id": "S4_runnable_examples:.:0:001",
+      "detector": "S4_runnable_examples",
+      "detector_version": "1.3.0",
+      "pattern_id": "runnable_example_file_v1",
+      "status": "not_detected",
+      "severity": "info",
+      "file": ".",
+      "line": 0,
+      "snippet": "",
+      "match_type": "file_presence",
+      "explanation": "No evidence detected for S4_runnable_examples."
+    }
+  ],
+  "detector_summary": {
+    "total_findings": 292,
+    "by_status": {
+      "not_detected": 13,
+      "detected": 274,
+      "absent": 4,
+      "error": 1
+    },
+    "by_detector": {
+      "S1_readme_bio_terms": {
+        "not_detected": 1
+      },
+      "S1_clinical_boundary": {
+        "not_detected": 1
+      },
+      "S3_T1_workflow_files": {
+        "detected": 2
+      },
+      "S3_T2_domain_tests": {
+        "not_detected": 1
+      },
+      "S3_T3_changelog_release_hygiene": {
+        "not_detected": 1
+      },
+      "S3_B1_dependency_manifest": {
+        "not_detected": 1
+      },
+      "S3_B2_bias_limitations": {
+        "detected": 7
+      },
+      "S3_B3_coi_funding": {
+        "detected": 17
+      },
+      "S2_package_bio_terms": {
+        "not_detected": 1
+      },
+      "C1_hardcoded_credentials": {
+        "not_detected": 1
+      },
+      "C2_dependency_pinning": {
+        "absent": 1
+      },
+      "C3_dead_or_deprecated_patient_adjacent_paths": {
+        "not_detected": 1
+      },
+      "C4_exception_handling_clinical_adjacent_paths": {
+        "detected": 22
+      },
+      "AST_argparse_cli": {
+        "detected": 116
+      },
+      "AST_fail_open_precision": {
+        "detected": 44
+      },
+      "AST_syntax_error": {
+        "error": 1
+      },
+      "AST_seed_setting": {
+        "detected": 12
+      },
+      "AST_assertion_tests": {
+        "detected": 44
+      },
+      "S4_container_environment": {
+        "not_detected": 1
+      },
+      "S4_make_reproduce_target": {
+        "absent": 1
+      },
+      "S4_environment_lock_evidence": {
+        "not_detected": 1
+      },
+      "S4_exact_dependency_pins_or_hashes": {
+        "absent": 1
+      },
+      "S4_readme_reproducibility_section": {
+        "absent": 1
+      },
+      "S4_checksum_files": {
+        "not_detected": 1
+      },
+      "S4_dataset_url": {
+        "detected": 6
+      },
+      "S4_model_weight_url_or_checksum": {
+        "detected": 2
+      },
+      "S4_citation_cff": {
+        "not_detected": 1
+      },
+      "S4_cli_entrypoint": {
+        "detected": 1
+      },
+      "S4_seed_setting": {
+        "detected": 1
+      },
+      "S4_runnable_examples": {
+        "not_detected": 1
+      }
+    }
+  },
+  "ast_signal_summary": {
+    "files_total": 227,
+    "files_considered": 227,
+    "files_parsed": 226,
+    "files_skipped_size": 0,
+    "syntax_errors": 1,
+    "file_limit_exceeded": false,
+    "test_functions": 51,
+    "assertion_tests": 44,
+    "public_functions": 1222,
+    "docstring_functions": 950,
+    "annotated_functions": 534,
+    "seed_settings": 12,
+    "argparse_cli": true,
+    "portable_model_loading": 0,
+    "fail_open_handlers": 44,
+    "docstring_coverage": 0.7774,
+    "type_annotation_coverage": 0.437
+  },
+  "notable_positive_evidence": [
+    "CI workflow files were detected.",
+    "Documentation files were detected."
+  ],
+  "notable_risks": [
+    "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.",
+    "C4_exception_handling_clinical_adjacent_paths: WARN"
+  ],
+  "file_hashes_sha256": {},
+  "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
+  "measurement_basis": {
+    "stage_1": "BIO_TERMS regex match in README; disclaimer phrase presence/absence",
+    "stage_2r": "Vocabulary overlap between README, package metadata, docs, and test/CI files",
+    "stage_3_T1": ".github/workflows/ directory contains files",
+    "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
+    "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists",
+    "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists",
+    "stage_3_B2": "bias/limitation vocabulary present in README and docs (regex)",
+    "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+    "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, CLI/seed/example signals",
+    "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
+    "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...)",
+    "C2": "== or hash pin vs >=, ~=, <, > in dependency manifest",
+    "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
+    "C4": "except Exception: pass or except: pass pattern (regex)",
+    "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer"
+  }
+}

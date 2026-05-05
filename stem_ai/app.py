@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import subprocess
 import tempfile
 from pathlib import Path
@@ -30,6 +31,16 @@ def _gradio_major() -> int:
         return int(str(gr.__version__).split(".", 1)[0])
     except (AttributeError, TypeError, ValueError):
         return 4
+
+
+def _blocks_kwargs() -> dict[str, str]:
+    params = inspect.signature(gr.Blocks).parameters
+    return {"css": _CSS} if "css" in params else {}
+
+
+def _launch_kwargs() -> dict[str, str]:
+    params = inspect.signature(gr.Blocks.launch).parameters
+    return {"css": _CSS} if "css" in params else {}
 
 
 def _clone_github(url: str, destination: Path) -> Path:
@@ -219,7 +230,7 @@ _TIER_BADGE = (
     "font-size:12px;font-weight:900;color:#ffffff;"
 )
 
-with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", css=_CSS) as demo:
+with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_blocks_kwargs()) as demo:
     gr.HTML(
         f"""
         <div class="hero">
@@ -271,7 +282,9 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", css=_CS
     )
     gr.Markdown(
         "Paste a public bio/medical AI repository URL below. The demo works best on repositories "
-        "with README/docs/tests/dependency files. Private repositories should be audited locally."
+        "with README/docs/tests/dependency files. Private repositories should be audited locally.\n\n"
+        "> Note: This Space scans the current default branch of a public GitHub repository at run time. "
+        "Results may differ from commit-pinned benchmark artifacts or older local audit snapshots."
     )
     with gr.Row():
         with gr.Column(scale=3):
@@ -337,4 +350,8 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", css=_CS
 
 def launch_demo() -> None:
     """Launch the Space UI."""
-    demo.queue().launch(server_name="0.0.0.0", server_port=7860)
+    demo.queue().launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        **_launch_kwargs(),
+    )
