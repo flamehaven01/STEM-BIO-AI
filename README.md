@@ -10,21 +10,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml">
-    <img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI">
-  </a>
-  <a href="CHANGELOG.md">
-    <img src="https://img.shields.io/badge/stable-v1.5.8-informational.svg" alt="v1.5.8">
-  </a>
-  <a href="pyproject.toml">
-    <img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+">
-  </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0">
-  </a>
-  <a href="https://huggingface.co/spaces/Flamehaven/stem-bio-ai">
-    <img src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-yellow.svg" alt="HF Space">
-  </a>
+  <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.5.8-informational.svg" alt="v1.5.8"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
+  <a href="https://huggingface.co/spaces/Flamehaven/stem-bio-ai"><img src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-yellow.svg" alt="HF Space"></a>
 </p>
 
 ---
