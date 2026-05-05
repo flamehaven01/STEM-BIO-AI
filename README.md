@@ -14,7 +14,7 @@
     <img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI">
   </a>
   <a href="CHANGELOG.md">
-    <img src="https://img.shields.io/badge/stable-v1.5.6-informational.svg" alt="v1.5.6">
+    <img src="https://img.shields.io/badge/stable-v1.5.7-informational.svg" alt="v1.5.7">
   </a>
   <a href="pyproject.toml">
     <img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+">
@@ -230,6 +230,11 @@ stem /path/to/repo --advisory-response FILE     # validate provider JSON respons
 - Responses containing clinical safety, efficacy, regulatory, or medical-advice claims are rejected
 - `allowed_finding_ids` is capped at 40 entries per packet
 
+**Packet hardening added in v1.5.7:**
+- `provider_request` now carries a secret-free request schema plus deterministic argument-validation status
+- `contract_schemas` exports the advisory input/output contract shapes for downstream validators
+- `packet_contract` confirms allowlist parity, snippet omission, and non-negative omission counts before handoff
+
 Full contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
 
 ---
@@ -261,7 +266,7 @@ STEM-BIO-AI/
   docs/                 # API contract, scoring rationale, report previews
   audits/               # Reference benchmark artifacts
   scripts/              # Benchmark and validation scripts
-  tests/                # Regression test suite (58 tests)
+  tests/                # Regression test suite
   app.py                # HuggingFace Spaces / Gradio entry point
   pyproject.toml        # Package metadata and extras
   SKILL.md              # Universal agent skill definition
@@ -294,7 +299,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.5.6},
+  version = {1.5.7},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

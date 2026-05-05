@@ -5,15 +5,19 @@ import json
 
 import stem_ai.detectors as detectors
 from stem_ai.advisory_contract import (
+    advisory_contract_schemas,
     build_advisory_input,
     build_provider_advisory_input,
     known_finding_ids,
+    validate_advisory_input_packet,
     validate_advisory_output,
 )
 from stem_ai.advisory_providers import (
     load_provider_config,
     provider_handoff_metadata,
+    provider_request_schema,
     provider_registry,
+    validate_provider_request_args,
 )
 from stem_ai.cli import main as cli_main
 from stem_ai.evidence import make_finding_id
@@ -662,6 +666,15 @@ def test_advisory_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
     assert "final_score_override            False" in explain
 
 
+def test_advisory_contract_schemas_export_stable_required_fields() -> None:
+    schemas = advisory_contract_schemas()
+
+    assert schemas["schema_version"] == "stem-ai-advisory-contracts-v1.4"
+    assert schemas["advisory_input"]["properties"]["schema_version"]["const"] == "stem-ai-advisory-input-v1.4"
+    assert "evidence_ledger" in schemas["advisory_input"]["required"]
+    assert schemas["advisory_output"]["properties"]["status"]["enum"] == ["valid", "invalid", "error"]
+
+
 def test_provider_config_is_secret_free_and_broad() -> None:
     config = load_provider_config({
         "STEM_AI_ADVISORY_PROVIDER": "openai_compatible",
@@ -679,6 +692,21 @@ def test_provider_config_is_secret_free_and_broad() -> None:
     assert handoff["api_key_present"] is True
     assert "secret-value" not in json.dumps(handoff)
     assert handoff["status"] == "adapter_not_implemented"
+    assert handoff["request_schema"]["schema_version"] == "stem-ai-provider-request-v1.4"
+    assert handoff["args_validation"]["status"] == "valid"
+
+
+def test_provider_request_validator_reports_structured_arg_errors() -> None:
+    schema = provider_request_schema()
+    validation = validate_provider_request_args({
+        "provider": "bad-provider",
+        "timeout_sec": 0,
+        "max_tokens": -1,
+    })
+
+    assert schema["schema_version"] == "stem-ai-provider-request-v1.4"
+    assert validation["status"] == "invalid"
+    assert {error["path"] for error in validation["errors"]} == {"provider", "timeout_sec", "max_tokens"}
 
 
 def test_advisory_packet_mode_adds_provider_request_without_ai_output(tmp_path: Path) -> None:
@@ -692,6 +720,9 @@ def test_advisory_packet_mode_adds_provider_request_without_ai_output(tmp_path: 
     assert packet["packet_profile"] == "provider_budgeted"
     assert packet["provider_request"]["provider"] == "none"
     assert packet["provider_request"]["status"] == "offline_ready"
+    assert packet["provider_request"]["args_validation"]["status"] == "valid"
+    assert packet["contract_schemas"]["schema_version"] == "stem-ai-advisory-contracts-v1.4"
+    assert packet["packet_contract"]["status"] == "valid"
     assert packet["evidence_ledger"]
     assert len(packet["evidence_ledger"]) <= 40
     assert packet["allowed_finding_ids"] == [f["finding_id"] for f in packet["evidence_ledger"]]
@@ -709,6 +740,7 @@ def test_cli_advisory_packet_writes_standalone_input_packet(tmp_path: Path) -> N
     assert packet["policy"]["requires_finding_id_citations"] is True
     assert packet["provider_request"]["registry"]
     assert packet["packet_profile"] == "provider_budgeted"
+    assert packet["packet_contract"]["status"] == "valid"
     assert len(packet["evidence_ledger"]) <= 40
 
 
@@ -726,6 +758,17 @@ def test_provider_advisory_input_budget_and_allowed_ids_are_deterministic(tmp_pa
     assert packet_a["omitted_finding_count"] > 0
     assert packet_a["allowed_finding_ids"] == [finding["finding_id"] for finding in packet_a["evidence_ledger"]]
     assert "shortened finding IDs" in packet_a["provider_prompt_contract"]["forbidden_citations"]
+
+
+def test_advisory_packet_validator_rejects_allowlist_mismatch(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    packet = build_provider_advisory_input(audit_repository(tmp_path))
+    packet["allowed_finding_ids"] = ["BROKEN:README.md:1:001"]
+
+    validation = validate_advisory_input_packet(packet)
+
+    assert validation["status"] == "invalid"
+    assert "allowed_finding_ids_mismatch" in validation["errors"]
 
 
 def test_advisory_response_file_validates_provider_json_without_network(tmp_path: Path) -> None:
@@ -757,6 +800,21 @@ def test_advisory_response_file_validates_provider_json_without_network(tmp_path
     assert advisory["response_contract"]["network_called"] is False
     assert advisory["response_contract"]["citation_repair_attempted"] is False
     assert "source_sha256" in advisory["response_contract"]
+
+
+def test_advisory_validation_reports_payload_shape_errors(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path)
+
+    advisory = validate_advisory_output(result, {
+        "reviewer_notes": [{"claim": "Inspect.", "cites": ["x"]}],
+        "inspection_priorities": {"priority": "high"},
+    })
+
+    assert advisory["status"] == "invalid"
+    assert "invalid_payload_shape" in advisory["errors"]
+    assert any(error["path"] == "reviewer_notes[0].severity" for error in advisory["shape_errors"])
+    assert any(error["path"] == "inspection_priorities" for error in advisory["shape_errors"])
 
 
 def test_advisory_response_file_keeps_malformed_provider_output_invalid(tmp_path: Path) -> None:

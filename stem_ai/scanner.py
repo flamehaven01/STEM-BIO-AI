@@ -9,7 +9,12 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
-from .advisory_contract import build_provider_advisory_input, build_offline_advisory
+from .advisory_contract import (
+    advisory_contract_schemas,
+    build_offline_advisory,
+    build_provider_advisory_input,
+    validate_advisory_input_packet,
+)
 from .advisory_providers import load_provider_config, provider_handoff_metadata
 from .advisory_response import validate_advisory_response_file
 from .detectors import collect_evidence_bundle
@@ -192,7 +197,9 @@ def audit_repository(
         result["ai_advisory"] = build_offline_advisory(result)
     elif advisory == "packet":
         result["ai_advisory_input"] = build_provider_advisory_input(result)
+        result["ai_advisory_input"]["contract_schemas"] = advisory_contract_schemas()
         result["ai_advisory_input"]["provider_request"] = provider_handoff_metadata(load_provider_config())
+        result["ai_advisory_input"]["packet_contract"] = validate_advisory_input_packet(result["ai_advisory_input"])
     if advisory_response_path is not None:
         result["ai_advisory"] = validate_advisory_response_file(result, advisory_response_path)
     return result

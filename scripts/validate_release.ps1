@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.5.6",
+    [string]$ExpectedVersion = "1.5.7",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -124,6 +124,13 @@ try {
         Assert-True ($packet.allowed_finding_ids.Count -eq $packet.evidence_ledger.Count) "allowed_finding_ids count mismatch"
         Assert-True ($null -ne $packet.provider_prompt_contract) "provider_prompt_contract missing"
         Assert-True ([string]$packet.provider_prompt_contract.citation_rule -match "allowed_finding_ids") "citation rule must mention allowed_finding_ids"
+        Assert-True ($null -ne $packet.provider_request.request_schema) "provider request schema missing"
+        Assert-True ($packet.provider_request.request_schema.schema_version -eq "stem-ai-provider-request-v1.4") "provider request schema version mismatch"
+        Assert-True ($packet.provider_request.args_validation.status -eq "valid") "provider request args should validate"
+        Assert-True ($null -ne $packet.contract_schemas) "contract_schemas missing"
+        Assert-True ($packet.contract_schemas.schema_version -eq "stem-ai-advisory-contracts-v1.4") "contract_schemas version mismatch"
+        Assert-True ($null -ne $packet.packet_contract) "packet_contract missing"
+        Assert-True ($packet.packet_contract.status -eq "valid") "packet_contract must validate"
         $packetText = Get-Content -LiteralPath $packetFiles[0].FullName -Raw
         Assert-True (-not $packetText.Contains('"snippet"')) "packet must not include raw snippets"
     }

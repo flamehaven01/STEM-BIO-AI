@@ -10,6 +10,22 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.7] - 2026-05-05
+
+### Added
+- Added advisory packet self-validation via `packet_contract`, checking allowlist parity, snippet omission, and omission-count sanity before any provider handoff.
+- Added exported advisory contract schemas (`contract_schemas`) so downstream validators can consume stable input/output packet shapes without reading repository code.
+- Added secret-free provider request schema export and deterministic provider argument validation metadata under `provider_request`.
+- Added regression coverage for advisory contract schema export, provider request validation, advisory packet allowlist mismatch, and invalid payload-shape handling.
+
+### Changed
+- Updated README, API contract, scoring rationale version markers, and release validation defaults for the v1.5.7 advisory contract-hardening release.
+
+### Fixed
+- Hardened advisory validation so malformed provider payload shapes are rejected as structured contract errors instead of causing a validator crash.
+
+---
+
 ## [1.5.6] - 2026-05-01
 
 ### Fixed

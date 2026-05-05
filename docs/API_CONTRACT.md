@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.5.6
+Version: 1.5.7
 Status: **Stable**
 Supersedes: `docs/API_CONTRACT_V1_5_DRAFT.md`
 
@@ -57,7 +57,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.4"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.5.6"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.5.7"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -148,10 +148,10 @@ Each item in `evidence_ledger` has the following fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `finding_id` | string | `"detector:pattern_id:occurrence"` — no backslashes |
+| `finding_id` | string | `"detector:path:line:occurrence"` using POSIX-style `/` separators — no backslashes |
 | `detector` | string | Detector name (e.g., `"S1_readme_bio_terms"`) |
 | `pattern_id` | string | Pattern version identifier |
-| `status` | string | `"detected"` / `"not_detected"` / `"absent"` / `"not_applicable"` / `"error"` |
+| `status` | string | `"detected"` / `"not_detected"` / `"absent"` / `"not_applicable"` / `"manual_review_required"` / `"error"` |
 | `severity` | string | `"info"` / `"warn"` |
 | `file` | string | Relative path from repo root, or `"."` for repo-level |
 | `line` | integer | Line number (0 if not applicable) |
@@ -184,6 +184,22 @@ They cannot be relaxed by configuration or provider agreement.
 | `--advisory packet` | Export provider-neutral advisory input packet. |
 | `--advisory-response FILE` | Validate a provider-produced JSON response. |
 
+### Advisory Packet Fields (Additive)
+
+Provider packet exports from `--advisory packet` now include the following additive fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `provider_request` | object | Secret-free provider handoff metadata, request schema, and argument-validation status |
+| `provider_request.request_schema_version` | string | `"stem-ai-provider-request-v1.4"` |
+| `provider_request.request_schema` | object | Exported provider request shape for downstream validators |
+| `provider_request.args_validation` | object | `{status, error_count}` summary for normalized provider request arguments |
+| `contract_schemas` | object | Advisory input/output contract schema export bundle |
+| `contract_schemas.schema_version` | string | `"stem-ai-advisory-contracts-v1.4"` |
+| `packet_contract` | object | Deterministic packet self-check result |
+| `packet_contract.status` | string | `"valid"` / `"invalid"` |
+| `packet_contract.errors` | array | Contract-level packet errors such as allowlist mismatch or raw snippet leakage |
+
 ---
 
 ## Python API (Stable for Local Automation)
@@ -195,7 +211,13 @@ additive extensions in minor versions.
 from stem_ai.scanner import audit_repository
 result = audit_repository(target: Path, advisory: str = "none", advisory_response_path: Path | None = None) -> dict
 
-from stem_ai.advisory_contract import build_provider_advisory_input, validate_advisory_output
+from stem_ai.advisory_contract import (
+    advisory_contract_schemas,
+    build_provider_advisory_input,
+    validate_advisory_input_packet,
+    validate_advisory_output,
+)
+from stem_ai.advisory_providers import provider_request_schema, validate_provider_request_args
 from stem_ai.advisory_response import validate_advisory_response_file
 from stem_ai.provider_benchmark import packet_stats_record, response_validation_record, packet_summary
 ```
