@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stem-ai"
+name = "stem-bio-ai"
 version = "1.5.8"
 description = "STEM BIO-AI deterministic evidence-surface scanner for bio/medical AI repositories"
 readme = "README.md"
