@@ -1,7 +1,7 @@
 ---
 name: stem-ai
 description: "Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories. Audits and reviews open-source bio/medical AI repositories for repository evidence-surface triage using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored review-priority reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess evidence signals for any bio-AI, medical AI, or clinical-adjacent repository."
-version: "1.5.11"
+version: "1.6.0"
 author: "Flamehaven"
 license: "Apache-2.0"
 platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigravity", "universal"]
@@ -9,7 +9,7 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 
 # STEM BIO-AI -- Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories
 
-**Version:** 1.5.11
+**Version:** 1.6.0
 **Codename:** Hippocratic_Code_Engine_Unified
 **Runtime:** LLM-Native + AI CLI (Universal)
 
@@ -65,9 +65,9 @@ stem-ai/
   SKILL.md                    <-- You are here (entry point)
   memory/                     <-- MICA v0.2.0 memory layer (load first)
     mica.yaml                 <-- composition contract
-    stem-ai.mica.v1.5.11.json  <-- active archive (selected by mica.yaml)
-    stem-ai-playbook.v1.5.11.md <-- active session protocol (selected by mica.yaml)
-    stem-ai-lessons.v1.5.11.md  <-- active lessons history (selected by mica.yaml)
+    stem-ai.mica.v1.6.0.json  <-- active archive (selected by mica.yaml)
+    stem-ai-playbook.v1.6.0.md <-- active session protocol (selected by mica.yaml)
+    stem-ai-lessons.v1.6.0.md  <-- active lessons history (selected by mica.yaml)
   spec/                       <-- Core rubric, scoring, execution rules
   discrimination/             <-- YES/NO example pairs for scoring consistency
   templates/                  <-- Output templates (report, claim matrix, etc.)
@@ -85,7 +85,7 @@ When activated, load files in this order:
    - Load the archive file referenced by `memory/mica.yaml` -- activate 18 IMMUTABLE rules as design_invariants
    - Load the playbook file referenced by `memory/mica.yaml` -- session protocol and rubric drift guard
    - Run PCT self-tests (PCT-001 through PCT-007). Halt on PCT-001/002/003 failure.
-   - Report: `[MICA READY] stem-ai-bio v1.5.11 | invariants: 18 active`
+   - Report: `[MICA READY] stem-ai-bio v1.6.0 | invariants: 18 active`
 
 1. **Always load next:** `spec/STEM-AI_v1.1.2_CORE.md`
    This is the canonical rubric and execution instruction.
@@ -130,6 +130,4 @@ When activated, load files in this order:
 | T1 Quarantine | 40-54 | High risk -- independent verification required |
 | T2 Caution | 55-69 | Research reference only -- clinical automation forbidden |
 | T3 Review | 70-84 | Supervised clinical pilot eligible -- oversight mandatory |
-| T4 Approved | 85-100 | Trust approved -- regulatory review alongside deployment |
-
-
+| T4 Candidate | 85-100 | Strongest structural audit-readiness signal -- clinical deployment still requires independent validation |

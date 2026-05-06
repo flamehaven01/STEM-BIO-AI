@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.5.11-informational.svg" alt="v1.5.11"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.0-informational.svg" alt="v1.6.0"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -71,6 +71,7 @@ Clone the target repository first; the CLI operates on local paths only.
 - Scoring rationale: [`docs/SCORING_RATIONALE.md`](docs/SCORING_RATIONALE.md)
 - Deterministic diagnostics: [`docs/DETERMINISTIC_DIAGNOSTICS.md`](docs/DETERMINISTIC_DIAGNOSTICS.md)
 - Regulatory traceability mapping: [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
+- Regulatory basis registry: [`docs/regulatory_basis_registry.v1.json`](docs/regulatory_basis_registry.v1.json)
 
 ---
 
@@ -326,7 +327,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.5.11},
+  version = {1.6.0},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

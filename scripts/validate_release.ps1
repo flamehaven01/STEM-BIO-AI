@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.5.11",
+    [string]$ExpectedVersion = "1.6.0",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -64,7 +64,7 @@ try {
         $result = Get-Content -LiteralPath $jsonFiles[0].FullName -Raw | ConvertFrom-Json
 
         Assert-True ($result.stem_ai_version -eq $ExpectedVersion) "stem_ai_version mismatch: $($result.stem_ai_version)"
-        Assert-True ($result.schema_version -eq "stem-ai-local-cli-result-v1.4") "schema_version mismatch: $($result.schema_version)"
+        Assert-True ($result.schema_version -eq "stem-ai-local-cli-result-v1.6") "schema_version mismatch: $($result.schema_version)"
         Assert-True ($null -ne $result.evidence_ledger -and $result.evidence_ledger.Count -gt 0) "evidence_ledger missing or empty"
         Assert-True ($null -ne $result.detector_summary) "detector_summary missing"
         Assert-True ($null -ne $result.ast_signal_summary) "ast_signal_summary missing"

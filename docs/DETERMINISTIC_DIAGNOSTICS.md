@@ -1,5 +1,5 @@
 # Deterministic Diagnostics for Bio-AI Integrity
-## Version 1.2.1 (Implemented Deterministic Lane, Optional AI-Assisted Review)
+## Version 1.3.0 (Implemented Deterministic Lane, Optional AI-Assisted Review)
 
 This document is the active deterministic diagnostics specification for STEM-BIO-AI. The local lane is implemented as evidence-bearing repository diagnostics. The optional AI lane remains advisory, opt-in, and non-authoritative.
 
@@ -22,7 +22,7 @@ The local deterministic lane is authoritative for hard findings. The AI lane is 
 
 ---
 
-## 1A. Implementation Status (STEM BIO-AI v1.5.11)
+## 1A. Implementation Status (STEM BIO-AI v1.6.0)
 
 Implemented now:
 1. `SMILES-DECEPT` Lane A0 conservative surface scanner
@@ -31,6 +31,7 @@ Implemented now:
 4. `TRACE-MANIFEST` traceability surface detection
 5. `RUN-TRACE` bio-tool subprocess heuristics
 6. Markdown / explain report surfacing for bio deterministic diagnostics
+7. Registry-driven regulatory traceability attachment using deterministic evidence without score override
 
 Implemented as evidence-only:
 1. Findings are emitted into `evidence_ledger`

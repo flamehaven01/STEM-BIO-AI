@@ -1,5 +1,5 @@
 # STEM-BIO-AI Regulatory Traceability Assistant
-## Version 1.2.2 (Structural Audit-Readiness Mapping)
+## Version 1.3.0 (Registry-Driven Structural Audit-Readiness Mapping)
 
 **Positioning:** STEM-BIO-AI is a **pre-audit structural evidence tool**. It does not determine legal compliance, regulatory clearance, clinical certification, market authorization, or deployer conformance. It identifies observable technical and governance signals that may support a later formal audit.
 
@@ -7,7 +7,30 @@
 
 ---
 
-## 1. Confidence Model for Regulatory Mapping
+## 1. Regulatory Basis Note for Reports
+When this layer is surfaced in Markdown, PDF, or explain-style reports, the regulatory basis should appear as a **small boxed note** below the traceability section rather than near the main score or tier.
+
+Recommended wording:
+
+> **Regulatory basis note**
+> Aligned to current official source classes as of May 2026: EU AI Act (Regulation (EU) 2024/1689), FDA QMSR, FDA AI-enabled device guidance themes, and IMDRF SaMD/GMLP frameworks.
+> This is a traceability aid, not a compliance or clearance determination.
+
+Presentation guidance:
+- Keep this note to **2-3 lines**
+- Use **small subdued text** (roughly `13-15px` in UI surfaces)
+- Render in a **visually separate muted box/panel**
+- Do **not** place it adjacent to `Final Score` or `T0-T4`
+
+Automation guidance:
+- Treat the report note as a rendered view of `docs/regulatory_basis_registry.v1.json`
+- Validate that registry against `docs/regulatory_basis_registry.schema.json`
+- Generate the boxed note from `display_note.title`, `body_line_1`, and `body_line_2`
+- Use `sources[*].status`, `published_date`, and `effective_date` to drive freshness checks and update prompts
+
+---
+
+## 2. Confidence Model for Regulatory Mapping
 Every mapping in this document should be read with one of five confidence levels:
 
 - **Strong**: direct structural evidence aligns with a requirement class
@@ -20,7 +43,7 @@ This confidence level applies to the **mapping relationship**, not to legal acce
 
 ---
 
-## 2. EU AI Act (Regulation 2024/1689)
+## 3. EU AI Act (Regulation 2024/1689)
 Mapping of observable signals to high-risk requirement families.
 
 | AI Act Article | Requirement Family | STEM-BIO-AI Evidence Class | Observable Evidence | Mapping Confidence | Boundary |
@@ -34,7 +57,7 @@ Mapping of observable signals to high-risk requirement families.
 
 ---
 
-## 3. IMDRF / SaMD Evidence Families
+## 4. IMDRF / SaMD Evidence Families
 STEM-BIO-AI can support pre-audit review against common SaMD evidence families, but only at the level of structural readiness signals.
 
 | SaMD Evidence Family | STEM-BIO-AI Evidence Class | Observable Evidence | Mapping Confidence | Boundary |
@@ -48,7 +71,7 @@ STEM-BIO-AI can support pre-audit review against common SaMD evidence families, 
 
 ---
 
-## 4. FDA / GMLP / PCCP-Oriented Readiness Signals
+## 5. FDA / GMLP / PCCP-Oriented Readiness Signals
 These mappings are included because iterative AI/ML device development often depends on change management and lifecycle evidence.
 
 | Framework | STEM-BIO-AI Evidence Class | Observable Evidence | Mapping Confidence | Boundary |
@@ -59,7 +82,7 @@ These mappings are included because iterative AI/ML device development often dep
 
 ---
 
-## 5. Evidence Grading vs. Empirical Compliance
+## 6. Evidence Grading vs. Empirical Compliance
 To avoid compliance theater, separate the **signal** from the **requirement**.
 
 | Signal detected by STEM-BIO-AI | Requirement Family | Alignment Status |
@@ -72,7 +95,7 @@ To avoid compliance theater, separate the **signal** from the **requirement**.
 
 ---
 
-## 6. New Deterministic Diagnostics and Regulatory Relevance
+## 7. New Deterministic Diagnostics and Regulatory Relevance
 The proposed deterministic diagnostics strengthen traceability only when described conservatively.
 
 | Detector | Primary Value | Likely Regulatory Relevance | Mapping Confidence | Boundary |
@@ -86,7 +109,7 @@ The proposed deterministic diagnostics strengthen traceability only when describ
 
 ---
 
-## 7. Mandatory Warning for Institutional Buyers
+## 8. Mandatory Warning for Institutional Buyers
 STEM-BIO-AI detects the **presence of structural evidence and accountability artifacts**.
 
 - `T0-T1`: insufficient visible scaffolding for serious pre-audit confidence
@@ -107,7 +130,7 @@ Use STEM-BIO-AI as a **pre-audit gate** and **traceability assistant**. Low scor
 
 ---
 
-## 8. ISO 13485:2016 / QMS-Oriented Mapping
+## 9. ISO 13485:2016 / QMS-Oriented Mapping
 STEM-BIO-AI can provide automated structural signals relevant to quality-system review in medical software contexts.
 
 - **7.3.3 Design and development outputs**  
@@ -123,7 +146,7 @@ STEM-BIO-AI can provide automated structural signals relevant to quality-system 
 
 ---
 
-## 9. Recommended Report Output Shape
+## 10. Recommended Report Output Shape
 If regulatory traceability is surfaced in reports, it should remain explicit about evidence type and strength.
 
 - `evidence_strength`: quality of the observed repository evidence itself
@@ -151,7 +174,92 @@ These fields may differ. For example, a strong manifest artifact may still map o
 
 ---
 
-## 10. Implementation Note
+## 11. Registry-Driven Rendering Algorithm
+The regulatory basis note and source references should be rendered from `docs/regulatory_basis_registry.v1.json`, not hand-maintained in multiple report templates.
+
+Recommended algorithm:
+1. Load `regulatory_basis_registry.v1.json`
+2. Validate against `docs/regulatory_basis_registry.schema.json`
+3. Render the small boxed note from:
+   - `display_note.title`
+   - `display_note.body_line_1`
+   - `display_note.body_line_2`
+4. Use `sources[*].used_for` to attach source families to:
+   - stage-level notes
+   - final synthesis
+   - machine-readable report metadata
+5. Raise `review_required` if:
+   - `as_of` is stale relative to the current reporting month
+   - a required source family is missing
+   - a required source is present only as `draft_guidance`
+6. Keep the rendered note identical across Markdown, PDF, and explain-text surfaces
+
+Recommended machine-readable basis object:
+
+```json
+{
+  "regulatory_basis": {
+    "registry_version": "stem-ai-regulatory-basis-registry-v1",
+    "as_of": "May 2026",
+    "review_required": false,
+    "source_ids": [
+      "eu_ai_act_2024_1689",
+      "fda_qmsr",
+      "fda_mlmd_transparency_2024",
+      "fda_pccp_2025",
+      "imdrf_samd_clinical_eval_2017",
+      "imdrf_gmlp_2025"
+    ]
+  }
+}
+```
+
+This basis object should remain separate from score computation and formal tiering.
+
+---
+
+## 12. Per-Stage Traceability Note Model
+Traceability should be attached where the evidence is observed, not only in a final appendix.
+
+Recommended structure:
+
+```json
+{
+  "stage_traceability": {
+    "stage_1": [
+      {
+        "requirement_id": "EU_AI_ACT_ARTICLE_13",
+        "mapping_confidence": "weak",
+        "evidence_strength": "weak",
+        "status": "signal_only",
+        "finding_refs": ["R3_clinical_disclaimer:README.md:001"],
+        "note": "Boundary and intended-use language is relevant to transparency scaffolding only."
+      }
+    ],
+    "stage_3": [
+      {
+        "requirement_id": "EU_AI_ACT_ARTICLE_12",
+        "mapping_confidence": "weak_moderate",
+        "evidence_strength": "moderate",
+        "status": "partially_aligned",
+        "finding_refs": ["T3_changelog_release_hygiene:CHANGELOG.md:001"],
+        "note": "Change-history scaffolding is present, but runtime log completeness is not established."
+      }
+    ]
+  }
+}
+```
+
+Recommended stage attachment policy:
+- `stage_1`: intended-use, disclaimer, claim-boundary, misuse
+- `stage_2r`: contradictions, unsupported workflow, repeated limitation signals
+- `stage_3`: tests, provenance, bias, changelog, governance memory
+- `stage_4`: reproducibility, manifests, checksums, runtime trace schemas
+- `bio_diagnostics`: parser guards, silent-mock fallback, subprocess safety, SMILES hygiene
+
+---
+
+## 13. Implementation Note
 Reports should describe this layer as:
 
 - `Regulatory Traceability Assistant`, or

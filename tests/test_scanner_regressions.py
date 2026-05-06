@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
+from datetime import date
 
 import stem_ai.detectors as detectors
 from stem_ai.advisory_contract import (
+    _fallback_citations,
     advisory_contract_schemas,
     build_advisory_input,
     build_provider_advisory_input,
@@ -41,6 +43,7 @@ from stem_ai.reasoning_model import (
     lane_coherence,
     unique_token_count,
 )
+from stem_ai.regulatory_traceability import build_regulatory_basis
 from stem_ai.redaction import redact_object, redaction_policy, sanitize_artifact_text, secret_scan
 from stem_ai.render import _explain_status_label, render_explain, render_markdown
 from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
@@ -602,7 +605,7 @@ def test_evidence_ledger_and_ast_summary_are_observation_only(tmp_path: Path) ->
 
     result = audit_repository(tmp_path)
 
-    assert result["schema_version"] == "stem-ai-local-cli-result-v1.4"
+    assert result["schema_version"] == "stem-ai-local-cli-result-v1.6"
     assert result["score"]["stage_1_readme_intent"] == 70
     assert "evidence_ledger" in result
     assert "detector_summary" in result
@@ -1684,3 +1687,110 @@ def test_stage3_bias_three_tiers() -> None:
     assert no_bias == 0
     assert vocab_only == 8
     assert with_measurement == 15
+
+
+def test_audit_repository_emits_regulatory_basis_and_stage_traceability(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio repository.\n\n## Limitations\nResearch use only. Not for clinical use.\n"
+        "Dataset provenance and subgroup analysis are documented.\n",
+    )
+    _write(tmp_path / "CHANGELOG.md", "# Changelog\n\n## v1.0.1\n- Fixed bug in pipeline.\n")
+    _write(tmp_path / "requirements.txt", "numpy==1.26.4\n")
+    _write(tmp_path / "checksums.txt", "abc123  model.bin\n")
+
+    result = audit_repository(tmp_path)
+
+    assert result["regulatory_basis"]["registry_version"] == "stem-ai-regulatory-basis-registry-v1"
+    assert result["regulatory_basis"]["note"]["title"] == "Regulatory basis note"
+    assert result["stage_traceability"]["stage_1"]
+    assert result["stage_traceability"]["stage_3"]
+    assert result["stage_traceability"]["stage_4"]
+    assert result["regulatory_traceability"]["version"] == "stem-ai-reg-trace-v1.6"
+    assert "pre-audit traceability aid" in result["regulatory_traceability"]["summary"]
+
+
+def test_stage1_traceability_does_not_treat_missing_boundary_as_alignment(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Clinical decision support prototype for patient triage.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    stage1 = result["stage_traceability"]["stage_1"]
+
+    assert stage1
+    assert stage1[0]["status"] == "not_detected"
+    assert "transparency scaffolding" not in result["regulatory_traceability"]["summary"]
+
+
+def test_markdown_and_explain_include_regulatory_basis_note(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio repository. Research use only. Not for clinical use.\n",
+    )
+    _write(tmp_path / "CHANGELOG.md", "# Changelog\n\n## v1.0.1\n- Fixed bug in pipeline.\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="brief", pages=1)
+    explain = render_explain(result)
+
+    assert "Regulatory Traceability Assistant" in markdown
+    assert "Regulatory basis note" in markdown
+    assert "This is a traceability aid, not a compliance or clearance determination." in markdown
+    assert "Regulatory Traceability Assistant" in explain
+    assert "Regulatory basis note" in explain
+
+
+def test_bio_markdown_uses_scope_specific_note_when_detector_not_detected(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="brief", pages=1)
+
+    assert "No malformed or suspicious SMILES-like strings detected by conservative surface checks." in markdown
+
+
+def test_write_outputs_json_remains_valid_with_placeholder_credential_snippet(tmp_path: Path) -> None:
+    from stem_ai.render import write_outputs
+
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(
+        tmp_path / "tests" / "test_provider.py",
+        'provider = ICAMetadataProvider(api_key="super-secret-key", session=session)\n',
+    )
+
+    result = audit_repository(tmp_path)
+    out_dir = tmp_path / "out"
+    write_outputs(result, out_dir, mode="brief", pages=1, fmt="json", explain=False)
+
+    [json_path] = list(out_dir.glob("*_experiment_results.json"))
+    parsed = json.loads(json_path.read_text(encoding="utf-8"))
+    assert parsed["schema_version"].startswith("stem-ai-local-cli-result")
+
+
+def test_regulatory_basis_review_required_is_false_for_current_registry_month() -> None:
+    basis = build_regulatory_basis(date(2026, 5, 6))
+
+    assert basis["review_required"] is False
+    assert basis["review_reasons"] == []
+
+
+def test_regulatory_basis_review_required_flips_when_registry_is_stale() -> None:
+    basis = build_regulatory_basis(date(2026, 6, 1))
+
+    assert basis["review_required"] is True
+    assert "registry_as_of_stale" in basis["review_reasons"]
+
+
+def test_fallback_citations_exclude_not_detected_and_absent_statuses() -> None:
+    result = {
+        "evidence_ledger": [
+            {"finding_id": "A", "status": "not_detected", "severity": "info", "detector": "D1", "file": ".", "line": 0},
+            {"finding_id": "B", "status": "absent", "severity": "info", "detector": "D2", "file": ".", "line": 0},
+            {"finding_id": "C", "status": "detected", "severity": "warn", "detector": "D3", "file": ".", "line": 0},
+            {"finding_id": "D", "status": "error", "severity": "error", "detector": "D4", "file": ".", "line": 0},
+        ]
+    }
+
+    assert _fallback_citations(result) == ["D", "C"]

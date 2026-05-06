@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flamehaven01.github.io/STEM-BIO-AI/docs/regulatory_basis_registry.schema.json",
+  "title": "STEM BIO-AI Regulatory Basis Registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "as_of",
+    "display_note",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "as_of": {
+      "type": "string",
+      "description": "Human-readable month or date used in report note, e.g. 'May 2026'"
+    },
+    "display_note": {
+      "type": "object",
+      "required": [
+        "title",
+        "body_line_1",
+        "body_line_2"
+      ],
+      "properties": {
+        "title": { "type": "string" },
+        "body_line_1": { "type": "string" },
+        "body_line_2": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "jurisdiction",
+          "title",
+          "status",
+          "url",
+          "used_for"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "jurisdiction": { "type": "string" },
+          "title": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "law_in_force",
+              "final_guidance",
+              "final_framework",
+              "draft_guidance"
+            ]
+          },
+          "published_date": { "type": ["string", "null"] },
+          "effective_date": { "type": ["string", "null"] },
+          "url": { "type": "string" },
+          "used_for": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

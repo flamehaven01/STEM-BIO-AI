@@ -1,8 +1,8 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.5.9
+Version: 1.6.0
 Status: **Stable**
-Supersedes: `docs/API_CONTRACT_V1_5_DRAFT.md`
+Supersedes: historical v1.5 draft contract
 
 ---
 
@@ -56,7 +56,7 @@ All fields below are present in every `audit_repository()` result.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `schema_version` | string | `"stem-ai-local-cli-result-v1.4"` — bumped on breaking change |
+| `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
 | `stem_ai_version` | string | Package version (e.g. `"1.5.9"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
@@ -137,10 +137,42 @@ Stage 4 does not affect `score.final_score` or `score.formal_tier`.
 | `detector_summary` | object | `{total_findings, by_status, by_detector}` |
 | `ast_signal_summary` | object | AST analysis counts and coverage ratios |
 | `reasoning_model` | object | Diagnostic layer (observation-only, does not affect score) |
+| `regulatory_basis` | object | Registry-driven regulatory basis note metadata and source IDs |
+| `stage_traceability` | object | Per-stage traceability notes keyed by `stage_1`, `stage_2r`, `stage_3`, `stage_4`, `bio_diagnostics` |
+| `regulatory_traceability` | object | Flattened traceability summary layer with additive `items` list |
 | `measurement_basis` | object | Per-stage description of detection method |
 | `notable_positive_evidence` | array | Human-readable positive signals |
 | `notable_risks` | array | Human-readable risk signals |
 | `file_hashes_sha256` | object | SHA-256 hashes of key files (README, manifests) |
+
+### Regulatory Traceability Layer (Additive)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `regulatory_basis.registry_version` | string | Registry identifier, currently `"stem-ai-regulatory-basis-registry-v1"` |
+| `regulatory_basis.as_of` | string | Human-readable freshness label used in report note |
+| `regulatory_basis.review_required` | boolean | True when the basis registry should be reviewed for staleness or draft-only dependencies |
+| `regulatory_basis.review_reasons` | array | Machine-readable reason codes such as `registry_as_of_stale` or `required_source_missing` |
+| `regulatory_basis.source_ids` | array | Source IDs loaded from the registry |
+| `regulatory_basis.note` | object | Small report note `{title, body_line_1, body_line_2}` |
+| `stage_traceability.*` | array | Per-stage traceability note records; each record is additive |
+| `regulatory_traceability.version` | string | Currently `"stem-ai-reg-trace-v1.6"` |
+| `regulatory_traceability.summary` | string | Human-readable synthesis paragraph |
+| `regulatory_traceability.items` | array | Flattened traceability note records across stages |
+
+Each traceability note record contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `stage` | string | `stage_1`, `stage_2r`, `stage_3`, `stage_4`, or `bio_diagnostics` |
+| `requirement_id` | string | Requirement family key such as `EU_AI_ACT_ARTICLE_12` |
+| `mapping_confidence` | string | `strong`, `moderate`, `weak_moderate`, `weak`, or `not_assessed` |
+| `evidence_strength` | string | Strength of observed repository evidence |
+| `status` | string | `aligned`, `partially_aligned`, `signal_only`, `not_detected`, or `not_assessed` |
+| `not_assessed` | array | Explicit out-of-scope or unavailable factors |
+| `finding_refs` | array | Finding IDs or stable rubric/evidence references |
+| `source_ids` | array | Source IDs from the regulatory basis registry |
+| `note` | string | Human-readable bounded interpretation |
 
 ### EvidenceFinding Record (Locked)
 

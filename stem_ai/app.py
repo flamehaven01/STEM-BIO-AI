@@ -238,7 +238,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
           <p>Deterministic evidence-surface scanner for bio/medical AI repositories.
           No LLM &nbsp;·&nbsp; No API key &nbsp;·&nbsp; No model runtime &nbsp;·&nbsp; No secrets sent anywhere.<br>
           Scans README, docs, CI, tests, changelogs, and manifests — returns a T0–T4 triage tier
-          with JSON, Markdown, and PDF artifacts.</p>
+          with JSON, Markdown, and PDF artifacts, plus an evidence-only regulatory traceability note layer.</p>
         </div>
         """
     )

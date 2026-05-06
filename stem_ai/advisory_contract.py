@@ -230,19 +230,23 @@ def _offline_inspection_priorities(result: dict[str, Any]) -> list[dict[str, Any
     priorities: list[dict[str, Any]] = []
     reasoning = result.get("reasoning_model", {})
     risk_gate = reasoning.get("evidence_risk_gate", {})
-    if risk_gate.get("status") == "review_required":
-        priorities.append({
-            "priority": "high",
-            "reason": "Reasoning diagnostics report evidence risk beyond the advisory gate.",
-            "cites": _fallback_citations(result),
-        })
+    if risk_gate.get("status") == "heuristic_review_gate":
+        cites = _fallback_citations(result)
+        if cites:
+            priorities.append({
+                "priority": "high",
+                "reason": "Reasoning diagnostics report evidence risk beyond the advisory gate.",
+                "cites": cites,
+            })
     uncertainty = reasoning.get("uncertainty_budget", {})
     if uncertainty.get("status") == "manual_review_required":
-        priorities.append({
-            "priority": "high",
-            "reason": "Reasoning diagnostics report high uncertainty.",
-            "cites": _fallback_citations(result),
-        })
+        cites = _fallback_citations(result)
+        if cites:
+            priorities.append({
+                "priority": "high",
+                "reason": "Reasoning diagnostics report high uncertainty.",
+                "cites": cites,
+            })
     return priorities
 
 
@@ -264,8 +268,8 @@ def _first_finding_ids(
 def _fallback_citations(result: dict[str, Any], limit: int = 3) -> list[str]:
     ids = [
         str(finding.get("finding_id"))
-        for finding in result.get("evidence_ledger", [])
-        if finding.get("status") in {"detected", "error", "not_detected", "absent"}
+        for finding in _ranked_findings(result)
+        if finding.get("status") in {"detected", "error", "manual_review_required"}
     ]
     return ids[:limit]
 

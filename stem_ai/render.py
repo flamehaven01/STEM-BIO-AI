@@ -94,14 +94,12 @@ def write_outputs(
     if fmt in {"json", "all"}:
         p = output_dir / f"{stem}_experiment_results.json"
         payload = json.dumps(safe_result, indent=2)
-        payload, _ = sanitize_artifact_text(payload)
         p.write_text(payload, encoding="utf-8")
         created.append(p)
 
     if "ai_advisory_input" in safe_result:
         p = output_dir / f"{stem}_advisory_input.json"
         payload = json.dumps(safe_result["ai_advisory_input"], indent=2)
-        payload, _ = sanitize_artifact_text(payload)
         p.write_text(payload, encoding="utf-8")
         created.append(p)
 
@@ -160,6 +158,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         _markdown_reasoning_summary(result.get("reasoning_model", {})),
         "",
         *_markdown_advisory_section(result.get("ai_advisory")),
+        *_markdown_regulatory_section(result),
         "## Code Integrity",
     ]
     for key, item in result["code_integrity"].items():
@@ -222,6 +221,7 @@ def render_explain(result: dict[str, Any]) -> str:
     for detector, findings in grouped.items():
         out += _explain_detector_group(detector, findings)
     out += _explain_bio_section(result)
+    out += _explain_regulatory_section(result)
     out += _explain_ast_section(result.get("ast_signal_summary", {}))
     out += _explain_s4_section(result.get("stage_4_rubric", {}))
     out += _explain_reasoning_section(result.get("reasoning_model", {}))
@@ -239,17 +239,19 @@ def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
     uncertainty = reasoning.get("uncertainty_budget", {})
     gate = reasoning.get("evidence_risk_gate", {})
     envelope = reasoning.get("confidence_envelope", {})
+    policy = reasoning.get("policy", {})
     return (
-        f"Diagnostic-only model `{reasoning.get('version', 'unknown')}`; "
-        f"lane coherence `{coherence.get('status', 'unknown')}` "
+        f"Diagnostic-only heuristic `{reasoning.get('version', 'unknown')}` "
+        f"({policy.get('weights', 'uncalibrated')}); "
+        f"lane consistency `{coherence.get('status', 'unknown')}` "
         f"({coherence.get('overall', 'n/a')}), "
-        f"uncertainty `{uncertainty.get('status', 'unknown')}` "
+        f"uncertainty band `{uncertainty.get('status', 'unknown')}` "
         f"({uncertainty.get('uncertainty', 'n/a')}), "
-        f"risk gate `{gate.get('status', 'unknown')}` "
+        f"risk heuristic `{gate.get('status', 'unknown')}` "
         f"({gate.get('evidence_risk', 'n/a')}), "
         f"confidence envelope {envelope.get('lower', 'n/a')}-"
         f"{envelope.get('upper', 'n/a')}. "
-        "This diagnostic layer does not override the final score."
+        "This heuristic layer does not override the final score."
     )
 
 
@@ -282,8 +284,45 @@ def _markdown_bio_section(result: dict[str, Any]) -> list[str]:
             f for f in result.get("evidence_ledger", [])
             if f.get("detector") == detector and f.get("status") == "detected"
         ]
-        note = findings[0].get("explanation", "") if findings else "No active finding detected."
+        note = findings[0].get("explanation", "") if findings else _detector_scope_note(result, detector)
         lines.append(f"- **{label}:** {', '.join(parts) if parts else 'no findings'} — {note}")
+    return lines
+
+
+def _markdown_regulatory_section(result: dict[str, Any]) -> list[str]:
+    basis = result.get("regulatory_basis", {})
+    traceability = result.get("stage_traceability", {})
+    if not basis and not traceability:
+        return []
+    note = basis.get("note", {})
+    lines = [
+        "## Regulatory Traceability Assistant",
+        "",
+        f"> **{note.get('title', 'Regulatory basis note')}**",
+        f"> {note.get('body_line_1', '')}",
+        f"> {note.get('body_line_2', '')}",
+        "",
+    ]
+    if basis.get("review_required"):
+        reasons = ", ".join(basis.get("review_reasons", []))
+        lines.append(f"> Review required: `{reasons}`")
+        lines.append("")
+    for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
+        items = traceability.get(stage_key, [])
+        if not items:
+            continue
+        lines.append(f"### {stage_key.replace('_', ' ').title()}")
+        for item in items:
+            lines.append(
+                f"- **{item['requirement_id']}** — {item['status']} "
+                f"(mapping confidence: {item['mapping_confidence']}, evidence strength: {item['evidence_strength']})"
+            )
+            lines.append(f"  - {item['note']}")
+        lines.append("")
+    summary = result.get("regulatory_traceability", {}).get("summary")
+    if summary:
+        lines.append(f"**Summary:** {summary}")
+        lines.append("")
     return lines
 
 
@@ -360,6 +399,7 @@ def _explain_reasoning_section(reasoning: dict[str, Any]) -> list[str]:
     policy = reasoning.get("policy", {})
     lines.append(f"  mode                            {policy.get('mode', 'unknown')}")
     lines.append(f"  final_score_override            {policy.get('final_score_override', False)}")
+    lines.append(f"  weights                         {policy.get('weights', 'unknown')}")
     for key in ("evidence_budget", "confidence_envelope", "lane_coherence",
                 "uncertainty_budget", "evidence_risk_gate"):
         item = reasoning.get(key, {})
@@ -383,6 +423,38 @@ def _explain_advisory_section(advisory: dict[str, Any] | None) -> list[str]:
     return lines
 
 
+def _explain_regulatory_section(result: dict[str, Any]) -> list[str]:
+    basis = result.get("regulatory_basis", {})
+    traceability = result.get("stage_traceability", {})
+    if not basis and not traceability:
+        return []
+    note = basis.get("note", {})
+    lines = [_EXPLAIN_SEP, "Regulatory Traceability Assistant", ""]
+    lines.append(f"  {note.get('title', 'Regulatory basis note')}")
+    lines.append(f"  {note.get('body_line_1', '')}")
+    lines.append(f"  {note.get('body_line_2', '')}")
+    if basis.get("review_required"):
+        lines.append(f"  review_required                 {', '.join(basis.get('review_reasons', []))}")
+    lines.append("")
+    for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
+        items = traceability.get(stage_key, [])
+        if not items:
+            continue
+        lines.append(f"  {stage_key:<31}")
+        for item in items:
+            lines.append(
+                f"    {item['requirement_id']}: {item['status']} "
+                f"(mapping={item['mapping_confidence']}, evidence={item['evidence_strength']})"
+            )
+            lines.append(f"      note: {item['note']}")
+    summary = result.get("regulatory_traceability", {}).get("summary")
+    if summary:
+        lines.append("")
+        lines.append(f"  summary                         {summary}")
+    lines.append("")
+    return lines
+
+
 def _explain_status_label(statuses: set[str]) -> str:
     for candidate in ("error", "detected", "not_detected", "absent", "not_applicable"):
         if candidate in statuses:
@@ -398,6 +470,18 @@ def _bio_detector_rows(result: dict[str, Any]) -> list[tuple[str, str, dict[str,
         if counts:
             rows.append((detector, label, counts))
     return rows
+
+
+def _detector_scope_note(result: dict[str, Any], detector: str) -> str:
+    ledger = result.get("evidence_ledger", [])
+    for status in ("error", "detected", "not_detected", "not_applicable", "absent"):
+        finding = next(
+            (item for item in ledger if item.get("detector") == detector and item.get("status") == status),
+            None,
+        )
+        if finding and finding.get("explanation"):
+            return str(finding["explanation"])
+    return "No findings were emitted under current detector scope."
 
 
 # ── reportlab: document entry point ──────────────────────────────────────────
@@ -447,6 +531,8 @@ def _page1_executive(result: dict[str, Any], mode: str, pages: int) -> list[Any]
     story += _stage_cards(result)
     story.append(Spacer(1, 3 * mm))
     story += _integrity_and_risks(result)
+    story.append(Spacer(1, 2 * mm))
+    story += _regulatory_basis_box(result)
     story += _footer_block()
     return story
 
@@ -650,13 +736,87 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
     ]))
 
-    two_col = Table([[ci_tbl, right_tbl]], colWidths=["48%", "52%"])
+    left_stack = [ci_tbl]
+    bio_tbl = _bio_diagnostics_pdf_table(result)
+    if bio_tbl is not None:
+        left_stack += [Spacer(1, 2 * mm), bio_tbl]
+    left_col = Table([[item] for item in left_stack], colWidths=["100%"])
+    left_col.setStyle(TableStyle([
+        ("LEFTPADDING",  (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING",   (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING",(0, 0), (-1, -1), 0),
+        ("VALIGN",       (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    two_col = Table([[left_col, right_tbl]], colWidths=["48%", "52%"])
     two_col.setStyle(TableStyle([
         ("LEFTPADDING",  (0, 0), (-1, -1), 3),
         ("RIGHTPADDING", (0, 0), (-1, -1), 3),
         ("VALIGN",       (0, 0), (-1, -1), "TOP"),
     ]))
     return [two_col]
+
+
+def _bio_diagnostics_pdf_table(result: dict[str, Any]) -> Table | None:
+    rows = _bio_detector_rows(result)
+    if not rows:
+        return None
+    table_rows: list[list[Any]] = [[
+        Paragraph(f'<font color="{_WHITE}"><b>Bio Deterministic Diagnostics</b></font>', _style("BDH1", 8.5, 11, _WHITE, True)),
+    ]]
+    for _, label, counts in rows:
+        status_parts = [f"{status}={counts[status]}" for status in ("detected", "not_detected", "not_applicable", "warn", "error", "absent") if counts.get(status)]
+        table_rows.append([
+            Paragraph(
+                f'<font color="{_DGRAY}" size="7.5"><b>{_xt(label)}</b><br/>{_xt(", ".join(status_parts) if status_parts else "no findings")}</font>',
+                _style(f"BD_{label[:6]}", 7.5, 10, _DGRAY),
+            )
+        ])
+    tbl = Table(table_rows, colWidths=["100%"])
+    tbl.setStyle(TableStyle([
+        ("BACKGROUND",    (0, 0), (0, 0), _hx(_PURPLE)),
+        ("ROWBACKGROUNDS",(0, 1), (0, -1), [_hx(_LGRAY), _hx(_WHITE)]),
+        ("TOPPADDING",    (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+        ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+    ]))
+    return tbl
+
+
+def _regulatory_basis_box(result: dict[str, Any]) -> list[Any]:
+    basis = result.get("regulatory_basis", {})
+    note = basis.get("note", {})
+    summary = result.get("regulatory_traceability", {}).get("summary", "")
+    if not note:
+        return []
+    body_lines = [
+        f'<font color="{_DGRAY}" size="7.5"><b>{_xt(note.get("title", "Regulatory basis note"))}</b></font>',
+        f'<font color="{_DGRAY}" size="7.5">{_xt(note.get("body_line_1", ""))}</font>',
+        f'<font color="{_DGRAY}" size="7.5">{_xt(note.get("body_line_2", ""))}</font>',
+    ]
+    if basis.get("review_required"):
+        body_lines.append(
+            f'<font color="{_AMBER}" size="7.2"><b>Review required:</b> {_xt(", ".join(basis.get("review_reasons", [])))}</font>'
+        )
+    if summary:
+        body_lines.append(
+            f'<font color="{_DGRAY}" size="7.2"><b>Traceability summary:</b> {_xt(_clip_words(summary, 220))}</font>'
+        )
+    panel = Table(
+        [[Paragraph("<br/>".join(body_lines), _style("RGB_NOTE", 7.5, 9, _DGRAY))]],
+        colWidths=["100%"],
+    )
+    panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), _hx(_LGRAY)),
+        ("BOX", (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ("LEFTPADDING", (0, 0), (-1, -1), 7),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 7),
+    ]))
+    return [panel]
 
 
 def _footer_block() -> list[Any]:

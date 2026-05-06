@@ -49,6 +49,11 @@ from .patterns import (
     STAGE2R_WORKFLOW_CLAIMS,
     TEXT_EXTENSIONS,
 )
+from .regulatory_traceability import (
+    build_regulatory_basis,
+    build_regulatory_traceability,
+    build_stage_traceability,
+)
 from .reasoning_model import build_reasoning_model
 
 
@@ -89,6 +94,7 @@ def audit_repository(
     advisory: str = "none",
     advisory_response_path: Path | None = None,
 ) -> dict[str, Any]:
+    audit_date = date.today()
     files = _list_files(target)
     readme = _read_first(target, ["README.md", "README.rst", "readme.md"])
     docs_text = _read_many(target / "docs", max_files=30)
@@ -129,9 +135,9 @@ def audit_repository(
     final_score = min(raw_score, score_cap) if score_cap is not None else raw_score
 
     result = {
-        "schema_version": "stem-ai-local-cli-result-v1.4",
+        "schema_version": "stem-ai-local-cli-result-v1.6",
         "stem_ai_version": __version__,
-        "generated_at_local": date.today().isoformat(),
+        "generated_at_local": audit_date.isoformat(),
         "execution_mode": "LOCAL_ANALYSIS",
         "target": {
             "name": repo_name,
@@ -195,6 +201,9 @@ def audit_repository(
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
         },
     }
+    result["regulatory_basis"] = build_regulatory_basis(audit_date)
+    result["stage_traceability"] = build_stage_traceability(result)
+    result["regulatory_traceability"] = build_regulatory_traceability(result)
     result["reasoning_model"] = build_reasoning_model(result)
     if advisory == "validate":
         result["ai_advisory"] = build_offline_advisory(result)

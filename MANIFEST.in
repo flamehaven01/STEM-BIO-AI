@@ -14,10 +14,12 @@ include docs/EXAMPLE_AUDITS.md
 include docs/MICA_MEMORY.md
 include docs/REGULATORY_MAPPING.md
 include docs/SCORING_RATIONALE.md
+include docs/regulatory_basis_registry.schema.json
+include docs/regulatory_basis_registry.v1.json
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.5.11.json
-include memory/stem-ai-playbook.v1.5.11.md
-include memory/stem-ai-lessons.v1.5.11.md
+include memory/stem-ai.mica.v1.6.0.json
+include memory/stem-ai-playbook.v1.6.0.md
+include memory/stem-ai-lessons.v1.6.0.md
 
 recursive-include stem_ai *.py
 recursive-include tests *.py

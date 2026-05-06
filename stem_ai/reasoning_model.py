@@ -135,7 +135,7 @@ def evidence_risk_gate(
         "evidence_risk": round(evidence_risk, 4),
         "risk_gate": round(gate, 4),
         "risk_gate_factor": round(gate_factor, 4),
-        "status": "review_required" if evidence_risk >= gate else "within_gate",
+        "status": "heuristic_review_gate" if evidence_risk >= gate else "within_heuristic_gate",
         "basis": MODEL_STATUS,
     }
 
@@ -233,15 +233,15 @@ def _coherence_status(value: float | None) -> str:
     if value is None:
         return "not_available"
     if value >= 0.80:
-        return "coherent"
+        return "heuristic_consistent"
     if value >= 0.55:
-        return "mixed"
-    return "divergent"
+        return "heuristic_mixed"
+    return "heuristic_divergent"
 
 
 def _uncertainty_status(value: float) -> str:
     if value < 0.20:
-        return "stable"
+        return "low_spread"
     if value <= 0.45:
         return "review_advised"
     return "manual_review_required"

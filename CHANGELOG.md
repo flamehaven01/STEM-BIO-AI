@@ -10,6 +10,27 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.0] - 2026-05-06
+
+### Added
+- Added a registry-driven regulatory traceability output layer with `regulatory_basis`, `stage_traceability`, and `regulatory_traceability` fields in the local CLI result object.
+- Added report/explain/PDF regulatory basis note rendering using `docs/regulatory_basis_registry.v1.json` and its JSON schema.
+- Added automated `review_required` checks for stale registry month labels, draft-guidance presence, and missing required regulatory source families.
+- Added direct surfacing of bio-detector scope notes so `not_detected` and `not_applicable` statuses explain what was and was not assessed.
+
+### Changed
+- Promoted the local CLI result schema to `stem-ai-local-cli-result-v1.6` to match the now-stable traceability payload shape.
+- Hardened regulatory traceability semantics so negative or missing Stage 1 boundary signals no longer read as positive Article 13 alignment.
+- Lowered reasoning diagnostics wording from model-like confidence language to explicit heuristic language (`heuristic_consistent`, `low_spread`, `within_heuristic_gate`) and surfaced uncalibrated priors directly in report text.
+- Updated package metadata, README, MICA active memory layer, and public docs for the v1.6.0 release.
+
+### Fixed
+- Restricted offline advisory fallback citations to active evidence states (`detected`, `error`, `manual_review_required`) so absent or not-detected findings no longer masquerade as priority evidence.
+- Regenerated ClawBio dogfooding artifacts against the live v1.6.0 code path to confirm new schema, traceability wording, and detector-scope notes are rendered consistently.
+- Removed superseded deterministic-diagnostics proposal indirection from the active public docs surface so the 1.6.0 implementation pair is now `DETERMINISTIC_DIAGNOSTICS.md` plus `REGULATORY_MAPPING.md`.
+
+---
+
 ## [1.5.11] - 2026-05-06
 
 ### Added
@@ -262,7 +283,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Added tests ensuring advisory input omits raw snippets by default, rejects unknown citations, rejects score overrides, rejects clinical/regulatory claims, and surfaces advisory validation in CLI/Markdown/explain output.
 
 ### Changed
-- Updated local CLI result schema to `stem-ai-local-cli-result-v1.4`.
+- Updated local CLI result schema to `stem-ai-local-cli-result-v1.6`.
 
 ---
 
