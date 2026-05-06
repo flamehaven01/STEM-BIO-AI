@@ -14,10 +14,19 @@ from stem_ai.advisory_contract import (
 )
 from stem_ai.advisory_providers import (
     load_provider_config,
+    provider_env_contract,
     provider_handoff_metadata,
     provider_request_schema,
     provider_registry,
+    provider_secret_policy,
+    redact_secret_text,
     validate_provider_request_args,
+)
+from stem_ai.advisory_runtime import (
+    advisory_log_policy,
+    build_child_env_allowlist,
+    execute_advisory_call,
+    provider_call_runtime,
 )
 from stem_ai.cli import main as cli_main
 from stem_ai.evidence import make_finding_id
@@ -32,6 +41,7 @@ from stem_ai.reasoning_model import (
     lane_coherence,
     unique_token_count,
 )
+from stem_ai.redaction import redact_object, redaction_policy, sanitize_artifact_text, secret_scan
 from stem_ai.render import _explain_status_label, render_explain, render_markdown
 from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
 
@@ -742,6 +752,12 @@ def test_provider_config_is_secret_free_and_broad() -> None:
     assert handoff["status"] == "adapter_not_implemented"
     assert handoff["request_schema"]["schema_version"] == "stem-ai-provider-request-v1.4"
     assert handoff["args_validation"]["status"] == "valid"
+    assert handoff["api_key_env_var"] == "STEM_AI_ADVISORY_API_KEY"
+    assert handoff["secret_source"] == "generic_env"
+    assert handoff["network_mode"] == "local_server"
+    assert handoff["base_url_validation"]["status"] == "valid"
+    assert handoff["secret_policy"]["schema_version"] == "stem-ai-secret-policy-v1.5"
+    assert handoff["env_contract"]["provider_api_keys"]["openai"] == "OPENAI_API_KEY"
 
 
 def test_provider_request_validator_reports_structured_arg_errors() -> None:
@@ -755,6 +771,157 @@ def test_provider_request_validator_reports_structured_arg_errors() -> None:
     assert schema["schema_version"] == "stem-ai-provider-request-v1.4"
     assert validation["status"] == "invalid"
     assert {error["path"] for error in validation["errors"]} == {"provider", "timeout_sec", "max_tokens"}
+
+
+def test_provider_specific_env_var_takes_precedence_over_generic_fallback() -> None:
+    config = load_provider_config({
+        "STEM_AI_ADVISORY_PROVIDER": "openai",
+        "OPENAI_API_KEY": "provider-secret",
+        "STEM_AI_ADVISORY_API_KEY": "generic-secret",
+    })
+
+    handoff = provider_handoff_metadata(config)
+
+    assert handoff["api_key_present"] is True
+    assert handoff["api_key_env_var"] == "OPENAI_API_KEY"
+    assert handoff["secret_source"] == "provider_env"
+    assert "provider-secret" not in json.dumps(handoff)
+    assert "generic-secret" not in json.dumps(handoff)
+
+
+def test_provider_request_validator_rejects_embedded_credentials_and_remote_http() -> None:
+    validation = validate_provider_request_args({
+        "provider": "openai_compatible",
+        "base_url": "http://user:pass@example.com/v1",
+        "timeout_sec": 30,
+        "max_tokens": 1024,
+    })
+
+    assert validation["status"] == "invalid"
+    assert validation["base_url_validation"]["code"] == "embedded_credentials_forbidden"
+    assert "redacted-user@example.com" in validation["normalized"]["base_url"]
+
+
+def test_cloud_provider_requires_https_and_api_key() -> None:
+    validation = validate_provider_request_args({
+        "provider": "openai",
+        "base_url": "http://localhost:8000/v1",
+        "api_key_present": False,
+        "timeout_sec": 30,
+        "max_tokens": 1024,
+    })
+
+    assert validation["status"] == "invalid"
+    assert {error["code"] for error in validation["errors"]} == {"https_required", "missing_api_key"}
+
+
+def test_provider_secret_policy_and_env_contract_are_exportable() -> None:
+    policy = provider_secret_policy()
+    contract = provider_env_contract()
+
+    assert policy["schema_version"] == "stem-ai-secret-policy-v1.5"
+    assert "OPENAI_API_KEY" == contract["provider_api_keys"]["openai"]
+    assert contract["generic_fallback"] == "STEM_AI_ADVISORY_API_KEY"
+    assert any("CLI arguments" in rule for rule in policy["rules"])
+
+
+def test_redact_secret_text_masks_known_prefixes() -> None:
+    text = redact_secret_text("https://example.com sk-abcdefghijklmnop")
+
+    assert "abcdefghijklmnop" not in text
+    assert "[REDACTED]" in text
+
+
+def test_advisory_log_policy_is_structured_and_secret_safe() -> None:
+    policy = advisory_log_policy()
+
+    assert policy["schema_version"] == "stem-ai-advisory-log-policy-v1.5"
+    assert "api_key_value" in policy["forbidden_fields"]
+    assert policy["exception_sanitization"] is True
+
+
+def test_child_env_allowlist_keeps_only_required_keys() -> None:
+    config = load_provider_config({
+        "STEM_AI_ADVISORY_PROVIDER": "openai",
+        "OPENAI_API_KEY": "provider-secret",
+        "PATH": "C:\\Windows\\System32",
+        "UNRELATED_SECRET": "drop-me",
+    })
+
+    child_env = build_child_env_allowlist(config, {
+        "STEM_AI_ADVISORY_PROVIDER": "openai",
+        "OPENAI_API_KEY": "provider-secret",
+        "PATH": "C:\\Windows\\System32",
+        "UNRELATED_SECRET": "drop-me",
+    })
+
+    assert child_env["OPENAI_API_KEY"] == "provider-secret"
+    assert child_env["PATH"] == "C:\\Windows\\System32"
+    assert "UNRELATED_SECRET" not in child_env
+
+
+def test_provider_call_runtime_exports_logging_and_child_env_contract() -> None:
+    config = load_provider_config({
+        "STEM_AI_ADVISORY_PROVIDER": "openai_compatible",
+        "STEM_AI_ADVISORY_BASE_URL": "http://localhost:11434/v1",
+        "OPENAI_COMPATIBLE_API_KEY": "provider-secret",
+        "PATH": "C:\\Windows\\System32",
+    })
+
+    runtime = provider_call_runtime(config, {
+        "STEM_AI_ADVISORY_PROVIDER": "openai_compatible",
+        "STEM_AI_ADVISORY_BASE_URL": "http://localhost:11434/v1",
+        "OPENAI_COMPATIBLE_API_KEY": "provider-secret",
+        "PATH": "C:\\Windows\\System32",
+    })
+
+    assert runtime["mode"] == "explicit_network_opt_in"
+    assert runtime["network_intent"] is True
+    assert runtime["network_called"] is False
+    assert runtime["log_policy"]["schema_version"] == "stem-ai-advisory-log-policy-v1.5"
+    assert "OPENAI_COMPATIBLE_API_KEY" in runtime["child_env_allowlist"]["keys"]
+
+
+def test_execute_advisory_call_returns_explicit_not_implemented_error_without_network() -> None:
+    result = {
+        "target": {"name": "example/repo", "remote": None, "branch": None, "commit": None, "file_count": 1},
+        "score": {"final_score": 50, "formal_tier": "T1 Quarantine"},
+        "classification": {},
+        "code_integrity": {
+            "C1_hardcoded_credentials": {"status": "PASS", "evidence": ["none"]},
+            "C2_dependency_pinning": {"status": "PASS", "evidence": ["none"]},
+            "C3_dead_or_deprecated_patient_adjacent_paths": {"status": "PASS", "evidence": ["none"]},
+            "C4_exception_handling_clinical_adjacent_paths": {"status": "PASS", "evidence": ["none"]},
+        },
+        "detector_summary": {},
+        "reasoning_model": {},
+        "stage_4_rubric": {},
+        "ast_signal_summary": {},
+        "evidence_ledger": [{"finding_id": "X:README.md:1:001", "status": "detected", "detector": "X"}],
+    }
+
+    advisory = execute_advisory_call(result, {
+        "STEM_AI_ADVISORY_PROVIDER": "openai",
+        "OPENAI_API_KEY": "provider-secret",
+        "PATH": "C:\\Windows\\System32",
+    })
+
+    assert advisory["status"] == "error"
+    assert advisory["errors"] == ["adapter_not_implemented"]
+    assert advisory["provider_call"]["network_called"] is False
+    assert advisory["provider_call"]["network_intent"] is True
+
+
+def test_redaction_utilities_scrub_objects_and_artifact_text() -> None:
+    scan = secret_scan("Authorization: Bearer secret-token-value")
+    clean_text, artifact_scan = sanitize_artifact_text("api_key=super-secret-key")
+    payload = redact_object({"token": "ghp_abcdefghijklmnopqrstuvwxyz"})
+
+    assert scan["status"] == "detected"
+    assert "secret-token-value" not in clean_text
+    assert artifact_scan["status"] == "detected"
+    assert payload["token"] == "[REDACTED]"
+    assert redaction_policy()["artifact_behavior"] == "sanitize_before_write"
 
 
 def test_advisory_packet_mode_adds_provider_request_without_ai_output(tmp_path: Path) -> None:

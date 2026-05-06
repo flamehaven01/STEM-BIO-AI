@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .advisory_contract import ADVISORY_SCHEMA_VERSION, validate_advisory_output
+from .redaction import redact_object, redact_text
 
 
 def validate_advisory_response_file(result: dict[str, Any], response_path: Path) -> dict[str, Any]:
@@ -16,12 +17,12 @@ def validate_advisory_response_file(result: dict[str, Any], response_path: Path)
     try:
         response = json.loads(raw.decode("utf-8-sig"))
     except (UnicodeDecodeError, JSONDecodeError) as exc:
-        return _response_error(result, contract, "response_parse_error", str(exc))
+        return _response_error(result, contract, "response_parse_error", redact_text(str(exc)) or "response_parse_error")
     if not isinstance(response, dict):
         return _response_error(result, contract, "response_not_object", "Advisory response JSON must be an object.")
-    advisory = validate_advisory_output(result, response)
+    advisory = validate_advisory_output(result, redact_object(response))
     advisory["response_contract"] = contract
-    return advisory
+    return redact_object(advisory)
 
 
 def _response_error(
@@ -47,7 +48,7 @@ def _response_error(
         "response_error": {"type": error_type, "message": message},
         "response_contract": contract,
     })
-    return advisory
+    return redact_object(advisory)
 
 
 def _response_contract(path: Path, raw: bytes) -> dict[str, Any]:

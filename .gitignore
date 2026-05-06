@@ -26,7 +26,9 @@ tmp/
 *.tmp
 *.bak
 .manual_verify/
+.tmp_build_temp/
 .tmp_pycompile/
+.tmp_pytest/
 .tmp_pytest_run/
 
 # Node modules (if skills.sh used)
@@ -42,6 +44,8 @@ dist/
 
 # Environment files (never commit credentials)
 .env
+.env.*
+!.env.example
 .env.local
 *.key
 *.pem
@@ -50,5 +54,6 @@ dist/
 STRATEGY_INTERNAL.md
 docs/STRATEGY_INTERNAL.md
 docs/*_INTERNAL.md
+docs/DETERMINISTIC_DIAGNOSTICS_PROPOSAL.md
 docs/private/
 spec/

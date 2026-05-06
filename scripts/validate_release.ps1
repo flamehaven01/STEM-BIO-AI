@@ -1,5 +1,5 @@
 param(
-    [string]$ExpectedVersion = "1.5.8",
+    [string]$ExpectedVersion = "1.5.9",
     [string]$OutputRoot = "tmp\release_validation",
     [string]$SlopDetectorPath = "D:\Sanctum\ai-slop-detector",
     [switch]$WithSlop
@@ -127,6 +127,9 @@ try {
         Assert-True ($null -ne $packet.provider_request.request_schema) "provider request schema missing"
         Assert-True ($packet.provider_request.request_schema.schema_version -eq "stem-ai-provider-request-v1.4") "provider request schema version mismatch"
         Assert-True ($packet.provider_request.args_validation.status -eq "valid") "provider request args should validate"
+        Assert-True ($null -ne $packet.provider_request.base_url_validation) "base_url_validation missing"
+        Assert-True ($null -ne $packet.provider_request.secret_policy) "secret_policy missing"
+        Assert-True ($null -ne $packet.provider_request.env_contract) "env_contract missing"
         Assert-True ($null -ne $packet.contract_schemas) "contract_schemas missing"
         Assert-True ($packet.contract_schemas.schema_version -eq "stem-ai-advisory-contracts-v1.4") "contract_schemas version mismatch"
         Assert-True ($null -ne $packet.packet_contract) "packet_contract missing"

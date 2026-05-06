@@ -11,8 +11,9 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.5.8-informational.svg" alt="v1.5.8"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.5.9-informational.svg" alt="v1.5.9"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
+  <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
   <a href="https://huggingface.co/spaces/Flamehaven/stem-bio-ai"><img src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-yellow.svg" alt="HF Space"></a>
 </p>
@@ -34,6 +35,11 @@ STEM BIO-AI scans the **observable repository surface** — README, docs, code s
 ```bash
 git clone https://github.com/flamehaven01/STEM-BIO-AI.git
 cd STEM-BIO-AI
+pip install stem-ai
+```
+
+```bash
+# editable local install with PDF output support
 pip install -e .[pdf]
 
 # 1-page executive dashboard
@@ -50,10 +56,19 @@ stem /path/to/bio-ai-repo --level 3 --format all --explain
 # Advisory mode (no provider API call required)
 stem /path/to/bio-ai-repo --advisory validate
 stem /path/to/bio-ai-repo --advisory packet
+stem /path/to/bio-ai-repo --advisory call
 stem /path/to/bio-ai-repo --advisory-response provider_advisory.json
 ```
 
 Clone the target repository first; the CLI operates on local paths only.
+
+**Proof surfaces**
+- Demo: [Hugging Face Space](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
+- API contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
+- Secret handling: [`docs/ADVISORY_SECRET_HANDLING.md`](docs/ADVISORY_SECRET_HANDLING.md)
+- Advisory runtime boundary: [`docs/ADVISORY_RUNTIME.md`](docs/ADVISORY_RUNTIME.md)
+- Example audits: [`docs/EXAMPLE_AUDITS.md`](docs/EXAMPLE_AUDITS.md)
+- Scoring rationale: [`docs/SCORING_RATIONALE.md`](docs/SCORING_RATIONALE.md)
 
 ---
 
@@ -225,7 +240,16 @@ stem /path/to/repo --advisory-response FILE     # validate provider JSON respons
 - `contract_schemas` exports the advisory input/output contract shapes for downstream validators
 - `packet_contract` confirms allowlist parity, snippet omission, and non-negative omission counts before handoff
 
+**Secret boundary hardening added in v1.5.9:**
+- provider-specific environment variables are recognized before the generic advisory key fallback
+- provider handoff metadata exports endpoint-policy validation and the expected env-var name, never the key value
+- embedded-credential URLs are rejected; cloud providers require `https`; plain `http` is limited to localhost
+- `.env` files are ignored by default; `.env.example` documents supported variable names only
+- `--advisory call` is now the explicit provider-call boundary, with centralized redaction, logging-policy export, child-env allowlist reporting, and artifact pre-write sanitization
+
 Full contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
+Secret policy: [`docs/ADVISORY_SECRET_HANDLING.md`](docs/ADVISORY_SECRET_HANDLING.md)
+Runtime boundary: [`docs/ADVISORY_RUNTIME.md`](docs/ADVISORY_RUNTIME.md)
 
 ---
 
@@ -263,7 +287,7 @@ python app.py
 ```
 STEM-BIO-AI/
   stem_ai/              # Core Python package
-  docs/                 # API contract, scoring rationale, MICA policy, report previews
+  docs/                 # API contract, advisory runtime/secret policy, scoring rationale, MICA policy, report previews
   memory/               # Versioned MICA archive/playbook/lessons; active layer selected by mica.yaml
   audits/               # Reference benchmark artifacts
   scripts/              # Benchmark and validation scripts
@@ -300,7 +324,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.5.8},
+  version = {1.5.9},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

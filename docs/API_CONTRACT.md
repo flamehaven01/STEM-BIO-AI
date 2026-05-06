@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.5.8
+Version: 1.5.9
 Status: **Stable**
 Supersedes: `docs/API_CONTRACT_V1_5_DRAFT.md`
 
@@ -37,7 +37,7 @@ Options:
   --format json|md|pdf|all             # output format
   --out DIR                            # output directory
   --explain                            # write {stem}_explain.txt
-  --advisory none|validate|packet      # advisory mode
+  --advisory none|validate|packet|call # advisory mode
   --advisory-response FILE             # validate provider response
   --version                            # print version and exit
 ```
@@ -57,7 +57,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.4"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.5.8"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.5.9"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -182,6 +182,7 @@ They cannot be relaxed by configuration or provider agreement.
 | `--advisory none` | Default. No advisory output. |
 | `--advisory validate` | Offline contract validation without API call. |
 | `--advisory packet` | Export provider-neutral advisory input packet. |
+| `--advisory call` | Enter explicit provider-call mode. The network boundary is opt-in and reported separately from deterministic scanning. |
 | `--advisory-response FILE` | Validate a provider-produced JSON response. |
 
 ### Advisory Packet Fields (Additive)
@@ -194,11 +195,27 @@ Provider packet exports from `--advisory packet` now include the following addit
 | `provider_request.request_schema_version` | string | `"stem-ai-provider-request-v1.4"` |
 | `provider_request.request_schema` | object | Exported provider request shape for downstream validators |
 | `provider_request.args_validation` | object | `{status, error_count}` summary for normalized provider request arguments |
+| `provider_request.base_url_validation` | object | Deterministic endpoint-policy result for the selected provider/base URL pair |
+| `provider_request.secret_policy` | object | Exported secret-handling policy summary for downstream runners |
+| `provider_request.env_contract` | object | Allowed provider-specific and shared environment variable names |
+| `provider_request.api_key_env_var` | string\|null | Secret-free name of the env var expected by the selected provider |
+| `provider_request.secret_source` | string\|null | `"provider_env"` / `"generic_env"` / `"missing"` / `"not_required"` |
+| `provider_request.network_mode` | string\|null | `"offline"` / `"remote_https"` / `"local_server"` / `"in_process"` |
+| `ai_advisory.provider_call` | object | Explicit provider-call runtime envelope: network intent, logging policy, child-env allowlist summary, and redaction policy |
 | `contract_schemas` | object | Advisory input/output contract schema export bundle |
 | `contract_schemas.schema_version` | string | `"stem-ai-advisory-contracts-v1.4"` |
 | `packet_contract` | object | Deterministic packet self-check result |
 | `packet_contract.status` | string | `"valid"` / `"invalid"` |
 | `packet_contract.errors` | array | Contract-level packet errors such as allowlist mismatch or raw snippet leakage |
+
+### Advisory Secret Boundary (Locked Policy, Additive Fields)
+
+- Provider API keys must come from environment variables or an external secret store.
+- Provider API keys must never appear in CLI arguments, Markdown reports, JSON audit artifacts, or PDFs.
+- `provider_request` is secret-free by construction; it reports `api_key_present` and `api_key_env_var`, never the secret value.
+- Cloud providers require `https` endpoints; plain `http` is limited to `localhost`, `127.0.0.1`, or `::1`.
+- Base URLs containing embedded credentials are rejected by argument validation.
+- Explicit `--advisory call` mode is the only runtime path allowed to cross into provider-call intent. Packet export and response validation remain separate trust boundaries.
 
 ---
 

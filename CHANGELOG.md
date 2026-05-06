@@ -10,6 +10,26 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.9] - 2026-05-06
+
+### Added
+- Added `docs/ADVISORY_SECRET_HANDLING.md` covering provider-specific environment variables, `.env` handling policy, endpoint restrictions, artifact redaction rules, and the no-secret-persistence boundary for advisory packets.
+- Added `docs/ADVISORY_RUNTIME.md` documenting the explicit `--advisory call` trust boundary, runtime guards, and current non-implemented adapter behavior.
+- Added `docs/EXAMPLE_AUDITS.md` as a surface-facing proof index for sample report artifacts, live demo behavior, and comparison expectations.
+- Added `.env.example` documenting supported advisory environment variables without shipping any secret values.
+
+### Changed
+- Strengthened the public README surface with PyPI install path, proof-surface links, and explicit secret-boundary notes for advisory packet export.
+- Rotated the active MICA memory layer to v1.5.9 and documented advisory secret-boundary policy in the active archive/playbook/lessons set.
+
+### Fixed
+- Advisory provider configuration now prefers provider-specific API key env vars before the generic fallback and exports the selected env-var name without exposing the secret.
+- Advisory provider request validation now rejects embedded-credential base URLs, rejects non-local plain `http` endpoints, and requires `https` for cloud-provider overrides.
+- Secret-free handoff metadata now includes endpoint-policy validation, network-mode classification, and exported env-contract metadata for downstream runners.
+- Added explicit `--advisory call` runtime mode with centralized redaction, adapter logging policy export, child-env allowlist reporting, and artifact pre-write sanitization for JSON/Markdown/explain outputs.
+
+---
+
 ## [1.5.8] - 2026-05-05
 
 ### Fixed

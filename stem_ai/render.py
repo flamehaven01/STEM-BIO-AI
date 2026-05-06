@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .redaction import redact_object, sanitize_artifact_text
 
 try:
     from reportlab.lib import colors
@@ -80,34 +81,41 @@ def write_outputs(
     output_dir.mkdir(parents=True, exist_ok=True)
     stem = _safe_name(result["target"]["name"])
     created: list[Path] = []
+    safe_result = redact_object(result)
 
     if fmt in {"json", "all"}:
         p = output_dir / f"{stem}_experiment_results.json"
-        p.write_text(json.dumps(result, indent=2), encoding="utf-8")
+        payload = json.dumps(safe_result, indent=2)
+        payload, _ = sanitize_artifact_text(payload)
+        p.write_text(payload, encoding="utf-8")
         created.append(p)
 
-    if "ai_advisory_input" in result:
+    if "ai_advisory_input" in safe_result:
         p = output_dir / f"{stem}_advisory_input.json"
-        p.write_text(json.dumps(result["ai_advisory_input"], indent=2), encoding="utf-8")
+        payload = json.dumps(safe_result["ai_advisory_input"], indent=2)
+        payload, _ = sanitize_artifact_text(payload)
+        p.write_text(payload, encoding="utf-8")
         created.append(p)
 
-    md = render_markdown(result, mode, pages)
+    md = render_markdown(safe_result, mode, pages)
     if fmt in {"md", "all"}:
         p = output_dir / f"{stem}_report.md"
+        md, _ = sanitize_artifact_text(md)
         p.write_text(md, encoding="utf-8")
         created.append(p)
 
     if fmt in {"pdf", "all"}:
         p = output_dir / f"{stem}_{mode}_{pages}p.pdf"
         if _RL:
-            _write_rl_pdf(p, result, mode, pages)
+            _write_rl_pdf(p, safe_result, mode, pages)
         else:
-            write_simple_pdf(p, render_pdf_pages(result, mode, pages))
+            write_simple_pdf(p, render_pdf_pages(safe_result, mode, pages))
         created.append(p)
 
     if explain:
         p = output_dir / f"{stem}_explain.txt"
-        p.write_text(render_explain(result), encoding="utf-8")
+        explain_text, _ = sanitize_artifact_text(render_explain(safe_result))
+        p.write_text(explain_text, encoding="utf-8")
         created.append(p)
 
     return created

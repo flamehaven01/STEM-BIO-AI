@@ -1,6 +1,6 @@
 # STEM BIO-AI MICA Memory Layer
 
-Version: 1.5.8
+Version: 1.5.9
 Status: Operational reference for the active memory contract
 
 ---
@@ -30,11 +30,11 @@ It selects exactly three live files:
 - playbook markdown
 - lessons markdown
 
-For v1.5.8 the active set is:
+For v1.5.9 the active set is:
 
-- `memory/stem-ai.mica.v1.5.8.json`
-- `memory/stem-ai-playbook.v1.5.8.md`
-- `memory/stem-ai-lessons.v1.5.8.md`
+- `memory/stem-ai.mica.v1.5.9.json`
+- `memory/stem-ai-playbook.v1.5.9.md`
+- `memory/stem-ai-lessons.v1.5.9.md`
 
 Anything older in `memory/` is retained as archive history unless explicitly retired.
 

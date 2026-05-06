@@ -17,6 +17,7 @@ from .advisory_contract import (
 )
 from .advisory_providers import load_provider_config, provider_handoff_metadata
 from .advisory_response import validate_advisory_response_file
+from .advisory_runtime import execute_advisory_call
 from .detectors import collect_evidence_bundle
 from .patterns import (
     BIAS_LIMITATION_TERMS,
@@ -200,6 +201,12 @@ def audit_repository(
         result["ai_advisory_input"]["contract_schemas"] = advisory_contract_schemas()
         result["ai_advisory_input"]["provider_request"] = provider_handoff_metadata(load_provider_config())
         result["ai_advisory_input"]["packet_contract"] = validate_advisory_input_packet(result["ai_advisory_input"])
+    elif advisory == "call":
+        result["ai_advisory_input"] = build_provider_advisory_input(result)
+        result["ai_advisory_input"]["contract_schemas"] = advisory_contract_schemas()
+        result["ai_advisory_input"]["provider_request"] = provider_handoff_metadata(load_provider_config())
+        result["ai_advisory_input"]["packet_contract"] = validate_advisory_input_packet(result["ai_advisory_input"])
+        result["ai_advisory"] = execute_advisory_call(result)
     if advisory_response_path is not None:
         result["ai_advisory"] = validate_advisory_response_file(result, advisory_response_path)
     return result

@@ -14,7 +14,7 @@ _LEVEL_MAP = {
     2: ("detailed", 3),
     3: ("detailed", 5),
 }
-_ADVISORY_CHOICES = ["none", "validate", "packet"]
+_ADVISORY_CHOICES = ["none", "validate", "packet", "call"]
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -34,6 +34,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "  stem /path/to/bio-ai-repo --explain\n"
             "  stem /path/to/bio-ai-repo --advisory validate\n"
             "  stem /path/to/bio-ai-repo --advisory packet\n"
+            "  stem /path/to/bio-ai-repo --advisory call\n"
             "  stem /path/to/bio-ai-repo --advisory-response provider_advisory.json"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -76,7 +77,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--advisory",
         choices=_ADVISORY_CHOICES,
         default="none",
-        help="Run offline advisory validation or export a provider-neutral advisory input packet",
+        help="Run offline advisory validation, export a provider-neutral packet, or enter explicit advisory call mode",
     )
     audit.add_argument(
         "--advisory-response",

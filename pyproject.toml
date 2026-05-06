@@ -3,8 +3,8 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stem-bio-ai"
-version = "1.5.8"
+name = "stem-ai"
+version = "1.5.9"
 description = "STEM BIO-AI deterministic evidence-surface scanner for bio/medical AI repositories"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -29,15 +29,18 @@ Issues = "https://github.com/flamehaven01/STEM-BIO-AI/issues"
 include = ["stem_ai*"]
 
 [tool.setuptools.data-files]
-"." = ["SKILL.md", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE", "README.md"]
+"." = [".env.example", "SKILL.md", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE", "README.md"]
 "docs" = [
+  "docs/ADVISORY_SECRET_HANDLING.md",
+  "docs/ADVISORY_RUNTIME.md",
   "docs/API_CONTRACT.md",
+  "docs/EXAMPLE_AUDITS.md",
   "docs/MICA_MEMORY.md",
   "docs/SCORING_RATIONALE.md",
 ]
 "memory" = [
   "memory/mica.yaml",
-  "memory/stem-ai.mica.v1.5.8.json",
-  "memory/stem-ai-playbook.v1.5.8.md",
-  "memory/stem-ai-lessons.v1.5.8.md",
+  "memory/stem-ai.mica.v1.5.9.json",
+  "memory/stem-ai-playbook.v1.5.9.md",
+  "memory/stem-ai-lessons.v1.5.9.md",
 ]
