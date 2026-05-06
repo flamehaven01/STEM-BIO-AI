@@ -42,6 +42,13 @@ _DGRAY  = "#4A5568"
 _WHITE  = "#FFFFFF"
 
 _TIER_COLOR = {"T0": _RED, "T1": _RED, "T2": _ORANGE, "T3": _TEAL, "T4": _GREEN}
+_BIO_DETECTOR_LABELS = {
+    "BIO_smiles_surface_integrity": "SMILES Surface Integrity",
+    "BIO_smiles_parser_guard": "SMILES Parser Guard",
+    "BIO_silent_mock_fallback": "Silent Mock Fallback",
+    "BIO_trace_manifest": "Traceability Manifest Surface",
+    "BIO_run_trace": "Bio Subprocess Run Trace",
+}
 
 def _hx(h: str) -> Any:
     return colors.HexColor(h)
@@ -157,6 +164,8 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     for key, item in result["code_integrity"].items():
         lines.append(f"- **{key}:** {item['status']} — {item['evidence'][0]}")
 
+    lines.extend(_markdown_bio_section(result))
+
     lines.extend(["", "## Top Risks"])
     for risk in result["notable_risks"][:5]:
         lines.append(f"- {risk}")
@@ -211,6 +220,7 @@ def render_explain(result: dict[str, Any]) -> str:
     ]
     for detector, findings in grouped.items():
         out += _explain_detector_group(detector, findings)
+    out += _explain_bio_section(result)
     out += _explain_ast_section(result.get("ast_signal_summary", {}))
     out += _explain_s4_section(result.get("stage_4_rubric", {}))
     out += _explain_reasoning_section(result.get("reasoning_model", {}))
@@ -254,6 +264,26 @@ def _markdown_advisory_section(advisory: dict[str, Any] | None) -> list[str]:
         f"**Invalid Citations:** {len(advisory.get('invalid_citations', []))}",
         "",
     ]
+
+
+def _markdown_bio_section(result: dict[str, Any]) -> list[str]:
+    rows = _bio_detector_rows(result)
+    if not rows:
+        return []
+    lines = ["", "## Bio Deterministic Diagnostics", ""]
+    for detector, label, counts in rows:
+        parts = []
+        for status in ("detected", "warn", "error", "not_detected", "not_applicable", "absent"):
+            value = counts.get(status)
+            if value:
+                parts.append(f"{status}={value}")
+        findings = [
+            f for f in result.get("evidence_ledger", [])
+            if f.get("detector") == detector and f.get("status") == "detected"
+        ]
+        note = findings[0].get("explanation", "") if findings else "No active finding detected."
+        lines.append(f"- **{label}:** {', '.join(parts) if parts else 'no findings'} — {note}")
+    return lines
 
 
 def _explain_detector_group(detector: str, findings: list[dict[str, Any]]) -> list[str]:
@@ -304,6 +334,23 @@ def _explain_s4_section(s4: dict[str, Any]) -> list[str]:
     return lines
 
 
+def _explain_bio_section(result: dict[str, Any]) -> list[str]:
+    rows = _bio_detector_rows(result)
+    if not rows:
+        return []
+    lines = [_EXPLAIN_SEP, "Bio Deterministic Diagnostics", ""]
+    ledger = result.get("evidence_ledger", [])
+    for detector, label, counts in rows:
+        parts = [f"{status}={counts[status]}" for status in ("detected", "warn", "error", "not_detected", "not_applicable", "absent") if counts.get(status)]
+        lines.append(f"  {label:<34} {', '.join(parts) if parts else 'no findings'}")
+        first = next((f for f in ledger if f.get("detector") == detector and f.get("status") == "detected"), None)
+        if first:
+            lines.append(f"    first finding: {first.get('finding_id', 'n/a')}")
+            lines.append(f"    reason       : {first.get('explanation', '')}")
+    lines.append("")
+    return lines
+
+
 def _explain_reasoning_section(reasoning: dict[str, Any]) -> list[str]:
     if not reasoning:
         return []
@@ -340,6 +387,16 @@ def _explain_status_label(statuses: set[str]) -> str:
         if candidate in statuses:
             return candidate.upper()
     return next(iter(statuses), "UNKNOWN").upper()
+
+
+def _bio_detector_rows(result: dict[str, Any]) -> list[tuple[str, str, dict[str, int]]]:
+    summary = result.get("detector_summary", {}).get("by_detector", {})
+    rows: list[tuple[str, str, dict[str, int]]] = []
+    for detector, label in _BIO_DETECTOR_LABELS.items():
+        counts = summary.get(detector)
+        if counts:
+            rows.append((detector, label, counts))
+    return rows
 
 
 # ── reportlab: document entry point ──────────────────────────────────────────

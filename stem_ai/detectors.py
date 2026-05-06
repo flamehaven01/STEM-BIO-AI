@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from .detector_ast import MAX_AST_FILE_SIZE_BYTES, MAX_AST_FILES, collect_ast_findings
+from .detector_bio import collect_bio_findings
 from .detector_stage4 import collect_stage4_findings
 from .detector_surface import collect_surface_findings
 from .evidence import EvidenceFinding
@@ -20,6 +21,7 @@ def collect_evidence_bundle(target: Path) -> tuple[list[dict[str, Any]], dict[st
     counters: dict[tuple[str, str], int] = defaultdict(int)
 
     collect_surface_findings(target, findings, counters)
+    collect_bio_findings(target, findings, counters)
     ast_summary = collect_ast_findings(
         target,
         findings,

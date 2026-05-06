@@ -10,6 +10,26 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.10] - 2026-05-06
+
+### Added
+- Added `stem_ai/detector_bio.py` with deterministic evidence-only bio diagnostics for conservative SMILES surface checks, SMILES parser-guard checks, silent mock fallback detection, traceability manifest surface detection, and bio-tool subprocess run-trace heuristics.
+- Added Markdown and `--explain` surfacing for bio deterministic diagnostics in audit outputs.
+- Added regression coverage for bio diagnostics and explain/Markdown surfacing.
+- Added `docs/DETERMINISTIC_DIAGNOSTICS.md` as the promoted active deterministic diagnostics specification.
+- Added `docs/REGULATORY_MAPPING.md` to the public docs surface and package manifest.
+
+### Changed
+- Promoted `docs/DETERMINISTIC_DIAGNOSTICS_PROPOSAL.md` to a pointer document and moved active documentation to `docs/DETERMINISTIC_DIAGNOSTICS.md`.
+- Linked README proof surfaces to deterministic diagnostics and regulatory traceability docs.
+- Rotated the active MICA memory layer to v1.5.10 for the bio-detector implementation release.
+
+### Fixed
+- Restored bio-detector integration to the evidence-bundle path in `stem_ai/detectors.py` and removed drift from an invalid direct-scanner wiring pattern.
+- Restored `stage_3` scoring flow in `stem_ai/scanner.py` after accidental regression during external edits.
+
+---
+
 ## [1.5.9] - 2026-05-06
 
 ### Added

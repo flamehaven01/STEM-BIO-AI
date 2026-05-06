@@ -190,6 +190,8 @@ def audit_repository(
             "C2": "Dependency-manifest-only pin check across requirements/environment/setup.cfg/pyproject dependency sections; ignores non-dependency metadata lines",
             "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
             "C4": "AST-backed detection of executable fail-open Python exception handlers (except/pass or except/return True)",
+            "BIO-Diagnostics": "Deterministic evidence-only bio diagnostics: conservative SMILES surface checks, SMILES parser-guard checks, silent mock fallback detection, traceability manifest surface checks, and subprocess bio-tool run-trace heuristics.",
+            "REG-Scaffolding": "Evidence-only traceability scaffolding signals from manifest/hash/audit-log schema surfaces; intended as structural audit-readiness support rather than compliance proof.",
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
         },
     }

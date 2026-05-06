@@ -9,13 +9,15 @@ include requirements.txt
 include docs/ADVISORY_SECRET_HANDLING.md
 include docs/ADVISORY_RUNTIME.md
 include docs/API_CONTRACT.md
+include docs/DETERMINISTIC_DIAGNOSTICS.md
 include docs/EXAMPLE_AUDITS.md
 include docs/MICA_MEMORY.md
+include docs/REGULATORY_MAPPING.md
 include docs/SCORING_RATIONALE.md
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.5.9.json
-include memory/stem-ai-playbook.v1.5.9.md
-include memory/stem-ai-lessons.v1.5.9.md
+include memory/stem-ai.mica.v1.5.10.json
+include memory/stem-ai-playbook.v1.5.10.md
+include memory/stem-ai-lessons.v1.5.10.md
 
 recursive-include stem_ai *.py
 recursive-include tests *.py
