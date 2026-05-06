@@ -256,6 +256,94 @@ def test_bio_smiles_surface_detector_flags_malformed_and_placeholder_strings(tmp
     assert "low_entropy_placeholder_pattern" in issues
 
 
+def test_bio_smiles_surface_detector_ignores_hex_colors_and_versionish_strings(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(
+        tmp_path / "plot.py",
+        "PRIMARY = '#8b949e'\n"
+        "SCHEMA = 'stem-ai-advisory-v1.4'\n"
+        "ENC = 'utf-8-sig'\n"
+        "HASH = 'sha256'\n",
+    )
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_surface_integrity"]
+
+    assert any(f["status"] == "not_detected" for f in findings)
+    assert not any(f["status"] == "detected" for f in findings)
+
+
+def test_bio_smiles_surface_detector_ignores_generated_build_paths(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(tmp_path / "build" / "lib" / "generated.py", "bad_smiles_ring = 'C1CC'\n")
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_surface_integrity"]
+
+    assert any(f["status"] == "not_detected" for f in findings)
+    assert not any(f["status"] == "detected" for f in findings)
+
+
+def test_bio_smiles_rdkit_validation_is_not_applicable_without_rdkit(monkeypatch, tmp_path: Path) -> None:
+    import stem_ai.detector_bio as detector_bio
+
+    monkeypatch.setattr(detector_bio, "_rdkit_mol_from_smiles", lambda smiles: detector_bio._RDKIT_UNAVAILABLE)
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(tmp_path / "pipeline.py", "bad_smiles = 'C1CC'\n")
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_rdkit_validation"]
+
+    assert any(f["status"] == "not_applicable" for f in findings)
+
+
+def test_bio_smiles_rdkit_validation_flags_invalid_candidate_when_available(monkeypatch, tmp_path: Path) -> None:
+    import stem_ai.detector_bio as detector_bio
+
+    def fake_rdkit(smiles: str):
+        if smiles == "C1CC":
+            return None
+        return object()
+
+    monkeypatch.setattr(detector_bio, "_rdkit_mol_from_smiles", fake_rdkit)
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(tmp_path / "pipeline.py", "bad_smiles = 'C1CC'\n")
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_rdkit_validation" and f["status"] == "detected"]
+
+    assert findings
+    assert findings[0]["metadata"]["smiles_text"] == "C1CC"
+
+
+def test_bio_smiles_rdkit_validation_reports_not_detected_when_available_and_valid(monkeypatch, tmp_path: Path) -> None:
+    import stem_ai.detector_bio as detector_bio
+
+    monkeypatch.setattr(detector_bio, "_rdkit_is_available", lambda: True)
+    monkeypatch.setattr(detector_bio, "_rdkit_mol_from_smiles", lambda smiles: object())
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(tmp_path / "pipeline.py", "candidate_smiles = 'CC(=O)O'\n")
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_rdkit_validation"]
+
+    assert any(f["status"] == "not_detected" for f in findings)
+
+
+def test_bio_smiles_rdkit_validation_reports_not_detected_when_available_without_candidates(monkeypatch, tmp_path: Path) -> None:
+    import stem_ai.detector_bio as detector_bio
+
+    monkeypatch.setattr(detector_bio, "_rdkit_is_available", lambda: True)
+    monkeypatch.setattr(detector_bio, "_rdkit_mol_from_smiles", lambda smiles: object())
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(tmp_path / "pipeline.py", "PRIMARY = '#8b949e'\n")
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_rdkit_validation"]
+
+    assert any(f["status"] == "not_detected" for f in findings)
+
+
 def test_bio_smiles_parser_guard_flags_missing_none_check(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
     _write(
@@ -289,6 +377,23 @@ def test_bio_smiles_parser_guard_accepts_explicit_none_check(tmp_path: Path) -> 
 
     assert result["score"]["raw_score_before_floor"] == result["score"]["final_score"]
     assert any(f["status"] == "not_detected" for f in findings)
+
+
+def test_bio_smiles_parser_guard_flags_allchem_missing_none_check(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(
+        tmp_path / "pipeline.py",
+        "def build(seq):\n"
+        "    mol = AllChem.MolFromSmiles(seq)\n"
+        "    return AllChem.AddHs(mol)\n",
+    )
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_parser_guard" and f["status"] == "detected"]
+
+    assert findings
+    assert findings[0]["metadata"]["variable"] == "mol"
+    assert findings[0]["metadata"]["parser_call"] == "AllChem.MolFromSmiles"
 
 
 def test_bio_silent_mock_detector_flags_import_fallback_to_mock_mode(tmp_path: Path) -> None:

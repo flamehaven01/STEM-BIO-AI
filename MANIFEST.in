@@ -15,9 +15,9 @@ include docs/MICA_MEMORY.md
 include docs/REGULATORY_MAPPING.md
 include docs/SCORING_RATIONALE.md
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.5.10.json
-include memory/stem-ai-playbook.v1.5.10.md
-include memory/stem-ai-lessons.v1.5.10.md
+include memory/stem-ai.mica.v1.5.11.json
+include memory/stem-ai-playbook.v1.5.11.md
+include memory/stem-ai-lessons.v1.5.11.md
 
 recursive-include stem_ai *.py
 recursive-include tests *.py

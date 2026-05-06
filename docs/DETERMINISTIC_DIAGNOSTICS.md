@@ -1,5 +1,5 @@
 # Deterministic Diagnostics for Bio-AI Integrity
-## Version 1.2.0 (Implemented Deterministic Lane, Optional AI-Assisted Review)
+## Version 1.2.1 (Implemented Deterministic Lane, Optional AI-Assisted Review)
 
 This document is the active deterministic diagnostics specification for STEM-BIO-AI. The local lane is implemented as evidence-bearing repository diagnostics. The optional AI lane remains advisory, opt-in, and non-authoritative.
 
@@ -22,14 +22,15 @@ The local deterministic lane is authoritative for hard findings. The AI lane is 
 
 ---
 
-## 1A. Implementation Status (STEM BIO-AI v1.5.10)
+## 1A. Implementation Status (STEM BIO-AI v1.5.11)
 
 Implemented now:
 1. `SMILES-DECEPT` Lane A0 conservative surface scanner
-2. `SILENT-MOCK` fallback detection
-3. `TRACE-MANIFEST` traceability surface detection
-4. `RUN-TRACE` bio-tool subprocess heuristics
-5. Markdown / explain report surfacing for bio deterministic diagnostics
+2. `SMILES-DECEPT` Lane A1 optional RDKit validation lane
+3. `SILENT-MOCK` fallback detection
+4. `TRACE-MANIFEST` traceability surface detection
+5. `RUN-TRACE` bio-tool subprocess heuristics
+6. Markdown / explain report surfacing for bio deterministic diagnostics
 
 Implemented as evidence-only:
 1. Findings are emitted into `evidence_ledger`
@@ -37,11 +38,10 @@ Implemented as evidence-only:
 3. Findings do not change `final_score` or `formal_tier`
 
 Not yet implemented:
-1. `SMILES-DECEPT` Lane A1 optional RDKit parser validation
-2. AI-assisted Lane B semantic review
-3. `MOUNT-AUDIT`
-4. `IFU-DEEP-SCAN`
-5. `SAFETY-INTERRUPT`
+1. AI-assisted Lane B semantic review
+2. `MOUNT-AUDIT`
+3. `IFU-DEEP-SCAN`
+4. `SAFETY-INTERRUPT`
 
 ---
 

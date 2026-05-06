@@ -44,6 +44,7 @@ _WHITE  = "#FFFFFF"
 _TIER_COLOR = {"T0": _RED, "T1": _RED, "T2": _ORANGE, "T3": _TEAL, "T4": _GREEN}
 _BIO_DETECTOR_LABELS = {
     "BIO_smiles_surface_integrity": "SMILES Surface Integrity",
+    "BIO_smiles_rdkit_validation": "SMILES RDKit Validation",
     "BIO_smiles_parser_guard": "SMILES Parser Guard",
     "BIO_silent_mock_fallback": "Silent Mock Fallback",
     "BIO_trace_manifest": "Traceability Manifest Surface",

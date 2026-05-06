@@ -10,6 +10,24 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.5.11] - 2026-05-06
+
+### Added
+- Added `BIO_smiles_rdkit_validation` as an optional A1 lane that emits stronger evidence when RDKit is available and rejects invalid hardcoded SMILES-like candidates.
+- Added regression coverage for RDKit-lane unavailable / invalid / valid paths and for `AllChem.MolFromSmiles` parser-guard detection.
+
+### Changed
+- Tightened `BIO_smiles_surface_integrity` precision by excluding generated surfaces (`build/`, `dist/`, `audits/`), hex colors, version/hash/schema strings, and other non-chemistry token patterns.
+- Expanded SMILES parser-guard detection to include `AllChem.MolFromSmiles`.
+- Updated the deterministic diagnostics spec to mark A1 as implemented and to document the current evidence-only behavior.
+- Rotated the active MICA memory layer to v1.5.11 for the SMILES precision and RDKit-lane patch release.
+
+### Fixed
+- Eliminated major SMILES false positives observed during dogfooding on `AI-SLOP-DETECTOR`, `STEM-BIO-AI`, and `BioClaw`.
+- Corrected RDKit-lane status semantics so environments with RDKit installed but no invalid candidates report `not_detected` instead of `not_applicable`.
+
+---
+
 ## [1.5.10] - 2026-05-06
 
 ### Added

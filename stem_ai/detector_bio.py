@@ -8,9 +8,19 @@ from .detector_utils import add_finding, is_fixture_like_path, iter_code_files, 
 from .evidence import EvidenceFinding
 
 
+_RDKIT_UNAVAILABLE = object()
+
 SMILES_ALLOWED = re.compile(r"^[A-Za-z0-9@+\-\[\]\(\)=#$%\\/\.]+$")
-SMILES_PARSER_CALLS = {"MolFromSmiles", "Chem.MolFromSmiles", "dm.to_mol", "to_mol"}
+HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6,8}$")
+VERSIONISH = re.compile(r"^[A-Za-z0-9_.-]*[._-]\d+[A-Za-z0-9_.-]*$")
+GENERATED_PATH_PARTS = {"build", "dist", "audits", "stem_output", "tmp"}
+SMILES_PARSER_CALLS = {"MolFromSmiles", "Chem.MolFromSmiles", "AllChem.MolFromSmiles", "dm.to_mol", "to_mol"}
 SMILES_CONTEXT_TOKENS = ("smiles", "smarts", "molecule", "mol", "ligand", "compound", "substrate", "chem")
+SMILES_MULTI_CHAR_ATOMS = (
+    "Cl", "Br", "Si", "Na", "Li", "Ca", "Mg", "Zn", "Fe", "Cu",
+    "Mn", "Hg", "Pb", "Sn", "Ag", "Au", "Pt", "Pd", "Co", "Ni", "Se", "As",
+)
+SMILES_ONE_CHAR_ATOMS = set("BCNOFPSIHKbcnops")
 MOCK_FLAG_NAMES = {"USE_MOCK", "DEMO_MODE", "SIMULATE_DATA", "SIMULATED_DATA", "MOCK_MODE"}
 MOCK_NAME_TOKENS = ("mock", "fake", "dummy", "simulat", "synthetic", "demo")
 BIO_IMPORT_MODULES = ("rdkit", "Bio", "biopython", "scanpy", "anndata", "FlowCytometryTools", "pysam")
@@ -40,6 +50,7 @@ def collect_bio_findings(
 ) -> None:
     code_paths = list(iter_code_files(target, max_files=240))
     _collect_smiles_surface_findings(target, findings, counters, code_paths)
+    _collect_smiles_rdkit_validation_findings(target, findings, counters, code_paths)
     _collect_smiles_parser_guard_findings(target, findings, counters, code_paths)
     _collect_silent_mock_findings(target, findings, counters, code_paths)
     _collect_trace_manifest_findings(target, findings, counters)
@@ -54,7 +65,7 @@ def _collect_smiles_surface_findings(
 ) -> None:
     detected = False
     for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path):
+        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
         text = read_text(path)
         if not text:
@@ -117,7 +128,7 @@ def _collect_smiles_parser_guard_findings(
 ) -> None:
     detected = False
     for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path):
+        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
         text = read_text(path)
         if not text:
@@ -172,6 +183,80 @@ def _collect_smiles_parser_guard_findings(
         )
 
 
+def _collect_smiles_rdkit_validation_findings(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    paths: list[Path],
+) -> None:
+    detected = False
+    rdkit_available = _rdkit_is_available()
+    for path in paths:
+        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
+            continue
+        text = read_text(path)
+        if not text:
+            continue
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            continue
+        _annotate_parents(tree)
+        lines = text.splitlines()
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
+                continue
+            value = node.value.strip()
+            if not _looks_like_smiles(value):
+                continue
+            if not _smiles_context_permits(node, value):
+                continue
+            parsed = _rdkit_mol_from_smiles(value)
+            if parsed is _RDKIT_UNAVAILABLE:
+                continue
+            if parsed is not None:
+                continue
+            detected = True
+            add_finding(
+                target,
+                findings,
+                counters,
+                "BIO_smiles_rdkit_validation",
+                "bio_smiles_rdkit_invalid_v1",
+                "detected",
+                "warn",
+                path,
+                getattr(node, "lineno", 0),
+                source_line(lines, getattr(node, "lineno", 0)),
+                "ast",
+                "RDKit optional validation lane rejected a SMILES-like string candidate.",
+                {"smiles_text": value, "lane": "A1_optional_rdkit"},
+            )
+    if detected:
+        return
+    status = "not_detected" if rdkit_available else "not_applicable"
+    explanation = (
+        "RDKit optional validation lane found no invalid SMILES-like candidates."
+        if rdkit_available
+        else "RDKit optional validation lane unavailable in current environment."
+    )
+    add_finding(
+        target,
+        findings,
+        counters,
+        "BIO_smiles_rdkit_validation",
+        "bio_smiles_rdkit_invalid_v1",
+        status,
+        "info",
+        Path("."),
+        0,
+        "",
+        "ast",
+        explanation,
+        {"lane": "A1_optional_rdkit"},
+    )
+
+
 def _collect_silent_mock_findings(
     target: Path,
     findings: list[EvidenceFinding],
@@ -181,7 +266,7 @@ def _collect_silent_mock_findings(
     detected = False
     not_applicable = False
     for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path):
+        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
         text = read_text(path)
         if not text:
@@ -299,6 +384,8 @@ def _collect_trace_manifest_findings(
             continue
         if path.suffix.lower() not in TRACE_SCAN_SUFFIXES:
             continue
+        if _is_generated_path(path):
+            continue
         if path.name in TRACE_MANIFEST_NAMES:
             continue
         if is_fixture_like_path(path):
@@ -355,7 +442,7 @@ def _collect_run_trace_findings(
 ) -> None:
     detected = False
     for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path):
+        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
         text = read_text(path)
         if not text:
@@ -410,6 +497,12 @@ def _looks_like_smiles(value: str) -> bool:
         return False
     if not SMILES_ALLOWED.fullmatch(value):
         return False
+    if _is_obviously_not_smiles(value):
+        return False
+    if not _token_stream_is_smiles_like(value):
+        return False
+    if _smiles_atom_count(value) < 2:
+        return False
     if not any(ch in value for ch in "()[]=#123456789"):
         condensed = value.replace(".", "")
         if not (len(condensed) >= 8 and len(set(condensed)) <= 2 and re.search(r"[BCNOFPSIbcnops]", condensed)):
@@ -427,9 +520,11 @@ def _smiles_context_permits(node: ast.Constant, value: str) -> bool:
                 condensed = value.replace("(", "").replace(")", "").replace("[", "").replace("]", "")
                 if len(condensed) >= 8 and len(set(condensed)) <= 2 and re.search(r"[BCNOFPSIbcnops]", condensed):
                     return True
+                if _is_strong_smiles_variable(target.id, value):
+                    return True
     if any(tok in value.lower() for tok in ("cl", "br", "@", "#", "=")):
         return True
-    if re.search(r"\d", value):
+    if re.search(r"\d", value) and any(ch in value for ch in "()[]=#"):
         return True
     return False
 
@@ -650,3 +745,96 @@ def _annotate_parents(tree: ast.AST) -> None:
     for parent in ast.walk(tree):
         for child in ast.iter_child_nodes(parent):
             setattr(child, "parent", parent)
+
+
+def _is_generated_path(path: Path) -> bool:
+    return any(part.lower() in GENERATED_PATH_PARTS for part in path.parts)
+
+
+def _is_obviously_not_smiles(value: str) -> bool:
+    if HEX_COLOR.fullmatch(value):
+        return True
+    lowered = value.lower()
+    if any(token in lowered for token in ("sha256", "sha512", "utf-8", "oauth", "http://", "https://")):
+        return True
+    if "/" in value and not any(ch in value for ch in "()[]=@#\\"):
+        return True
+    if "-" in value and "=" not in value and not any(ch in value for ch in "()[]@#"):
+        return True
+    if VERSIONISH.fullmatch(value) and not any(ch in value for ch in "()[]=@#"):
+        return True
+    return False
+
+
+def _token_stream_is_smiles_like(value: str) -> bool:
+    i = 0
+    while i < len(value):
+        if value.startswith("%", i):
+            if i + 2 >= len(value) or not value[i + 1 : i + 3].isdigit():
+                return False
+            i += 3
+            continue
+        for token in SMILES_MULTI_CHAR_ATOMS:
+            if value.startswith(token, i):
+                i += len(token)
+                break
+        else:
+            ch = value[i]
+            if ch.isdigit() or ch in "@+-[]=#$()/\\.":
+                i += 1
+                continue
+            if ch in SMILES_ONE_CHAR_ATOMS:
+                i += 1
+                continue
+            return False
+    return True
+
+
+def _is_strong_smiles_variable(name: str, value: str) -> bool:
+    lowered = name.lower()
+    if any(tok in lowered for tok in SMILES_CONTEXT_TOKENS):
+        return True
+    condensed = value.replace("(", "").replace(")", "").replace("[", "").replace("]", "").replace(".", "")
+    return len(condensed) >= 8 and len(set(condensed)) <= 2 and all(ch in "BCNOFPSIHKbcnops" for ch in condensed)
+
+
+def _smiles_atom_count(value: str) -> int:
+    count = 0
+    i = 0
+    while i < len(value):
+        if value.startswith("%", i):
+            i += 3
+            continue
+        matched = False
+        for token in SMILES_MULTI_CHAR_ATOMS:
+            if value.startswith(token, i):
+                count += 1
+                i += len(token)
+                matched = True
+                break
+        if matched:
+            continue
+        ch = value[i]
+        if ch in SMILES_ONE_CHAR_ATOMS:
+            count += 1
+        i += 1
+    return count
+
+
+def _rdkit_mol_from_smiles(smiles: str):
+    try:
+        from rdkit import Chem  # type: ignore
+    except ImportError:
+        return _RDKIT_UNAVAILABLE
+    try:
+        return Chem.MolFromSmiles(smiles)
+    except Exception:
+        return None
+
+
+def _rdkit_is_available() -> bool:
+    try:
+        import rdkit  # type: ignore  # noqa: F401
+        return True
+    except ImportError:
+        return False
