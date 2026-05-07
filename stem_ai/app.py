@@ -63,6 +63,9 @@ def _finding_cards(result: dict) -> str:
     classification = result["classification"]
     integrity = result["code_integrity"]
     s3 = result.get("stage_3_rubric", {})
+    regulatory = result.get("regulatory_traceability", {})
+    basis = result.get("regulatory_basis", {})
+    detector_summary = result.get("detector_summary", {}).get("by_detector", {})
 
     # Stage scores
     stage_lines = [
@@ -95,6 +98,29 @@ def _finding_cards(result: dict) -> str:
     positives = result.get("notable_positive_evidence", [])
     risk_text = "\n".join(f"- {r}" for r in risks[:4]) or "- None detected."
     pos_text = "\n".join(f"- {p}" for p in positives[:4]) or "- None detected."
+    bio_lines = []
+    for detector, label in (
+        ("BIO_smiles_surface_integrity", "SMILES surface"),
+        ("BIO_smiles_rdkit_validation", "SMILES RDKit lane"),
+        ("BIO_smiles_parser_guard", "SMILES parser guard"),
+        ("BIO_silent_mock_fallback", "Silent mock fallback"),
+        ("BIO_run_trace", "Bio run trace"),
+    ):
+        counts = detector_summary.get(detector, {})
+        if not counts:
+            continue
+        if counts.get("detected"):
+            bio_lines.append(f"- **{label}:** detected `{counts['detected']}`")
+        elif counts.get("not_applicable"):
+            bio_lines.append(f"- **{label}:** not applicable")
+        else:
+            bio_lines.append(f"- **{label}:** not detected")
+    bio_text = "\n".join(bio_lines) or "- No bio deterministic diagnostics were emitted."
+    traceability_summary = regulatory.get(
+        "summary",
+        "No regulatory traceability summary emitted.",
+    )
+    basis_title = basis.get("note", {}).get("title", "Regulatory basis note")
 
     return "\n".join(
         [
@@ -121,6 +147,13 @@ def _finding_cards(result: dict) -> str:
             "",
             "### Positive Evidence",
             pos_text,
+            "",
+            "### Bio Deterministic Diagnostics",
+            bio_text,
+            "",
+            "### Regulatory Traceability",
+            f"- **Summary:** {traceability_summary}",
+            f"- **{basis_title}:** current official source classes as of {basis.get('as_of', 'current registry month')}",
         ]
     )
 
@@ -139,6 +172,10 @@ def _json_preview(result: dict) -> str:
         "stage_3_rubric": result.get("stage_3_rubric", {}),
         "stage_4_rubric": result.get("stage_4_rubric", {}),
         "code_integrity": result.get("code_integrity", {}),
+        "regulatory_basis": result.get("regulatory_basis", {}),
+        "stage_traceability": result.get("stage_traceability", {}),
+        "regulatory_traceability": result.get("regulatory_traceability", {}),
+        "reasoning_model": result.get("reasoning_model", {}),
         "notable_positive_evidence": result.get("notable_positive_evidence", []),
         "notable_risks": result.get("notable_risks", []),
     }
@@ -261,6 +298,13 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">What 1.6.0 adds</p>
+            <p style="{_CARD_BODY}">
+              Deterministic bio diagnostics for SMILES surface checks, optional RDKit validation, parser-guard detection,
+              silent mock fallback detection, and an evidence-only regulatory traceability assistant.
+            </p>
+          </div>
+          <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">Triage tiers</p>
             <p style="{_CARD_BODY}">
               <span style="{_TIER_BADGE}background:#b91c1c;">T0</span> Rejected
@@ -283,6 +327,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
     gr.Markdown(
         "Paste a public bio/medical AI repository URL below. The demo works best on repositories "
         "with README/docs/tests/dependency files. Private repositories should be audited locally.\n\n"
+        "> STEM BIO-AI v1.6.0 adds deterministic SMILES diagnostics, silent-mock detection, and a registry-driven regulatory traceability note layer.\n\n"
         "> Note: This Space scans the current default branch of a public GitHub repository at run time. "
         "Results may differ from commit-pinned benchmark artifacts or older local audit snapshots."
     )
