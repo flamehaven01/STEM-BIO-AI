@@ -1,19 +1,19 @@
 # Advisory Runtime Boundary
 
-Version: 1.5.9
-Status: Public operational note for `--advisory call`
+Version: 1.6.2
+Status: Public operational note for `stem advisory call`
 
 ---
 
 ## Purpose
 
-`--advisory packet` and `--advisory validate` are deterministic local contract operations.
+`stem advisory packet` and `stem advisory validate` are deterministic local contract operations.
 
-`--advisory call` is different. It is the explicit runtime boundary where a downstream provider adapter may be invoked. In v1.5.9, this mode exists to make the boundary visible and enforce its security contract before real provider execution is attached.
+`stem advisory call` is different. It is the explicit runtime boundary where a downstream provider adapter may be invoked. In v1.6.2, this mode exists to make the boundary visible and enforce its security contract before real provider execution is attached.
 
 ---
 
-## What `--advisory call` Does In v1.5.9
+## What `stem advisory call` Does In v1.6.2
 
 - builds the same provider-budgeted advisory input packet
 - exports provider request metadata
@@ -38,7 +38,7 @@ This is intentional. The mode exists to separate the trust boundary before a liv
 Provider-call intent is never implicit. Users must choose:
 
 ```bash
-stem /path/to/repo --advisory call
+stem advisory call /path/to/repo
 ```
 
 ### 2. Centralized redaction
@@ -86,7 +86,7 @@ Artifacts are sanitized before write. This is the last boundary if upstream reda
 
 ## What This Mode Does Not Yet Do
 
-v1.5.9 does **not** ship a live provider adapter.
+v1.6.2 does **not** ship a live provider adapter.
 
 That means:
 
@@ -103,9 +103,9 @@ The current release hardens the boundary first. Real adapter execution belongs t
 ## Recommended Operator Use
 
 1. Run the deterministic scan.
-2. Export `--advisory packet`.
+2. Export `stem advisory packet`.
 3. Review `provider_request`, `packet_contract`, and `contract_schemas`.
-4. Use `--advisory call` only when you need the explicit runtime boundary metadata.
-5. Validate any downstream provider output with `--advisory-response FILE`.
+4. Use `stem advisory call` only when you need the explicit runtime boundary metadata.
+5. Validate any downstream provider output with `stem advisory check-response <repo> --response FILE`.
 
 This keeps deterministic scoring, provider invocation intent, and response validation as separate operational lanes.

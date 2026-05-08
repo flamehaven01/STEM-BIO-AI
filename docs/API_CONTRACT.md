@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.6.0
+Version: 1.6.2
 Status: **Stable**
 Supersedes: historical v1.5 draft contract
 
@@ -28,23 +28,35 @@ Minor version bumps (e.g., 1.5.x → 1.5.y) may:
 
 ## CLI Entry Point (Locked)
 
-```
-python -m stem_ai <repo>               # brief 1-page, all formats
-stem audit <repo> [OPTIONS]            # explicit subcommand
+```bash
+stem <repo>                            # shortcut for `stem scan <repo>`
+stem scan <repo> [OPTIONS]             # primary scan workflow
+stem gate <repo> --min-tier T2         # CI/CD gate workflow
+stem advisory validate <repo>          # offline advisory validation
+stem advisory packet <repo>            # provider-neutral packet export
+stem advisory call <repo>              # explicit provider-call boundary
+stem advisory check-response <repo> --response FILE
 
-Options:
-  --level 1|2|3                        # report depth
-  --format json|md|pdf|all             # output format
-  --out DIR                            # output directory
-  --explain                            # write {stem}_explain.txt
-  --advisory none|validate|packet|call # advisory mode
-  --advisory-response FILE             # validate provider response
-  --version                            # print version and exit
+# Compatibility entry points
+python -m stem_ai <repo>
+python -m stem_ai.cli <repo>
+stem audit <repo> [OPTIONS]
 ```
 
-The `stem audit <repo>` invocation is stable. Output format choices and the
-`--explain` flag are stable. Advisory flags are stable at the protocol level;
-individual provider integrations are additive.
+Shared stable options:
+
+```text
+--level 1|2|3
+--format json|md|pdf|all
+--out DIR / --output DIR
+--explain
+--summary full|compact|off
+--version
+```
+
+The workflow-oriented commands are stable. `stem <repo>` and `stem audit <repo>`
+remain backward-compatible entry points. Advisory packet/response semantics are
+stable at the protocol level; individual provider integrations are additive.
 
 ---
 
@@ -57,7 +69,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.5.9"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.6.2"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -207,19 +219,20 @@ They cannot be relaxed by configuration or provider agreement.
    medical-advice claims are **rejected** by the validator.
 6. `allowed_finding_ids` is capped at 40 entries per packet.
 
-### Advisory CLI Flags (Locked)
+### Advisory CLI Workflows (Locked)
 
-| Flag | Behavior |
-|------|----------|
-| `--advisory none` | Default. No advisory output. |
-| `--advisory validate` | Offline contract validation without API call. |
-| `--advisory packet` | Export provider-neutral advisory input packet. |
-| `--advisory call` | Enter explicit provider-call mode. The network boundary is opt-in and reported separately from deterministic scanning. |
-| `--advisory-response FILE` | Validate a provider-produced JSON response. |
+| Command / Flag | Behavior |
+|----------------|----------|
+| `stem advisory validate <repo>` | Offline contract validation without API call. |
+| `stem advisory packet <repo>` | Export provider-neutral advisory input packet. |
+| `stem advisory call <repo>` | Enter explicit provider-call mode. The network boundary is opt-in and reported separately from deterministic scanning. |
+| `stem advisory check-response <repo> --response FILE` | Validate a provider-produced JSON response. |
+| `stem scan <repo> --advisory ...` | Legacy inline compatibility path. |
+| `stem scan <repo> --advisory-response FILE` | Legacy provider-response compatibility path. |
 
 ### Advisory Packet Fields (Additive)
 
-Provider packet exports from `--advisory packet` now include the following additive fields:
+Provider packet exports from `stem advisory packet` now include the following additive fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -247,7 +260,7 @@ Provider packet exports from `--advisory packet` now include the following addit
 - `provider_request` is secret-free by construction; it reports `api_key_present` and `api_key_env_var`, never the secret value.
 - Cloud providers require `https` endpoints; plain `http` is limited to `localhost`, `127.0.0.1`, or `::1`.
 - Base URLs containing embedded credentials are rejected by argument validation.
-- Explicit `--advisory call` mode is the only runtime path allowed to cross into provider-call intent. Packet export and response validation remain separate trust boundaries.
+- Explicit `stem advisory call` is the only runtime path allowed to cross into provider-call intent. Packet export and response validation remain separate trust boundaries.
 
 ---
 

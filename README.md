@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.1-informational.svg" alt="v1.6.1"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.2-informational.svg" alt="v1.6.2"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -42,28 +42,26 @@ pip install stem-ai
 # editable local install with PDF output support
 pip install -e .[pdf]
 
-# 1-page executive dashboard
-stem /path/to/bio-ai-repo --level 1 --format all
-
-# 3-page stage analysis
-stem /path/to/bio-ai-repo --level 2 --format all
+# fastest path: scan a local repository
+stem /path/to/bio-ai-repo
 
 # 5-page full evidence packet with proof trace
+stem scan /path/to/bio-ai-repo --level 3 --format all --explain
+```
+
+```bash
+# workflow-oriented CLI
+stem scan /path/to/bio-ai-repo --level 2
+stem gate /path/to/bio-ai-repo --min-tier T2
+stem advisory validate /path/to/bio-ai-repo
+stem advisory packet /path/to/bio-ai-repo --output advisory_out
+stem advisory check-response /path/to/bio-ai-repo --response provider_advisory.json
+```
+
+```bash
+# backward-compatible shortcuts still work
 stem /path/to/bio-ai-repo --level 3 --format all --explain
-```
-
-```bash
-# Advisory mode (no provider API call required)
-stem /path/to/bio-ai-repo --advisory validate
-stem /path/to/bio-ai-repo --advisory packet
-stem /path/to/bio-ai-repo --advisory call
-stem /path/to/bio-ai-repo --advisory-response provider_advisory.json
-```
-
-```bash
-# CI/CD governance gate (exit 1 if below threshold)
-stem /path/to/bio-ai-repo --tier-gate T2 --quiet
-stem /path/to/bio-ai-repo --tier-gate T3 --format json --quiet
+stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 ```
 
 Clone the target repository first; the CLI operates on local paths only.
@@ -235,9 +233,9 @@ Every scored item maps to a concrete, inspectable detection method. No inference
 The advisory system exports a sanitized, provider-neutral handoff packet and validates provider responses — without making any provider API call.
 
 ```bash
-stem /path/to/repo --advisory validate          # offline contract check
-stem /path/to/repo --advisory packet            # export sanitized input packet
-stem /path/to/repo --advisory-response FILE     # validate provider JSON response
+stem advisory validate /path/to/repo                # offline contract check
+stem advisory packet /path/to/repo                  # export sanitized input packet
+stem advisory check-response /path/to/repo --response FILE
 ```
 
 **Non-negotiable rules (enforced by the validator):**
@@ -336,7 +334,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.6.1},
+  version = {1.6.2},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

@@ -1,6 +1,6 @@
 # Example Audits
 
-Version: 1.5.9
+Version: 1.6.2
 Status: Public proof-surface index
 
 ---
@@ -37,7 +37,7 @@ Notes:
 Run locally for full artifacts:
 
 ```bash
-stem /path/to/bio-ai-repo --level 3 --format all --explain
+stem scan /path/to/bio-ai-repo --level 3 --format all --explain
 ```
 
 Primary artifacts:

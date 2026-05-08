@@ -1,128 +1,225 @@
 # CLI Reference
 
-**Version:** 1.6.1
+**Version:** 1.6.2  
 **Status:** Stable
 
 ---
 
-## Entry Points
+## Command Model
+
+The 1.6.2 CLI is organized around workflows instead of one long option string.
 
 ```bash
-# Recommended: installed console_scripts entry point
-stem <folder> [OPTIONS]
-stem audit <folder> [OPTIONS]
+stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`
+stem scan <folder> [OPTIONS]             # report generation
+stem gate <folder> --min-tier T2         # CI/CD gate
+stem advisory validate <folder>          # offline advisory validation
+stem advisory packet <folder>            # provider-neutral packet export
+stem advisory call <folder>              # explicit provider-call workflow
+stem advisory check-response <folder> --response FILE
+```
 
-# Package-level module
-python -m stem_ai <folder> [OPTIONS]
+Backward compatibility remains in place:
 
-# Direct module (supported since v1.6.1)
-python -m stem_ai.cli <folder> [OPTIONS]
+```bash
+stem audit <folder> ...
+stem <folder> --tier-gate T2 --quiet
+stem <folder> --advisory packet
+stem <folder> --advisory-response provider_advisory.json
 ```
 
 ---
 
-## Options
+## Picking The Right Command
+
+| Goal | Recommended command |
+|------|---------------------|
+| Get the normal scan outputs | `stem scan <folder>` |
+| Use the fastest default path | `stem <folder>` |
+| Fail CI if the repo is too weak | `stem gate <folder> --min-tier T2` |
+| Export a provider-neutral handoff packet | `stem advisory packet <folder>` |
+| Validate an external provider response | `stem advisory check-response <folder> --response FILE` |
+
+---
+
+## Shared Options
+
+These options work across `scan`, `gate`, and `advisory` workflows unless otherwise noted.
 
 | Flag | Values | Default | Description |
 |------|--------|---------|-------------|
-| `--level` | `1`, `2`, `3` | `1` | Report depth: 1=brief 1p, 2=detailed 3p, 3=full 5p |
-| `--format` | `json`, `md`, `pdf`, `all` | `all` | Output format |
-| `--out` | `DIR` | `stem_output` | Output directory |
+| `--level` | `1`, `2`, `3` | `1` | Report depth: 1=brief 1p, 2=stage review 3p, 3=full packet 5p |
+| `--format` | `json`, `md`, `pdf`, `all` | command-specific | Artifact format to write |
+| `--out`, `--output` | `DIR` | `stem_output` | Output directory |
 | `--explain` | flag | off | Write `{stem}_explain.txt` proof trace |
-| `--advisory` | `none`, `validate`, `packet`, `call` | `none` | Advisory mode |
-| `--advisory-response` | `FILE` | — | Validate provider-produced JSON response |
-| `--tier-gate` | `T0`, `T1`, `T2`, `T3`, `T4` | — | CI gate: exit 1 if audit tier is below threshold |
-| `--quiet` | flag | off | Suppress human-readable stdout (artifacts still written) |
+| `--summary` | `full`, `compact`, `off` | command-specific | stdout summary mode |
+| `--quiet` | flag | off | Alias for `--summary off` |
 | `--version` | flag | — | Print version and exit |
 
----
+### Default behavior by workflow
 
-## Output
-
-### Default stdout (without `--quiet`)
-
-```
-STEM BIO-AI local evidence-surface scan complete
-Target:      owner/repo-name
-Level:       1  (brief, 1p)
-
-Score:       72 / 100  (T3 Supervised)
-  Stage 1:   85 / 100   (README evidence)
-  Stage 2R:  60 / 100   (repo consistency)
-  Stage 3:   70 / 100   (code + bio)
-  Stage 4:   45 / 100   (replication R2)
-Clinical:    CA-INDIRECT
-Integrity:   WARN (C1, C2)
-AI:          not used (deterministic only)
-
-Action items (2 total):
-  - C1_hardcoded_credentials: FAIL
-  - C2_dependency_pinning: WARN
-
-Output:      /path/to/stem_output
-  owner_repo-name_experiment_results.json
-  owner_repo-name_report.md
-  owner_repo-name_brief_1p.pdf
-```
-
-### stdout lines explained
-
-| Line | Source | Since |
-|------|--------|-------|
-| Score / Tier | `result.score.final_score`, `result.score.formal_tier` | v1.1.3 |
-| Stage 1–3 | `result.score.stage_1_readme_intent`, etc. | v1.6.1 |
-| Stage 4 | `result.replication_score`, `result.replication_tier` | v1.3.0 (stdout: v1.6.1) |
-| Clinical | `result.classification.ca_severity` | v1.1.3 (stdout: v1.6.1) |
-| Integrity | `result.code_integrity.C1..C4` | v1.1.3 (stdout: v1.6.1) |
-| AI | Advisory mode / provider status | v1.6.1 |
-| Action items | `result.notable_risks` | v1.2.0 (stdout: v1.6.1) |
+| Command | Default `--format` | Default `--summary` |
+|---------|--------------------|---------------------|
+| `scan` | `all` | `full` |
+| `gate` | `json` | `compact` |
+| `advisory validate` | `json` | `compact` |
+| `advisory packet` | `json` | `compact` |
+| `advisory call` | `json` | `compact` |
+| `advisory check-response` | `json` | `compact` |
 
 ---
 
-## CI/CD Integration
+## Scan Workflow
 
-### Tier Gate
-
-Use `--tier-gate` to enforce a minimum tier in CI pipelines:
+Use `scan` when you want the normal report artifacts.
 
 ```bash
-# Fail the pipeline if the repository scores below T2
-stem /path/to/repo --tier-gate T2 --quiet
-echo $?   # 0 = gate passed, 1 = gate failed
+stem scan /path/to/repo
+stem scan /path/to/repo --level 3 --format all --explain
 ```
+
+The shorthand remains:
 
 ```bash
-# GitHub Actions example
-- name: STEM BIO-AI governance gate
-  run: |
-    pip install stem-ai
-    stem ${{ github.workspace }} --tier-gate T3 --format json --quiet
+stem /path/to/repo
 ```
+
+Compatibility flags still work on `scan`:
+
+| Flag | Description |
+|------|-------------|
+| `--advisory {none,validate,packet,call}` | Legacy inline advisory path; prefer `stem advisory ...` |
+| `--advisory-response FILE` | Legacy provider-response validation path; prefer `stem advisory check-response ... --response FILE` |
+| `--tier-gate T0..T4` | Legacy inline gate path; prefer `stem gate ... --min-tier ...` |
+
+---
+
+## Gate Workflow
+
+Use `gate` when the command is part of CI/CD and the tier threshold matters more than human-readable output.
 
 ```bash
-# GitLab CI example
-stem_gate:
-  script:
-    - pip install stem-ai
-    - stem . --tier-gate T2 --format json --quiet
+stem gate /path/to/repo --min-tier T2
+stem gate /path/to/repo --min-tier T3 --summary off --output results
 ```
 
-### Exit Codes
+Exit codes:
 
 | Code | Meaning |
 |------|---------|
-| `0` | Audit complete; tier gate passed (or no gate set) |
-| `1` | Tier gate failed: actual tier is below `--tier-gate` threshold |
-| `2` | No subcommand provided (help printed) |
+| `0` | Audit complete and gate passed |
+| `1` | Gate failed: actual tier is below `--min-tier` |
+| `2` | Invalid CLI invocation / help path |
 
-### Machine-Readable Output
+---
 
-For CI scripts that need structured data:
+## Advisory Workflow
+
+Use `advisory` when you want a clean boundary between deterministic scoring and downstream model review.
+
+### Validate
 
 ```bash
-# JSON only, no stdout noise
-stem /path/to/repo --format json --quiet --out results/
-# Parse the result
+stem advisory validate /path/to/repo
+```
+
+Runs the deterministic scan and attaches offline advisory-validation metadata. No provider API call is made.
+
+### Packet
+
+```bash
+stem advisory packet /path/to/repo --output advisory_out
+```
+
+Exports a sanitized, provider-neutral advisory packet with allowlisted `finding_id` citations.
+
+### Call
+
+```bash
+stem advisory call /path/to/repo
+```
+
+Enters the explicit provider-call boundary. This is the only workflow that is intended to cross the deterministic-only line.
+
+### Check Response
+
+```bash
+stem advisory check-response /path/to/repo --response provider_advisory.json
+```
+
+Validates a provider-produced JSON response against the evidence ledger with no network call.
+
+---
+
+## stdout Summary Modes
+
+### `--summary full`
+
+Best for local review. Shows:
+- workflow
+- target
+- stage 1-4 breakdown
+- clinical adjacency / caps
+- integrity warnings
+- bio diagnostics
+- regulatory review flag
+- AI usage status
+- top action items
+- output file list
+
+### `--summary compact`
+
+Best for CI logs and quick checks. Shows only:
+- workflow
+- target
+- final tier and score
+- clinical cap / T0 floor when applicable
+- gate verdict when applicable
+- artifact count and output directory
+
+### `--summary off`
+
+Writes artifacts only. Equivalent to `--quiet`.
+
+---
+
+## Output Artifacts
+
+| Pattern | Meaning |
+|---------|---------|
+| `<repo>_experiment_results.json` | Machine-readable result object |
+| `<repo>_report.md` | Human-readable Markdown report |
+| `<repo>_brief_1p.pdf` | Level 1 brief report |
+| `<repo>_detailed_3p.pdf` | Level 2 stage review |
+| `<repo>_detailed_5p.pdf` | Level 3 full packet |
+| `<repo>_explain.txt` | Proof trace from `--explain` |
+
+---
+
+## CI/CD Examples
+
+### GitHub Actions
+
+```yaml
+- name: STEM BIO-AI governance gate
+  run: |
+    pip install stem-ai
+    stem gate ${{ github.workspace }} --min-tier T3 --summary off --output results
+```
+
+### GitLab CI
+
+```yaml
+stem_gate:
+  script:
+    - pip install stem-ai
+    - stem gate . --min-tier T2 --summary off --output results
+```
+
+### Parse the JSON result
+
+```bash
+stem gate /path/to/repo --min-tier T2 --summary off --output results
 cat results/*_experiment_results.json | jq '.score.final_score'
 ```
 
@@ -130,25 +227,26 @@ cat results/*_experiment_results.json | jq '.score.final_score'
 
 ## AI Usage Transparency
 
-The CLI always reports AI usage status:
+Every workflow declares whether AI was used.
 
-| Mode | stdout |
-|------|--------|
-| Default (`--advisory none`) | `AI: not used (deterministic only)` |
-| `--advisory validate` | `AI: not_run (provider=none)` |
-| `--advisory packet` | `AI: packet_ready (provider=none)` |
-| `--advisory call` | `AI: <status> (provider=<name>)` |
+| Workflow | Typical stdout |
+|----------|----------------|
+| `scan` / `gate` | `AI: not used (deterministic only)` |
+| `advisory validate` | `AI: not_run (provider=none)` |
+| `advisory packet` | `AI: packet_ready (provider=none)` |
+| `advisory call` | `AI: <status> (provider=<name>)` |
+| `advisory check-response` | `AI: valid|invalid|error (provider=<name>)` |
 
-This is a trust-transparency feature: every scan explicitly declares whether any AI model was consulted.
+This is a trust-transparency feature, not a marketing line.
 
 ---
 
-## Relationship to Other Docs
+## Relationship To Other Docs
 
 | Document | Scope |
 |----------|-------|
 | [`API_CONTRACT.md`](API_CONTRACT.md) | JSON result schema, field stability, compatibility policy |
 | [`SCORING_RATIONALE.md`](SCORING_RATIONALE.md) | Formula derivation, tier boundaries, calibration gaps |
 | [`ADVISORY_SECRET_HANDLING.md`](ADVISORY_SECRET_HANDLING.md) | Provider API key policy, endpoint restrictions |
-| [`ADVISORY_RUNTIME.md`](ADVISORY_RUNTIME.md) | `--advisory call` trust boundary |
-| This document | CLI flags, stdout format, CI/CD integration |
+| [`ADVISORY_RUNTIME.md`](ADVISORY_RUNTIME.md) | `advisory call` runtime boundary |
+| This document | Human CLI workflows, flags, defaults, summary modes, CI patterns |

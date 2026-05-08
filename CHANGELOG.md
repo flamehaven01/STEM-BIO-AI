@@ -10,6 +10,22 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.2] - 2026-05-08
+
+### Added
+- Added workflow-oriented CLI entry points: `stem scan`, `stem gate`, and `stem advisory validate|packet|call|check-response`.
+- Added `--summary full|compact|off` stdout control with command-specific defaults (`scan=full`, `gate/advisory=compact`).
+- Added `--output` as a clearer alias for `--out`.
+- Added regression coverage for the new workflow-oriented CLI paths and shorthand compatibility.
+- Added `pytest.ini` to ignore transient local output/temp directories during test collection.
+
+### Changed
+- Reframed the CLI around user intent instead of one long option string while preserving `stem <folder>` and `stem audit ...` compatibility.
+- Updated README and `docs/CLI_REFERENCE.md` to document the new workflow model and migration path from legacy inline advisory/gate flags.
+- Promoted package metadata and public version references to v1.6.2.
+
+---
+
 ## [1.6.1] - 2026-05-08
 
 ### Added

@@ -1487,6 +1487,99 @@ def test_cli_advisory_response_writes_validated_ai_advisory_json(tmp_path: Path)
     assert result["ai_advisory"]["response_contract"]["network_called"] is False
 
 
+def test_cli_shorthand_defaults_to_scan_command_and_output_alias(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "results"
+
+    code = cli_main([
+        str(repo),
+        "--format", "json",
+        "--output", str(out_dir),
+        "--summary", "compact",
+    ])
+
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "STEM BIO-AI | scan |" in captured.out
+    assert list(out_dir.glob("*_experiment_results.json"))
+
+
+def test_cli_gate_subcommand_enforces_threshold_and_uses_compact_summary(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "gate"
+
+    code = cli_main([
+        "gate",
+        str(repo),
+        "--min-tier", "T4",
+        "--output", str(out_dir),
+    ])
+
+    captured = capsys.readouterr()
+
+    assert code == 1
+    assert "STEM BIO-AI | gate |" in captured.out
+    assert "Gate: FAIL" in captured.out
+    assert list(out_dir.glob("*_experiment_results.json"))
+
+
+def test_cli_advisory_packet_subcommand_writes_packet_json(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "packet"
+
+    code = cli_main([
+        "advisory",
+        "packet",
+        str(repo),
+        "--output", str(out_dir),
+    ])
+
+    captured = capsys.readouterr()
+    [json_path] = list(out_dir.glob("*_experiment_results.json"))
+    result = json.loads(json_path.read_text(encoding="utf-8"))
+
+    assert code == 0
+    assert "STEM BIO-AI | advisory packet |" in captured.out
+    assert result["ai_advisory_input"]["packet_profile"] == "provider_budgeted"
+
+
+def test_cli_advisory_check_response_subcommand_validates_response_file(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    base = audit_repository(repo)
+    cite = next(iter(known_finding_ids(base)))
+    response_path = tmp_path / "provider_advisory.json"
+    _write(response_path, json.dumps({
+        "provider": "anthropic",
+        "model": "external-model",
+        "reviewer_notes": [
+            {"claim": "Review cited evidence.", "severity": "info", "cites": [cite], "recommended_action": "Inspect cited finding."}
+        ],
+        "inspection_priorities": [],
+    }))
+    out_dir = tmp_path / "response"
+
+    code = cli_main([
+        "advisory",
+        "check-response",
+        str(repo),
+        "--response", str(response_path),
+        "--output", str(out_dir),
+    ])
+
+    captured = capsys.readouterr()
+    [json_path] = list(out_dir.glob("*_experiment_results.json"))
+    result = json.loads(json_path.read_text(encoding="utf-8"))
+
+    assert code == 0
+    assert "STEM BIO-AI | advisory check-response |" in captured.out
+    assert result["ai_advisory"]["status"] == "valid"
+
+
 def test_provider_benchmark_packet_record_and_summary(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
     result = audit_repository(tmp_path, advisory="packet")

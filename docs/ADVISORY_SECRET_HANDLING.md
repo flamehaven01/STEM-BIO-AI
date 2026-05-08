@@ -1,6 +1,6 @@
 # Advisory Secret Handling
 
-Version: 1.5.9
+Version: 1.6.2
 Status: Operational policy for provider-neutral advisory handoff
 
 ---
@@ -22,7 +22,7 @@ The deterministic scanner itself does not call external provider APIs. The secre
 5. Base URLs containing embedded credentials are invalid.
 6. Cloud-provider overrides require `https`.
 7. Plain `http` is restricted to `localhost`, `127.0.0.1`, or `::1`.
-8. Real provider-call intent must be explicit via `--advisory call`.
+8. Real provider-call intent must be explicit via `stem advisory call`.
 
 ---
 
@@ -112,10 +112,10 @@ It must not include any actual key value.
 ## Recommended Operating Pattern
 
 1. Generate deterministic audit output locally.
-2. Export `--advisory packet`.
+2. Export `stem advisory packet`.
 3. Validate `provider_request.args_validation` and `provider_request.base_url_validation`.
 4. Pass the packet to a downstream adapter only after the secret/env contract is satisfied.
-5. Validate the provider response with `--advisory-response`.
+5. Validate the provider response with `stem advisory check-response <repo> --response FILE`.
 
 This keeps deterministic scoring and external provider execution on separate trust boundaries.
 
@@ -123,7 +123,7 @@ This keeps deterministic scoring and external provider execution on separate tru
 
 ## Runtime Guardrails
 
-`--advisory call` is an explicit provider-call boundary. In v1.5.9 the runtime exports:
+`stem advisory call` is an explicit provider-call boundary. In v1.6.2 the runtime exports:
 
 - centralized redaction policy
 - adapter logging policy
