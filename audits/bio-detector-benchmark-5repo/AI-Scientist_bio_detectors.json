@@ -1,0 +1,79 @@
+{
+  "repo": "AI-Scientist",
+  "path": "D:\\Sanctum\\Extra Repo\\AI-Scientist",
+  "final_score": 33,
+  "formal_tier": "T0 Rejected",
+  "ca_severity": "none",
+  "bio_detectors": {
+    "BIO_smiles_surface_integrity": {
+      "status_counts": {
+        "detected": 239
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_smiles_surface_integrity:ai_scientist/generate_ideas.py:511:001",
+          "file": "ai_scientist/generate_ideas.py",
+          "line": 511,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "gpt-4o-2024-05-13",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:ai_scientist/llm.py:15:001",
+          "file": "ai_scientist/llm.py",
+          "line": 15,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "claude-3-5-sonnet-20240620",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:ai_scientist/llm.py:16:002",
+          "file": "ai_scientist/llm.py",
+          "line": 16,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "claude-3-5-sonnet-20241022",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        }
+      ]
+    },
+    "BIO_smiles_parser_guard": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_silent_mock_fallback": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_trace_manifest": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_run_trace": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    }
+  }
+}

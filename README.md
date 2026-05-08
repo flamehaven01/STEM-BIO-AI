@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.0-informational.svg" alt="v1.6.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.1-informational.svg" alt="v1.6.1"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -60,7 +60,15 @@ stem /path/to/bio-ai-repo --advisory call
 stem /path/to/bio-ai-repo --advisory-response provider_advisory.json
 ```
 
+```bash
+# CI/CD governance gate (exit 1 if below threshold)
+stem /path/to/bio-ai-repo --tier-gate T2 --quiet
+stem /path/to/bio-ai-repo --tier-gate T3 --format json --quiet
+```
+
 Clone the target repository first; the CLI operates on local paths only.
+
+Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
 **Proof surfaces**
 - Demo: [Hugging Face Space](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
@@ -72,6 +80,7 @@ Clone the target repository first; the CLI operates on local paths only.
 - Deterministic diagnostics: [`docs/DETERMINISTIC_DIAGNOSTICS.md`](docs/DETERMINISTIC_DIAGNOSTICS.md)
 - Regulatory traceability mapping: [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
 - Regulatory basis registry: [`docs/regulatory_basis_registry.v1.json`](docs/regulatory_basis_registry.v1.json)
+- CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
 ---
 
@@ -327,7 +336,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.6.0},
+  version = {1.6.1},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

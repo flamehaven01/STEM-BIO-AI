@@ -1,0 +1,536 @@
+[
+  {
+    "repo": "Biomni",
+    "path": "D:\\Sanctum\\Extra Repo\\Biomni",
+    "final_score": 33,
+    "formal_tier": "T0 Rejected",
+    "ca_severity": "none",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "detected": 200
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_smiles_surface_integrity:biomni/agent/a1.py:661:001",
+            "file": "biomni/agent/a1.py",
+            "line": 661,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "module2api",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:biomni/agent/a1.py:1971:002",
+            "file": "biomni/agent/a1.py",
+            "line": 1971,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "module2api",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:biomni/agent/a1.py:1984:003",
+            "file": "biomni/agent/a1.py",
+            "line": 1984,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "module2api",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          }
+        ]
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "detected": 9
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_silent_mock_fallback:biomni/tool/cancer_biology.py:259:001",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 259,
+            "severity": "warn",
+            "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:biomni/tool/genetics.py:724:001",
+            "file": "biomni/tool/genetics.py",
+            "line": 724,
+            "severity": "warn",
+            "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:biomni/tool/genetics.py:730:002",
+            "file": "biomni/tool/genetics.py",
+            "line": 730,
+            "severity": "warn",
+            "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          }
+        ]
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "detected": 7
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:627:001",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 627,
+            "severity": "info",
+            "explanation": "Known bio-tool subprocess call has no explicit timeout.",
+            "metadata": {
+              "call_name": "subprocess.run",
+              "bio_tool": "samtools",
+              "shell_true": false,
+              "external_input_taint": true,
+              "string_command": false,
+              "timeout_present": false,
+              "evidence_mode": "observation_only"
+            }
+          },
+          {
+            "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:642:002",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 642,
+            "severity": "warn",
+            "explanation": "Known bio-tool subprocess uses shell=True with likely external-input-tainted command construction.",
+            "metadata": {
+              "call_name": "subprocess.run",
+              "bio_tool": "samtools",
+              "shell_true": true,
+              "external_input_taint": true,
+              "string_command": false,
+              "timeout_present": false,
+              "evidence_mode": "observation_only"
+            }
+          },
+          {
+            "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:703:003",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 703,
+            "severity": "info",
+            "explanation": "Known bio-tool subprocess call has no explicit timeout.",
+            "metadata": {
+              "call_name": "subprocess.run",
+              "bio_tool": "bcftools",
+              "shell_true": false,
+              "external_input_taint": true,
+              "string_command": false,
+              "timeout_present": false,
+              "evidence_mode": "observation_only"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "repo": "BioClaw",
+    "path": "D:\\Sanctum\\Extra Repo\\BioClaw",
+    "final_score": 48,
+    "formal_tier": "T1 Quarantine",
+    "ca_severity": "CA-INDIRECT",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "detected": 10
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_smiles_surface_integrity:container/skills/bio-tools/pymol_render_template.py:26:001",
+            "file": "container/skills/bio-tools/pymol_render_template.py",
+            "line": 26,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "pdb1",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:container/skills/bio-tools/volcano_plot_template.py:56:001",
+            "file": "container/skills/bio-tools/volcano_plot_template.py",
+            "line": 56,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "#C0392B",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:container/skills/bio-tools/volcano_plot_template.py:57:002",
+            "file": "container/skills/bio-tools/volcano_plot_template.py",
+            "line": 57,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "#2E86C1",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          }
+        ]
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "detected": 20
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_trace_manifest:.claude/skills/add-telegram-swarm/SKILL.md:196:001",
+            "file": ".claude/skills/add-telegram-swarm/SKILL.md",
+            "line": 196,
+            "severity": "info",
+            "explanation": "Traceability or runtime event schema keyword detected.",
+            "metadata": {
+              "matched_term": "timestamp"
+            }
+          },
+          {
+            "finding_id": "BIO_trace_manifest:.claude/skills/add-telegram/SKILL.md:174:001",
+            "file": ".claude/skills/add-telegram/SKILL.md",
+            "line": 174,
+            "severity": "info",
+            "explanation": "Traceability or runtime event schema keyword detected.",
+            "metadata": {
+              "matched_term": "timestamp"
+            }
+          },
+          {
+            "finding_id": "BIO_trace_manifest:.claude/skills/add-telegram/SKILL.md:210:002",
+            "file": ".claude/skills/add-telegram/SKILL.md",
+            "line": 210,
+            "severity": "info",
+            "explanation": "Traceability or runtime event schema keyword detected.",
+            "metadata": {
+              "matched_term": "timestamp"
+            }
+          }
+        ]
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  },
+  {
+    "repo": "ClawBio",
+    "path": "D:\\Sanctum\\Extra Repo\\ClawBio",
+    "final_score": 67,
+    "formal_tier": "T2 Caution",
+    "ca_severity": "CA-DIRECT",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "detected": 543
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_smiles_surface_integrity:bot/roboterri.py:56:001",
+            "file": "bot/roboterri.py",
+            "line": 56,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "gemini-2.0-flash",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:bot/roboterri.py:740:002",
+            "file": "bot/roboterri.py",
+            "line": 740,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "chars)",
+              "issues": [
+                "unbalanced_parentheses"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:bot/roboterri.py:757:003",
+            "file": "bot/roboterri.py",
+            "line": 757,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": ".mp3",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          }
+        ]
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "detected": 44
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:500:001",
+            "file": "bot/roboterri.py",
+            "line": 500,
+            "severity": "warn",
+            "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:507:002",
+            "file": "bot/roboterri.py",
+            "line": 507,
+            "severity": "warn",
+            "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:517:003",
+            "file": "bot/roboterri.py",
+            "line": 517,
+            "severity": "warn",
+            "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          }
+        ]
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  },
+  {
+    "repo": "LabClaw",
+    "path": "D:\\Sanctum\\Extra Repo\\LabClaw",
+    "final_score": 28,
+    "formal_tier": "T0 Rejected",
+    "ca_severity": "none",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "detected": 19
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_trace_manifest:skills/bio/detect_common_wetlab_errors/SKILL.md:3:001",
+            "file": "skills/bio/detect_common_wetlab_errors/SKILL.md",
+            "line": 3,
+            "severity": "info",
+            "explanation": "Traceability or runtime event schema keyword detected.",
+            "metadata": {
+              "matched_term": "timestamp"
+            }
+          },
+          {
+            "finding_id": "BIO_trace_manifest:skills/bio/detect_common_wetlab_errors/SKILL.md:13:002",
+            "file": "skills/bio/detect_common_wetlab_errors/SKILL.md",
+            "line": 13,
+            "severity": "info",
+            "explanation": "Traceability or runtime event schema keyword detected.",
+            "metadata": {
+              "matched_term": "timestamp"
+            }
+          },
+          {
+            "finding_id": "BIO_trace_manifest:skills/bio/egocentric_view_to_structured_log/SKILL.md:13:001",
+            "file": "skills/bio/egocentric_view_to_structured_log/SKILL.md",
+            "line": 13,
+            "severity": "info",
+            "explanation": "Traceability or runtime event schema keyword detected.",
+            "metadata": {
+              "matched_term": "timestamp"
+            }
+          }
+        ]
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  },
+  {
+    "repo": "AI-Scientist",
+    "path": "D:\\Sanctum\\Extra Repo\\AI-Scientist",
+    "final_score": 33,
+    "formal_tier": "T0 Rejected",
+    "ca_severity": "none",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "detected": 239
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_smiles_surface_integrity:ai_scientist/generate_ideas.py:511:001",
+            "file": "ai_scientist/generate_ideas.py",
+            "line": 511,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "gpt-4o-2024-05-13",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:ai_scientist/llm.py:15:001",
+            "file": "ai_scientist/llm.py",
+            "line": 15,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "claude-3-5-sonnet-20240620",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          },
+          {
+            "finding_id": "BIO_smiles_surface_integrity:ai_scientist/llm.py:16:002",
+            "file": "ai_scientist/llm.py",
+            "line": 16,
+            "severity": "warn",
+            "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+            "metadata": {
+              "smiles_text": "claude-3-5-sonnet-20241022",
+              "issues": [
+                "unclosed_ring_label"
+              ]
+            }
+          }
+        ]
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  }
+]

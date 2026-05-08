@@ -204,7 +204,7 @@ def test_realistic_sk_fixture_in_test_path_does_not_trigger_c1_penalty(tmp_path:
     _write(
         tmp_path / "tests" / "test_severity.py",
         "def test_hardcoded_api_key():\n"
-        "    code = '''\\napi_key = \\\"sk-1234567890abcdef\\\"\\n'''\n",
+        "    code = '''\\napi_key = \\\"sk-1234567890abcdefghijklmn\\\"\\n'''\n",
     )
 
     result = audit_repository(tmp_path)

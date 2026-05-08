@@ -1,0 +1,70 @@
+{
+  "repo": "LabClaw",
+  "path": "D:\\Sanctum\\Extra Repo\\LabClaw",
+  "final_score": 28,
+  "formal_tier": "T0 Rejected",
+  "ca_severity": "none",
+  "bio_detectors": {
+    "BIO_smiles_surface_integrity": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_smiles_parser_guard": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_silent_mock_fallback": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_trace_manifest": {
+      "status_counts": {
+        "detected": 19
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_trace_manifest:skills/bio/detect_common_wetlab_errors/SKILL.md:3:001",
+          "file": "skills/bio/detect_common_wetlab_errors/SKILL.md",
+          "line": 3,
+          "severity": "info",
+          "explanation": "Traceability or runtime event schema keyword detected.",
+          "metadata": {
+            "matched_term": "timestamp"
+          }
+        },
+        {
+          "finding_id": "BIO_trace_manifest:skills/bio/detect_common_wetlab_errors/SKILL.md:13:002",
+          "file": "skills/bio/detect_common_wetlab_errors/SKILL.md",
+          "line": 13,
+          "severity": "info",
+          "explanation": "Traceability or runtime event schema keyword detected.",
+          "metadata": {
+            "matched_term": "timestamp"
+          }
+        },
+        {
+          "finding_id": "BIO_trace_manifest:skills/bio/egocentric_view_to_structured_log/SKILL.md:13:001",
+          "file": "skills/bio/egocentric_view_to_structured_log/SKILL.md",
+          "line": 13,
+          "severity": "info",
+          "explanation": "Traceability or runtime event schema keyword detected.",
+          "metadata": {
+            "matched_term": "timestamp"
+          }
+        }
+      ]
+    },
+    "BIO_run_trace": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    }
+  }
+}

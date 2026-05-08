@@ -1,0 +1,110 @@
+{
+  "repo": "BioClaw",
+  "path": "D:\\Sanctum\\Extra Repo\\BioClaw",
+  "final_score": 48,
+  "formal_tier": "T1 Quarantine",
+  "ca_severity": "CA-INDIRECT",
+  "bio_detectors": {
+    "BIO_smiles_surface_integrity": {
+      "status_counts": {
+        "detected": 10
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_smiles_surface_integrity:container/skills/bio-tools/pymol_render_template.py:26:001",
+          "file": "container/skills/bio-tools/pymol_render_template.py",
+          "line": 26,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "pdb1",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:container/skills/bio-tools/volcano_plot_template.py:56:001",
+          "file": "container/skills/bio-tools/volcano_plot_template.py",
+          "line": 56,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "#C0392B",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:container/skills/bio-tools/volcano_plot_template.py:57:002",
+          "file": "container/skills/bio-tools/volcano_plot_template.py",
+          "line": 57,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "#2E86C1",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        }
+      ]
+    },
+    "BIO_smiles_parser_guard": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_silent_mock_fallback": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_trace_manifest": {
+      "status_counts": {
+        "detected": 20
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_trace_manifest:.claude/skills/add-telegram-swarm/SKILL.md:196:001",
+          "file": ".claude/skills/add-telegram-swarm/SKILL.md",
+          "line": 196,
+          "severity": "info",
+          "explanation": "Traceability or runtime event schema keyword detected.",
+          "metadata": {
+            "matched_term": "timestamp"
+          }
+        },
+        {
+          "finding_id": "BIO_trace_manifest:.claude/skills/add-telegram/SKILL.md:174:001",
+          "file": ".claude/skills/add-telegram/SKILL.md",
+          "line": 174,
+          "severity": "info",
+          "explanation": "Traceability or runtime event schema keyword detected.",
+          "metadata": {
+            "matched_term": "timestamp"
+          }
+        },
+        {
+          "finding_id": "BIO_trace_manifest:.claude/skills/add-telegram/SKILL.md:210:002",
+          "file": ".claude/skills/add-telegram/SKILL.md",
+          "line": 210,
+          "severity": "info",
+          "explanation": "Traceability or runtime event schema keyword detected.",
+          "metadata": {
+            "matched_term": "timestamp"
+          }
+        }
+      ]
+    },
+    "BIO_run_trace": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    }
+  }
+}

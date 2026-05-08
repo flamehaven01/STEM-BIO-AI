@@ -1,0 +1,113 @@
+{
+  "repo": "ClawBio",
+  "path": "D:\\Sanctum\\Extra Repo\\ClawBio",
+  "final_score": 67,
+  "formal_tier": "T2 Caution",
+  "ca_severity": "CA-DIRECT",
+  "bio_detectors": {
+    "BIO_smiles_surface_integrity": {
+      "status_counts": {
+        "detected": 543
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_smiles_surface_integrity:bot/roboterri.py:56:001",
+          "file": "bot/roboterri.py",
+          "line": 56,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "gemini-2.0-flash",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:bot/roboterri.py:740:002",
+          "file": "bot/roboterri.py",
+          "line": 740,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "chars)",
+            "issues": [
+              "unbalanced_parentheses"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:bot/roboterri.py:757:003",
+          "file": "bot/roboterri.py",
+          "line": 757,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": ".mp3",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        }
+      ]
+    },
+    "BIO_smiles_parser_guard": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_silent_mock_fallback": {
+      "status_counts": {
+        "detected": 44
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:500:001",
+          "file": "bot/roboterri.py",
+          "line": 500,
+          "severity": "warn",
+          "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+          "metadata": {
+            "reason": "runtime_mock_toggle_controls_output_path",
+            "recommended_severity": "warn"
+          }
+        },
+        {
+          "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:507:002",
+          "file": "bot/roboterri.py",
+          "line": 507,
+          "severity": "warn",
+          "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+          "metadata": {
+            "reason": "runtime_mock_toggle_controls_output_path",
+            "recommended_severity": "warn"
+          }
+        },
+        {
+          "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:517:003",
+          "file": "bot/roboterri.py",
+          "line": 517,
+          "severity": "warn",
+          "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+          "metadata": {
+            "reason": "runtime_mock_toggle_controls_output_path",
+            "recommended_severity": "warn"
+          }
+        }
+      ]
+    },
+    "BIO_trace_manifest": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_run_trace": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    }
+  }
+}

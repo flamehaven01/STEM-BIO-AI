@@ -1,0 +1,162 @@
+{
+  "repo": "Biomni",
+  "path": "D:\\Sanctum\\Extra Repo\\Biomni",
+  "final_score": 33,
+  "formal_tier": "T0 Rejected",
+  "ca_severity": "none",
+  "bio_detectors": {
+    "BIO_smiles_surface_integrity": {
+      "status_counts": {
+        "detected": 200
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_smiles_surface_integrity:biomni/agent/a1.py:661:001",
+          "file": "biomni/agent/a1.py",
+          "line": 661,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "module2api",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:biomni/agent/a1.py:1971:002",
+          "file": "biomni/agent/a1.py",
+          "line": 1971,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "module2api",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        },
+        {
+          "finding_id": "BIO_smiles_surface_integrity:biomni/agent/a1.py:1984:003",
+          "file": "biomni/agent/a1.py",
+          "line": 1984,
+          "severity": "warn",
+          "explanation": "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
+          "metadata": {
+            "smiles_text": "module2api",
+            "issues": [
+              "unclosed_ring_label"
+            ]
+          }
+        }
+      ]
+    },
+    "BIO_smiles_parser_guard": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_silent_mock_fallback": {
+      "status_counts": {
+        "detected": 9
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_silent_mock_fallback:biomni/tool/cancer_biology.py:259:001",
+          "file": "biomni/tool/cancer_biology.py",
+          "line": 259,
+          "severity": "warn",
+          "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+          "metadata": {
+            "reason": "runtime_mock_toggle_controls_output_path",
+            "recommended_severity": "warn"
+          }
+        },
+        {
+          "finding_id": "BIO_silent_mock_fallback:biomni/tool/genetics.py:724:001",
+          "file": "biomni/tool/genetics.py",
+          "line": 724,
+          "severity": "warn",
+          "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+          "metadata": {
+            "reason": "runtime_mock_toggle_controls_output_path",
+            "recommended_severity": "warn"
+          }
+        },
+        {
+          "finding_id": "BIO_silent_mock_fallback:biomni/tool/genetics.py:730:002",
+          "file": "biomni/tool/genetics.py",
+          "line": 730,
+          "severity": "warn",
+          "explanation": "Runtime branch appears to redirect analysis into mock, demo, or simulated output behavior.",
+          "metadata": {
+            "reason": "runtime_mock_toggle_controls_output_path",
+            "recommended_severity": "warn"
+          }
+        }
+      ]
+    },
+    "BIO_trace_manifest": {
+      "status_counts": {
+        "not_detected": 1
+      },
+      "examples": []
+    },
+    "BIO_run_trace": {
+      "status_counts": {
+        "detected": 7
+      },
+      "examples": [
+        {
+          "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:627:001",
+          "file": "biomni/tool/cancer_biology.py",
+          "line": 627,
+          "severity": "info",
+          "explanation": "Known bio-tool subprocess call has no explicit timeout.",
+          "metadata": {
+            "call_name": "subprocess.run",
+            "bio_tool": "samtools",
+            "shell_true": false,
+            "external_input_taint": true,
+            "string_command": false,
+            "timeout_present": false,
+            "evidence_mode": "observation_only"
+          }
+        },
+        {
+          "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:642:002",
+          "file": "biomni/tool/cancer_biology.py",
+          "line": 642,
+          "severity": "warn",
+          "explanation": "Known bio-tool subprocess uses shell=True with likely external-input-tainted command construction.",
+          "metadata": {
+            "call_name": "subprocess.run",
+            "bio_tool": "samtools",
+            "shell_true": true,
+            "external_input_taint": true,
+            "string_command": false,
+            "timeout_present": false,
+            "evidence_mode": "observation_only"
+          }
+        },
+        {
+          "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:703:003",
+          "file": "biomni/tool/cancer_biology.py",
+          "line": 703,
+          "severity": "info",
+          "explanation": "Known bio-tool subprocess call has no explicit timeout.",
+          "metadata": {
+            "call_name": "subprocess.run",
+            "bio_tool": "bcftools",
+            "shell_true": false,
+            "external_input_taint": true,
+            "string_command": false,
+            "timeout_present": false,
+            "evidence_mode": "observation_only"
+          }
+        }
+      ]
+    }
+  }
+}

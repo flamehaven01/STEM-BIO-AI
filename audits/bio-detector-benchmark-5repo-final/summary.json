@@ -1,0 +1,300 @@
+[
+  {
+    "repo": "Biomni",
+    "final_score": 33,
+    "formal_tier": "T0 Rejected",
+    "ca_severity": "none",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "detected": 9
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_silent_mock_fallback:biomni/tool/cancer_biology.py:259:001",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 259,
+            "severity": "warn",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:biomni/tool/genetics.py:724:001",
+            "file": "biomni/tool/genetics.py",
+            "line": 724,
+            "severity": "warn",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:biomni/tool/genetics.py:730:002",
+            "file": "biomni/tool/genetics.py",
+            "line": 730,
+            "severity": "warn",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          }
+        ]
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "detected": 7
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:627:001",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 627,
+            "severity": "info",
+            "metadata": {
+              "call_name": "subprocess.run",
+              "bio_tool": "samtools",
+              "shell_true": false,
+              "external_input_taint": true,
+              "string_command": false,
+              "timeout_present": false,
+              "evidence_mode": "observation_only"
+            }
+          },
+          {
+            "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:642:002",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 642,
+            "severity": "warn",
+            "metadata": {
+              "call_name": "subprocess.run",
+              "bio_tool": "samtools",
+              "shell_true": true,
+              "external_input_taint": true,
+              "string_command": false,
+              "timeout_present": false,
+              "evidence_mode": "observation_only"
+            }
+          },
+          {
+            "finding_id": "BIO_run_trace:biomni/tool/cancer_biology.py:703:003",
+            "file": "biomni/tool/cancer_biology.py",
+            "line": 703,
+            "severity": "info",
+            "metadata": {
+              "call_name": "subprocess.run",
+              "bio_tool": "bcftools",
+              "shell_true": false,
+              "external_input_taint": true,
+              "string_command": false,
+              "timeout_present": false,
+              "evidence_mode": "observation_only"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "repo": "BioClaw",
+    "final_score": 48,
+    "formal_tier": "T1 Quarantine",
+    "ca_severity": "CA-INDIRECT",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  },
+  {
+    "repo": "ClawBio",
+    "final_score": 67,
+    "formal_tier": "T2 Caution",
+    "ca_severity": "CA-DIRECT",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "detected": 44
+        },
+        "examples": [
+          {
+            "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:500:001",
+            "file": "bot/roboterri.py",
+            "line": 500,
+            "severity": "warn",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:507:002",
+            "file": "bot/roboterri.py",
+            "line": 507,
+            "severity": "warn",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          },
+          {
+            "finding_id": "BIO_silent_mock_fallback:bot/roboterri.py:517:003",
+            "file": "bot/roboterri.py",
+            "line": 517,
+            "severity": "warn",
+            "metadata": {
+              "reason": "runtime_mock_toggle_controls_output_path",
+              "recommended_severity": "warn"
+            }
+          }
+        ]
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  },
+  {
+    "repo": "LabClaw",
+    "final_score": 28,
+    "formal_tier": "T0 Rejected",
+    "ca_severity": "none",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  },
+  {
+    "repo": "AI-Scientist",
+    "final_score": 33,
+    "formal_tier": "T0 Rejected",
+    "ca_severity": "none",
+    "bio_detectors": {
+      "BIO_smiles_surface_integrity": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_smiles_parser_guard": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_silent_mock_fallback": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_trace_manifest": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      },
+      "BIO_run_trace": {
+        "status_counts": {
+          "not_detected": 1
+        },
+        "examples": []
+      }
+    }
+  }
+]

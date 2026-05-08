@@ -10,6 +10,24 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.1] - 2026-05-08
+
+### Added
+- Added `--tier-gate T0|T1|T2|T3|T4` CLI flag for CI/CD pipeline integration: exit code 1 if the audit tier is below the required threshold.
+- Added `--quiet` CLI flag to suppress human-readable stdout summary while still writing artifacts.
+- Added enriched CLI stdout summary with per-stage scoring breakdown (Stage 1–4), clinical adjacency status, code integrity warnings, bio diagnostics, and regulatory review flags.
+- Added AI usage transparency line to stdout: always reports whether the scan used deterministic-only mode or advisory provider mode.
+- Added remediation hints from `notable_risks` (top 3 action items displayed in stdout).
+- Added `if __name__ == "__main__"` guard to `cli.py` so `python -m stem_ai.cli` works as a valid entry point.
+- Added `docs/CLI_REFERENCE.md` documenting all CLI flags, stdout format, CI/CD integration examples, exit codes, and AI transparency features.
+
+### Changed
+- CLI stdout now surfaces data from v1.3.0–v1.6.0 engine features (replication lane, bio diagnostics, regulatory traceability) that were previously only available in JSON/Markdown/PDF artifacts.
+- Updated README Quick Start section with CI/CD gate examples and CLI reference link.
+- Updated version badge and citation to v1.6.1.
+
+---
+
 ## [1.6.0] - 2026-05-06
 
 ### Added
