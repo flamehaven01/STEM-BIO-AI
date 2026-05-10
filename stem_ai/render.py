@@ -136,6 +136,9 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "",
         f"**Target:** `{result['target']['name']}`",
         f"**Execution Mode:** `{result['execution_mode']}`",
+        f"**Calibration Profile:** `{result.get('calibration_profile', {}).get('profile_name', 'unknown')}` "
+        f"(`{result.get('calibration_profile', {}).get('policy_version', 'unknown')}`, "
+        f"`{result.get('calibration_profile', {}).get('profile_read_mode', 'unknown')}`)",
         f"**Final Score:** **{score['final_score']} / 100**",
         f"**Formal Tier:** **{score['formal_tier']}**",
         f"**Use Scope:** {score['use_scope']}",
@@ -216,6 +219,12 @@ def render_explain(result: dict[str, Any]) -> str:
     out: list[str] = [
         "STEM BIO-AI Explain Report",
         f"Target  : {result['target']['name']}",
+        (
+            "Policy  : "
+            f"{result.get('calibration_profile', {}).get('profile_name', 'unknown')} "
+            f"[{result.get('calibration_profile', {}).get('policy_version', 'unknown')}; "
+            f"{result.get('calibration_profile', {}).get('profile_read_mode', 'unknown')}]"
+        ),
         f"Score   : {score['final_score']} / 100  ({score['formal_tier']})",
         f"Replic  : {result.get('replication_score', 0)} / 100"
         f"  ({result.get('replication_tier', 'R0')})",

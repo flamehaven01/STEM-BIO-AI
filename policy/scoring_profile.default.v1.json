@@ -1,0 +1,57 @@
+{
+  "policy_schema_version": "1",
+  "policy_version": "ca-policy-1.0",
+  "tool_version_introduced": "1.6.5",
+  "tool_version_last_validated": "1.6.5",
+  "profile_name": "default",
+  "profile_status": "authoritative_release",
+  "profile_read_mode": "mirror_only",
+  "weights": {
+    "stage_1_percent": 40,
+    "stage_2r_percent": 20,
+    "stage_3_percent": 40
+  },
+  "stage_baselines": {
+    "stage_1": 60,
+    "stage_2r": 60,
+    "stage_3": 0
+  },
+  "tier_policy": {
+    "tier_names": ["T0", "T1", "T2", "T3", "T4"],
+    "tier_boundaries": [40, 55, 70, 85],
+    "boundary_semantics": "left_closed_right_open",
+    "score_domain": "integer_0_to_100"
+  },
+  "clinical_policy": {
+    "ca_no_disclaimer_cap": 69,
+    "t0_hard_floor_cap": 39
+  },
+  "code_integrity_policy": {
+    "C1_penalty": 10,
+    "C2_score_affecting": false,
+    "C3_score_affecting": false,
+    "C4_score_affecting": false
+  },
+  "stage_3_policy": {
+    "normalization": {
+      "kind": "linear_round",
+      "raw_max": 80,
+      "target_max": 100,
+      "rounding": "half_up_int"
+    },
+    "b2_partial_credit_mode": "structured_boundary_required"
+  },
+  "stage_4_policy": {
+    "emphasis": "baseline"
+  },
+  "diagnostic_policy": {},
+  "reasoning_policy": {
+    "status": "diagnostic_only_uncalibrated_initial_prior",
+    "score_integration": "forbidden"
+  },
+  "governance_sources": {
+    "ca_taxonomy_version": "ca-taxonomy-v1",
+    "ca_taxonomy_source": "runtime_regex_hardcoded_in_scanner_py"
+  },
+  "policy_sha256": null
+}

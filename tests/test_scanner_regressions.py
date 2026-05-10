@@ -30,6 +30,11 @@ from stem_ai.advisory_runtime import (
     execute_advisory_call,
     provider_call_runtime,
 )
+from stem_ai.calibration_profile import (
+    calibration_profile_metadata,
+    load_calibration_profile,
+    validate_profile,
+)
 from stem_ai.cli import main as cli_main
 from stem_ai.evidence import make_finding_id
 from stem_ai.provider_benchmark import (
@@ -1940,6 +1945,84 @@ def test_regulatory_basis_review_required_is_false_for_current_registry_month() 
 
     assert basis["review_required"] is False
     assert basis["review_reasons"] == []
+
+
+def test_default_calibration_profile_loads_with_computed_sha256() -> None:
+    profile = load_calibration_profile("default")
+
+    assert profile["profile_name"] == "default"
+    assert profile["profile_read_mode"] == "mirror_only"
+    assert isinstance(profile["policy_sha256"], str)
+    assert len(profile["policy_sha256"]) == 64
+
+
+def test_strict_clinical_profile_loads_with_defined_diff() -> None:
+    profile = load_calibration_profile("strict_clinical_adjacency")
+
+    assert profile["clinical_policy"]["ca_no_disclaimer_cap"] == 60
+    assert profile["clinical_policy"]["t0_hard_floor_cap"] == 35
+    assert profile["profile_status"] == "experimental"
+
+
+def test_validate_profile_rejects_weights_that_do_not_sum_to_100() -> None:
+    profile = load_calibration_profile("default")
+    profile["weights"]["stage_3_percent"] = 41
+
+    try:
+        validate_profile(profile)
+    except ValueError as exc:
+        assert "sum to 100" in str(exc)
+    else:
+        raise AssertionError("Expected validate_profile to reject invalid weights")
+
+
+def test_validate_profile_rejects_non_monotonic_tier_boundaries() -> None:
+    profile = load_calibration_profile("default")
+    profile["tier_policy"]["tier_boundaries"] = [69, 40, 55, 85]
+
+    try:
+        validate_profile(profile)
+    except ValueError as exc:
+        assert "strictly increasing" in str(exc)
+    else:
+        raise AssertionError("Expected validate_profile to reject non-monotonic boundaries")
+
+
+def test_validate_profile_rejects_authoritative_mode_without_declared_hash() -> None:
+    profile = load_calibration_profile("default")
+    profile["profile_read_mode"] = "authoritative"
+    profile["policy_sha256"] = None
+
+    try:
+        validate_profile(profile)
+    except ValueError as exc:
+        assert "must declare a policy_sha256" in str(exc)
+    else:
+        raise AssertionError("Expected validate_profile to reject authoritative mode without hash")
+
+
+def test_audit_repository_surfaces_calibration_profile_metadata(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral genome analysis.\n")
+
+    result = audit_repository(tmp_path)
+    calibration = result["calibration_profile"]
+
+    assert calibration["policy_schema_version"] == "1"
+    assert calibration["policy_version"] == "ca-policy-1.0"
+    assert calibration["profile_name"] == "default"
+    assert calibration["profile_read_mode"] == "mirror_only"
+    assert isinstance(calibration["policy_sha256"], str)
+
+
+def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral genome analysis.\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="brief", pages=1)
+    explain = render_explain(result)
+
+    assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`)" in markdown
+    assert "Policy  : default [ca-policy-1.0; mirror_only]" in explain
 
 
 def test_regulatory_basis_review_required_flips_when_registry_is_stale() -> None:

@@ -18,6 +18,7 @@ from .advisory_contract import (
 from .advisory_providers import load_provider_config, provider_handoff_metadata
 from .advisory_response import validate_advisory_response_file
 from .advisory_runtime import execute_advisory_call
+from .calibration_profile import calibration_profile_metadata, load_calibration_profile
 from .detectors import collect_evidence_bundle
 from .patterns import (
     BIAS_LIMITATION_TERMS,
@@ -97,6 +98,7 @@ def audit_repository(
     advisory: str = "none",
     advisory_response_path: Path | None = None,
 ) -> dict[str, Any]:
+    calibration_profile = load_calibration_profile("default")
     audit_date = date.today()
     files = _list_files(target)
     readme = _read_first(target, ["README.md", "README.rst", "readme.md"])
@@ -206,6 +208,7 @@ def audit_repository(
             "REG-Scaffolding": "Evidence-only traceability scaffolding signals from manifest/hash/audit-log schema surfaces; intended as structural audit-readiness support rather than compliance proof.",
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
         },
+        "calibration_profile": calibration_profile_metadata(calibration_profile),
     }
     result["regulatory_basis"] = build_regulatory_basis(audit_date)
     result["stage_traceability"] = build_stage_traceability(result)

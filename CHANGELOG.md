@@ -10,6 +10,22 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.5] - 2026-05-10
+
+### Added
+- Added `stem_ai.calibration_profile` for Phase 1 mirror-only calibration profile loading, validation, and canonical policy hashing.
+- Added packaged policy artifacts: `policy/scoring_profile.schema.json`, `policy/scoring_profile.default.v1.json`, and `policy/scoring_profile.strict_clinical_adjacency.v1.json`.
+- Added calibration profile metadata to result objects so outputs now surface `policy_version`, `profile_name`, `profile_status`, `profile_read_mode`, and canonical `policy_sha256`.
+- Added regression coverage for calibration profile validation, metadata surfacing, and Markdown / explain rendering.
+- Added a fixture-format example for Phase 1 profile parity under `tests/fixtures/calibration_profiles/`.
+
+### Changed
+- Kept scoring behavior unchanged while introducing mirror-only profile validation so Phase 1 remains parity-first rather than behavior-changing.
+- Updated `docs/API_CONTRACT.md` and `docs/CALIBRATION_PROFILE_DESIGN.md` to define Phase 1 calibration metadata, fixture format, and schema/runtime validation boundaries.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.6.5.
+
+---
+
 ## [1.6.4] - 2026-05-10
 
 ### Added

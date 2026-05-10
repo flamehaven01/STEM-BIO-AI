@@ -9,6 +9,7 @@ include requirements.txt
 include docs/ADVISORY_SECRET_HANDLING.md
 include docs/ADVISORY_RUNTIME.md
 include docs/API_CONTRACT.md
+include docs/CALIBRATION_PROFILE_DESIGN.md
 include docs/DETERMINISTIC_DIAGNOSTICS.md
 include docs/EXAMPLE_AUDITS.md
 include docs/MICA_MEMORY.md
@@ -16,13 +17,17 @@ include docs/REGULATORY_MAPPING.md
 include docs/SCORING_RATIONALE.md
 include docs/regulatory_basis_registry.schema.json
 include docs/regulatory_basis_registry.v1.json
+include policy/scoring_profile.schema.json
+include policy/scoring_profile.default.v1.json
+include policy/scoring_profile.strict_clinical_adjacency.v1.json
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.6.0.json
-include memory/stem-ai-playbook.v1.6.0.md
-include memory/stem-ai-lessons.v1.6.0.md
+include memory/stem-ai.mica.v1.6.5.json
+include memory/stem-ai-playbook.v1.6.5.md
+include memory/stem-ai-lessons.v1.6.5.md
 
 recursive-include stem_ai *.py
 recursive-include tests *.py
+recursive-include tests *.json
 
 prune .git
 prune .github

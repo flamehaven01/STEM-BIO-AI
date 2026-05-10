@@ -1,0 +1,10 @@
+{
+  "fixture_name": "default_profile_parity_small_repo",
+  "target_repo": "tests/fixtures/repos/small_repo_a",
+  "expected": {
+    "raw_score_before_floor": 67,
+    "final_score": 67,
+    "formal_tier": "T2 Caution",
+    "score_cap": null
+  }
+}

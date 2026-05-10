@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/flamehaven01/STEM-BIO-AI/policy/scoring_profile.schema.json",
+  "title": "STEM BIO-AI Scoring Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_schema_version",
+    "policy_version",
+    "tool_version_introduced",
+    "tool_version_last_validated",
+    "profile_name",
+    "profile_status",
+    "profile_read_mode",
+    "weights",
+    "stage_baselines",
+    "tier_policy",
+    "clinical_policy",
+    "code_integrity_policy",
+    "stage_3_policy",
+    "stage_4_policy",
+    "diagnostic_policy",
+    "reasoning_policy",
+    "governance_sources"
+  ],
+  "properties": {
+    "policy_schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "policy_version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "tool_version_introduced": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "tool_version_last_validated": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "profile_name": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "profile_status": {
+      "type": "string",
+      "enum": [
+        "preview_only",
+        "experimental",
+        "benchmark_candidate",
+        "authoritative_release",
+        "deprecated"
+      ]
+    },
+    "profile_read_mode": {
+      "type": "string",
+      "enum": [
+        "mirror_only",
+        "authoritative"
+      ]
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage_1_percent",
+        "stage_2r_percent",
+        "stage_3_percent"
+      ],
+      "properties": {
+        "stage_1_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "stage_2r_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "stage_3_percent": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "stage_baselines": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage_1",
+        "stage_2r",
+        "stage_3"
+      ],
+      "properties": {
+        "stage_1": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "stage_2r": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "stage_3": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "tier_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tier_names",
+        "tier_boundaries",
+        "boundary_semantics",
+        "score_domain"
+      ],
+      "properties": {
+        "tier_names": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "tier_boundaries": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "boundary_semantics": {
+          "type": "string",
+          "enum": [
+            "left_closed_right_open"
+          ]
+        },
+        "score_domain": {
+          "type": "string",
+          "enum": [
+            "integer_0_to_100"
+          ]
+        }
+      }
+    },
+    "clinical_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ca_no_disclaimer_cap",
+        "t0_hard_floor_cap"
+      ],
+      "properties": {
+        "ca_no_disclaimer_cap": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "t0_hard_floor_cap": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "code_integrity_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "C1_penalty",
+        "C2_score_affecting",
+        "C3_score_affecting",
+        "C4_score_affecting"
+      ],
+      "properties": {
+        "C1_penalty": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "C2_score_affecting": { "type": "boolean" },
+        "C3_score_affecting": { "type": "boolean" },
+        "C4_score_affecting": { "type": "boolean" }
+      }
+    },
+    "stage_3_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "normalization",
+        "b2_partial_credit_mode"
+      ],
+      "properties": {
+        "normalization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "raw_max",
+            "target_max",
+            "rounding"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "linear_round"
+              ]
+            },
+            "raw_max": { "type": "integer", "minimum": 1 },
+            "target_max": { "type": "integer", "minimum": 1 },
+            "rounding": {
+              "type": "string",
+              "enum": [
+                "half_up_int"
+              ]
+            }
+          }
+        },
+        "b2_partial_credit_mode": {
+          "type": "string",
+          "enum": [
+            "structured_boundary_required"
+          ]
+        }
+      }
+    },
+    "stage_4_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "emphasis"
+      ],
+      "properties": {
+        "emphasis": {
+          "type": "string",
+          "enum": [
+            "baseline",
+            "stronger_replication"
+          ]
+        }
+      }
+    },
+    "diagnostic_policy": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": [
+          "evidence_only",
+          "candidate_scored",
+          "scored",
+          "deprecated"
+        ]
+      }
+    },
+    "reasoning_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "score_integration"
+      ],
+      "properties": {
+        "status": { "type": "string" },
+        "score_integration": {
+          "type": "string",
+          "enum": [
+            "forbidden"
+          ]
+        }
+      }
+    },
+    "governance_sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ca_taxonomy_version",
+        "ca_taxonomy_source"
+      ],
+      "properties": {
+        "ca_taxonomy_version": { "type": "string" },
+        "ca_taxonomy_source": { "type": "string" }
+      }
+    },
+    "policy_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}
