@@ -1,13 +1,13 @@
 # CLI Reference
 
-**Version:** 1.6.3  
+**Version:** 1.6.4  
 **Status:** Stable
 
 ---
 
 ## Command Model
 
-The 1.6.3 CLI is organized around workflows instead of one long option string.
+The 1.6.4 CLI is organized around workflows instead of one long option string.
 
 ```bash
 stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`

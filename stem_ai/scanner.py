@@ -72,6 +72,8 @@ CA_DIRECT_TERMS = re.compile(
     r"DPYD|CYP2D6|CPIC|FDA clearance|CE mark)\b",
     re.I,
 )
+CA_TAXONOMY_VERSION = "ca-taxonomy-v1"
+CA_TAXONOMY_SOURCE = "runtime_regex_hardcoded_in_scanner_py"
 T0_HARD_FLOOR_TERMS = re.compile(
     r"\b(autonomous|automated|without clinician|clinical decision support|diagnosis|"
     r"diagnostic\s+(?:tool|model|system|decision|support|pipeline|classifier|prediction|screening|test|use)|"
@@ -151,6 +153,8 @@ def audit_repository(
         "classification": {
             "clinical_adjacent": clinical_adjacent,
             "ca_severity": ca_severity,
+            "ca_taxonomy_version": CA_TAXONOMY_VERSION,
+            "ca_taxonomy_source": CA_TAXONOMY_SOURCE,
             "t0_hard_floor": t0_hard_floor,
             "score_cap": score_cap,
             "has_explicit_clinical_boundary": has_disclaimer,
@@ -193,6 +197,7 @@ def audit_repository(
             "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
             "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, license/use-scope restriction evidence, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
+            "ca_taxonomy_governance": f"{CA_TAXONOMY_VERSION} from {CA_TAXONOMY_SOURCE}; reference markdown is informative, not authoritative runtime source.",
             "C1": "Hardcoded key pattern regex (AWS AKIA*, sk-*, ghp_*, api_key=...), excluding obvious placeholder/test values and test/example fixture contexts",
             "C2": "Dependency-manifest-only pin check across requirements/environment/setup.cfg/pyproject dependency sections; ignores non-dependency metadata lines",
             "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
@@ -420,7 +425,9 @@ def _score_bias(bias_text: str, test_text: str) -> tuple[int, str]:
         return 0, "No bias/limitations language detected by local CLI scan."
     if BIAS_MEASUREMENT_TERMS.search(bias_text) or (test_text and BIAS_LIMITATION_TERMS.search(test_text)):
         return 15, "Bias/limitations language with measurement evidence or test coverage detected."
-    return 8, "Bias/limitations language detected; no quantitative measurement evidence found."
+    if LIMITATIONS_SECTION.search(bias_text) or len(BIAS_LIMITATION_TERMS.findall(bias_text)) >= 2:
+        return 8, "Structured bias/limitations language detected; no quantitative measurement evidence found."
+    return 0, "Only a minimal single-term bias/limitations mention was detected; structured boundary language or measurement evidence was not found."
 
 
 def _code_integrity_from_findings(evidence_ledger: list[dict[str, Any]]) -> dict[str, Any]:

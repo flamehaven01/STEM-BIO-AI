@@ -1,6 +1,6 @@
 # STEM BIO-AI Calibration Profile Design
 
-Version: draft for post-1.6.3 implementation discussion  
+Version: draft for post-1.6.4 implementation discussion  
 Status: design proposal, not active runtime behavior
 
 ---
@@ -17,7 +17,7 @@ What it does **not** yet separate cleanly is the **calibration surface**:
 - evidence-only versus score-authoritative detector status
 - reasoning-model status labels
 
-In `1.6.3`, most of these values are still implemented as code constants plus prose in `SCORING_RATIONALE.md`. That is acceptable for a stable prototype, but it creates a long-term maintenance risk:
+In `1.6.4`, most of these values are still implemented as code constants plus prose in `SCORING_RATIONALE.md`. That is acceptable for a stable prototype, but it creates a long-term maintenance risk:
 
 > if calibration values are easy to change but hard to govern, the architecture will drift even if the lane boundaries remain conceptually correct.
 
@@ -93,11 +93,11 @@ This preserves the current architectural discipline:
 
 Recommended location:
 
-`policy/scoring_profile_v1.6.3.json`
+`policy/scoring_profile_v1.6.4.json`
 
 Recommended future support:
 
-- `policy/scoring_profile_v1.6.3.json`
+- `policy/scoring_profile_v1.6.5.json`
 - `policy/scoring_profile_benchmark_candidate.json`
 - `policy/scoring_profile_dev_experimental.json`
 
@@ -130,7 +130,7 @@ Minimum recommended fields:
 
 ```json
 {
-  "policy_version": "1.6.3",
+  "policy_version": "1.6.4",
   "profile_name": "default",
   "profile_status": "authoritative_release",
   "weights": {
@@ -206,7 +206,7 @@ Recommended JSON example:
 
 ```json
 "calibration_profile": {
-  "policy_version": "1.6.3",
+  "policy_version": "1.6.4",
   "profile_name": "default",
   "profile_status": "authoritative_release",
   "policy_sha256": "..."

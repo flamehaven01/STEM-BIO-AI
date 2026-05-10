@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.6.3
+Version: 1.6.4
 Status: **Stable**
 Supersedes: historical v1.5 draft contract
 
@@ -69,7 +69,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.6.3"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.6.4"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -91,6 +91,8 @@ All fields below are present in every `audit_repository()` result.
 |-------|------|-------------|
 | `classification.clinical_adjacent` | boolean | True if any CA term detected |
 | `classification.ca_severity` | string | `"CA-DIRECT"` / `"CA-INDIRECT"` / `"none"` |
+| `classification.ca_taxonomy_version` | string | Active CA taxonomy version label (e.g. `"ca-taxonomy-v1"`) |
+| `classification.ca_taxonomy_source` | string | Runtime authority for CA trigger logic |
 | `classification.t0_hard_floor` | boolean | True if T0 hard floor triggered |
 | `classification.score_cap` | integer\|null | Score ceiling applied (39 or 69), or null |
 | `classification.has_explicit_clinical_boundary` | boolean | Disclaimer detected |

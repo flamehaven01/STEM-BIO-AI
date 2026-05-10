@@ -1,6 +1,6 @@
 # STEM BIO-AI Scoring Rationale
 
-Version: 1.6.3
+Version: 1.6.4
 Status: Authoritative design record. Update with each structural score change.
 
 ---
@@ -33,7 +33,7 @@ In LOCAL_ANALYSIS mode, Stage 2 cross-platform verification is unavailable. The 
 
 ## 3. Key Terms
 
-- **CA-DIRECT / CA-INDIRECT**: Clinical-adjacent severity classes derived from visible repository language. They govern cap policy, not clinical truth.
+- **CA-DIRECT / CA-INDIRECT**: Clinical-adjacent severity classes derived from visible repository language. They govern cap policy, not clinical truth. In `1.6.4`, the active runtime taxonomy remains `ca-taxonomy-v1` implemented in `scanner.py`; reference markdown is informative, not authoritative.
 - **Stage 2R**: Repo-local consistency substitute for full Stage 2 cross-platform verification in LOCAL_ANALYSIS mode.
 - **score_cap**: Post-score ceiling applied when clinical-adjacent boundary conditions are not satisfied.
 - **C1_penalty**: Only code-integrity item that currently subtracts from the final score.
@@ -196,7 +196,7 @@ Stage 3 is a deterministic engineering-accountability rubric. T1, T2, and B3 rem
 
 ### Rationale for bounded partial scoring
 
-The local CLI still avoids semantic quality judgments. Partial credit is allowed only where deterministic text evidence is available: a changelog can be present with or without bug-fix/security entries, a dependency manifest can be present with or without data-source/IRB language, and limitations language can appear with or without measurement evidence. This improves precision while keeping the scan reproducible.
+The local CLI still avoids semantic quality judgments. Partial credit is allowed only where deterministic text evidence is available: a changelog can be present with or without bug-fix/security entries, a dependency manifest can be present with or without data-source/IRB language, and structured limitations language can appear with or without measurement evidence. This improves precision while keeping the scan reproducible.
 
 | Item | Max pts | Trigger | Rationale |
 |------|---------|---------|-----------|
@@ -204,7 +204,7 @@ The local CLI still avoids semantic quality judgments. Partial credit is allowed
 | T2 Domain tests | 15 (8 partial) | test/ dir with bio-domain vocabulary (or generic tests) | Tests that cover domain-specific outputs, not just infrastructure |
 | T3 Changelog | 0 / 5 / 15 | Absent / present / present with bug-fix, patch, or security entries | Release history transparency; stronger credit when corrective maintenance is visible |
 | B1 Dependency provenance | 0 / 10 / 15 | No manifest / manifest present / manifest plus data-source, dataset citation, or IRB language | Reproducibility requires declared dependencies; bio/medical provenance also needs data-source context |
-| B2 Bias/limitations | 0 / 8 / 15 | No vocabulary / bias or limitation vocabulary / vocabulary plus measurement evidence or test coverage | Consistent with R1/R4 in Stage 1; stronger credit requires measurement or test evidence |
+| B2 Bias/limitations | 0 / 8 / 15 | No signal / structured boundary language / structured boundary language plus measurement evidence or test coverage | Consistent with R1/R4 in Stage 1; stronger credit requires measurement or test evidence |
 | B3 COI/funding | 5 | COI, funding, or sponsor language in README/docs/FUNDING.md | Lower max reflects that COI disclosure is less universally expected than technical hygiene |
 
 Raw max = 80. Normalized to 100: `round((raw / 80) * 100)`.

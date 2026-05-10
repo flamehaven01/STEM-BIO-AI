@@ -10,6 +10,19 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.4] - 2026-05-10
+
+### Added
+- Added CA taxonomy provenance fields to the public classification surface so outputs now record the active runtime taxonomy version and source.
+- Added regression coverage for CA taxonomy metadata surfacing and tightened B2 threshold behavior.
+
+### Changed
+- Tightened Stage 3 B2 entry criteria so a minimal single-term limitations mention no longer receives partial credit without structured boundary language.
+- Clarified in public docs that the active clinical-adjacent taxonomy remains a runtime `scanner.py` authority and that reference markdown is informative, not authoritative.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.6.4.
+
+---
+
 ## [1.6.3] - 2026-05-10
 
 ### Added

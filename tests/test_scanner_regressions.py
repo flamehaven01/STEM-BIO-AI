@@ -145,6 +145,15 @@ def test_stage_3_full_rubric_can_reach_100(tmp_path: Path) -> None:
     assert result["stage_3_rubric"]["B1_data_provenance_controls"]["max"] == 15
 
 
+def test_classification_surfaces_ca_taxonomy_metadata(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Automated diagnostic decision support for patient treatment recommendation.\n")
+
+    result = audit_repository(tmp_path)
+
+    assert result["classification"]["ca_taxonomy_version"] == "ca-taxonomy-v1"
+    assert result["classification"]["ca_taxonomy_source"] == "runtime_regex_hardcoded_in_scanner_py"
+
+
 def test_deprecated_patient_paths_are_generic_not_repo_specific(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
     _write(tmp_path / "legacy" / "metadata.py", "sample_id = 'S1'\npatient_age = 42\n")
@@ -962,6 +971,20 @@ def test_score_provenance_negative_irb_context_does_not_get_max_credit() -> None
 
     assert score == 10
     assert "negative or non-approval context" in evidence
+
+
+def test_score_bias_single_minimal_limitation_term_no_longer_gets_partial_credit() -> None:
+    score, evidence = _score_bias("A short note says limitations exist.", "")
+
+    assert score == 0
+    assert "minimal single-term" in evidence
+
+
+def test_score_bias_structured_limitations_still_gets_partial_credit() -> None:
+    score, evidence = _score_bias("## Limitations\nKnown limitations in edge cases are documented.\n", "")
+
+    assert score == 8
+    assert "Structured bias/limitations language" in evidence
 
 
 def test_reasoning_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
@@ -1823,10 +1846,12 @@ def test_stage3_provenance_three_tiers() -> None:
 def test_stage3_bias_three_tiers() -> None:
     no_bias, _ = _score_bias("No relevant language here.", "")
     vocab_only, _ = _score_bias("Model has known limitations in edge cases.", "")
+    structured_only, _ = _score_bias("## Limitations\nKnown limitations in edge cases.\n", "")
     with_measurement, _ = _score_bias("Model has known limitations. Subgroup analysis shows performance gap.", "")
 
     assert no_bias == 0
-    assert vocab_only == 8
+    assert vocab_only == 0
+    assert structured_only == 8
     assert with_measurement == 15
 
 
