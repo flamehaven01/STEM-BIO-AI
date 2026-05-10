@@ -131,14 +131,16 @@ def write_outputs(
 def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     score = result["score"]
     ast_note = _ast_scope_note(result)
+    calibration = result.get("calibration_profile", {})
     lines = [
         "# STEM BIO-AI Local Audit Report",
         "",
         f"**Target:** `{result['target']['name']}`",
         f"**Execution Mode:** `{result['execution_mode']}`",
-        f"**Calibration Profile:** `{result.get('calibration_profile', {}).get('profile_name', 'unknown')}` "
-        f"(`{result.get('calibration_profile', {}).get('policy_version', 'unknown')}`, "
-        f"`{result.get('calibration_profile', {}).get('profile_read_mode', 'unknown')}`)",
+        f"**Calibration Profile:** `{calibration.get('profile_name', 'unknown')}` "
+        f"(`{calibration.get('policy_version', 'unknown')}`, "
+        f"`{calibration.get('profile_read_mode', 'unknown')}`, "
+        f"`{calibration.get('profile_status', 'unknown')}`)",
         f"**Final Score:** **{score['final_score']} / 100**",
         f"**Formal Tier:** **{score['formal_tier']}**",
         f"**Use Scope:** {score['use_scope']}",
@@ -216,14 +218,16 @@ def render_explain(result: dict[str, Any]) -> str:
     for finding in ledger:
         grouped.setdefault(finding["detector"], []).append(finding)
 
+    calibration = result.get("calibration_profile", {})
     out: list[str] = [
         "STEM BIO-AI Explain Report",
         f"Target  : {result['target']['name']}",
         (
             "Policy  : "
-            f"{result.get('calibration_profile', {}).get('profile_name', 'unknown')} "
-            f"[{result.get('calibration_profile', {}).get('policy_version', 'unknown')}; "
-            f"{result.get('calibration_profile', {}).get('profile_read_mode', 'unknown')}]"
+            f"{calibration.get('profile_name', 'unknown')} "
+            f"[{calibration.get('policy_version', 'unknown')}; "
+            f"{calibration.get('profile_read_mode', 'unknown')}; "
+            f"{calibration.get('profile_status', 'unknown')}]"
         ),
         f"Score   : {score['final_score']} / 100  ({score['formal_tier']})",
         f"Replic  : {result.get('replication_score', 0)} / 100"
@@ -567,6 +571,11 @@ def _header_block(result: dict[str, Any]) -> list[Any]:
     branch = t.get("branch") or "—"
     audit_date = result.get("generated_at_local", "—")
     mode = result.get("execution_mode", "—")
+    calibration = result.get("calibration_profile", {})
+    profile_label = (
+        f"{calibration.get('profile_name', 'unknown')} "
+        f"({calibration.get('profile_read_mode', 'unknown')})"
+    )
 
     header_data = [[Paragraph(
         f'<font color="{_WHITE}"><b>STEM BIO-AI Evidence-Surface Scan v{result["stem_ai_version"]}</b></font>',
@@ -585,7 +594,8 @@ def _header_block(result: dict[str, Any]) -> list[Any]:
         f'<b>Commit:</b> {commit} &nbsp;|&nbsp; '
         f'<b>Branch:</b> {_xt(branch)} &nbsp;|&nbsp; '
         f'<b>Audit Date:</b> {audit_date} &nbsp;|&nbsp; '
-        f'<b>Mode:</b> {mode}</font>'
+        f'<b>Mode:</b> {mode} &nbsp;|&nbsp; '
+        f'<b>Policy:</b> {_xt(profile_label)}</font>'
     )
     meta_data = [[Paragraph(meta, _style("M1", 7, 10, _DGRAY))]]
     meta_tbl = Table(meta_data, colWidths=["100%"])

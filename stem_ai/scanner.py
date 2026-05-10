@@ -95,10 +95,11 @@ META_EVIDENCE_LINE = re.compile(
 
 def audit_repository(
     target: Path,
+    policy_name: str = "default",
     advisory: str = "none",
     advisory_response_path: Path | None = None,
 ) -> dict[str, Any]:
-    calibration_profile = load_calibration_profile("default")
+    calibration_profile = load_calibration_profile(policy_name)
     audit_date = date.today()
     files = _list_files(target)
     readme = _read_first(target, ["README.md", "README.rst", "readme.md"])

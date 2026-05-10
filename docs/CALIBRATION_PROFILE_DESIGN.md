@@ -1,6 +1,6 @@
 # STEM BIO-AI Calibration Profile Design
 
-Version: updated for 1.6.5 phase-1 mirror-only implementation  
+Version: updated for 1.6.6 phase-1 mirror-only visibility implementation
 Status: design proposal, not active runtime behavior
 
 ---
@@ -17,7 +17,7 @@ What it does **not** yet separate cleanly is the **calibration surface**:
 - evidence-only versus score-authoritative detector status
 - reasoning-model status labels
 
-In `1.6.5`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata is now surfaced. That is acceptable for a stable prototype, but it creates a long-term maintenance risk:
+In `1.6.6`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata and CLI-visible profile selection are now surfaced. That is acceptable for a stable prototype, but it creates a long-term maintenance risk:
 
 > if calibration values are easy to change but hard to govern, the architecture will drift even if the lane boundaries remain conceptually correct.
 
@@ -133,7 +133,7 @@ Minimum recommended fields:
   "policy_schema_version": "1",
   "policy_version": "ca-policy-1.0",
   "tool_version_introduced": "1.6.5",
-  "tool_version_last_validated": "1.6.5",
+  "tool_version_last_validated": "1.6.6",
   "profile_name": "default",
   "profile_status": "authoritative_release",
   "profile_read_mode": "mirror_only",

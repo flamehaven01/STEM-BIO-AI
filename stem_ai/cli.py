@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from .calibration_profile import available_policy_names, load_calibration_profile
 from .render import write_outputs
 from .scanner import audit_repository
 
@@ -19,6 +20,11 @@ _SUMMARY_CHOICES = ["full", "compact", "off"]
 _ADVISORY_CHOICES = ["none", "validate", "packet", "call"]
 _TIER_CHOICES = ["T0", "T1", "T2", "T3", "T4"]
 _TIER_ORDER = {"T0": 0, "T1": 1, "T2": 2, "T3": 3, "T4": 4}
+
+
+def _policy_choices() -> list[str]:
+    names = available_policy_names()
+    return names or ["default"]
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -123,6 +129,27 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Path to a provider-produced advisory JSON response file",
     )
 
+    policy = subparsers.add_parser(
+        "policy",
+        help="Inspect available calibration profiles",
+        description="List or explain named calibration profiles used by STEM BIO-AI policy surfaces.",
+    )
+    policy_subparsers = policy.add_subparsers(dest="policy_command")
+    policy_subparsers.required = True
+
+    policy_subparsers.add_parser(
+        "list",
+        help="List available calibration profiles",
+        description="Show the named calibration profiles that can be selected with --policy.",
+    )
+
+    policy_explain = policy_subparsers.add_parser(
+        "explain",
+        help="Explain one calibration profile",
+        description="Show the current contents and bounded differences of a named calibration profile.",
+    )
+    policy_explain.add_argument("profile_name", choices=_policy_choices(), help="Calibration profile name")
+
     return parser
 
 
@@ -176,6 +203,12 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         help="Output directory for generated artifacts",
     )
     parser.add_argument(
+        "--policy",
+        choices=_policy_choices(),
+        default="default",
+        help="Named calibration profile to surface in the result (1.6.6 keeps policy selection mirror-only)",
+    )
+    parser.add_argument(
         "--explain",
         action="store_true",
         default=False,
@@ -198,7 +231,7 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
 def _normalize_argv(argv: list[str]) -> list[str]:
     if not argv:
         return argv
-    if argv[0] in {"scan", "audit", "gate", "advisory", "-h", "--help", "--version"}:
+    if argv[0] in {"scan", "audit", "gate", "advisory", "policy", "-h", "--help", "--version"}:
         return argv
     if argv[0].startswith("-"):
         return argv
@@ -304,6 +337,12 @@ def _print_full_summary(
     print(f"Workflow:    {workflow}")
     print(f"Target:      {result['target']['name']}")
     print(f"Level:       {level}  ({mode}, {pages}p)")
+    calibration = result.get("calibration_profile", {})
+    print(
+        "Policy:      "
+        f"{calibration.get('profile_name', 'unknown')}  "
+        f"({calibration.get('profile_status', 'unknown')}, {calibration.get('profile_read_mode', 'unknown')})"
+    )
     print()
 
     print(f"Score:       {score['final_score']} / 100  ({score['formal_tier']})")
@@ -379,6 +418,11 @@ def _print_compact_summary(
     score = result["score"]
     print(f"STEM BIO-AI | {workflow} | {score['formal_tier']} | {score['final_score']}/100")
     print(f"Target: {result['target']['name']}")
+    calibration = result.get("calibration_profile", {})
+    print(
+        f"Policy: {calibration.get('profile_name', 'unknown')} "
+        f"[{calibration.get('profile_status', 'unknown')}; {calibration.get('profile_read_mode', 'unknown')}]"
+    )
 
     classification = result.get("classification", {})
     if classification.get("ca_severity", "none") != "none":
@@ -447,12 +491,18 @@ def _execute_scan(
     explain: bool,
     advisory_mode: str,
     advisory_response: Path | None,
+    policy_name: str,
     tier_gate: str | None,
     summary_mode: str,
     workflow: str,
 ) -> int:
     mode, pages = _LEVEL_MAP[level]
-    result = audit_repository(target, advisory=advisory_mode, advisory_response_path=advisory_response)
+    result = audit_repository(
+        target,
+        policy_name=policy_name,
+        advisory=advisory_mode,
+        advisory_response_path=advisory_response,
+    )
     output_dir = Path(out_dir).expanduser().resolve()
     created = write_outputs(result, output_dir, mode, pages, fmt, explain=explain)
     gate_passed, gate_message = _evaluate_tier_gate(result, tier_gate)
@@ -471,6 +521,95 @@ def _execute_scan(
         gate_message=gate_message,
     )
     return 0 if gate_passed else 1
+
+
+def _format_tier_boundaries(profile: dict) -> str:
+    boundaries = profile["tier_policy"]["tier_boundaries"]
+    return (
+        f"T0 < {boundaries[0]}, "
+        f"T1 {boundaries[0]}-{boundaries[1] - 1}, "
+        f"T2 {boundaries[1]}-{boundaries[2] - 1}, "
+        f"T3 {boundaries[2]}-{boundaries[3] - 1}, "
+        f"T4 >= {boundaries[3]}"
+    )
+
+
+def _print_policy_list() -> int:
+    print("STEM BIO-AI calibration profiles")
+    for name in _policy_choices():
+        profile = load_calibration_profile(name)
+        print(
+            f"- {profile['profile_name']}: {profile['profile_status']} | "
+            f"{profile['profile_read_mode']} | {profile['policy_version']}"
+        )
+    return 0
+
+
+def _print_policy_explain(profile_name: str) -> int:
+    profile = load_calibration_profile(profile_name)
+    default_profile = load_calibration_profile("default")
+    weights = profile["weights"]
+    clinical = profile["clinical_policy"]
+    stage_3 = profile["stage_3_policy"]
+    stage_4 = profile["stage_4_policy"]
+
+    print(f"STEM BIO-AI policy: {profile['profile_name']}")
+    print(f"Policy Version: {profile['policy_version']}")
+    print(f"Status:         {profile['profile_status']}")
+    print(f"Read Mode:      {profile['profile_read_mode']}")
+    print(
+        "Scoring Effect: "
+        "mirror-only in 1.6.6; selection is surfaced in artifacts but does not yet reweight score computation"
+    )
+    print()
+    print(
+        "Weights:        "
+        f"S1={weights['stage_1_percent']}% | "
+        f"S2R={weights['stage_2r_percent']}% | "
+        f"S3={weights['stage_3_percent']}%"
+    )
+    print(f"Tier Policy:    {_format_tier_boundaries(profile)}")
+    print(
+        "Clinical Caps:  "
+        f"no_disclaimer_cap={clinical['ca_no_disclaimer_cap']} | "
+        f"t0_hard_floor_cap={clinical['t0_hard_floor_cap']}"
+    )
+    normalization = stage_3["normalization"]
+    print(
+        "Stage 3:        "
+        f"normalization={normalization['kind']} "
+        f"(raw_max={normalization['raw_max']}, target_max={normalization['target_max']}, rounding={normalization['rounding']})"
+    )
+    print(f"B2 Posture:     {stage_3['b2_partial_credit_mode']}")
+    print(f"Stage 4:        emphasis={stage_4.get('emphasis', 'unknown')}")
+    print(
+        "Reasoning:      "
+        f"{profile['reasoning_policy'].get('status', 'unknown')} "
+        f"(score integration: {profile['reasoning_policy'].get('score_integration', 'unknown')})"
+    )
+
+    if profile_name != "default":
+        diffs: list[str] = []
+        if profile["clinical_policy"]["ca_no_disclaimer_cap"] != default_profile["clinical_policy"]["ca_no_disclaimer_cap"]:
+            diffs.append(
+                "ca_no_disclaimer_cap "
+                f"{default_profile['clinical_policy']['ca_no_disclaimer_cap']} -> {profile['clinical_policy']['ca_no_disclaimer_cap']}"
+            )
+        if profile["clinical_policy"]["t0_hard_floor_cap"] != default_profile["clinical_policy"]["t0_hard_floor_cap"]:
+            diffs.append(
+                "t0_hard_floor_cap "
+                f"{default_profile['clinical_policy']['t0_hard_floor_cap']} -> {profile['clinical_policy']['t0_hard_floor_cap']}"
+            )
+        if profile["profile_status"] != default_profile["profile_status"]:
+            diffs.append(f"profile_status {default_profile['profile_status']} -> {profile['profile_status']}")
+        if profile["policy_version"] != default_profile["policy_version"]:
+            diffs.append(f"policy_version {default_profile['policy_version']} -> {profile['policy_version']}")
+        if diffs:
+            print()
+            print("Default Diff:")
+            for diff in diffs:
+                print(f"- {diff}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -493,6 +632,7 @@ def main(argv: list[str] | None = None) -> int:
             explain=parsed.explain,
             advisory_mode=parsed.advisory,
             advisory_response=advisory_response,
+            policy_name=parsed.policy,
             tier_gate=parsed.tier_gate,
             summary_mode=summary_mode,
             workflow="scan",
@@ -508,6 +648,7 @@ def main(argv: list[str] | None = None) -> int:
             explain=parsed.explain,
             advisory_mode="none",
             advisory_response=None,
+            policy_name=parsed.policy,
             tier_gate=parsed.min_tier,
             summary_mode=summary_mode,
             workflow="gate",
@@ -533,10 +674,17 @@ def main(argv: list[str] | None = None) -> int:
             explain=parsed.explain,
             advisory_mode=advisory_mode,
             advisory_response=advisory_response,
+            policy_name=parsed.policy,
             tier_gate=None,
             summary_mode=summary_mode,
             workflow=_workflow_label(parsed.command, parsed.advisory_command),
         )
+
+    if parsed.command == "policy":
+        if parsed.policy_command == "list":
+            return _print_policy_list()
+        if parsed.policy_command == "explain":
+            return _print_policy_explain(parsed.profile_name)
 
     parser.print_help()
     return 2

@@ -10,6 +10,20 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.6] - 2026-05-10
+
+### Added
+- Added `stem policy list` and `stem policy explain <name>` so named calibration profiles can be inspected directly from the CLI.
+- Added `--policy <name>` to scan, gate, and advisory workflows so selected profiles are surfaced consistently in result metadata and stdout summaries.
+- Added regression coverage for policy list/explain CLI behavior and selected-profile metadata surfacing.
+
+### Changed
+- Extended Markdown, explain, and PDF header surfaces to show the active calibration profile name, status, and read mode.
+- Kept policy selection mirror-only in 1.6.6 so named profiles remain visible and testable before any score-authoritative read-through is enabled.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.6.6.
+
+---
+
 ## [1.6.5] - 2026-05-10
 
 ### Added

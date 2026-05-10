@@ -31,6 +31,7 @@ from stem_ai.advisory_runtime import (
     provider_call_runtime,
 )
 from stem_ai.calibration_profile import (
+    available_policy_names,
     calibration_profile_metadata,
     load_calibration_profile,
     validate_profile,
@@ -2011,6 +2012,7 @@ def test_audit_repository_surfaces_calibration_profile_metadata(tmp_path: Path) 
     assert calibration["policy_version"] == "ca-policy-1.0"
     assert calibration["profile_name"] == "default"
     assert calibration["profile_read_mode"] == "mirror_only"
+    assert calibration["profile_status"] == "authoritative_release"
     assert isinstance(calibration["policy_sha256"], str)
 
 
@@ -2021,8 +2023,76 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     markdown = render_markdown(result, mode="brief", pages=1)
     explain = render_explain(result)
 
-    assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`)" in markdown
-    assert "Policy  : default [ca-policy-1.0; mirror_only]" in explain
+    assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
+    assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
+
+
+def test_audit_repository_can_surface_selected_policy_metadata(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral genome analysis.\n")
+
+    result = audit_repository(tmp_path, policy_name="strict_clinical_adjacency")
+    calibration = result["calibration_profile"]
+
+    assert calibration["policy_version"] == "ca-policy-1.0-strict-ca"
+    assert calibration["profile_name"] == "strict_clinical_adjacency"
+    assert calibration["profile_status"] == "experimental"
+
+
+def test_policy_list_cli_surfaces_available_profiles(capsys) -> None:
+    code = cli_main(["policy", "list"])
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "STEM BIO-AI calibration profiles" in captured.out
+    assert "- default: authoritative_release | mirror_only | ca-policy-1.0" in captured.out
+    assert "- strict_clinical_adjacency: experimental | mirror_only | ca-policy-1.0-strict-ca" in captured.out
+    assert set(available_policy_names()) >= {"default", "strict_clinical_adjacency"}
+
+
+def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
+    code = cli_main(["policy", "explain", "strict_clinical_adjacency"])
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
+    assert "Scoring Effect: mirror-only in 1.6.6" in captured.out
+    assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
+    assert "Default Diff:" in captured.out
+
+
+def test_cli_scan_accepts_named_policy_and_surfaces_it_in_output(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "results"
+
+    code = cli_main([
+        "scan",
+        str(repo),
+        "--policy", "strict_clinical_adjacency",
+        "--format", "json",
+        "--summary", "compact",
+        "--output", str(out_dir),
+    ])
+
+    captured = capsys.readouterr()
+    [json_path] = list(out_dir.glob("*_experiment_results.json"))
+    result = json.loads(json_path.read_text(encoding="utf-8"))
+
+    assert code == 0
+    assert "Policy: strict_clinical_adjacency [experimental; mirror_only]" in captured.out
+    assert result["calibration_profile"]["profile_name"] == "strict_clinical_adjacency"
+
+
+def test_cli_rejects_invalid_policy_name(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+
+    try:
+        cli_main(["scan", str(repo), "--policy", "not_a_profile"])
+    except SystemExit as exc:
+        assert exc.code == 2
+    else:
+        raise AssertionError("Expected argparse SystemExit for invalid policy")
 
 
 def test_regulatory_basis_review_required_flips_when_registry_is_stale() -> None:

@@ -1,13 +1,13 @@
 # CLI Reference
 
-**Version:** 1.6.5  
+**Version:** 1.6.6
 **Status:** Stable
 
 ---
 
 ## Command Model
 
-The 1.6.5 CLI is organized around workflows instead of one long option string.
+The 1.6.6 CLI is organized around workflows instead of one long option string, and now exposes named calibration profiles directly.
 
 ```bash
 stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`
@@ -17,6 +17,8 @@ stem advisory validate <folder>          # offline advisory validation
 stem advisory packet <folder>            # provider-neutral packet export
 stem advisory call <folder>              # explicit provider-call workflow
 stem advisory check-response <folder> --response FILE
+stem policy list                         # available calibration profiles
+stem policy explain <name>               # inspect one calibration profile
 ```
 
 Backward compatibility remains in place:
@@ -51,6 +53,7 @@ These options work across `scan`, `gate`, and `advisory` workflows unless otherw
 | `--level` | `1`, `2`, `3` | `1` | Report depth: 1=brief 1p, 2=stage review 3p, 3=full packet 5p |
 | `--format` | `json`, `md`, `pdf`, `all` | command-specific | Artifact format to write |
 | `--out`, `--output` | `DIR` | `stem_output` | Output directory |
+| `--policy` | `NAME` | `default` | Named calibration profile to surface in the scan result |
 | `--explain` | flag | off | Write `{stem}_explain.txt` proof trace |
 | `--summary` | `full`, `compact`, `off` | command-specific | stdout summary mode |
 | `--quiet` | flag | off | Alias for `--summary off` |
@@ -83,6 +86,8 @@ The shorthand remains:
 ```bash
 stem /path/to/repo
 ```
+
+Policy selection is mirror-only in 1.6.6: the chosen profile is surfaced in outputs and summaries, but score computation still follows the current deterministic runtime constants.
 
 Compatibility flags still work on `scan`:
 

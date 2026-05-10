@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.6.5
+Version: 1.6.6
 Status: **Stable**
 Supersedes: historical v1.5 draft contract
 
@@ -36,6 +36,8 @@ stem advisory validate <repo>          # offline advisory validation
 stem advisory packet <repo>            # provider-neutral packet export
 stem advisory call <repo>              # explicit provider-call boundary
 stem advisory check-response <repo> --response FILE
+stem policy list                       # list named calibration profiles
+stem policy explain <name>             # inspect one calibration profile
 
 # Compatibility entry points
 python -m stem_ai <repo>
@@ -69,7 +71,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.6.5"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.6.6"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -82,7 +84,7 @@ All fields below are present in every `audit_repository()` result.
 | `calibration_profile.policy_version` | string | Versioned policy identifier independent from package version |
 | `calibration_profile.tool_version_introduced` | string | First tool version that introduced this policy shape |
 | `calibration_profile.tool_version_last_validated` | string | Last tool version whose runtime constants were checked against this profile |
-| `calibration_profile.profile_name` | string | Active profile label (Phase 1 default: `"default"`) |
+| `calibration_profile.profile_name` | string | Active profile label selected by CLI `--policy` (Phase 1 default: `"default"`) |
 | `calibration_profile.profile_status` | string | Profile lifecycle status (`authoritative_release`, `experimental`, etc.) |
 | `calibration_profile.profile_read_mode` | string | `"mirror_only"` in Phase 1, later `"authoritative"` when runtime reads policy values |
 | `calibration_profile.policy_sha256` | string | Canonical SHA256 of the policy JSON with the field itself excluded from the hash input |

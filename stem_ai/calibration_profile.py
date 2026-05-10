@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from copy import deepcopy
 from functools import lru_cache
@@ -52,7 +53,6 @@ def compute_policy_sha256(profile: dict[str, Any]) -> str:
     payload = deepcopy(profile)
     payload.pop("policy_sha256", None)
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
-    import hashlib
 
     return hashlib.sha256(canonical).hexdigest()
 
