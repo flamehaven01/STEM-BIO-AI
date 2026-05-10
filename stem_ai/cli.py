@@ -254,6 +254,16 @@ def _integrity_summary_line(result: dict) -> str | None:
     return ", ".join(item.split("_", 1)[0] for item in warnings)
 
 
+def _ast_scope_summary_line(result: dict) -> str | None:
+    ast = result.get("ast_signal_summary", {})
+    if not ast or not ast.get("file_limit_exceeded"):
+        return None
+    return (
+        f"capped at {ast.get('files_considered', 'unknown')} / "
+        f"{ast.get('files_total', 'unknown')} python files"
+    )
+
+
 def _workflow_label(command: str, advisory_command: str | None = None) -> str:
     if command == "gate":
         return "gate"
@@ -322,6 +332,10 @@ def _print_full_summary(
     if bio_line:
         print(f"Bio:         {bio_line}")
 
+    ast_line = _ast_scope_summary_line(result)
+    if ast_line:
+        print(f"AST Scope:   {ast_line}")
+
     regulatory = result.get("regulatory_basis", {})
     if regulatory.get("review_required"):
         reasons = ", ".join(regulatory.get("review_reasons", []))
@@ -377,6 +391,10 @@ def _print_compact_summary(
 
     if gate_message is not None:
         print(f"Gate: {gate_message}")
+
+    ast_line = _ast_scope_summary_line(result)
+    if ast_line:
+        print(f"AST: {ast_line}")
 
     print(f"Artifacts: {len(created)} -> {output_dir}")
 

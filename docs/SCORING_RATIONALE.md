@@ -1,11 +1,55 @@
 # STEM BIO-AI Scoring Rationale
 
-Version: 1.5.9
+Version: 1.6.3
 Status: Authoritative design record. Update with each structural score change.
 
 ---
 
-## 1. What This Framework Measures
+## 1. Executive Summary
+
+STEM BIO-AI answers one bounded question: does the visible repository surface expose enough responsible evidence for supervised institutional review in a bio/medical AI context?
+
+The framework is intentionally deterministic and local-first. In CLI mode it scores three weighted stages using a `0.4 / 0.2 / 0.4` split, applies a C1 credential penalty when triggered, and then enforces clinical-adjacent caps or hard floors where boundary language is missing. Stage 4 replication evidence is reported separately and does not change the formal T0-T4 tier.
+
+The score is a classification of **evidence posture**, not a clinical risk rating, safety certification, regulatory determination, or empirical performance judgment. Its purpose is to help reviewers distinguish between repositories that expose meaningful boundary language, engineering hygiene, and reproducibility signals, and repositories that do not.
+
+In LOCAL_ANALYSIS mode, Stage 2 cross-platform verification is unavailable. The CLI therefore uses Stage 2R, a bounded repo-local consistency substitute, rather than claiming full external verification.
+
+---
+
+## 2. Quick Reference
+
+| Item | Value |
+|------|-------|
+| Stage weights | `S1 = 0.4`, `S2R = 0.2`, `S3 = 0.4` |
+| Baselines | `S1 = 60`, `S2R = 60`, `S3 = 0` |
+| Score formula | `final = clamp(0.4 * S1 + 0.2 * S2R + 0.4 * S3 - C1_penalty, score_cap)` |
+| Stage 3 normalization | `round((raw_stage_3 / 80) * 100)` |
+| Clinical-adjacent cap | `69` (max T2) when clinical-adjacent and no explicit disclaimer |
+| T0 hard floor | `39` when CA-DIRECT + autonomous/direct-clinical framing + no disclaimer |
+| Replication lane | Separate `R0-R4` classification; does not alter formal T-tier |
+
+---
+
+## 3. Key Terms
+
+- **CA-DIRECT / CA-INDIRECT**: Clinical-adjacent severity classes derived from visible repository language. They govern cap policy, not clinical truth.
+- **Stage 2R**: Repo-local consistency substitute for full Stage 2 cross-platform verification in LOCAL_ANALYSIS mode.
+- **score_cap**: Post-score ceiling applied when clinical-adjacent boundary conditions are not satisfied.
+- **C1_penalty**: Only code-integrity item that currently subtracts from the final score.
+- **T0 hard floor**: Forced cap at `39` when direct clinical framing, autonomous/high-risk claim language, and missing disclaimer co-occur.
+- **LOCAL_ANALYSIS mode**: Deterministic local CLI scan. No network fetch, no runtime execution, no LLM dependency.
+- **SaMD / IRB / COI / CLI**: Software as a Medical Device, Institutional Review Board, conflict of interest, and command-line interface.
+
+---
+
+## 4. Deliberate Scope Boundaries
+
+This framework does **not** evaluate clinical safety, hidden-set model performance, empirical robustness, adversarial security, regulatory compliance, or whether a repository is morally "good" or "bad." It evaluates only the visible evidence posture of the repository surface: claims, limitations, engineering hygiene, reproducibility scaffolding, and related boundary signals that a reviewer can inspect directly.
+
+---
+
+## 5. What This Framework Measures
 
 STEM BIO-AI answers one question:
 
@@ -19,11 +63,21 @@ A repo that scores T3 has strong evidence signals. It has not been clinically va
 
 ---
 
-## 2. Formula
+## 6. Formula
 
 ```
 final = clamp(0.4 * S1 + 0.2 * S2R + 0.4 * S3 - C1_penalty, score_cap)
 ```
+
+### Order of operations
+
+1. Compute `S1` from README/package responsibility and hype signals.
+2. Compute `S2R` from repo-local consistency signals.
+3. Compute raw Stage 3 rubric, then normalize it to 100.
+4. Apply the weighted formula `0.4 * S1 + 0.2 * S2R + 0.4 * S3`.
+5. Apply `C1_penalty` if hardcoded credentials are detected.
+6. Apply `score_cap` if clinical-adjacent boundary policy requires it.
+7. Clamp to the final `0-100` result and map to a formal tier.
 
 ### Weight rationale: 0.4 / 0.2 / 0.4
 
@@ -33,11 +87,11 @@ Stage 2R (repo-local consistency) carries half the weight because it is a *bound
 
 When Stage 2 is fully N/A (no external evidence and no local repo), its weight redistributes 50/50 to S1 and S3, preserving the symmetry of the two primary lanes.
 
-This weight split was stabilized in spec FAILURE 7 (v1.0.3), which found that equal 1/3 weights caused instability when Stage 2 = N/A.
+This weight split was stabilized after an earlier design phase found that equal 1/3 weights caused instability when Stage 2 = N/A.
 
 ---
 
-## 3. Baseline 60
+## 7. Baseline 60
 
 Both Stage 1 and Stage 2R start at 60. Stage 3 starts at 0.
 
@@ -49,7 +103,7 @@ Stage 3 starts at 0 because its items (CI, tests, changelog, provenance, bias di
 
 ---
 
-## 4. Tier Boundaries
+## 8. Tier Boundaries
 
 | Tier | Range | Meaning | Derivation |
 |------|-------|---------|------------|
@@ -72,7 +126,7 @@ T3/T4 boundary: 60 + 25 = 85   (sustained positive signal required)
 
 ---
 
-## 5. Stage 1: README Intent and Signal Cost
+## 9. Stage 1: README Intent and Signal Cost
 
 Stage 1 scans the README and package metadata for two classes of evidence:
 
@@ -113,7 +167,7 @@ Given the baseline 60, the additions and penalties above, and the `clamp(0, 100)
 
 ---
 
-## 6. Stage 2R: Repo-Local Consistency
+## 10. Stage 2R: Repo-Local Consistency
 
 Stage 2R is an approximation of cross-platform verification (Stage 2) using only local repository files. It cannot verify what the author claims externally.
 
@@ -136,7 +190,7 @@ D1 (internal contradiction) and D2 (missing boundary) are both -20 because they 
 
 ---
 
-## 7. Stage 3: Engineering Accountability
+## 11. Stage 3: Engineering Accountability
 
 Stage 3 is a deterministic engineering-accountability rubric. T1, T2, and B3 remain presence-oriented; T3, B1, and B2 use bounded three-tier scoring.
 
@@ -155,11 +209,11 @@ The local CLI still avoids semantic quality judgments. Partial credit is allowed
 
 Raw max = 80. Normalized to 100: `round((raw / 80) * 100)`.
 
-The 80-point denominator (not 85) was corrected in spec FAILURE 27. An earlier version used 85 as the denominator, which was a 5-point error of unknown origin.
+The 80-point denominator (not 85) was corrected after an earlier specification inconsistency. The current 80-point normalization is the authoritative release behavior.
 
 ---
 
-## 8. Score Cap Policy
+## 12. Score Cap Policy
 
 Two hard ceilings apply when clinical risk signals are present without counterbalancing boundary language.
 
@@ -182,7 +236,7 @@ The score is capped at 39, forcing T0.
 
 ---
 
-## 9. Stage 4: Replication Evidence
+## 13. Stage 4: Replication Evidence
 
 Stage 4 is reported separately and **does not affect the final score or tier**.
 
@@ -196,7 +250,7 @@ Stage 4 produces a separate R0–R4 replication tier that informs institutional 
 
 ---
 
-## 10. C1–C4: Code Integrity
+## 14. C1–C4: Code Integrity
 
 C1–C4 are code-level checks available only in LOCAL_ANALYSIS mode. They do not contribute to S1/S2R/S3 scoring.
 
@@ -211,7 +265,7 @@ Only C1 affects the final score. C2–C4 are reported as code integrity warnings
 
 ---
 
-## 11. Known Calibration Gaps
+## 15. Known Calibration Gaps
 
 This section documents what the framework does not claim.
 
@@ -232,7 +286,7 @@ The full Stage 2 score — which checks whether the author's external communicat
 
 ---
 
-## 12. What a Tier Does and Does Not Mean
+## 16. What a Tier Does and Does Not Mean
 
 | Tier | What it means | What it does NOT mean |
 |------|--------------|----------------------|

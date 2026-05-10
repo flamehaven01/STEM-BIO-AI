@@ -10,6 +10,21 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.3] - 2026-05-10
+
+### Added
+- Added AST analysis scope surfacing to stdout, Markdown reports, and PDF outputs when deterministic AST scanning is capped by file-count limits.
+- Added `docs/CALIBRATION_PROFILE_DESIGN.md` as a design proposal for future versioned scoring-policy profiles.
+- Added regression coverage for AST cap surfacing across CLI, Markdown, and PDF fallback outputs.
+- Added regression coverage for negative-context provenance handling in Stage 3 B1 scoring.
+
+### Changed
+- Tightened Stage 3 B1 provenance scoring so negative or non-approval IRB / data-source contexts no longer receive maximum provenance credit.
+- Updated `docs/SCORING_RATIONALE.md` with executive summary, quick reference, key terms, deliberate scope boundaries, and explicit order-of-operations onboarding.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.6.3.
+
+---
+
 ## [1.6.2] - 2026-05-08
 
 ### Added

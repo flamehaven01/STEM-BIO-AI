@@ -26,6 +26,7 @@ from .patterns import (
     CHANGELOG_BUG_TERMS,
     COI_FUNDING_TERMS,
     DATA_SOURCE_TERMS,
+    DATA_SOURCE_NEGATIVE_TERMS,
     DEMOGRAPHIC_BIAS_TERMS,
     DISCLAIMER_TERMS,
     EXACT_PINNED_DEP,
@@ -407,6 +408,8 @@ def _score_provenance(dep_text: str, readme: str, docs_text: str) -> tuple[int, 
     if not dep_text:
         return 0, "No dependency/provenance manifest detected."
     surface = "\n".join([readme, docs_text])
+    if DATA_SOURCE_NEGATIVE_TERMS.search(surface):
+        return 10, "Dependency manifest detected; provenance language appears in a negative or non-approval context."
     if DATA_SOURCE_TERMS.search(surface):
         return 15, "Dependency manifest detected with data source, IRB, or dataset citation language."
     return 10, "Dependency manifest detected; no explicit data source or IRB citation found."

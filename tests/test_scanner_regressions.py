@@ -45,7 +45,7 @@ from stem_ai.reasoning_model import (
 )
 from stem_ai.regulatory_traceability import build_regulatory_basis
 from stem_ai.redaction import redact_object, redaction_policy, sanitize_artifact_text, secret_scan
-from stem_ai.render import _explain_status_label, render_explain, render_markdown
+from stem_ai.render import _explain_status_label, render_explain, render_markdown, render_pdf_pages
 from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
 
 
@@ -742,6 +742,23 @@ def test_ast_file_limit_records_not_applicable(monkeypatch, tmp_path: Path) -> N
     )
 
 
+def test_ast_file_limit_surfaces_in_markdown_and_pdf(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(detectors, "MAX_AST_FILES", 1)
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(tmp_path / "a.py", "def a():\n    return 1\n")
+    _write(tmp_path / "b.py", "def b():\n    return 2\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="brief", pages=1)
+    pages = render_pdf_pages(result, mode="brief", pages=1)
+    page_text = "\n".join(pages[0])
+
+    assert "AST analysis scope" in markdown
+    assert "excluded from C1/C4 AST-backed analysis" in markdown
+    assert "AST analysis scope:" in page_text
+    assert "excluded from C1/C4 AST-backed analysis" in page_text
+
+
 def test_ast_detects_seed_variants_and_direct_argument_parser(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
     _write(
@@ -934,6 +951,17 @@ def test_reasoning_model_is_diagnostic_only_and_does_not_change_score(tmp_path: 
         + result["score"]["stage_3_code_bio"] * 0.4
         - result["score"]["risk_penalty"]
     )
+
+
+def test_score_provenance_negative_irb_context_does_not_get_max_credit() -> None:
+    score, evidence = _score_provenance(
+        "numpy==1.26.4",
+        "Data availability: no IRB required for this public benchmark dataset.\n",
+        "",
+    )
+
+    assert score == 10
+    assert "negative or non-approval context" in evidence
 
 
 def test_reasoning_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
@@ -1504,6 +1532,26 @@ def test_cli_shorthand_defaults_to_scan_command_and_output_alias(tmp_path: Path,
     assert code == 0
     assert "STEM BIO-AI | scan |" in captured.out
     assert list(out_dir.glob("*_experiment_results.json"))
+
+
+def test_cli_summary_surfaces_ast_cap_limit(monkeypatch, tmp_path: Path, capsys) -> None:
+    monkeypatch.setattr(detectors, "MAX_AST_FILES", 1)
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    _write(repo / "a.py", "def a():\n    return 1\n")
+    _write(repo / "b.py", "def b():\n    return 2\n")
+
+    code = cli_main([
+        str(repo),
+        "--format", "json",
+        "--summary", "compact",
+        "--output", str(tmp_path / "results"),
+    ])
+
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "AST: capped at 1 / 2 python files" in captured.out
 
 
 def test_cli_gate_subcommand_enforces_threshold_and_uses_compact_summary(tmp_path: Path, capsys) -> None:

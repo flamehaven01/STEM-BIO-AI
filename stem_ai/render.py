@@ -130,6 +130,7 @@ def write_outputs(
 # ── markdown ──────────────────────────────────────────────────────────────────
 def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     score = result["score"]
+    ast_note = _ast_scope_note(result)
     lines = [
         "# STEM BIO-AI Local Audit Report",
         "",
@@ -163,6 +164,8 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     ]
     for key, item in result["code_integrity"].items():
         lines.append(f"- **{key}:** {item['status']} — {item['evidence'][0]}")
+    if ast_note:
+        lines.append(f"- **AST analysis scope:** {ast_note}")
 
     lines.extend(_markdown_bio_section(result))
 
@@ -361,6 +364,18 @@ def _explain_ast_section(ast: dict[str, Any]) -> list[str]:
     lines += [f"  {k:<34} {v}" for k, v in ast.items() if v is not None]
     lines.append("")
     return lines
+
+
+def _ast_scope_note(result: dict[str, Any]) -> str | None:
+    ast = result.get("ast_signal_summary", {})
+    if not ast or not ast.get("file_limit_exceeded"):
+        return None
+    considered = ast.get("files_considered", "unknown")
+    total = ast.get("files_total", "unknown")
+    return (
+        f"AST analysis capped at {considered} of {total} Python files; "
+        "remaining files were excluded from C1/C4 AST-backed analysis."
+    )
 
 
 def _explain_s4_section(s4: dict[str, Any]) -> list[str]:
@@ -1194,6 +1209,7 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
     cls = result["classification"]
     hashes = result.get("file_hashes_sha256", {})
     tgt = result["target"]
+    ast_note = _ast_scope_note(result)
 
     story += _sec_hdr("Code Integrity — Deep Analysis", _NAVY)
 
@@ -1298,6 +1314,13 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
          "No LLM calls. No network access. No runtime execution. "
          "Deterministic regex + file-system scan only."),
     ]
+    if ast_note:
+        cls_items.append((
+            "AST Analysis Scope",
+            "CAPPED",
+            _AMBER,
+            ast_note,
+        ))
     story.append(_rubric_rows(cls_items, "CLS"))
 
     # File hashes
@@ -1463,6 +1486,7 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
 # ── plain-text PDF fallback (no reportlab) ───────────────────────────────────
 def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list[str]]:
     score = result["score"]
+    ast_note = _ast_scope_note(result)
     brief = [
         "STEM BIO-AI Local Audit Brief",
         f"Target: {result['target']['name']}",
@@ -1478,6 +1502,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         "",
         "Code Integrity",
         *[f"- {k}: {v['status']}" for k, v in result["code_integrity"].items()],
+        *([f"- AST analysis scope: {ast_note}"] if ast_note else []),
         "",
         "Top Risks",
         *[f"- {r}" for r in result["notable_risks"][:4]],
@@ -1500,7 +1525,8 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
     sets = [_fit_page(brief), p2, p3]
     if pages == 5:
         sets.append(_fit_page(["Code Integrity",
-            *[f"- {k}: {v['status']} {v['evidence'][0]}" for k, v in result["code_integrity"].items()]]))
+            *[f"- {k}: {v['status']} {v['evidence'][0]}" for k, v in result["code_integrity"].items()],
+            *([f"- AST analysis scope: {ast_note}"] if ast_note else [])]))
         sets.append(_fit_page(["Method Boundary", result["method"]]))
     return sets[:pages]
 
