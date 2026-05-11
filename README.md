@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.6-informational.svg" alt="v1.6.6"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.7-informational.svg" alt="v1.6.7"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -56,6 +56,8 @@ stem scan /path/to/bio-ai-repo --policy strict_clinical_adjacency
 stem gate /path/to/bio-ai-repo --min-tier T2
 stem policy list
 stem policy explain strict_clinical_adjacency
+stem policy derive --clinical-strictness 4 --code-integrity-priority 3 --reproducibility-priority 2 --structured-limitations-requirement 3
+stem policy simulate /path/to/bio-ai-repo --clinical-strictness 4 --code-integrity-priority 3 --reproducibility-priority 2 --structured-limitations-requirement 3
 stem advisory validate /path/to/bio-ai-repo
 stem advisory packet /path/to/bio-ai-repo --output advisory_out
 stem advisory check-response /path/to/bio-ai-repo --response provider_advisory.json
@@ -337,7 +339,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.6.6},
+  version = {1.6.7},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

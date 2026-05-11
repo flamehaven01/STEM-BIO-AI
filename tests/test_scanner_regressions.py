@@ -37,6 +37,7 @@ from stem_ai.calibration_profile import (
     validate_profile,
 )
 from stem_ai.cli import main as cli_main
+from stem_ai.policy_intent import derive_policy_intent, simulate_policy_outcome
 from stem_ai.evidence import make_finding_id
 from stem_ai.provider_benchmark import (
     PROVIDER_BENCHMARK_SCHEMA_VERSION,
@@ -2055,7 +2056,7 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.6.6" in captured.out
+    assert "Scoring Effect: mirror-only in 1.6.7" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
 
@@ -2093,6 +2094,132 @@ def test_cli_rejects_invalid_policy_name(tmp_path: Path) -> None:
         assert exc.code == 2
     else:
         raise AssertionError("Expected argparse SystemExit for invalid policy")
+
+
+def test_policy_derive_returns_named_strict_profile_for_high_clinical_posture() -> None:
+    derived = derive_policy_intent(
+        {
+            "clinical_strictness": 4,
+            "code_integrity_priority": 3,
+            "reproducibility_priority": 2,
+            "structured_limitations_requirement": 3,
+        }
+    )
+
+    assert derived["outcome_type"] == "named_profile"
+    assert derived["recommended_profile"] == "strict_clinical_adjacency"
+
+
+def test_policy_derive_returns_default_match_for_balanced_answers() -> None:
+    derived = derive_policy_intent(
+        {
+            "clinical_strictness": 2,
+            "code_integrity_priority": 3,
+            "reproducibility_priority": 3,
+            "structured_limitations_requirement": 2,
+        }
+    )
+
+    assert derived["outcome_type"] == "default_match"
+    assert derived["recommended_profile"] == "default"
+
+
+def test_policy_derive_returns_preview_only_for_conflicting_strong_postures() -> None:
+    derived = derive_policy_intent(
+        {
+            "clinical_strictness": 4,
+            "code_integrity_priority": 4,
+            "reproducibility_priority": 4,
+            "structured_limitations_requirement": 4,
+        }
+    )
+
+    assert derived["outcome_type"] == "preview_only"
+    assert derived["recommended_profile"] == "preview_only"
+    assert "clinical_policy" in derived["preview_only_deltas"]
+    assert "weights" in derived["preview_only_deltas"]
+
+
+def test_policy_simulation_can_reduce_score_via_stricter_clinical_cap() -> None:
+    result = {
+        "target": {"name": "demo/repo"},
+        "classification": {
+            "ca_severity": "CA-INDIRECT",
+            "t0_hard_floor": False,
+            "has_explicit_clinical_boundary": False,
+        },
+        "score": {
+            "stage_1_readme_intent": 80,
+            "stage_2_repo_local_consistency": 80,
+            "stage_3_code_bio": 80,
+            "risk_penalty": 0,
+            "raw_score_before_floor": 80,
+            "final_score": 69,
+            "formal_tier": "T2 Caution",
+        },
+    }
+    derived = derive_policy_intent(
+        {
+            "clinical_strictness": 4,
+            "code_integrity_priority": 3,
+            "reproducibility_priority": 2,
+            "structured_limitations_requirement": 3,
+        }
+    )
+
+    simulation = simulate_policy_outcome(result, derived)
+
+    assert simulation["effective_profile"] == "strict_clinical_adjacency"
+    assert simulation["score_cap"] == 60
+    assert simulation["final_score"] == 60
+    assert simulation["formal_tier"] == "T2 Caution"
+    assert simulation["score_delta"] == -9
+
+
+def test_policy_derive_cli_surfaces_preview_only_deltas(capsys) -> None:
+    code = cli_main([
+        "policy",
+        "derive",
+        "--clinical-strictness", "4",
+        "--code-integrity-priority", "4",
+        "--reproducibility-priority", "4",
+        "--structured-limitations-requirement", "4",
+    ])
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "Outcome:       preview_only" in captured.out
+    assert "Preview Deltas:" in captured.out
+    assert "weights" in captured.out
+
+
+def test_policy_simulate_cli_surfaces_score_delta_for_strict_profile(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(
+        repo / "README.md",
+        "Bioinformatics repository for clinical trial biomarker analysis and medical imaging.\n"
+        "Limitations are documented.\n"
+    )
+    _write(repo / "requirements.txt", "numpy==1.26.4\n")
+    _write(repo / ".github" / "workflows" / "ci.yml", "name: test\n")
+    _write(repo / "tests" / "test_domain.py", "def test_clinical_trial_variant_pipeline(): pass\n")
+    _write(repo / "CHANGELOG.md", "# Changelog\n\n## v1.0.1\n- Fixed bug in pipeline.\n")
+
+    code = cli_main([
+        "policy",
+        "simulate",
+        str(repo),
+        "--clinical-strictness", "4",
+        "--code-integrity-priority", "3",
+        "--reproducibility-priority", "2",
+        "--structured-limitations-requirement", "3",
+    ])
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "STEM BIO-AI policy simulation" in captured.out
+    assert "Simulation:    strict_clinical_adjacency" in captured.out
+    assert "Score Delta:" in captured.out
 
 
 def test_regulatory_basis_review_required_flips_when_registry_is_stale() -> None:

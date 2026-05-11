@@ -6,6 +6,7 @@ from pathlib import Path
 
 from . import __version__
 from .calibration_profile import available_policy_names, load_calibration_profile
+from .policy_intent import derive_policy_intent, simulate_policy_outcome
 from .render import write_outputs
 from .scanner import audit_repository
 
@@ -150,6 +151,21 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     policy_explain.add_argument("profile_name", choices=_policy_choices(), help="Calibration profile name")
 
+    policy_derive = policy_subparsers.add_parser(
+        "derive",
+        help="Translate researcher intent into a named profile or preview-only delta",
+        description="Apply the documented top-down rule table to a 0-5 researcher intent surface.",
+    )
+    _add_intent_arguments(policy_derive)
+
+    policy_simulate = policy_subparsers.add_parser(
+        "simulate",
+        help="Preview how a derived posture would change the current repository outcome",
+        description="Run the deterministic scan, then simulate a named-profile or preview-only policy outcome without changing the stored scan contract.",
+    )
+    _add_intent_arguments(policy_simulate)
+    policy_simulate.add_argument("target", help="Path to a local repository")
+
     return parser
 
 
@@ -206,7 +222,7 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         "--policy",
         choices=_policy_choices(),
         default="default",
-        help="Named calibration profile to surface in the result (1.6.6 keeps policy selection mirror-only)",
+        help="Named calibration profile to surface in the result (1.6.7 keeps policy selection mirror-only)",
     )
     parser.add_argument(
         "--explain",
@@ -226,6 +242,14 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         default=False,
         help="Alias for `--summary off`",
     )
+
+
+def _add_intent_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--baseline", choices=_policy_choices(), default="default", help="Baseline named profile")
+    parser.add_argument("--clinical-strictness", type=int, choices=range(0, 6), required=True, help="0-5 scale")
+    parser.add_argument("--code-integrity-priority", type=int, choices=range(0, 6), required=True, help="0-5 scale")
+    parser.add_argument("--reproducibility-priority", type=int, choices=range(0, 6), required=True, help="0-5 scale")
+    parser.add_argument("--structured-limitations-requirement", type=int, choices=range(0, 6), required=True, help="0-5 scale")
 
 
 def _normalize_argv(argv: list[str]) -> list[str]:
@@ -559,7 +583,7 @@ def _print_policy_explain(profile_name: str) -> int:
     print(f"Read Mode:      {profile['profile_read_mode']}")
     print(
         "Scoring Effect: "
-        "mirror-only in 1.6.6; selection is surfaced in artifacts but does not yet reweight score computation"
+        "mirror-only in 1.6.7; selection is surfaced in artifacts but does not yet reweight score computation"
     )
     print()
     print(
@@ -609,6 +633,66 @@ def _print_policy_explain(profile_name: str) -> int:
             print("Default Diff:")
             for diff in diffs:
                 print(f"- {diff}")
+    return 0
+
+
+def _intent_answers_from_args(args: argparse.Namespace) -> dict[str, int]:
+    return {
+        "clinical_strictness": args.clinical_strictness,
+        "code_integrity_priority": args.code_integrity_priority,
+        "reproducibility_priority": args.reproducibility_priority,
+        "structured_limitations_requirement": args.structured_limitations_requirement,
+    }
+
+
+def _print_policy_derive(args: argparse.Namespace) -> int:
+    derived = derive_policy_intent(_intent_answers_from_args(args), baseline_profile_name=args.baseline)
+    print("STEM BIO-AI policy derive")
+    print(f"Baseline:      {derived['baseline_profile']}")
+    print(f"Outcome:       {derived['outcome_type']}")
+    print(f"Recommendation:{' '}{derived['recommended_profile']}")
+    print("Answers:       " + ", ".join(f"{k}={v}" for k, v in derived["answers"].items()))
+    if derived["triggered_rules"]:
+        print("Rules:         " + "; ".join(derived["triggered_rules"]))
+    if derived["preview_only_deltas"]:
+        print("Preview Deltas:")
+        for section, values in derived["preview_only_deltas"].items():
+            print(f"- {section}: {values}")
+    if derived["notes"]:
+        print("Notes:")
+        for note in derived["notes"]:
+            print(f"- {note}")
+    return 0
+
+
+def _print_policy_simulate(args: argparse.Namespace) -> int:
+    target = _validate_target(args.target)
+    derived = derive_policy_intent(_intent_answers_from_args(args), baseline_profile_name=args.baseline)
+    result = audit_repository(target, policy_name=args.baseline)
+    simulation = simulate_policy_outcome(result, derived, baseline_profile_name=args.baseline)
+
+    print("STEM BIO-AI policy simulation")
+    print(f"Target:        {result['target']['name']}")
+    print(f"Baseline:      {args.baseline} -> {result['score']['final_score']}/100 ({result['score']['formal_tier']})")
+    print(
+        f"Simulation:    {simulation['effective_profile']} -> "
+        f"{simulation['final_score']}/100 ({simulation['formal_tier']})"
+    )
+    print(f"Outcome Type:  {simulation['outcome_type']}")
+    if simulation["score_cap"] is not None:
+        print(f"Score Cap:     {simulation['score_cap']}")
+    print(f"Score Delta:   {simulation['score_delta']:+d}")
+    print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
+    if derived["triggered_rules"]:
+        print("Rules:         " + "; ".join(derived["triggered_rules"]))
+    if derived["preview_only_deltas"]:
+        print("Preview Deltas:")
+        for section, values in derived["preview_only_deltas"].items():
+            print(f"- {section}: {values}")
+    if simulation["notes"]:
+        print("Notes:")
+        for note in simulation["notes"]:
+            print(f"- {note}")
     return 0
 
 
@@ -685,6 +769,10 @@ def main(argv: list[str] | None = None) -> int:
             return _print_policy_list()
         if parsed.policy_command == "explain":
             return _print_policy_explain(parsed.profile_name)
+        if parsed.policy_command == "derive":
+            return _print_policy_derive(parsed)
+        if parsed.policy_command == "simulate":
+            return _print_policy_simulate(parsed)
 
     parser.print_help()
     return 2

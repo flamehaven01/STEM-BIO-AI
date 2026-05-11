@@ -10,6 +10,20 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.7] - 2026-05-11
+
+### Added
+- Added `stem policy derive` as an auditable researcher-intent translation surface built from the documented 0-5 rule table.
+- Added `stem policy simulate <repo>` so users can preview named-profile or preview-only policy outcomes against a real repository before any authoritative score changes are enabled.
+- Added deterministic translation and simulation helpers for top-down rule matching, preview-only bounded deltas, and policy-tier/cap preview math.
+- Added regression coverage for intent translation, preview-only fallback, and CLI derive/simulate outputs.
+
+### Changed
+- Kept formal scan scoring unchanged while adding governed derive/simulate UX, so 1.6.7 narrows the user-policy gap without turning the CLI into a free-form tuning console.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.6.7.
+
+---
+
 ## [1.6.6] - 2026-05-10
 
 ### Added

@@ -1,13 +1,13 @@
 # CLI Reference
 
-**Version:** 1.6.6
+**Version:** 1.6.7
 **Status:** Stable
 
 ---
 
 ## Command Model
 
-The 1.6.6 CLI is organized around workflows instead of one long option string, and now exposes named calibration profiles directly.
+The 1.6.7 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
 
 ```bash
 stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`
@@ -19,6 +19,8 @@ stem advisory call <folder>              # explicit provider-call workflow
 stem advisory check-response <folder> --response FILE
 stem policy list                         # available calibration profiles
 stem policy explain <name>               # inspect one calibration profile
+stem policy derive [INTENT OPTIONS]      # translate researcher intent
+stem policy simulate <folder> [INTENT OPTIONS]
 ```
 
 Backward compatibility remains in place:
@@ -87,7 +89,30 @@ The shorthand remains:
 stem /path/to/repo
 ```
 
-Policy selection is mirror-only in 1.6.6: the chosen profile is surfaced in outputs and summaries, but score computation still follows the current deterministic runtime constants.
+Policy selection is mirror-only in 1.6.7: the chosen profile is surfaced in outputs and summaries, and derive/simulate preview lanes can compare postures, but authoritative score computation still follows the current deterministic runtime constants.
+Policy selection remains mirror-only in scans in 1.6.7. The new `policy derive` and `policy simulate` commands preview governed posture changes without turning those deltas into authoritative scan behavior.
+
+## Policy Intent Workflows
+
+`stem policy derive` applies the documented 0-5 translation rule table:
+
+```bash
+stem policy derive \
+  --clinical-strictness 4 \
+  --code-integrity-priority 3 \
+  --reproducibility-priority 2 \
+  --structured-limitations-requirement 3
+```
+
+`stem policy simulate` runs the deterministic scan, then shows a baseline-vs-preview outcome:
+
+```bash
+stem policy simulate /path/to/repo \
+  --clinical-strictness 4 \
+  --code-integrity-priority 3 \
+  --reproducibility-priority 2 \
+  --structured-limitations-requirement 3
+```
 
 Compatibility flags still work on `scan`:
 
