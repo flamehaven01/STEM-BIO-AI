@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from .calibration_profile import load_calibration_profile
+from .calibration_profile import load_calibration_profile, validate_profile
 
 
 INTENT_KEYS = (
@@ -106,6 +106,7 @@ def simulate_policy_outcome(
         effective_profile = load_calibration_profile(recommended_profile)
     elif outcome_type == "preview_only":
         _apply_preview_deltas(effective_profile, derived.get("preview_only_deltas", {}))
+        validate_profile(effective_profile)
 
     raw_score = _simulate_weighted_raw_score(result, effective_profile)
     score_cap = _simulate_score_cap(result, effective_profile)
@@ -142,13 +143,21 @@ def _apply_preview_deltas(profile: dict[str, Any], deltas: dict[str, Any]) -> No
 def _simulate_weighted_raw_score(result: dict[str, Any], profile: dict[str, Any]) -> int:
     weights = profile["weights"]
     score = result["score"]
+    penalty = _simulated_c1_penalty(score, profile)
     weighted = (
         score["stage_1_readme_intent"] * weights["stage_1_percent"] / 100
         + score["stage_2_repo_local_consistency"] * weights["stage_2r_percent"] / 100
         + score["stage_3_code_bio"] * weights["stage_3_percent"] / 100
-        - score["risk_penalty"]
+        - penalty
     )
     return round(weighted)
+
+
+def _simulated_c1_penalty(score: dict[str, Any], profile: dict[str, Any]) -> int:
+    baseline_penalty = int(score.get("risk_penalty", 0) or 0)
+    if baseline_penalty <= 0:
+        return 0
+    return int(profile["code_integrity_policy"]["C1_penalty"])
 
 
 def _simulate_score_cap(result: dict[str, Any], profile: dict[str, Any]) -> int | None:

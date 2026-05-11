@@ -1,0 +1,20 @@
+{
+  "title": "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories",
+  "upload_type": "software",
+  "description": "Deterministic local evidence-surface scanner for bio and medical AI repositories. Produces reproducible T0-T4 review-priority tiers, a separate replication lane, evidence-ledger proof traces, provider-neutral advisory contract artifacts, and governed calibration-profile preview surfaces without requiring an LLM runtime.",
+  "creators": [
+    {
+      "name": "Kwansub Yun"
+    }
+  ],
+  "license": "Apache-2.0",
+  "access_right": "open",
+  "keywords": [
+    "bioinformatics",
+    "medical-ai",
+    "ai-governance",
+    "reproducibility",
+    "repository-audit",
+    "software-quality"
+  ]
+}

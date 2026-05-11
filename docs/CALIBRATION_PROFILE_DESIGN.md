@@ -1,7 +1,7 @@
 # STEM BIO-AI Calibration Profile Architecture
 
-Version: 1.6.7
-Status: implemented mirror-only calibration contract with derive/simulate preview surfaces; authoritative read-through remains future work
+Version: 1.6.8
+Status: implemented mirror-only calibration contract with derive/simulate preview surfaces; 1.6.8 preview hardening complete; authoritative read-through remains future work
 
 ---
 
@@ -9,7 +9,7 @@ Status: implemented mirror-only calibration contract with derive/simulate previe
 
 STEM BIO-AI already separates formal scoring, deterministic diagnostics, regulatory traceability, and AI advisory into distinct lanes.
 
-As of `1.6.7`, the repository ships a real calibration architecture:
+As of `1.6.8`, the repository ships a real calibration architecture:
 
 - packaged profiles in `policy/`
 - schema and runtime validation
@@ -25,7 +25,7 @@ What is still not fully separated is the **authoritative score read-through surf
 - evidence-only versus score-authoritative detector status
 - reasoning-model status labels
 
-In `1.6.7`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata, CLI-visible profile selection, and derive/simulate preview surfaces are already live. That is acceptable for the current release line, but it still creates a long-term maintenance risk:
+In `1.6.8`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata, CLI-visible profile selection, and derive/simulate preview surfaces are already live. That is acceptable for the current release line, but it still creates a long-term maintenance risk:
 
 > if calibration values are easy to change but hard to govern, the architecture will drift even if the lane boundaries remain conceptually correct.
 
@@ -143,7 +143,7 @@ Current shipped fields:
   "policy_schema_version": "1",
   "policy_version": "ca-policy-1.0",
   "tool_version_introduced": "1.6.5",
-  "tool_version_last_validated": "1.6.7",
+  "tool_version_last_validated": "1.6.8",
   "profile_name": "default",
   "profile_status": "authoritative_release",
   "profile_read_mode": "mirror_only",
@@ -200,7 +200,7 @@ Current shipped fields:
 }
 ```
 
-This is the active shipped schema family in `1.6.7`.
+This is the active shipped schema family in `1.6.8`.
 
 Schema notes:
 
@@ -209,7 +209,7 @@ Schema notes:
 - normalization should be represented as named semantics plus parameters, not a free-form expression string
 - `policy_version` should be independent from the tool release version
 - `profile_read_mode` must distinguish mirror-only exposure from authoritative runtime loading
-- `stage_3_policy.b2_partial_credit_mode` is currently a declared mirror-only profile field; authoritative Stage 3 B2 scoring in `1.6.7` still follows the hardcoded scanner path and does not yet read this value directly
+- `stage_3_policy.b2_partial_credit_mode` is currently a declared mirror-only profile field; authoritative Stage 3 B2 scoring in `1.6.8` still follows the hardcoded scanner path and does not yet read this value directly
 - `governance_sources.ca_taxonomy_version` must increment whenever runtime CA trigger membership, severity mapping, or cap-relevant phrase semantics change
 
 Current `profile_status` state set:
@@ -508,7 +508,7 @@ Current intent variables:
 - `reproducibility_priority`
 - `structured_limitations_requirement`
 
-Current `1.6.7` decision rules:
+Current `1.6.8` decision rules:
 
 | Condition | Outcome |
 |---|---|
@@ -516,7 +516,7 @@ Current `1.6.7` decision rules:
 | all four values are `2` or `3` | keep `default` |
 | no named profile rule matches | generate `preview_only` profile delta from explicit bounded deltas only |
 
-This narrow table is intentional. It keeps the translation layer visible, reviewable, and testable without pretending that every strong posture already has a release-grade named profile.
+This narrow table is intentional. It keeps the translation layer visible, reviewable, and testable without pretending that every strong posture already has a release-grade named profile. In particular, `reproducibility_first` remains deferred in `1.6.8`; high reproducibility answers still fall back to `preview_only` Stage 4 emphasis rather than a named recommendation.
 
 Rule priority:
 
@@ -568,7 +568,7 @@ Current bounded deltas used in preview-only mode:
 | `structured_limitations_requirement >= 4` with no named-profile match | require stricter Stage 3 B2 partial-credit posture only |
 | multiple strong answers with no named-profile match | combine only explicitly listed bounded deltas; do not infer new arithmetic outside documented policy fields |
 
-These are active preview-only deltas in `1.6.7`. They are not hidden similarity operations and they do not mutate the authoritative scan path.
+These are active preview-only deltas in `1.6.8`. They are not hidden similarity operations and they do not mutate the authoritative scan path.
 
 ### 11.2.4 Comparison Output
 
@@ -600,11 +600,11 @@ The current implementation defines two named profiles:
 Deferred until explicitly defined:
 
 - `documentation_lenient`
-  - not active in the `1.6.7` rule table
+  - not active in the `1.6.8` rule table
 - `research_repo_baseline`
-  - not active in the `1.6.7` rule table
+  - not active in the `1.6.8` rule table
 - `biosecurity_cautious`
-  - not active in the `1.6.7` rule table
+  - not active in the `1.6.8` rule table
 - `reproducibility_first`
   - intentionally deferred until an actual policy diff exists and a release-grade recommendation path is defined
 
@@ -752,6 +752,14 @@ Phase 1 parity target fields:
 - added `stem policy derive` for auditable 0–5 intent translation
 - added `stem policy simulate <repo>` for baseline-vs-preview outcome comparison
 - kept derive/simulate outputs mirror-only so authoritative scoring remains unchanged
+
+### 1.6.8: preview hardening and citation readiness
+
+- kept mirror-only scan scoring unchanged while hardening preview simulation against future profile drift
+- aligned `simulate` with profile-aware C1 penalty behavior instead of assuming scanner constants forever
+- revalidated `preview_only` profiles after bounded deltas are applied
+- strengthened mirror-only wording across CLI and report surfaces so `scan --policy` is not confused with `policy simulate`
+- added `CITATION.cff` and `.zenodo.json` so release artifacts are ready for DOI-backed citation once GitHub releases are archived by Zenodo
 
 ### Remaining roadmap
 

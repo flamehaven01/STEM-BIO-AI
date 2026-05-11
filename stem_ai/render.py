@@ -132,6 +132,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     score = result["score"]
     ast_note = _ast_scope_note(result)
     calibration = result.get("calibration_profile", {})
+    calibration_effect = _calibration_effect_note(calibration)
     lines = [
         "# STEM BIO-AI Local Audit Report",
         "",
@@ -141,6 +142,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         f"(`{calibration.get('policy_version', 'unknown')}`, "
         f"`{calibration.get('profile_read_mode', 'unknown')}`, "
         f"`{calibration.get('profile_status', 'unknown')}`)",
+        *([f"**Calibration Effect:** {calibration_effect}"] if calibration_effect else []),
         f"**Final Score:** **{score['final_score']} / 100**",
         f"**Formal Tier:** **{score['formal_tier']}**",
         f"**Use Scope:** {score['use_scope']}",
@@ -219,6 +221,7 @@ def render_explain(result: dict[str, Any]) -> str:
         grouped.setdefault(finding["detector"], []).append(finding)
 
     calibration = result.get("calibration_profile", {})
+    calibration_effect = _calibration_effect_note(calibration)
     out: list[str] = [
         "STEM BIO-AI Explain Report",
         f"Target  : {result['target']['name']}",
@@ -229,6 +232,7 @@ def render_explain(result: dict[str, Any]) -> str:
             f"{calibration.get('profile_read_mode', 'unknown')}; "
             f"{calibration.get('profile_status', 'unknown')}]"
         ),
+        *([f"Policy Mode: {calibration_effect}"] if calibration_effect else []),
         f"Score   : {score['final_score']} / 100  ({score['formal_tier']})",
         f"Replic  : {result.get('replication_score', 0)} / 100"
         f"  ({result.get('replication_tier', 'R0')})",
@@ -268,6 +272,16 @@ def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
         f"confidence envelope {envelope.get('lower', 'n/a')}-"
         f"{envelope.get('upper', 'n/a')}. "
         "This heuristic layer does not override the final score."
+    )
+
+
+def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
+    if calibration.get("profile_read_mode") != "mirror_only":
+        return None
+    return (
+        "mirror-only in 1.6.8 — selected profile metadata is surfaced in artifacts, "
+        "but authoritative scan scoring still follows deterministic runtime constants. "
+        "Use `stem policy simulate` to preview governed score deltas."
     )
 
 

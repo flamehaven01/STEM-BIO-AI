@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.6.7
+Version: 1.6.8
 Status: **Stable**
 Supersedes: historical v1.5 draft contract
 
@@ -71,7 +71,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.6.7"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.6.8"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -86,8 +86,10 @@ All fields below are present in every `audit_repository()` result.
 | `calibration_profile.tool_version_last_validated` | string | Last tool version whose runtime constants were checked against this profile |
 | `calibration_profile.profile_name` | string | Active profile label selected by CLI `--policy` |
 | `calibration_profile.profile_status` | string | Profile lifecycle status (`authoritative_release`, `experimental`, etc.) |
-| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.6.7`; later `"authoritative"` when scan scoring reads policy values directly |
+| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.6.8`; later `"authoritative"` when scan scoring reads policy values directly |
 | `calibration_profile.policy_sha256` | string | Canonical SHA256 surfaced by the runtime artifact; profile files may carry `null` before authoritative read-through |
+
+In `1.6.8`, `scan --policy <name>` still keeps authoritative scan scoring on the deterministic runtime-constant path. Policy selection changes surfaced metadata only; governed score-delta preview belongs to `stem policy simulate`.
 
 ### Target (Locked)
 

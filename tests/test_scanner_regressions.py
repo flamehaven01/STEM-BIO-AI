@@ -2025,7 +2025,9 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     explain = render_explain(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
+    assert "**Calibration Effect:** mirror-only in 1.6.8" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
+    assert "Policy Mode: mirror-only in 1.6.8" in explain
 
 
 def test_audit_repository_can_surface_selected_policy_metadata(tmp_path: Path) -> None:
@@ -2056,7 +2058,7 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.6.7" in captured.out
+    assert "Scoring Effect: mirror-only in 1.6.8" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
 
@@ -2081,6 +2083,7 @@ def test_cli_scan_accepts_named_policy_and_surfaces_it_in_output(tmp_path: Path,
 
     assert code == 0
     assert "Policy: strict_clinical_adjacency [experimental; mirror_only]" in captured.out
+    assert "Policy Mode: mirror-only preview; scan scoring still follows authoritative runtime constants." in captured.out
     assert result["calibration_profile"]["profile_name"] == "strict_clinical_adjacency"
 
 
@@ -2176,6 +2179,84 @@ def test_policy_simulation_can_reduce_score_via_stricter_clinical_cap() -> None:
     assert simulation["score_delta"] == -9
 
 
+def test_policy_simulation_uses_profile_c1_penalty_when_c1_triggered(monkeypatch) -> None:
+    result = {
+        "target": {"name": "demo/repo"},
+        "classification": {
+            "ca_severity": "none",
+            "t0_hard_floor": False,
+            "has_explicit_clinical_boundary": True,
+        },
+        "score": {
+            "stage_1_readme_intent": 80,
+            "stage_2_repo_local_consistency": 70,
+            "stage_3_code_bio": 90,
+            "risk_penalty": 10,
+            "raw_score_before_floor": 70,
+            "final_score": 70,
+            "formal_tier": "T3 Supervised",
+        },
+    }
+    derived = {
+        "outcome_type": "named_profile",
+        "recommended_profile": "strict_clinical_adjacency",
+        "preview_only_deltas": {},
+        "notes": [],
+    }
+    baseline = load_calibration_profile("default")
+    strict = load_calibration_profile("strict_clinical_adjacency")
+    strict["code_integrity_policy"]["C1_penalty"] = 15
+
+    def _fake_load(name: str = "default") -> dict:
+        return baseline if name == "default" else strict
+
+    monkeypatch.setattr("stem_ai.policy_intent.load_calibration_profile", _fake_load)
+
+    simulation = simulate_policy_outcome(result, derived)
+
+    assert simulation["raw_score_before_cap"] == 67
+    assert simulation["raw_score_delta"] == -3
+
+
+def test_policy_simulation_revalidates_preview_only_profile_after_deltas() -> None:
+    result = {
+        "target": {"name": "demo/repo"},
+        "classification": {
+            "ca_severity": "none",
+            "t0_hard_floor": False,
+            "has_explicit_clinical_boundary": True,
+        },
+        "score": {
+            "stage_1_readme_intent": 80,
+            "stage_2_repo_local_consistency": 80,
+            "stage_3_code_bio": 80,
+            "risk_penalty": 0,
+            "raw_score_before_floor": 80,
+            "final_score": 80,
+            "formal_tier": "T3 Supervised",
+        },
+    }
+    derived = {
+        "outcome_type": "preview_only",
+        "recommended_profile": "preview_only",
+        "preview_only_deltas": {
+            "weights": {
+                "stage_1_percent": 70,
+                "stage_2r_percent": 20,
+                "stage_3_percent": 45,
+            }
+        },
+        "notes": [],
+    }
+
+    try:
+        simulate_policy_outcome(result, derived)
+    except ValueError as exc:
+        assert "sum to 100" in str(exc)
+    else:
+        raise AssertionError("Expected preview-only simulation to revalidate effective profile deltas")
+
+
 def test_policy_derive_cli_surfaces_preview_only_deltas(capsys) -> None:
     code = cli_main([
         "policy",
@@ -2218,6 +2299,7 @@ def test_policy_simulate_cli_surfaces_score_delta_for_strict_profile(tmp_path: P
 
     assert code == 0
     assert "STEM BIO-AI policy simulation" in captured.out
+    assert "Mode:          preview only; baseline scan scoring remains authoritative" in captured.out
     assert "Simulation:    strict_clinical_adjacency" in captured.out
     assert "Score Delta:" in captured.out
 

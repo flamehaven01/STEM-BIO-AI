@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.7-informational.svg" alt="v1.6.7"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.8-informational.svg" alt="v1.6.8"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -71,7 +71,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.6.7`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path.
+Calibration profiles are implemented in `mirror_only` mode in `1.6.8`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
@@ -338,11 +338,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 ## Citation
 
+Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff). Zenodo metadata is configured in [`.zenodo.json`](.zenodo.json); once Zenodo archives a GitHub release, prefer the fixed release DOI for version-specific citation.
+
 ```bibtex
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.6.7},
+  version = {1.6.8},
   year    = {2026},
   url     = {https://github.com/flamehaven01/STEM-BIO-AI}
 }

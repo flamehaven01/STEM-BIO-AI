@@ -10,6 +10,20 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.6.8] - 2026-05-11
+
+### Added
+- Added root `CITATION.cff` and `.zenodo.json` so GitHub releases can be archived as DOI-backed software records through Zenodo.
+- Added regression coverage for profile-aware C1 penalty simulation and preview-only post-delta profile validation.
+
+### Changed
+- Hardened `stem policy simulate` so preview scoring now uses the selected profile's `C1_penalty` when the baseline scan has already triggered C1, instead of assuming the runtime constant forever.
+- Revalidated effective `preview_only` profiles after bounded deltas are applied, keeping future preview expansion inside the same runtime policy guardrails as packaged profiles.
+- Strengthened mirror-only wording across CLI, Markdown, explain, calibration-architecture, and API-contract surfaces so `scan --policy <name>` is not confused with score-authoritative policy simulation.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.6.8.
+
+---
+
 ## [1.6.7] - 2026-05-11
 
 ### Added

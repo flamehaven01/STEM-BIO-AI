@@ -1,13 +1,13 @@
 # CLI Reference
 
-**Version:** 1.6.7
+**Version:** 1.6.8
 **Status:** Stable
 
 ---
 
 ## Command Model
 
-The 1.6.7 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
+The 1.6.8 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
 
 ```bash
 stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`
@@ -89,8 +89,8 @@ The shorthand remains:
 stem /path/to/repo
 ```
 
-Policy selection is mirror-only in 1.6.7: the chosen profile is surfaced in outputs and summaries, and derive/simulate preview lanes can compare postures, but authoritative score computation still follows the current deterministic runtime constants.
-Policy selection remains mirror-only in scans in 1.6.7. The new `policy derive` and `policy simulate` commands preview governed posture changes without turning those deltas into authoritative scan behavior.
+Policy selection is mirror-only in 1.6.8: the chosen profile is surfaced in outputs and summaries, and derive/simulate preview lanes can compare postures, but authoritative score computation still follows the current deterministic runtime constants.
+Policy selection remains mirror-only in scans in 1.6.8. The new `policy derive` and `policy simulate` commands preview governed posture changes without turning those deltas into authoritative scan behavior.
 
 ## Policy Intent Workflows
 
@@ -114,10 +114,11 @@ stem policy simulate /path/to/repo \
   --structured-limitations-requirement 3
 ```
 
-Current `1.6.7` rule scope is intentionally narrow:
+Current `1.6.8` rule scope is intentionally narrow:
 
 - strong clinical strictness maps to `strict_clinical_adjacency`
 - balanced `2..3` answers keep `default`
+- reproducibility-heavy postures still fall to `preview_only`
 - all other non-default postures fall to `preview_only` bounded deltas rather than pretending a release-grade named profile already exists
 
 Compatibility flags still work on `scan`:

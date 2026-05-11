@@ -222,7 +222,7 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         "--policy",
         choices=_policy_choices(),
         default="default",
-        help="Named calibration profile to surface in the result (1.6.7 keeps policy selection mirror-only)",
+        help="Named calibration profile to surface in the result (1.6.8 keeps scan-time policy selection mirror-only)",
     )
     parser.add_argument(
         "--explain",
@@ -329,6 +329,17 @@ def _workflow_label(command: str, advisory_command: str | None = None) -> str:
     return "scan"
 
 
+def _mirror_only_notice(calibration: dict) -> str | None:
+    if calibration.get("profile_read_mode") != "mirror_only":
+        return None
+    if calibration.get("profile_name") == "default":
+        return None
+    return (
+        "mirror-only preview; scan scoring still follows authoritative runtime constants. "
+        "Use `stem policy simulate` for score deltas."
+    )
+
+
 def _evaluate_tier_gate(result: dict, required_tier: str | None) -> tuple[bool, str | None]:
     if required_tier is None:
         return True, None
@@ -367,6 +378,9 @@ def _print_full_summary(
         f"{calibration.get('profile_name', 'unknown')}  "
         f"({calibration.get('profile_status', 'unknown')}, {calibration.get('profile_read_mode', 'unknown')})"
     )
+    policy_notice = _mirror_only_notice(calibration)
+    if policy_notice:
+        print(f"Policy Mode: {policy_notice}")
     print()
 
     print(f"Score:       {score['final_score']} / 100  ({score['formal_tier']})")
@@ -447,6 +461,9 @@ def _print_compact_summary(
         f"Policy: {calibration.get('profile_name', 'unknown')} "
         f"[{calibration.get('profile_status', 'unknown')}; {calibration.get('profile_read_mode', 'unknown')}]"
     )
+    policy_notice = _mirror_only_notice(calibration)
+    if policy_notice:
+        print(f"Policy Mode: {policy_notice}")
 
     classification = result.get("classification", {})
     if classification.get("ca_severity", "none") != "none":
@@ -583,7 +600,7 @@ def _print_policy_explain(profile_name: str) -> int:
     print(f"Read Mode:      {profile['profile_read_mode']}")
     print(
         "Scoring Effect: "
-        "mirror-only in 1.6.7; selection is surfaced in artifacts but does not yet reweight score computation"
+        "mirror-only in 1.6.8; selection is surfaced in artifacts but does not yet reweight score computation"
     )
     print()
     print(
@@ -673,6 +690,7 @@ def _print_policy_simulate(args: argparse.Namespace) -> int:
 
     print("STEM BIO-AI policy simulation")
     print(f"Target:        {result['target']['name']}")
+    print("Mode:          preview only; baseline scan scoring remains authoritative")
     print(f"Baseline:      {args.baseline} -> {result['score']['final_score']}/100 ({result['score']['formal_tier']})")
     print(
         f"Simulation:    {simulation['effective_profile']} -> "

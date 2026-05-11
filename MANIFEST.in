@@ -2,6 +2,8 @@ include CHANGELOG.md
 include CONTRIBUTING.md
 include LICENSE
 include README.md
+include CITATION.cff
+include .zenodo.json
 include SKILL.md
 include .env.example
 include pyproject.toml
@@ -21,9 +23,9 @@ include policy/scoring_profile.schema.json
 include policy/scoring_profile.default.v1.json
 include policy/scoring_profile.strict_clinical_adjacency.v1.json
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.6.7.json
-include memory/stem-ai-playbook.v1.6.7.md
-include memory/stem-ai-lessons.v1.6.7.md
+include memory/stem-ai.mica.v1.6.8.json
+include memory/stem-ai-playbook.v1.6.8.md
+include memory/stem-ai-lessons.v1.6.8.md
 
 recursive-include stem_ai *.py
 recursive-include tests *.py

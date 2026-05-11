@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use STEM BIO-AI, please cite the versioned software release."
+title: "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories"
+version: "1.6.8"
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/flamehaven01/STEM-BIO-AI"
+url: "https://github.com/flamehaven01/STEM-BIO-AI"
+abstract: >-
+  Deterministic local evidence-surface scanner for bio and medical AI repositories.
+  Produces reproducible T0-T4 review-priority tiers, a separate replication lane,
+  evidence-ledger proof traces, provider-neutral advisory contract artifacts, and
+  governed calibration-profile preview surfaces without requiring an LLM runtime.
+keywords:
+  - bioinformatics
+  - medical-ai
+  - ai-governance
+  - reproducibility
+  - repository-audit
+  - software-quality
+authors:
+  - family-names: Yun
+    given-names: Kwansub
