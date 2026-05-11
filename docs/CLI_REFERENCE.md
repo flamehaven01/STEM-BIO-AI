@@ -114,6 +114,12 @@ stem policy simulate /path/to/repo \
   --structured-limitations-requirement 3
 ```
 
+Current `1.6.7` rule scope is intentionally narrow:
+
+- strong clinical strictness maps to `strict_clinical_adjacency`
+- balanced `2..3` answers keep `default`
+- all other non-default postures fall to `preview_only` bounded deltas rather than pretending a release-grade named profile already exists
+
 Compatibility flags still work on `scan`:
 
 | Flag | Description |

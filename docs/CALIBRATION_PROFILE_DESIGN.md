@@ -1,15 +1,23 @@
-# STEM BIO-AI Calibration Profile Design
+# STEM BIO-AI Calibration Profile Architecture
 
-Version: updated for 1.6.7 derive/simulate preview implementation
-Status: design proposal, not active runtime behavior
+Version: 1.6.7
+Status: implemented mirror-only calibration contract with derive/simulate preview surfaces; authoritative read-through remains future work
 
 ---
 
-## 1. Purpose
+## 1. Current State
 
 STEM BIO-AI already separates formal scoring, deterministic diagnostics, regulatory traceability, and AI advisory into distinct lanes.
 
-What it does **not** yet separate cleanly is the **calibration surface**:
+As of `1.6.7`, the repository ships a real calibration architecture:
+
+- packaged profiles in `policy/`
+- schema and runtime validation
+- result metadata surfacing for active profile identity
+- CLI policy visibility via `stem policy list`, `stem policy explain`, and `--policy <name>`
+- researcher-intent preview surfaces via `stem policy derive` and `stem policy simulate`
+
+What is still not fully separated is the **authoritative score read-through surface**:
 
 - stage weights
 - tier boundaries
@@ -17,11 +25,11 @@ What it does **not** yet separate cleanly is the **calibration surface**:
 - evidence-only versus score-authoritative detector status
 - reasoning-model status labels
 
-In `1.6.7`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata, CLI-visible profile selection, and derive/simulate preview surfaces are now surfaced. That is acceptable for a stable prototype, but it creates a long-term maintenance risk:
+In `1.6.7`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata, CLI-visible profile selection, and derive/simulate preview surfaces are already live. That is acceptable for the current release line, but it still creates a long-term maintenance risk:
 
 > if calibration values are easy to change but hard to govern, the architecture will drift even if the lane boundaries remain conceptually correct.
 
-This document proposes a **versioned calibration profile** so STEM BIO-AI can remain maintainable without turning into a free-form tuning surface.
+This document describes the **implemented versioned calibration profile architecture** and the remaining governed path to authoritative read-through.
 
 ---
 
@@ -89,17 +97,19 @@ This preserves the current architectural discipline:
 
 ---
 
-## 5. Recommended Shape
+## 5. Implemented Shape
 
-Recommended location:
+Current packaged profile files:
 
 `policy/scoring_profile.default.v1.json`
+`policy/scoring_profile.strict_clinical_adjacency.v1.json`
 
-Recommended future support:
+Deferred profiles:
 
-- `policy/scoring_profile.strict_clinical_adjacency.v1.json`
-- `policy/scoring_profile.reproducibility_first.v1.json`
-- `policy/scoring_profile.experimental.v1.json`
+- `reproducibility_first`
+- `documentation_lenient`
+- `research_repo_baseline`
+- `biosecurity_cautious`
 
 Important restriction:
 
@@ -124,9 +134,9 @@ The second turns the tool into an untracked tuning console.
 
 ---
 
-## 6. What the Profile Should Contain
+## 6. Current Profile Contract
 
-Minimum recommended fields:
+Current shipped fields:
 
 ```json
 {
@@ -190,8 +200,7 @@ Minimum recommended fields:
 }
 ```
 
-This is not meant to be the final schema.  
-It is the minimum useful shape.
+This is the active shipped schema family in `1.6.7`.
 
 Schema notes:
 
@@ -200,8 +209,10 @@ Schema notes:
 - normalization should be represented as named semantics plus parameters, not a free-form expression string
 - `policy_version` should be independent from the tool release version
 - `profile_read_mode` must distinguish mirror-only exposure from authoritative runtime loading
+- `stage_3_policy.b2_partial_credit_mode` is currently a declared mirror-only profile field; authoritative Stage 3 B2 scoring in `1.6.7` still follows the hardcoded scanner path and does not yet read this value directly
+- `governance_sources.ca_taxonomy_version` must increment whenever runtime CA trigger membership, severity mapping, or cap-relevant phrase semantics change
 
-Recommended `profile_status` state set:
+Current `profile_status` state set:
 
 - `preview_only`
 - `experimental`
@@ -209,7 +220,7 @@ Recommended `profile_status` state set:
 - `authoritative_release`
 - `deprecated`
 
-Recommended status transition path:
+Current status transition path:
 
 `preview_only -> experimental -> benchmark_candidate -> authoritative_release -> deprecated`
 
@@ -388,14 +399,17 @@ It should be:
 
 > "which evaluation posture best matches your repository context?"
 
-Recommended starter profiles:
+Current active named profiles:
 
 - `default`
 - `strict_clinical_adjacency`
+
+Deferred named profiles:
+
 - `reproducibility_first`
-- `research_repo_baseline` (deferred until explicitly defined)
-- `documentation_lenient` (deferred until explicitly defined)
-- `biosecurity_cautious` (deferred until explicitly defined)
+- `research_repo_baseline`
+- `documentation_lenient`
+- `biosecurity_cautious`
 
 These names are easier for researchers to reason about than raw numbers.
 
@@ -423,7 +437,7 @@ Before users touch any named policy, STEM BIO-AI should reduce the interpretatio
 - what the researcher actually cares about
 - what the default profile currently emphasizes
 
-The recommended mechanism is a **researcher intent layer** built around short `0–5` scales.
+The implemented mechanism is a **researcher intent layer** built around short `0–5` scales.
 
 Important boundary:
 
@@ -446,7 +460,7 @@ Recommended scale interpretation:
 - `4` = strong emphasis
 - `5` = very strong emphasis
 
-Recommended question areas:
+Current question areas:
 
 - how strict clinical-adjacent claims should be treated
 - whether code-integrity evidence should outweigh README/documentation evidence
@@ -485,28 +499,24 @@ The system should map researcher answers to one of three outcomes:
 
 This is safer than letting the user edit raw scoring parameters directly.
 
-The initial implementation should prefer an auditable rule table over a hidden similarity function.
+The current implementation uses an auditable rule table instead of a hidden similarity function.
 
-Recommended intent variables:
+Current intent variables:
 
 - `clinical_strictness`
 - `code_integrity_priority`
 - `reproducibility_priority`
 - `structured_limitations_requirement`
 
-Recommended first-pass decision rules:
+Current `1.6.7` decision rules:
 
 | Condition | Outcome |
 |---|---|
 | `clinical_strictness >= 4` and `reproducibility_priority <= 3` | recommend `strict_clinical_adjacency` |
-| `reproducibility_priority >= 4` and `clinical_strictness <= 3` | recommend `reproducibility_first` |
-| `code_integrity_priority <= 2` and `structured_limitations_requirement <= 2` and `clinical_strictness <= 3` | recommend `documentation_lenient` only after that profile is explicitly defined; otherwise fall back to `preview_only` |
 | all four values are `2` or `3` | keep `default` |
 | no named profile rule matches | generate `preview_only` profile delta from explicit bounded deltas only |
 
-The purpose of this first-pass table is not to be perfect.
-
-It is to make the translation layer visible, reviewable, and testable.
+This narrow table is intentional. It keeps the translation layer visible, reviewable, and testable without pretending that every strong posture already has a release-grade named profile.
 
 Rule priority:
 
@@ -527,7 +537,7 @@ Zero-value meaning:
 - `0` does **not** remove or disable an axis
 - therefore `0` participates in threshold checks such as `<= 2`
 
-Recommended "default already matches" rule:
+Current "default already matches" rule:
 
 - if the selected baseline is `default`
 - and all four intent variables are in the `2..3` range
@@ -535,7 +545,7 @@ Recommended "default already matches" rule:
 
 then the system should report that the default profile already matches the stated posture closely enough to avoid a custom preview.
 
-Recommended `preview_only` boundary for the first implementation:
+Current `preview_only` boundary:
 
 - do **not** compute nearest-profile distance
 - do **not** infer hidden similarity scores
@@ -549,7 +559,7 @@ Instead:
 
 This keeps the intent layer auditable during the first implementation cycle.
 
-Illustrative bounded deltas for the first implementation:
+Current bounded deltas used in preview-only mode:
 
 | Triggered answer | Allowed `preview_only` delta shape |
 |---|---|
@@ -558,9 +568,7 @@ Illustrative bounded deltas for the first implementation:
 | `structured_limitations_requirement >= 4` with no named-profile match | require stricter Stage 3 B2 partial-credit posture only |
 | multiple strong answers with no named-profile match | combine only explicitly listed bounded deltas; do not infer new arithmetic outside documented policy fields |
 
-These are not hidden similarity operations.
-
-They are bounded, inspectable policy deltas that must be documented before activation.
+These are active preview-only deltas in `1.6.7`. They are not hidden similarity operations and they do not mutate the authoritative scan path.
 
 ### 11.2.4 Comparison Output
 
@@ -582,48 +590,39 @@ It is:
 
 > "what did the repository outcome change to, and why?"
 
-### 11.2.5 Minimum Starter Profile Definitions
+### 11.2.5 Current Named Profile Definitions
 
-Before implementation begins, at least two named profiles should have explicit documented diffs.
-
-Required minimum:
+The current implementation defines two named profiles:
 
 - `default`
 - `strict_clinical_adjacency`
 
-Strongly recommended:
-
-- `reproducibility_first`
-
 Deferred until explicitly defined:
 
 - `documentation_lenient`
-  - row 3 of the wizard rule table must not recommend this profile until its actual policy diff is documented here
+  - not active in the `1.6.7` rule table
 - `research_repo_baseline`
-  - must not appear in active wizard recommendation paths until its actual policy diff is documented here
+  - not active in the `1.6.7` rule table
 - `biosecurity_cautious`
-  - must not appear in active wizard recommendation paths until its actual policy diff is documented here
+  - not active in the `1.6.7` rule table
+- `reproducibility_first`
+  - intentionally deferred until an actual policy diff exists and a release-grade recommendation path is defined
 
-Minimum documented diff fields per profile:
+Documented diff fields per active profile:
 
 - stage weights
 - clinical cap / hard-floor posture
 - Stage 3 B2 strictness posture
 - Stage 4 emphasis posture
 
-Illustrative starter diff:
+Current starter diff:
 
 | Profile | Stage weights | Clinical posture | B2 posture | Stage 4 posture |
 |---|---|---|---|---|
 | `default` | `0.40 / 0.20 / 0.40` | standard CA cap / hard-floor rules | structured boundary language for partial credit | current baseline |
-| `strict_clinical_adjacency` | same as `default` initially | stricter CA posture candidate for later policy revision | same as `default` unless explicitly changed | current baseline |
-| `reproducibility_first` | future profile; must be defined before implementation if referenced by wizard rules | same as `default` unless explicitly changed | same as `default` unless explicitly changed | stronger replication emphasis candidate |
+| `strict_clinical_adjacency` | `0.40 / 0.20 / 0.40` | tighter `ca_no_disclaimer_cap=60`, tighter `t0_hard_floor_cap=35` | same as `default` | `baseline` |
 
-These do not need to be final policy values yet, but they must exist as explicit diffs before the wizard can be treated as an implementation-ready surface.
-
-These values are illustrative placeholders.
-
-Phase 1 implementation must not proceed until this table contains actual policy diffs for every named profile that the active wizard rule table is allowed to recommend.
+Any additional named profile must document its concrete diff here before it becomes eligible for CLI recommendation.
 
 ### 11.3 Side-by-Side Simulation
 
@@ -707,11 +706,9 @@ The guiding rule is:
 
 ---
 
-## 12. Migration Plan
+## 12. Implemented Milestones and Remaining Roadmap
 
-Suggested low-risk rollout:
-
-### Phase 1: mirror only
+### 1.6.5: mirror-only profile contract
 
 - create the profile file
 - keep scanner behavior unchanged
@@ -737,51 +734,45 @@ Recommended fixture location:
 
 - `tests/fixtures/calibration_profiles/`
 
-Recommended Phase 1 parity target fields:
+Phase 1 parity target fields:
 
 - `raw_score_before_floor`
 - `final_score`
 - `formal_tier`
 - `classification.score_cap`
 
-### Phase 2: read-through
+### 1.6.6: policy visibility
 
-- scanner loads weights, thresholds, caps, and detector status from profile
-- tests verify parity with old constant-based behavior
+- added `stem policy list` and `stem policy explain`
+- added `--policy <name>` on scan/gate/advisory workflows
+- surfaced selected profile metadata in stdout, Markdown, explain text, and PDF headers
 
-### Phase 3: governed evolution
+### 1.6.7: derive/simulate preview
 
-- future score-affecting changes require:
+- added `stem policy derive` for auditable 0–5 intent translation
+- added `stem policy simulate <repo>` for baseline-vs-preview outcome comparison
+- kept derive/simulate outputs mirror-only so authoritative scoring remains unchanged
+
+### Remaining roadmap
+
+- authoritative read-through of policy weights/caps/thresholds
+- additional release-grade named profiles beyond `strict_clinical_adjacency`
+- explicit read-through for currently declared mirror-only fields such as `stage_3_policy.b2_partial_credit_mode`
+- `ca-taxonomy-vN` governance policy so runtime trigger-set changes are versioned as first-class release events
+- Phase 2 target release remains intentionally unset until parity fixtures, differential tests, and rollback notes are ready for the first score-authoritative read-through patch
+- future score-affecting policy changes require:
   - profile update
   - rationale update
   - changelog entry
   - benchmark note when relevant
 
-This sequence avoids a risky “big bang” rewrite.
+This keeps calibration governance ahead of personalization while avoiding a risky “big bang” rewrite.
 
 ---
 
-## 13. Suggested Release Sequence
+## 13. Non-Goals
 
-The current implementation state suggests the following release order:
-
-- `1.6.5`
-  - introduce profile files
-  - expose `policy_version`, `profile_name`, `profile_status`, `policy_sha256`
-  - keep named-profile selection narrow and deterministic
-- `1.6.6`
-  - add `stem policy list` and `stem policy explain`
-  - support explicit `--policy <name>` on scan commands
-- `1.6.7`
-  - add guided policy derivation and side-by-side simulation
-
-This keeps calibration governance ahead of personalization.
-
----
-
-## 14. Non-Goals
-
-This proposal does **not** aim to:
+This architecture does **not** aim to:
 
 - let users personalize trust scores
 - introduce hidden model-based calibration
@@ -793,11 +784,11 @@ It only aims to make calibration easier to maintain **without weakening lane bou
 
 ---
 
-## 15. Final Recommendation
+## 14. Final Position
 
-Yes: STEM BIO-AI should gain an easier calibration maintenance surface.
+STEM BIO-AI now has a real calibration architecture.
 
-But the correct mechanism is:
+The correct mechanism is:
 
 > a versioned calibration profile with explicit promotion rules
 
@@ -805,7 +796,7 @@ not:
 
 > ad hoc runtime tuning knobs
 
-If the architecture is serious about preserving the distinction between:
+If the system is serious about preserving the distinction between:
 
 - formal score
 - diagnostics

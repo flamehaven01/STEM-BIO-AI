@@ -20,6 +20,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ### Changed
 - Kept formal scan scoring unchanged while adding governed derive/simulate UX, so 1.6.7 narrows the user-policy gap without turning the CLI into a free-form tuning console.
+- Clarified calibration documentation so the profile contract, policy visibility, and derive/simulate preview lanes are described as implemented mirror-only architecture rather than as a future-only proposal.
 - Rotated the active MICA memory layer and public package/version surfaces to v1.6.7.
 
 ---
@@ -389,7 +390,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Added tests ensuring advisory input omits raw snippets by default, rejects unknown citations, rejects score overrides, rejects clinical/regulatory claims, and surfaces advisory validation in CLI/Markdown/explain output.
 
 ### Changed
-- Updated local CLI result schema to `stem-ai-local-cli-result-v1.6`.
+- Established the provider-neutral advisory contract surface that later converged into the stable local CLI result schema family.
 
 ---
 

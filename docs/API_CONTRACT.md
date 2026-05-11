@@ -76,7 +76,7 @@ All fields below are present in every `audit_repository()` result.
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
 
-### Calibration Profile (Locked in Phase 1)
+### Calibration Profile (Implemented Mirror-Only Surface)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -84,10 +84,10 @@ All fields below are present in every `audit_repository()` result.
 | `calibration_profile.policy_version` | string | Versioned policy identifier independent from package version |
 | `calibration_profile.tool_version_introduced` | string | First tool version that introduced this policy shape |
 | `calibration_profile.tool_version_last_validated` | string | Last tool version whose runtime constants were checked against this profile |
-| `calibration_profile.profile_name` | string | Active profile label selected by CLI `--policy` (Phase 1 default: `"default"`) |
+| `calibration_profile.profile_name` | string | Active profile label selected by CLI `--policy` |
 | `calibration_profile.profile_status` | string | Profile lifecycle status (`authoritative_release`, `experimental`, etc.) |
-| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in Phase 1, later `"authoritative"` when runtime reads policy values |
-| `calibration_profile.policy_sha256` | string | Canonical SHA256 of the policy JSON with the field itself excluded from the hash input |
+| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.6.7`; later `"authoritative"` when scan scoring reads policy values directly |
+| `calibration_profile.policy_sha256` | string | Canonical SHA256 surfaced by the runtime artifact; profile files may carry `null` before authoritative read-through |
 
 ### Target (Locked)
 
