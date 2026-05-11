@@ -16,6 +16,7 @@
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
   <a href="https://huggingface.co/spaces/Flamehaven/stem-bio-ai"><img src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-yellow.svg" alt="HF Space"></a>
+  <a href="https://doi.org/10.5281/zenodo.20116303"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20116303.svg" alt="DOI"></a>
 </p>
 
 ---
@@ -338,7 +339,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 ## Citation
 
-Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff). Zenodo metadata is configured in [`.zenodo.json`](.zenodo.json); once Zenodo archives a GitHub release, prefer the fixed release DOI for version-specific citation.
+Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
 ```bibtex
 @software{stem-bio-ai,
@@ -346,7 +347,8 @@ Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff). Zenodo meta
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
   version = {1.6.8},
   year    = {2026},
-  url     = {https://github.com/flamehaven01/STEM-BIO-AI}
+  doi     = {10.5281/zenodo.20116303},
+  url     = {https://doi.org/10.5281/zenodo.20116303}
 }
 ```
 
