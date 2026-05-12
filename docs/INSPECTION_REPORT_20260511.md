@@ -1,6 +1,6 @@
 # STEM-BIO-AI 이중 검수 보고서
 
-**날짜:** 2026-05-11 | **버전:** v1.6.8 | **상태:** 내일 오후 처리 예정
+**날짜:** 2026-05-11 | **버전:** v1.6.8 → v1.7.0 기록 기준 | **상태:** 패치 로드맵 확정 (2026-05-12)
 
 ---
 
@@ -85,17 +85,67 @@
 
 ---
 
-## 처리 예정 항목 (내일 오후)
+## v1.7.0 이후 상태
 
-| 우선순위 | 대상 | 조치 |
+`detector_contract.py`는 v1.7.0에서 신규 작성되어 CC-1/CC-2/CC-3 탐지가 동작하지만, 검수에서 지적된 **구조적 복잡도 문제는 미해결** 상태로 다음 패치에 이관.
+
+---
+
+## 패치 로드맵
+
+### v1.7.1 — 구조 부채 1차 해소 (P0)
+
+**대상: `stem_ai/detector_contract.py`**
+
+| 함수 | 현황 | 조치 |
 |---|---|---|
-| P0 | `detector_contract.py` `_readme_claimed_names` | depth=8 → guard-clause + helper 분리 |
-| P0 | `detector_contract.py` `_detect_clinical_zero_default` | cc=16 → candidate 수집 로직 별도 함수 추출 |
-| P1 | `detector_bio.py` SMILES 함수 클론 11개 | 데이터 구동 dispatch table로 통합 |
-| P1 | `rdkit` phantom import | `pyproject.toml` optional-dep 선언 |
-| P2 | `.slopconfig.yaml` 추가 | `tmp/`, `build/` exclude |
-| P2 | `vulture` 설치 | dead code 스캔 완성 |
+| `_readme_claimed_names` (L137) | depth=8, 프로젝트 최악 중첩 | guard-clause 조기 반환 + `_extract_section_names()` 헬퍼 분리 |
+| `_detect_clinical_zero_default` (L44) | cc=16 | `_collect_candidate_pairs()` 추출 — kwonly/positional 수집 로직 분리 |
+| `_extract_package_all` (L115) | depth=5, cc=12 | inner loop → `_parse_all_assign()` 헬퍼 |
+
+**대상: 설정**
+
+| 항목 | 조치 |
+|---|---|
+| `.slopconfig.yaml` 신규 | `exclude_dirs: [tmp, build, dist, .pytest_cache]` — slop detector 오탐 제거 |
+
+### v1.7.2 — 클론 클러스터 해소 (P1)
+
+**대상: `stem_ai/detector_bio.py`**
+
+| 이슈 | 현황 | 조치 |
+|---|---|---|
+| SMILES 함수 클론 11개 | AST JSD < 0.05 (거의 동일) | `_SMILES_RULES: list[tuple[str, Callable]]` dispatch table로 통합, `_apply_smiles_rule()` 단일 실행기 |
+| `nested_complexity` x4 | `_collect_silent_mock_findings` cc=14 등 | 조건 분기 → 전략 함수 추출 |
+
+**대상: `pyproject.toml`**
+
+```toml
+[project.optional-dependencies]
+bio = ["rdkit>=2023.3"]
+```
+`rdkit` phantom import → optional dep 선언 + `try/except ImportError` 가드로 교체
+
+### v1.7.3 — 코드 위생 완성 (P2)
+
+| 항목 | 조치 |
+|---|---|
+| `cli.py` `main` cc=14 | `_handle_scan_cmd()`, `_handle_policy_cmd()` 등 서브핸들러 추출 |
+| print 함수 5개 클론 | `_print_section(title, rows)` 공통 렌더러 통합 |
+| `advisory_contract.py` 8-함수 클론 | 공통 `_validate_list_field(key, items, rules)` 추출 |
+| `vulture` 설치 | `pip install vulture` + `scripts/dead_code_check.sh` 추가 |
+
+---
+
+## 검수 도구 재실행 기준
+
+| 버전 | 기대 목표 |
+|---|---|
+| v1.7.1 | `detector_contract.py` slop score ≤ 30 (현 63.93) |
+| v1.7.2 | `detector_bio.py` slop score ≤ 35 (현 72.12) |
+| v1.7.3 | SIDRCE Omega ≥ 0.85 in inspect 모드 (현 0.7883) |
 
 ---
 
 *AI-SLOP-Detector v3.7.3 + SIDRCE SaaS 1.1.15 | Flamehaven Research | 2026-05-11*
+*패치 로드맵 확정: 2026-05-12*

@@ -88,7 +88,7 @@ Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 - Regulatory traceability mapping: [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
 - Regulatory basis registry: [`docs/regulatory_basis_registry.v1.json`](docs/regulatory_basis_registry.v1.json)
 - CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
-- HTML report dashboard: [`docs/UI_HTML_REPORT.md`](docs/UI_HTML_REPORT.md)
+
 
 ---
 
@@ -191,8 +191,6 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 **5 sections:** Executive Summary · Score Matrix · Code Integrity (expandable cards) · AIRI Risk Coverage (toggle) · Evidence Detail (filter chips)
 
 Interactive features: sticky scroll-spy nav · `?` tooltip icons on every metric · click-to-expand evidence cards · covered/gaps toggle for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
-
-Full spec: [`docs/UI_HTML_REPORT.md`](docs/UI_HTML_REPORT.md)
 
 ---
 

@@ -19,7 +19,7 @@ body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-ser
   border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}}
 .nav-link:hover{{color:#fff;background:rgba(255,255,255,.07)}}
 .nav-link.active{{color:#fff;border-bottom-color:{t}}}
-.hero{{background:linear-gradient(135deg,{n} 0%,#263d5e 100%);color:#fff;
+.hero{{background:linear-gradient(135deg,{n} 0%,#1A3556 100%);color:#fff;
   padding:36px 48px;display:flex;gap:36px;align-items:center;flex-wrap:wrap}}
 .hero h1{{font-size:24px;font-weight:700;margin-bottom:6px}}
 .sub{{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:10px}}
@@ -60,6 +60,19 @@ section{{margin-bottom:40px;scroll-margin-top:60px}}
 .toggle-btn:hover{{background:{lg}}}
 .toggle-btn.active{{background:{n};color:#fff}}
 .airi-table{{width:100%;border-collapse:collapse}}
+.domain-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:10px;margin-bottom:20px}}
+.domain-card{{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:{w};border:1.5px solid {mg};border-radius:8px;
+  transition:border-color .15s,box-shadow .15s;user-select:none}}
+.domain-card:hover{{border-color:{t};box-shadow:0 2px 8px rgba(0,0,0,.1)}}
+.domain-card.domain-active{{border-color:var(--d-color,{t});
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--d-color,{t}) 20%,transparent)}}
+.domain-num{{display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:5px;color:#fff;font-size:11px;
+  font-weight:700;flex-shrink:0}}
+.domain-label{{font-size:11px;color:{n};font-weight:500;flex:1;line-height:1.3}}
+.domain-cnt{{font-size:12px;font-weight:700;flex-shrink:0}}
 .airi-table th{{padding:10px 8px;font-size:11px;text-align:left;color:{dg};
   background:{lg};font-weight:600;text-transform:uppercase;letter-spacing:.05em}}
 .airi-table tr:hover{{background:{lg}}}
@@ -108,13 +121,34 @@ function toggleCard(card) {
   if (d) d.style.display = exp ? 'block' : 'none';
 }
 
-function airiToggle(view) {
-  document.querySelectorAll('.airi-covered,.airi-gaps').forEach(function(el) {
-    el.style.display = el.classList.contains('airi-' + view) ? '' : 'none';
+var _airiView = 'covered';
+var _airiDomain = 0;
+
+function _applyAiriFilter() {
+  document.querySelectorAll('.airi-covered,.airi-gaps').forEach(function(r) {
+    var viewOk   = r.classList.contains('airi-' + _airiView);
+    var domainOk = (_airiDomain === 0 || r.dataset.domain == _airiDomain);
+    r.style.display = (viewOk && domainOk) ? '' : 'none';
   });
+}
+
+function airiToggle(view) {
+  _airiView = view;
+  _applyAiriFilter();
   document.querySelectorAll('.toggle-btn[data-view]').forEach(function(b) {
     b.classList.toggle('active', b.dataset.view === view);
   });
+}
+
+function filterDomain(num) {
+  _airiDomain = (_airiDomain === num) ? 0 : num;
+  document.querySelectorAll('.domain-card').forEach(function(c) {
+    var active = (c.dataset.domain == _airiDomain);
+    c.classList.toggle('domain-active', active);
+    c.style.setProperty('--d-color', active
+      ? c.querySelector('.domain-num').style.background : '');
+  });
+  _applyAiriFilter();
 }
 
 function filterEv(sev) {

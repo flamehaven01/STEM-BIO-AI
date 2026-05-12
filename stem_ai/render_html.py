@@ -8,9 +8,10 @@ from __future__ import annotations
 from typing import Any
 
 from .render_html_components import (
-    _C, _STAGE_TIPS, xt, tier_color, status_color, tip_icon,
+    _C, _STAGE_TIPS, _AIRI_DOMAIN_COLORS,
+    xt, tier_color, status_color, tip_icon,
     svg_gauge, svg_donut, svg_hbar,
-    integrity_card, airi_row, evidence_row,
+    integrity_card, domain_card, airi_row, evidence_row,
 )
 from .render_html_styles import build_css, JS
 
@@ -147,17 +148,31 @@ def _section4(airi: dict) -> str:
     covered_n = int(airi.get("covered_count", 0))
     total_n   = int(airi.get("total_risks_in_detector_scope", 0))
     gaps      = airi.get("known_gaps", [])
+    all_risks = airi.get("covered_risks", [])
     donut     = svg_donut(pct, _C["green"], 90)
-    c_rows    = "".join(airi_row(r, "covered") for r in airi.get("covered_risks", [])[:24])
-    g_rows    = "".join(airi_row(g, "gap") for g in gaps)
+
+    # Count covered risks per AIRI domain (first digit of subdomain_id)
+    domain_counts: dict[int, int] = {d: 0 for d in range(1, 8)}
+    for r in all_risks:
+        try:
+            d = int(str(r.get("subdomain_id", "0")).split(".")[0])
+            if d in domain_counts:
+                domain_counts[d] += 1
+        except (ValueError, IndexError):
+            pass
+    domain_boxes = "".join(domain_card(d, domain_counts[d]) for d in range(1, 8))
+
+    c_rows = "".join(airi_row(r, "covered") for r in all_risks[:24])
+    g_rows = "".join(airi_row(g, "gap") for g in gaps)
     toggle = (
+        f'<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">'
         f'<div class="toggle-group">'
         f'<button class="toggle-btn" data-view="covered"'
-        f' onclick="airiToggle(\'covered\')">'
-        f'Covered ({covered_n})</button>'
+        f' onclick="airiToggle(\'covered\')">Covered ({covered_n})</button>'
         f'<button class="toggle-btn" data-view="gaps"'
-        f' onclick="airiToggle(\'gaps\')">'
-        f'Gaps ({len(gaps)})</button>'
+        f' onclick="airiToggle(\'gaps\')">Gaps ({len(gaps)})</button>'
+        f'</div>'
+        f'<span style="font-size:11px;color:{_C["dgray"]}">Click a domain to filter</span>'
         f'</div>'
     )
     table = (
@@ -166,7 +181,7 @@ def _section4(airi: dict) -> str:
         f'<th>Covered by / Note</th></tr></thead>'
         f'<tbody>{c_rows}{g_rows}</tbody></table></div>'
     )
-    src = xt(airi.get("airi_version", ""))
+    src  = xt(airi.get("airi_version", ""))
     hint = tip_icon(
         "Coverage rate = risks addressed / total risks in detector scope. "
         "Gaps are AIRI risks present in scope but not yet covered by any detector."
@@ -183,11 +198,14 @@ def _section4(airi: dict) -> str:
         f'<div style="font-size:13px;font-weight:600;color:{_C["navy"]};margin-top:8px">'
         f'{covered_n} / {total_n}</div>'
         f'<div style="font-size:11px;color:{_C["dgray"]}">risks in scope</div></div>'
-        f'<div style="flex:1;min-width:200px">'
+        f'<div style="flex:1;min-width:240px">'
         f'<p style="font-size:12px;color:{_C["dgray"]};margin-bottom:14px;line-height:1.5">'
         f'Risks addressed by STEM-BIO-AI detectors across the AIRI V4 '
-        f'medical/clinical subset. Toggle to view coverage gaps.</p>'
-        f'{toggle}{table}</div></div></div></section>'
+        f'medical/clinical subset. Click a domain card to filter. Toggle covered/gaps.'
+        f'</p></div></div>'
+        f'<div class="domain-grid">{domain_boxes}</div>'
+        f'{toggle}{table}'
+        f'</div></section>'
     )
 
 

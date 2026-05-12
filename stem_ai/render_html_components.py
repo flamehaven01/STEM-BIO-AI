@@ -5,20 +5,40 @@ import math
 from typing import Any
 
 _C = {
-    "navy":   "#1B2A4A",
-    "teal":   "#2E86AB",
-    "green":  "#27A560",
-    "amber":  "#C97B10",
-    "red":    "#C0392B",
-    "purple": "#6B4D8E",
-    "slate":  "#3D5A7A",
-    "lgray":  "#F5F7FA",
-    "mgray":  "#E2E8F0",
-    "dgray":  "#718096",
+    "navy":   "#0D1F3C",  # deeper, truer navy (AIRI-aligned)
+    "teal":   "#1A6FA8",  # richer mid-blue
+    "green":  "#1A7A47",  # botanical green
+    "amber":  "#C07B10",  # warm amber
+    "red":    "#9B2335",  # AIRI crimson
+    "purple": "#5B3D8A",  # deeper purple
+    "slate":  "#2D4A6E",  # slate-blue
+    "lgray":  "#F8FAFC",  # cooler background
+    "mgray":  "#E4EBF5",  # cooler divider
+    "dgray":  "#5A6B80",  # bluer muted text
     "white":  "#FFFFFF",
 }
 _TIER_COLOR   = {"T0": _C["red"], "T1": _C["red"], "T2": _C["amber"], "T3": _C["teal"], "T4": _C["green"]}
 _STATUS_COLOR = {"PASS": _C["green"], "WARN": _C["amber"], "FAIL": _C["red"]}
+
+# AIRI 7-domain palette (matches MIT AI Risk Navigator)
+_AIRI_DOMAIN_COLORS = {
+    1: "#B5272A",  # Discrimination & Toxicity
+    2: "#1E3A6E",  # Privacy & Security
+    3: "#C07020",  # Misinformation
+    4: "#6B3FA0",  # Malicious Actors & Misuse
+    5: "#1B7A4E",  # Human-Computer Interaction
+    6: "#7A6520",  # Socioeconomic & Environmental
+    7: "#1A5568",  # AI System Safety, Failures & Limitations
+}
+_AIRI_DOMAIN_NAMES = {
+    1: "Discrimination & Toxicity",
+    2: "Privacy & Security",
+    3: "Misinformation",
+    4: "Malicious Actors & Misuse",
+    5: "Human-Computer Interaction",
+    6: "Socioeconomic & Environmental",
+    7: "AI System Safety, Failures & Limitations",
+}
 
 _STAGE_TIPS = [
     "Stage 1: Scans README/docs for hype language, overconfidence claims, and missing clinical disclaimers.",
@@ -127,13 +147,29 @@ def integrity_card(key: str, info: dict[str, Any]) -> str:
     )
 
 
+def domain_card(d_num: int, count: int) -> str:
+    color = _AIRI_DOMAIN_COLORS.get(d_num, _C["dgray"])
+    name  = _AIRI_DOMAIN_NAMES.get(d_num, f"Domain {d_num}")
+    dim   = "opacity:.3;pointer-events:none" if count == 0 else "cursor:pointer"
+    return (
+        f'<div class="domain-card" data-domain="{d_num}"'
+        f' onclick="filterDomain({d_num})" style="{dim}">'
+        f'<span class="domain-num" style="background:{color}">{d_num}</span>'
+        f'<span class="domain-label">{name}</span>'
+        f'<span class="domain-cnt" style="color:{color}">{count}</span>'
+        f'</div>'
+    )
+
+
 def airi_row(r: dict[str, Any], status: str = "covered") -> str:
     color = _C["green"] if status == "covered" else _C["amber"]
     det   = ", ".join(r.get("covered_by", [])) if status == "covered" else r.get("note", "")[:70]
     sub   = xt(r.get("subdomain_label", r.get("subdomain_id", "")))[:32]
     cls   = "airi-covered" if status == "covered" else "airi-gaps"
+    dom   = str(r.get("subdomain_id", "0")).split(".")[0]
     return (
-        f'<tr class="{cls}" style="border-bottom:1px solid {_C["mgray"]}">'
+        f'<tr class="{cls}" data-domain="{dom}"'
+        f' style="border-bottom:1px solid {_C["mgray"]}">'
         f'<td style="padding:8px 6px;font-size:11px;color:{_C["dgray"]};'
         f'font-family:monospace">{xt(r["id"])}</td>'
         f'<td style="padding:8px 6px;font-size:12px;color:{_C["navy"]};font-weight:500">'
