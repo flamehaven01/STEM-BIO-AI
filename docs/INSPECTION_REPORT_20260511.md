@@ -93,21 +93,19 @@
 
 ## 패치 로드맵
 
-### v1.7.1 — 구조 부채 1차 해소 (P0)
+### v1.7.1 — 구조 부채 1차 해소 (P0) — DONE 2026-05-12
 
-**대상: `stem_ai/detector_contract.py`**
+**대상: `stem_ai/detector_contract.py`** (commit 22af1f8)
 
-| 함수 | 현황 | 조치 |
-|---|---|---|
-| `_readme_claimed_names` (L137) | depth=8, 프로젝트 최악 중첩 | guard-clause 조기 반환 + `_extract_section_names()` 헬퍼 분리 |
-| `_detect_clinical_zero_default` (L44) | cc=16 | `_collect_candidate_pairs()` 추출 — kwonly/positional 수집 로직 분리 |
-| `_extract_package_all` (L115) | depth=5, cc=12 | inner loop → `_parse_all_assign()` 헬퍼 |
+| 함수 | 현황 | 조치 | 결과 |
+|---|---|---|---|
+| `_readme_claimed_names` | depth=8 | `_flush_code_block()` 헬퍼 추출 | depth 8→3 |
+| `_detect_clinical_zero_default` | cc=16 | `_collect_candidate_pairs()` 추출 | cc ~4 |
+| `_extract_package_all` | depth=5, cc=12 | `_parse_all_assign()` 추출 | depth 5→2 |
 
-**대상: 설정**
+**대상: 설정** `.slopconfig.yaml` 신규 — `tmp/`, `build/`, `dist/` 제외
 
-| 항목 | 조치 |
-|---|---|
-| `.slopconfig.yaml` 신규 | `exclude_dirs: [tmp, build, dist, .pytest_cache]` — slop detector 오탐 제거 |
+137/137 tests pass
 
 ### v1.7.2 — 클론 클러스터 해소 (P1)
 
