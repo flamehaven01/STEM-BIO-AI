@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.6.8-informational.svg" alt="v1.6.8"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.0-informational.svg" alt="v1.7.0"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -72,7 +72,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.6.8`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.7.0`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
@@ -88,6 +88,7 @@ Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 - Regulatory traceability mapping: [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
 - Regulatory basis registry: [`docs/regulatory_basis_registry.v1.json`](docs/regulatory_basis_registry.v1.json)
 - CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
+- HTML report dashboard: [`docs/UI_HTML_REPORT.md`](docs/UI_HTML_REPORT.md)
 
 ---
 
@@ -136,20 +137,24 @@ flowchart LR
     B --> E[Stage 3\nCode/bio responsibility]
     B --> F[Stage 4\nReplication lane]
     B --> K[C1–C4\nCode integrity]
+    B --> CC[CC1–CC3\nAST contract detectors]
     C --> G[Weighted evidence score]
     D --> G
     E --> G
     K --> G
+    CC --> R[code_contract + AIRI coverage]
     F --> H[replication_score / tier]
     G --> I[JSON result]
     H --> I
+    R --> I
     I --> L[Evidence ledger]
     I --> M[Explain trace]
     G --> N[Markdown report]
     G --> O[PDF packet]
+    G --> P[Interactive HTML dashboard]
 ```
 
-Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem_ai/detectors.py`, `stem_ai/detector_surface.py`, `stem_ai/detector_ast.py`, `stem_ai/detector_bio.py`, `stem_ai/detector_stage4.py`, `stem_ai/evidence.py`, `stem_ai/app.py`
+Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem_ai/detectors.py`, `stem_ai/detector_surface.py`, `stem_ai/detector_ast.py`, `stem_ai/detector_bio.py`, `stem_ai/detector_contract.py`, `stem_ai/detector_stage4.py`, `stem_ai/evidence.py`, `stem_ai/airi_risk_mapping.py`, `stem_ai/app.py`
 
 ---
 
@@ -165,12 +170,29 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 
 ```
 <repo>_experiment_results.json   # machine-readable score + full evidence object
+<repo>_report.html               # interactive 5-section HTML dashboard (v1.7.0+)
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
 <repo>_detailed_3p.pdf           # Level 2 stage analysis
 <repo>_detailed_5p.pdf           # Level 3 deep review packet
 <repo>_explain.txt               # --explain: file/line/snippet proof trace
 ```
+
+---
+
+## HTML Report Dashboard
+
+`--format html` generates a self-contained interactive dashboard (v1.7.0+). Single `.html` file — no network, no external dependencies.
+
+<p align="center">
+  <img src="docs/assets/html_report_preview.png" alt="STEM BIO-AI interactive HTML dashboard" width="760">
+</p>
+
+**5 sections:** Executive Summary · Score Matrix · Code Integrity (expandable cards) · AIRI Risk Coverage (toggle) · Evidence Detail (filter chips)
+
+Interactive features: sticky scroll-spy nav · `?` tooltip icons on every metric · click-to-expand evidence cards · covered/gaps toggle for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
+
+Full spec: [`docs/UI_HTML_REPORT.md`](docs/UI_HTML_REPORT.md)
 
 ---
 
@@ -232,6 +254,9 @@ Every scored item maps to a concrete, inspectable detection method. No inference
 | C2 dependency pinning | `==` or hash pin vs. loose `>=`, `~=`, `<`, `>` ranges |
 | C3 deprecated paths | Patient-metadata patterns in `deprecated/`, `legacy/`, `archive/` directories |
 | C4 fail-open | `except Exception: pass` or `except: pass` in Python source (AST) |
+| **CC1** clinical zero default | AST scan of function defaults: keyword-only and positional params named `confidence_threshold`, `score_threshold`, `min_confidence`, etc. defaulted to `0.0` |
+| **CC2** API contract | README-declared names cross-checked against `__all__` exports; phantom APIs flagged |
+| **CC3** shallow validator | `validate_*` / `check_*` functions using only `len()` (no regex structure check) flagged as insufficient for clinical/PII validation |
 
 </details>
 

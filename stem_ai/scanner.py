@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import subprocess
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -19,7 +20,10 @@ from .advisory_providers import load_provider_config, provider_handoff_metadata
 from .advisory_response import validate_advisory_response_file
 from .advisory_runtime import execute_advisory_call
 from .calibration_profile import calibration_profile_metadata, load_calibration_profile
+from .airi_risk_mapping import build_airi_coverage
+from .detector_contract import collect_contract_findings
 from .detectors import collect_evidence_bundle
+from .evidence import EvidenceFinding
 from .patterns import (
     BIAS_LIMITATION_TERMS,
     BIAS_MEASUREMENT_TERMS,
@@ -131,6 +135,12 @@ def audit_repository(
         has_disclaimer,
     )
     evidence_ledger, ast_signal_summary, stage_4 = collect_evidence_bundle(target)
+
+    cc_findings: list[EvidenceFinding] = []
+    cc_counters: dict[tuple[str, str], int] = defaultdict(int)
+    cc_summary = collect_contract_findings(target, readme, cc_findings, cc_counters)
+    evidence_ledger.extend(f.to_dict() for f in cc_findings)
+
     stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text, changelog_text)
     code_integrity = _code_integrity_from_findings(evidence_ledger)
 
@@ -182,11 +192,13 @@ def audit_repository(
         "replication_tier": stage_4["replication_tier"],
         "stage_4_rubric": stage_4["stage_4_rubric"],
         "code_integrity": code_integrity,
+        "code_contract": cc_summary,
+        "airi_risk_coverage": build_airi_coverage(code_integrity, cc_summary, stage_1_rubric, t0_hard_floor),
         "evidence_ledger": evidence_ledger,
         "detector_summary": _detector_summary(evidence_ledger),
         "ast_signal_summary": ast_signal_summary,
         "notable_positive_evidence": _positive_evidence(workflow_text, test_text, docs_text, package_text),
-        "notable_risks": _risks(clinical_adjacent, has_disclaimer, code_integrity),
+        "notable_risks": _risks(clinical_adjacent, has_disclaimer, code_integrity, cc_summary),
         "file_hashes_sha256": _hash_key_files(target),
         "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
         "measurement_basis": {
@@ -205,6 +217,10 @@ def audit_repository(
             "C2": "Dependency-manifest-only pin check across requirements/environment/setup.cfg/pyproject dependency sections; ignores non-dependency metadata lines",
             "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
             "C4": "AST-backed detection of executable fail-open Python exception handlers (except/pass or except/return True)",
+            "CC1": "AST scan for public functions with confidence/threshold parameter defaulting to 0 or 0.0.",
+            "CC2": "README code-block import names compared against package __all__; flags names claimed as importable but absent.",
+            "CC3": "AST scan for validate_*/check_* functions using len() but no re.match/search structure check.",
+            "airi_risk_coverage": "MIT AI Risk Repository V4_03 (airisk.mit.edu, arXiv:2408.12622) mapping: detectors cross-referenced to AIRI risk IDs in the medical/PII/safety subdomains (2.1, 2.2, 3.1, 5.1, 7.3, 7.4).",
             "BIO-Diagnostics": "Deterministic evidence-only bio diagnostics: conservative SMILES surface checks, SMILES parser-guard checks, silent mock fallback detection, traceability manifest surface checks, and subprocess bio-tool run-trace heuristics.",
             "REG-Scaffolding": "Evidence-only traceability scaffolding signals from manifest/hash/audit-log schema surfaces; intended as structural audit-readiness support rather than compliance proof.",
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",
@@ -643,13 +659,21 @@ def _positive_evidence(workflow_text: str, test_text: str, docs_text: str, packa
     return items or ["No strong positive local evidence detected by the CLI scan."]
 
 
-def _risks(clinical_adjacent: bool, has_disclaimer: bool, code_integrity: dict[str, Any]) -> list[str]:
+def _risks(
+    clinical_adjacent: bool,
+    has_disclaimer: bool,
+    code_integrity: dict[str, Any],
+    cc_summary: dict[str, Any] | None = None,
+) -> list[str]:
     risks: list[str] = []
     if clinical_adjacent and not has_disclaimer:
         risks.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
     for key, item in code_integrity.items():
         if item["status"] in {"WARN", "FAIL"}:
             risks.append(f"{key}: {item['status']}")
+    for key, item in (cc_summary or {}).items():
+        if isinstance(item, dict) and item.get("status") == "WARN":
+            risks.append(f"{key}: WARN (count={item.get('count', '?')})")
     return risks or ["No major local risks detected by the CLI scan."]
 
 

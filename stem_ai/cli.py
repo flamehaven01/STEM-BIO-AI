@@ -16,7 +16,7 @@ _LEVEL_MAP = {
     2: ("detailed", 3),
     3: ("detailed", 5),
 }
-_FORMAT_CHOICES = ["json", "md", "pdf", "all"]
+_FORMAT_CHOICES = ["json", "md", "html", "pdf", "all"]
 _SUMMARY_CHOICES = ["full", "compact", "off"]
 _ADVISORY_CHOICES = ["none", "validate", "packet", "call"]
 _TIER_CHOICES = ["T0", "T1", "T2", "T3", "T4"]

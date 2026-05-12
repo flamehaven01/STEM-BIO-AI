@@ -8,6 +8,7 @@ from typing import Any
 
 from . import __version__
 from .redaction import redact_object, sanitize_artifact_text
+from .render_html import render_html
 
 try:
     from reportlab.lib import colors
@@ -108,6 +109,11 @@ def write_outputs(
         p = output_dir / f"{stem}_report.md"
         md, _ = sanitize_artifact_text(md)
         p.write_text(md, encoding="utf-8")
+        created.append(p)
+
+    if fmt in {"html", "all"}:
+        p = output_dir / f"{stem}_report.html"
+        p.write_text(render_html(safe_result), encoding="utf-8")
         created.append(p)
 
     if fmt in {"pdf", "all"}:

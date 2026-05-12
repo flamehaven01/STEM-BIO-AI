@@ -1,0 +1,1662 @@
+{
+  "version": "V4_03_2026-04-23",
+  "source": "airisk.mit.edu",
+  "risks": [
+    {
+      "id": "02.01.03",
+      "title": "Privacy Leakage",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "02.04.01",
+      "title": "Programming Language",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "02.06.00",
+      "title": "Issues on External Tools",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "02.06.01",
+      "title": "Factual Errors Injected by External Tools",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "02.07.01",
+      "title": "Private Training Data",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "02.07.02",
+      "title": "Memorization in LLMs",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "02.07.03",
+      "title": "Association in LLMs",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "02.09.00",
+      "title": "Hallucinations",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "02.09.01",
+      "title": "Knowledge Gaps",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "02.09.02",
+      "title": "Noisy Training Data",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "02.09.03",
+      "title": "Defective Decoding Process",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "02.09.05",
+      "title": "Pursuing Consistent Context",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "02.12.03",
+      "title": "Multi-step Jailbreaks",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "03.04.00",
+      "title": "Privacy and regulation violations",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "04.05.00",
+      "title": "Misleading Information",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "04.06.00",
+      "title": "Privacy and Data Leakage",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "05.05.00",
+      "title": "Privacy",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "05.06.00",
+      "title": "Interaction risks",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "05.07.00",
+      "title": "Security - Robustness",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "05.13.00",
+      "title": "Transparency - Explainability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Not coded",
+      "causal_intent": "Not coded",
+      "causal_timing": "Not coded"
+    },
+    {
+      "id": "06.02.00",
+      "title": "Loss of privacy",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "06.06.00",
+      "title": "Lack of transparency",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "09.02.04",
+      "title": "Safety",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "09.02.05",
+      "title": "Law abiding",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "11.04.03",
+      "title": "Diminished health & well-being",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "11.04.04",
+      "title": "Privacy violations",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "12.04.00",
+      "title": "Explainability & Transparency",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "13.01.04",
+      "title": "Privacy and Data Protection",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "14.04.00",
+      "title": "Complexity of the Intended Task and Usage Environment",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "14.06.00",
+      "title": "Security",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.02.00",
+      "title": "Risk area 2: Information Hazards",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.02.01",
+      "title": "Compromising privacy by leaking sensitive information",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.02.02",
+      "title": "Compromising privacy or security by correctly inferring sensitive information",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.03.01",
+      "title": "Disseminating false or misleading information",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.03.02",
+      "title": "Causing material harm by disseminating false or poor information e.g. in medicine or law",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.05.00",
+      "title": "Risk area 5: Human-Computer Interaction Harms",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.05.02",
+      "title": "Anthropomorphising systems can lead to overreliance and unsafe use",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "16.05.03",
+      "title": "Avenues for exploiting user trust and accessing more private information",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "17.02.01",
+      "title": "Compromising privacy by leaking private infiormation",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "17.02.02",
+      "title": "Compromising privacy by correctly inferring private information",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "17.03.03",
+      "title": "Leading users to perform unethical or illegal actions",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "17.05.00",
+      "title": "Human-Computer Interaction Harms",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "17.05.01",
+      "title": "Anthropomorphising systems can lead to overreliance or unsafe use",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "17.05.02",
+      "title": "Creating avenues for exploiting user trust, nudging or manipulation",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "18.03.00",
+      "title": "Information & Safety Harms",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "18.03.01",
+      "title": "Privacy infringement",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "18.05.03",
+      "title": "Overreliance",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "19.04.02",
+      "title": "Privacy and safety concerns due to ubiquity of AI systems in economy and society (lack of social acceptance)",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "19.05.04",
+      "title": "Misinterpretation of human value definitions/ ethics by AI systems",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "21.02.02",
+      "title": "Model prediction uncertainty",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "23.08.00",
+      "title": "Specialized Advice",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.01.03",
+      "title": "Safe exploration problem with widely deployed AI assistants",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.03.05",
+      "title": "Adversarial AI (General)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.03.06",
+      "title": "Adversarial AI: Circumvention of Technical Security Measures",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.03.08",
+      "title": "Adversarial AI: Data and Model Exfiltration Attacks",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.04.01",
+      "title": "Physical and Psychological Harms",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.04.02",
+      "title": "Privacy Harms",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.05.01",
+      "title": "Privacy concerns",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.05.02",
+      "title": "Manipulation and coercion",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.06.01",
+      "title": "Causing direct emotional or physical harm to users",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.07.00",
+      "title": "Trust",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.07.01",
+      "title": "Competence trust",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.07.02",
+      "title": "Alignment trust",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "24.08.01",
+      "title": "Private information leakage",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "24.11.04",
+      "title": "Increased vulnerability to misinformation",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.01.05",
+      "title": "Physical Harm",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.01.06",
+      "title": "Mental Health",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.01.07",
+      "title": "Privacy and Property",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.02.00",
+      "title": "Instruction Attacks",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.02.01",
+      "title": "Goal Hijacking",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.02.03",
+      "title": "Role Play Instruction",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.02.04",
+      "title": "Unsafe Instruction Topic",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "27.02.05",
+      "title": "Inquiry with Unsafe Opinion",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "28.03.00",
+      "title": "Physical Health",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "29.01.02",
+      "title": "Privacy Invasion",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "29.03.02",
+      "title": "Insufficient Security Measures",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "30.01.00",
+      "title": "Reliability",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "30.01.02",
+      "title": "Hallucination",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "30.02.06",
+      "title": "Privacy Violation",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "30.05.01",
+      "title": "Lack of Interpretability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "30.05.03",
+      "title": "Limited Causal Reasoning",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "33.01.05",
+      "title": "Privacy and security",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "33.02.00",
+      "title": "Technology concerns",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "33.02.03",
+      "title": "Explainability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "37.02.02",
+      "title": "Privacy protection",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "38.05.00",
+      "title": "Trust and reliability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "39.04.00",
+      "title": "Robustness and Reliability",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "39.21.00",
+      "title": "Reproducibility",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "39.25.00",
+      "title": "Verifiability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "40.01.00",
+      "title": "On Purpose - Pre-Deployment",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "40.04.00",
+      "title": "By Mistake - Post-Deployment",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "41.04.00",
+      "title": "Healthcare",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "42.06.00",
+      "title": "Opacity",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "42.09.00",
+      "title": "Data Protection/Privacy",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "43.01.00",
+      "title": "Safety & Trustworthiness",
+      "subdomain_id": "7.0",
+      "subdomain_label": "AI System Safety (general)",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "43.01.05",
+      "title": "Robustness",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "45.01.04",
+      "title": "Risks from models and algorithms (Risks of stealing and tampering)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "45.01.05",
+      "title": "Risks from models and algorithms (Risks of unreliable output)",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "45.01.09",
+      "title": "Risks from data (Risks of unregulated training data annotation)",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "45.02.02",
+      "title": "Cyberspace risks (Risks of confusing facts, misleading users, and bypassing authentication)",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "Other",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "45.02.06",
+      "title": "Real-world risks (inducing traditional economic and social security risks)",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "46.01.00",
+      "title": "Personal Loss and Identity Theft",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "47.01.00",
+      "title": "Technical and operational risks",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "47.01.02",
+      "title": "Technical vulnerabilities (Robustness - vulnerability to jailbreaking",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "47.01.04",
+      "title": "Factually incorrect content (inaccuracies and fabricated sources)",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "47.01.05",
+      "title": "Opacity (the black box problem)",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "47.02.11",
+      "title": "Influence, overreliance and dependence (influence and manipulation)",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "47.02.12",
+      "title": "Influence, overreliance and dependence (overreliance)",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "47.02.13",
+      "title": "Influence, overreliance and dependence (emotional dependence)",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "47.03.00",
+      "title": "Legal challenges",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "47.03.01",
+      "title": "Privacy and data collection concerns (collecting personal information or personally identifiable information)",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "47.03.02",
+      "title": "Privacy and data collection concerns (data protection concerns)",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "48.02.00",
+      "title": "Confabulation",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "48.04.00",
+      "title": "Data Privacy",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "48.12.00",
+      "title": "Value Chain and Component Integration",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "49.02.01",
+      "title": "Risks from product functionality issues",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "49.03.05",
+      "title": "Risks to privacy",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "50.04.04",
+      "title": "Privacy (Unauthorized Privacy Violations)",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "50.04.05",
+      "title": "Privacy (Types of Sensitive Data)",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Not coded",
+      "causal_intent": "Not coded",
+      "causal_timing": "Not coded"
+    },
+    {
+      "id": "51.05.00",
+      "title": "Safe learning",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "52.01.02",
+      "title": "Misinformation and Privacy Violations",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "52.01.03",
+      "title": "Accidents",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "54.02.06",
+      "title": "Harm caused by incompetent systems",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "56.06.00",
+      "title": "Lack of transparency and interpretability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "56.14.00",
+      "title": "Overreliance on AI systems, which cannot be subsequently unpicked",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "57.03.01",
+      "title": "Specialized Advice (Election, Financial, Health, Legal)",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "58.06.11",
+      "title": "Privacy loss",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "59.03.00",
+      "title": "Inadequate planning of performance requirements",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "59.05.00",
+      "title": "Inappropriate degree of transparency to end users",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Human",
+      "causal_intent": "Other",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "59.07.00",
+      "title": "Choice of untrustworthy data source",
+      "subdomain_id": "7.0",
+      "subdomain_label": "AI System Safety (general)",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "59.10.00",
+      "title": "Harming users’ data privacy",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "59.14.00",
+      "title": "Problems of synthetic data",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "59.16.00",
+      "title": "Poor model design choices",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "59.17.00",
+      "title": "Over- and underfitting",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "59.18.00",
+      "title": "Lack of explainability",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "59.19.00",
+      "title": "Unreliability in corner cases",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "59.20.00",
+      "title": "Lack of robustness",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "59.21.00",
+      "title": "Uncertainty concerns",
+      "subdomain_id": "7.0",
+      "subdomain_label": "AI System Safety (general)",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "59.22.00",
+      "title": "Operational data issues",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "59.24.00",
+      "title": "Concept drift",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "60.02.01",
+      "title": "Reliability issues",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "61.02.08",
+      "title": "Automation bias",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "61.02.28",
+      "title": "Human choice of overreliance in critical sectors",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.15.02",
+      "title": "Training-related (Poor model confidence calibration)",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "62.15.08",
+      "title": "Fine-tuning related (Excessive or overly restrictive safety-tuning)",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Not coded",
+      "causal_intent": "Not coded",
+      "causal_timing": "Not coded"
+    },
+    {
+      "id": "62.15.09",
+      "title": "Fine-tuning related (Degrading safety training due to benign fine-tuning)",
+      "subdomain_id": "7.0",
+      "subdomain_label": "AI System Safety (general)",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.16.03",
+      "title": "General Evaluations (Difficulty of identification and measurement of capabilities)",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "62.18.00",
+      "title": "Model Evaluations (Interpretability/Explainability)",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Human",
+      "causal_intent": "Other",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "62.18.01",
+      "title": "Misuse of interpretability techniques",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "62.18.05",
+      "title": "Model outputs inconsistent with chain-of-thought reasoning",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.19.01",
+      "title": "Jailbreak of a model to subvert intended behavior",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.19.05",
+      "title": "Text encoding-based attacks",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.19.10",
+      "title": "Lack of understanding of in-context learning in language models",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "62.19.11",
+      "title": "Model sensitivity to prompt formatting",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.28.04",
+      "title": "Model weight leak",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "62.37.00",
+      "title": "Impacts of AI (Privacy)",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Not coded",
+      "causal_intent": "Not coded",
+      "causal_timing": "Not coded"
+    },
+    {
+      "id": "64.04.03",
+      "title": "Jailbreaking",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "64.05.01",
+      "title": "Privacy compromise",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "65.03.01",
+      "title": "Personal information in data",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "65.03.03",
+      "title": "Reidentification",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "65.15.03",
+      "title": "Over- or under-reliance",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "65.17.04",
+      "title": "Unreliable source attribution",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "65.20.01",
+      "title": "Exposing personal information",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "69.01.00",
+      "title": "False information",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "69.01.01",
+      "title": "Hallucinated responses (in general)",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Other",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "69.05.01",
+      "title": "Personal data",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "70.01.02",
+      "title": "Accidental harm",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "70.02.01",
+      "title": "Privacy Violations",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "70.02.02",
+      "title": "Misinformation",
+      "subdomain_id": "3.1",
+      "subdomain_label": "False or misleading information",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "70.04.03",
+      "title": "Lack of transparency, explainability, and trust",
+      "subdomain_id": "7.4",
+      "subdomain_label": "Lack of transparency or interpretability",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "70.04.04",
+      "title": "Unhealthy or dangerous human-EAI relationships",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "71.01.05",
+      "title": "Information Science Risks",
+      "subdomain_id": "2.1",
+      "subdomain_label": "Compromise of privacy / PII leakage",
+      "causal_entity": "Other",
+      "causal_intent": "Other",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "72.03.00",
+      "title": "Accident Risks",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "72.03.01",
+      "title": "Nuclear Power Systems",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "72.03.03",
+      "title": "Other Critical Infrastructure Control Systems",
+      "subdomain_id": "7.3",
+      "subdomain_label": "Lack of capability or robustness",
+      "causal_entity": "AI system",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "73.04.02",
+      "title": "Inconsistent Performance across and within Domains",
+      "subdomain_id": "5.1",
+      "subdomain_label": "Overreliance and unsafe use",
+      "causal_entity": "Human",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "73.07.01",
+      "title": "Exploiting Limited Generalization of Safety Finetuning",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Other",
+      "causal_intent": "Unintentional",
+      "causal_timing": "Other"
+    },
+    {
+      "id": "73.08.00",
+      "title": "Vulnerability to Poisoning and Backdoors",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Pre-deployment"
+    },
+    {
+      "id": "74.01.01",
+      "title": "Privacy - Membership Inference Attack (MIA)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "74.01.02",
+      "title": "Privacy - Data Extraction Attack (DEA)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "74.01.03",
+      "title": "Privacy -  Prompt Inversion Attack (PIA)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "74.01.04",
+      "title": "Privacy - Attribute Inference Attack (AIA)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "74.01.05",
+      "title": "Privacy - Model Extraction Attack (MEA)",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Post-deployment"
+    },
+    {
+      "id": "74.02.03",
+      "title": "Jailbreak in LLM Malicious Use - Backdoor Attack",
+      "subdomain_id": "2.2",
+      "subdomain_label": "AI system security vulnerabilities",
+      "causal_entity": "Human",
+      "causal_intent": "Intentional",
+      "causal_timing": "Pre-deployment"
+    }
+  ]
+}

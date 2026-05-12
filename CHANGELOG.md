@@ -10,6 +10,32 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.0] - 2026-05-12
+
+### Added
+- **Layer 2 AST Contract Detectors (CC-1 / CC-2 / CC-3)** — new `stem_ai/detector_contract.py` module performing Python AST analysis beyond surface-scan reach:
+  - `CC1_clinical_zero_default`: detects keyword-only and positional function parameters named `confidence_threshold`, `score_threshold`, `min_confidence`, etc. defaulted to `0.0` — a silent fail-open pattern in clinical inference paths.
+  - `CC2_api_contract`: cross-checks names documented in README against `__all__` exports; flags phantom APIs (documented but not exported).
+  - `CC3_shallow_validator`: identifies `validate_*` / `check_*` functions that use only `len()` (length gate) without regex structure validation — insufficient for PII/clinical data fields.
+- **MIT AI Risk Repository (AIRI) V4 integration** — new `stem_ai/airi_risk_mapping.py` and `stem_ai/data/airi_medical_risks.json` (184 curated medical/clinical risk entries). Every scan now produces an `airi_risk_coverage` section mapping triggered detectors to their AIRI risk IDs, coverage rate, and known gaps.
+- **Interactive 5-section HTML dashboard** — `--format html` (and `--format all`) now generates a self-contained interactive report with:
+  - Sticky nav with scroll-spy active state
+  - SVG semicircle score gauge + tier badge in hero header
+  - Expandable code-integrity cards (click to reveal full evidence list)
+  - AIRI covered/gaps toggle buttons
+  - Evidence ledger filter chips (FAIL / WARN / PASS / INFO)
+  - Tooltip `?` icons on every metric header (CSS `::after`, no JS)
+  - Hover transitions and keyboard accessibility throughout
+- `stem_ai/render_html_components.py` and `stem_ai/render_html_styles.py` — renderer split into three focused modules (each < 250 lines).
+- `docs/UI_HTML_REPORT.md` — full specification for the HTML dashboard format, interactive features, and AIRI coverage mapping.
+- `docs/assets/html_report_preview.png` — screenshot of the interactive HTML report.
+
+### Changed
+- `stem_ai/scanner.py` — wired CC-1/CC-2/CC-3 findings into `code_contract` result key; CC WARN entries surface in `notable_risks`; `build_airi_coverage()` called at the end of every scan.
+- Rotated the active MICA memory layer and public package/version surfaces to v1.7.0.
+
+---
+
 ## [1.6.8] - 2026-05-11
 
 ### Added
