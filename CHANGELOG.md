@@ -10,6 +10,25 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.2] - 2026-05-12
+
+### Changed
+- Tightened `.slopconfig.yaml` so temporary and generated analysis paths (`tmp`, `build`, `audits`, `stem_output*`, `.manual_verify`) are excluded more explicitly from local structural inspection runs.
+- Removed unused HTML renderer imports in `stem_ai/render_html.py`, reducing inspection noise without changing report behavior.
+- Simplified `stem_ai/detector_contract.py` by extracting shared Python-module traversal and public-function iteration helpers, reducing repetition while preserving detector outputs.
+- Revalidated the shipped calibration profiles against `1.7.2` and rotated public package, CLI, documentation, policy, and active MICA version surfaces to `v1.7.2`.
+
+### Verified
+- Confirmed P0/P1 parity on a same-target self-scan comparison (`A` vs `B`) with no drift in:
+  - `score.final_score`
+  - `score.formal_tier`
+  - `code_contract`
+  - `detector_summary`
+  - `airi_risk_coverage`
+  - `evidence_ledger` count
+
+---
+
 ## [1.7.1] - 2026-05-12
 
 ### Added

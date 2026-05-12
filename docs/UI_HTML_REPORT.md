@@ -1,6 +1,6 @@
 # HTML Report Dashboard
 
-STEM BIO-AI v1.7.0 introduced a **self-contained interactive HTML dashboard** as the primary human-readable output format. In v1.7.1, the AIRI section was aligned to the governed local AIRI registry/runtime-bundle model. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
+STEM BIO-AI v1.7.0 introduced a **self-contained interactive HTML dashboard** as the primary human-readable output format. In v1.7.2, the AIRI section was aligned to the governed local AIRI registry/runtime-bundle model. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
 
 ## Generating the Report
 
@@ -139,3 +139,4 @@ Five known gaps are reported for risks that require dynamic evaluation or extend
 | Typical T3 repository | ~40–80 KB |
 
 Size scales with evidence ledger length. The renderer caps the evidence table at 200 rows.
+

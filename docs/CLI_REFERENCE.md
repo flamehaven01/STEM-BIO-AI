@@ -1,13 +1,13 @@
 # CLI Reference
 
-**Version:** 1.7.1
+**Version:** 1.7.2
 **Status:** Stable
 
 ---
 
 ## Command Model
 
-The 1.7.1 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
+The 1.7.2 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
 
 ```bash
 stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`
@@ -89,8 +89,8 @@ The shorthand remains:
 stem /path/to/repo
 ```
 
-Policy selection is mirror-only in 1.7.1: the chosen profile is surfaced in outputs and summaries, and derive/simulate preview lanes can compare postures, but authoritative score computation still follows the current deterministic runtime constants.
-Policy selection remains mirror-only in scans in 1.7.1. The new `policy derive` and `policy simulate` commands preview governed posture changes without turning those deltas into authoritative scan behavior.
+Policy selection is mirror-only in 1.7.2: the chosen profile is surfaced in outputs and summaries, and derive/simulate preview lanes can compare postures, but authoritative score computation still follows the current deterministic runtime constants.
+Policy selection remains mirror-only in scans in 1.7.2. The new `policy derive` and `policy simulate` commands preview governed posture changes without turning those deltas into authoritative scan behavior.
 
 Layer 2 AST contract detectors (`CC1` / `CC2` / `CC3`) run during normal scans
 and surface through:
@@ -121,7 +121,7 @@ stem policy simulate /path/to/repo \
   --structured-limitations-requirement 3
 ```
 
-Current `1.7.1` rule scope is intentionally narrow:
+Current `1.7.2` rule scope is intentionally narrow:
 
 - strong clinical strictness maps to `strict_clinical_adjacency`
 - balanced `2..3` answers keep `default`
@@ -294,3 +294,4 @@ This is a trust-transparency feature, not a marketing line.
 | [`ADVISORY_SECRET_HANDLING.md`](ADVISORY_SECRET_HANDLING.md) | Provider API key policy, endpoint restrictions |
 | [`ADVISORY_RUNTIME.md`](ADVISORY_RUNTIME.md) | `advisory call` runtime boundary |
 | This document | Human CLI workflows, flags, defaults, summary modes, CI patterns |
+

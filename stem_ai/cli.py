@@ -222,7 +222,7 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         "--policy",
         choices=_policy_choices(),
         default="default",
-        help="Named calibration profile to surface in the result (1.7.1 keeps scan-time policy selection mirror-only)",
+        help="Named calibration profile to surface in the result (1.7.2 keeps scan-time policy selection mirror-only)",
     )
     parser.add_argument(
         "--explain",
@@ -600,7 +600,7 @@ def _print_policy_explain(profile_name: str) -> int:
     print(f"Read Mode:      {profile['profile_read_mode']}")
     print(
         "Scoring Effect: "
-        "mirror-only in 1.7.1; selection is surfaced in artifacts but does not yet reweight score computation"
+        "mirror-only in 1.7.2; selection is surfaced in artifacts but does not yet reweight score computation"
     )
     print()
     print(
@@ -791,3 +791,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

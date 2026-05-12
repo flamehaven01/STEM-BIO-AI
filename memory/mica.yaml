@@ -5,17 +5,17 @@ description: "STEM BIO-AI distributed skill (16+ platforms). Single archive upda
 
 layers:
   - name: archive
-    path: memory/stem-ai.mica.v1.7.1.json
+    path: memory/stem-ai.mica.v1.7.2.json
     format: json
     loading_hint: always
 
   - name: playbook
-    path: memory/stem-ai-playbook.v1.7.1.md
+    path: memory/stem-ai-playbook.v1.7.2.md
     format: markdown
     loading_hint: always
 
   - name: lessons
-    path: memory/stem-ai-lessons.v1.7.1.md
+    path: memory/stem-ai-lessons.v1.7.2.md
     format: markdown
     loading_hint: on_demand
 
@@ -53,4 +53,5 @@ drift_profile:
       label: version_reference_staleness
       severity: warning
       action: warn_continue
+
 

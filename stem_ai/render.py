@@ -285,7 +285,7 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     if calibration.get("profile_read_mode") != "mirror_only":
         return None
     return (
-        "mirror-only in 1.7.1 — selected profile metadata is surfaced in artifacts, "
+        "mirror-only in 1.7.2 — selected profile metadata is surfaced in artifacts, "
         "but authoritative scan scoring still follows deterministic runtime constants. "
         "Use `stem policy simulate` to preview governed score deltas."
     )
@@ -1668,3 +1668,4 @@ def _ascii(t: str) -> str:
 
 def _safe_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", name).strip("_") or "stem_audit"
+

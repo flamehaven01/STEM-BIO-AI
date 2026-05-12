@@ -2025,9 +2025,9 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     explain = render_explain(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
-    assert "**Calibration Effect:** mirror-only in 1.7.1" in markdown
+    assert "**Calibration Effect:** mirror-only in 1.7.2" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
-    assert "Policy Mode: mirror-only in 1.7.1" in explain
+    assert "Policy Mode: mirror-only in 1.7.2" in explain
 
 
 def test_audit_repository_can_surface_selected_policy_metadata(tmp_path: Path) -> None:
@@ -2058,7 +2058,7 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.7.1" in captured.out
+    assert "Scoring Effect: mirror-only in 1.7.2" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
 
@@ -2348,3 +2348,4 @@ def test_fallback_citations_exclude_not_detected_and_absent_statuses() -> None:
     }
 
     assert _fallback_citations(result) == ["D", "C"]
+

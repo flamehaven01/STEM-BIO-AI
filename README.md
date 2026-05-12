@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.1-informational.svg" alt="v1.7.1"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.2-informational.svg" alt="v1.7.2"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -72,7 +72,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.7.1`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.7.2`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
@@ -172,7 +172,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 
 ```
 <repo>_experiment_results.json   # machine-readable score + full evidence object
-<repo>_report.html               # interactive 5-section HTML dashboard (v1.7.1+)
+<repo>_report.html               # interactive 5-section HTML dashboard (v1.7.2+)
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
 <repo>_detailed_3p.pdf           # Level 2 stage analysis
@@ -184,7 +184,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 
 ## HTML Report Dashboard
 
-`--format html` generates a self-contained interactive dashboard (v1.7.1+). Single `.html` file — no network, no external dependencies.
+`--format html` generates a self-contained interactive dashboard (v1.7.2+). Single `.html` file — no network, no external dependencies.
 
 <p align="center">
   <img src="docs/assets/html_report_preview.png" alt="STEM BIO-AI interactive HTML dashboard" width="760">
@@ -368,7 +368,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
-Current DOI-backed archive:
+Current DOI-backed archive for the latest Zenodo-published release (`v1.7.1`):
 - <https://doi.org/10.5281/zenodo.20139732>
 
 ```bibtex
@@ -389,3 +389,4 @@ Current DOI-backed archive:
 Apache 2.0. See [LICENSE](LICENSE).
 
 Maintained by [flamehaven01](https://github.com/flamehaven01)
+
