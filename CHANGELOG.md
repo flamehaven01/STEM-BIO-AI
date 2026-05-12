@@ -10,6 +10,29 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.1] - 2026-05-12
+
+### Added
+- Added a governed local AIRI data layer with three packaged registries:
+  - `stem_ai/data/airi_registry_full.v1.json` — normalized full local registry derived from the upstream AIRI CSV snapshot
+  - `stem_ai/data/airi_runtime_bundle.v1.json` — curated deterministic runtime bundle
+  - `stem_ai/data/airi_detector_mapping.v1.json` — detector-to-risk mapping registry with bundle/full-scope gap labels
+- Added AIRI governance and attribution documents:
+  - `docs/AIRI_DATA_GOVERNANCE.md`
+  - `docs/THIRD_PARTY_DATA.md`
+  - `docs/airi_registry.schema.json`
+  - `docs/airi_detector_mapping.schema.json`
+- Added regression coverage for AIRI registry/bundle/mapping provenance surfacing and bundle-scope gap separation.
+
+### Changed
+- Replaced hardcoded AIRI detector mappings and known-gap lists in `stem_ai/airi_risk_mapping.py` with packaged local registry files so provenance, runtime scope, and mapping governance are separated explicitly.
+- Updated AIRI coverage outputs to surface registry version, runtime bundle version, mapping version, upstream snapshot date, license, attribution note, and split known gaps into `known_gaps_in_bundle` and `known_gaps_outside_bundle`.
+- Corrected HTML score-matrix T0 hard-floor wording to match the authoritative 39-point cap used by the scanner and scoring rationale.
+- Strengthened AIRI wording across README, HTML report docs, API contract, calibration architecture, and runtime output so the scanner’s curated runtime bundle is not confused with the full upstream AIRI universe.
+- Rotated package/version surfaces to v1.7.1 and packaged the new AIRI registry artifacts.
+
+---
+
 ## [1.7.0] - 2026-05-12
 
 ### Added

@@ -2025,9 +2025,9 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     explain = render_explain(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
-    assert "**Calibration Effect:** mirror-only in 1.6.8" in markdown
+    assert "**Calibration Effect:** mirror-only in 1.7.1" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
-    assert "Policy Mode: mirror-only in 1.6.8" in explain
+    assert "Policy Mode: mirror-only in 1.7.1" in explain
 
 
 def test_audit_repository_can_surface_selected_policy_metadata(tmp_path: Path) -> None:
@@ -2058,9 +2058,35 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.6.8" in captured.out
+    assert "Scoring Effect: mirror-only in 1.7.1" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
+
+
+def test_airi_registry_bundle_and_gap_scope_surface_in_scan_result(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bioinformatics repository for clinical trial biomarker analysis.\n"
+        "Limitations are documented.\n",
+    )
+    _write(tmp_path / "requirements.txt", "numpy==1.26.4\n")
+
+    result = audit_repository(tmp_path)
+    coverage = result["airi_risk_coverage"]
+
+    assert coverage["airi_registry_version"] == "stem-ai-airi-registry-v1"
+    assert coverage["airi_bundle_version"] == "stem-ai-airi-runtime-bundle-v1"
+    assert coverage["airi_mapping_version"] == "stem-ai-airi-detector-mapping-v1"
+    assert coverage["airi_upstream_license"] == "MIT"
+    assert coverage["total_risks_in_registry"] == 1595
+    assert coverage["total_risks_in_bundle"] == 184
+
+    in_bundle_ids = {item["id"] for item in coverage["known_gaps_in_bundle"]}
+    outside_bundle_ids = {item["id"] for item in coverage["known_gaps_outside_bundle"]}
+
+    assert "65.03.03" in in_bundle_ids
+    assert "11.02.00" in outside_bundle_ids
+    assert "72.04.02" in outside_bundle_ids
 
 
 def test_cli_scan_accepts_named_policy_and_surfaces_it_in_output(tmp_path: Path, capsys) -> None:

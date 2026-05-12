@@ -220,7 +220,7 @@ def audit_repository(
             "CC1": "AST scan for public functions with confidence/threshold parameter defaulting to 0 or 0.0.",
             "CC2": "README code-block import names compared against package __all__; flags names claimed as importable but absent.",
             "CC3": "AST scan for validate_*/check_* functions using len() but no re.match/search structure check.",
-            "airi_risk_coverage": "MIT AI Risk Repository V4_03 (airisk.mit.edu, arXiv:2408.12622) mapping: detectors cross-referenced to AIRI risk IDs in the medical/PII/safety subdomains (2.1, 2.2, 3.1, 5.1, 7.3, 7.4).",
+            "airi_risk_coverage": "MIT AI Risk Repository V4_03 (airisk.mit.edu, arXiv:2408.12622) local-governed mapping: detectors cross-referenced to AIRI risk IDs through a full local registry, curated runtime bundle, and detector-mapping registry.",
             "BIO-Diagnostics": "Deterministic evidence-only bio diagnostics: conservative SMILES surface checks, SMILES parser-guard checks, silent mock fallback detection, traceability manifest surface checks, and subprocess bio-tool run-trace heuristics.",
             "REG-Scaffolding": "Evidence-only traceability scaffolding signals from manifest/hash/audit-log schema surfaces; intended as structural audit-readiness support rather than compliance proof.",
             "score_cap": "Score ceiling applied when clinical-adjacent signals lack explicit disclaimer",

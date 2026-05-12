@@ -106,7 +106,7 @@ def _section2(s1: int, s2: int, s3: int, s4: int) -> str:
         )
     score_tip = tip_icon(
         "Weighted formula: 40% README intent + 20% repo consistency + 40% code/bio. "
-        "T0 hard floor (missing clinical disclaimer) caps score at 24/100 maximum."
+        "T0 hard floor (missing clinical disclaimer) caps score at 39/100 maximum."
     )
     return (
         f'<section id="s2">'
@@ -115,7 +115,7 @@ def _section2(s1: int, s2: int, s3: int, s4: int) -> str:
         f'{rows}'
         f'<div class="formula">'
         f'Final = 0.4 &times; S1 + 0.2 &times; S2R + 0.4 &times; S3 &minus; C1_penalty'
-        f' &nbsp;|&nbsp; T0 floor: max 24/100'
+        f' &nbsp;|&nbsp; T0 floor: max 39/100'
         f'</div></div></section>'
     )
 
@@ -182,9 +182,14 @@ def _section4(airi: dict) -> str:
         f'<tbody>{c_rows}{g_rows}</tbody></table></div>'
     )
     src  = xt(airi.get("airi_version", ""))
+    bundle_scope = xt(airi.get("airi_bundle_scope", ""))
+    snapshot = xt(airi.get("airi_upstream_snapshot_date", ""))
+    license_name = xt(airi.get("airi_upstream_license", ""))
+    attribution = xt(airi.get("airi_attribution_note", ""))
     hint = tip_icon(
         "Coverage rate = risks addressed / total risks in detector scope. "
-        "Gaps are AIRI risks present in scope but not yet covered by any detector."
+        "Gaps are AIRI risks present in scope but not yet covered by any detector. "
+        "The HTML report uses the curated runtime AIRI bundle, not the full upstream registry."
     )
     return (
         f'<section id="s4">'
@@ -201,7 +206,11 @@ def _section4(airi: dict) -> str:
         f'<div style="flex:1;min-width:240px">'
         f'<p style="font-size:12px;color:{_C["dgray"]};margin-bottom:14px;line-height:1.5">'
         f'Risks addressed by STEM-BIO-AI detectors across the AIRI V4 '
-        f'medical/clinical subset. Click a domain card to filter. Toggle covered/gaps.'
+        f'curated runtime bundle. Click a domain card to filter. Toggle covered/gaps.'
+        f'</p>'
+        f'<p style="font-size:11px;color:{_C["dgray"]};margin-bottom:0;line-height:1.5">'
+        f'Bundle scope: {bundle_scope} | snapshot: {snapshot} | license: {license_name}<br>'
+        f'{attribution}'
         f'</p></div></div>'
         f'<div class="domain-grid">{domain_boxes}</div>'
         f'{toggle}{table}'

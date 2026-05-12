@@ -10,6 +10,7 @@ include pyproject.toml
 include requirements.txt
 include docs/ADVISORY_SECRET_HANDLING.md
 include docs/ADVISORY_RUNTIME.md
+include docs/AIRI_DATA_GOVERNANCE.md
 include docs/API_CONTRACT.md
 include docs/CALIBRATION_PROFILE_DESIGN.md
 include docs/DETERMINISTIC_DIAGNOSTICS.md
@@ -17,17 +18,22 @@ include docs/EXAMPLE_AUDITS.md
 include docs/MICA_MEMORY.md
 include docs/REGULATORY_MAPPING.md
 include docs/SCORING_RATIONALE.md
+include docs/THIRD_PARTY_DATA.md
+include docs/UI_HTML_REPORT.md
+include docs/airi_detector_mapping.schema.json
+include docs/airi_registry.schema.json
 include docs/regulatory_basis_registry.schema.json
 include docs/regulatory_basis_registry.v1.json
 include policy/scoring_profile.schema.json
 include policy/scoring_profile.default.v1.json
 include policy/scoring_profile.strict_clinical_adjacency.v1.json
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.6.8.json
-include memory/stem-ai-playbook.v1.6.8.md
-include memory/stem-ai-lessons.v1.6.8.md
+include memory/stem-ai.mica.v1.7.1.json
+include memory/stem-ai-playbook.v1.7.1.md
+include memory/stem-ai-lessons.v1.7.1.md
 
 recursive-include stem_ai *.py
+recursive-include stem_ai *.json
 recursive-include tests *.py
 recursive-include tests *.json
 

@@ -1,0 +1,463 @@
+{
+  "mapping_version": "stem-ai-airi-detector-mapping-v1",
+  "registry_version": "stem-ai-airi-registry-v1",
+  "bundle_version": "stem-ai-airi-runtime-bundle-v1",
+  "attribution_note": "Detector-to-risk links are STEM BIO-AI local interpretations layered on top of AIRI source data. They are governance mappings, not claims of complete AIRI equivalence.",
+  "detector_mappings": [
+    {
+      "detector_id": "B2_bias_limitations",
+      "risk_id": "39.25.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.4",
+      "title": "Verifiability",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "B2_bias_limitations",
+      "risk_id": "16.02.02",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Compromising privacy or security by correctly inferring sensitive information",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "B2_bias_limitations",
+      "risk_id": "11.04.04",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy violations",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C1_hardcoded_credentials",
+      "risk_id": "33.01.05",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy and security",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C1_hardcoded_credentials",
+      "risk_id": "58.06.11",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.2",
+      "title": "Privacy loss",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C1_hardcoded_credentials",
+      "risk_id": "04.06.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy and Data Leakage",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C2_dependency_pinning",
+      "risk_id": "33.01.05",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy and security",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C2_dependency_pinning",
+      "risk_id": "24.04.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Physical and Psychological Harms",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C3_dead_or_deprecated_patient_adjacent_paths",
+      "risk_id": "48.04.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Data Privacy",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C3_dead_or_deprecated_patient_adjacent_paths",
+      "risk_id": "42.09.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Data Protection/Privacy",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C4_exception_handling_clinical_adjacent_paths",
+      "risk_id": "70.01.02",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.3",
+      "title": "Accidental harm",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C4_exception_handling_clinical_adjacent_paths",
+      "risk_id": "24.01.03",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.3",
+      "title": "Safe exploration problem with widely deployed AI assistants",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "C4_exception_handling_clinical_adjacent_paths",
+      "risk_id": "60.02.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.3",
+      "title": "Reliability issues",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC1_clinical_zero_default",
+      "risk_id": "62.15.02",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.3",
+      "title": "Training-related (Poor model confidence calibration)",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC1_clinical_zero_default",
+      "risk_id": "02.09.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "Hallucinations",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC1_clinical_zero_default",
+      "risk_id": "30.01.02",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "Hallucination",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC1_clinical_zero_default",
+      "risk_id": "69.01.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "Hallucinated responses (in general)",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC1_clinical_zero_default",
+      "risk_id": "16.03.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "Disseminating false or misleading information",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC2_api_contract",
+      "risk_id": "69.01.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "False information",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC2_api_contract",
+      "risk_id": "39.25.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.4",
+      "title": "Verifiability",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC2_api_contract",
+      "risk_id": "16.03.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "Disseminating false or misleading information",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC2_api_contract",
+      "risk_id": "04.05.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "Misleading Information",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC3_shallow_validator",
+      "risk_id": "65.03.03",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Reidentification",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC3_shallow_validator",
+      "risk_id": "02.01.03",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy Leakage",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC3_shallow_validator",
+      "risk_id": "16.02.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Compromising privacy by leaking sensitive information",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC3_shallow_validator",
+      "risk_id": "47.03.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy and data collection concerns (collecting personal information or personally identifiable information)",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "CC3_shallow_validator",
+      "risk_id": "70.02.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "2.1",
+      "title": "Privacy Violations",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "H1_clinical_certainty_hype",
+      "risk_id": "18.05.03",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Overreliance",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "H1_clinical_certainty_hype",
+      "risk_id": "61.02.28",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Human choice of overreliance in critical sectors",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "H3_autonomous_replacement_hype",
+      "risk_id": "56.14.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Overreliance on AI systems, which cannot be subsequently unpicked",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "H3_autonomous_replacement_hype",
+      "risk_id": "47.02.12",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Influence, overreliance and dependence (overreliance)",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "41.04.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Healthcare",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "61.02.28",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Human choice of overreliance in critical sectors",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "18.05.03",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Overreliance",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "56.14.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Overreliance on AI systems, which cannot be subsequently unpicked",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "47.02.12",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Influence, overreliance and dependence (overreliance)",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "16.05.02",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "5.1",
+      "title": "Anthropomorphising systems can lead to overreliance and unsafe use",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "T0_hard_floor",
+      "risk_id": "43.01.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.0",
+      "title": "Safety & Trustworthiness",
+      "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
+      "introduced_in": "1.7.0"
+    }
+  ],
+  "known_gaps": [
+    {
+      "id": "65.03.03",
+      "title": "Reidentification",
+      "subdomain_id": "2.1",
+      "gap_scope": "in_runtime_bundle",
+      "note": "CC-3 catches shallow validators; dedicated reidentify() API exposure check (CC-4) not yet implemented."
+    },
+    {
+      "id": "70.02.02",
+      "title": "Misinformation — hallucination of clinical knowledge",
+      "subdomain_id": "3.1",
+      "gap_scope": "in_runtime_bundle",
+      "note": "CC-1 catches threshold=0.0 default; actual output-level hallucination rate requires Layer 3 dynamic testing."
+    },
+    {
+      "id": "39.25.00",
+      "title": "Verifiability — black-box AI in medical healthcare",
+      "subdomain_id": "7.4",
+      "gap_scope": "in_runtime_bundle",
+      "note": "B2 detects surface language only; Model Card / interpretability artifact presence not yet checked."
+    },
+    {
+      "id": "11.02.00",
+      "title": "Allocative Harms — withheld resources in healthcare",
+      "subdomain_id": "1.1",
+      "gap_scope": "outside_runtime_bundle_reference",
+      "note": "Subgroup performance disparities require dynamic evaluation; outside static scan scope."
+    },
+    {
+      "id": "72.04.02",
+      "title": "Market Concentration — healthcare single-point failures",
+      "subdomain_id": "6.1",
+      "gap_scope": "outside_runtime_bundle_reference",
+      "note": "Systemic risk beyond single-repository scope."
+    }
+  ]
+}

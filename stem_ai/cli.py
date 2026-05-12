@@ -222,7 +222,7 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         "--policy",
         choices=_policy_choices(),
         default="default",
-        help="Named calibration profile to surface in the result (1.6.8 keeps scan-time policy selection mirror-only)",
+        help="Named calibration profile to surface in the result (1.7.1 keeps scan-time policy selection mirror-only)",
     )
     parser.add_argument(
         "--explain",
@@ -600,7 +600,7 @@ def _print_policy_explain(profile_name: str) -> int:
     print(f"Read Mode:      {profile['profile_read_mode']}")
     print(
         "Scoring Effect: "
-        "mirror-only in 1.6.8; selection is surfaced in artifacts but does not yet reweight score computation"
+        "mirror-only in 1.7.1; selection is surfaced in artifacts but does not yet reweight score computation"
     )
     print()
     print(
@@ -662,6 +662,20 @@ def _intent_answers_from_args(args: argparse.Namespace) -> dict[str, int]:
     }
 
 
+def _print_derived_policy_tail(derived: dict, notes: list | None = None) -> None:
+    if derived["triggered_rules"]:
+        print("Rules:         " + "; ".join(derived["triggered_rules"]))
+    if derived["preview_only_deltas"]:
+        print("Preview Deltas:")
+        for section, values in derived["preview_only_deltas"].items():
+            print(f"- {section}: {values}")
+    effective_notes = notes if notes is not None else derived["notes"]
+    if effective_notes:
+        print("Notes:")
+        for note in effective_notes:
+            print(f"- {note}")
+
+
 def _print_policy_derive(args: argparse.Namespace) -> int:
     derived = derive_policy_intent(_intent_answers_from_args(args), baseline_profile_name=args.baseline)
     print("STEM BIO-AI policy derive")
@@ -669,16 +683,7 @@ def _print_policy_derive(args: argparse.Namespace) -> int:
     print(f"Outcome:       {derived['outcome_type']}")
     print(f"Recommendation:{' '}{derived['recommended_profile']}")
     print("Answers:       " + ", ".join(f"{k}={v}" for k, v in derived["answers"].items()))
-    if derived["triggered_rules"]:
-        print("Rules:         " + "; ".join(derived["triggered_rules"]))
-    if derived["preview_only_deltas"]:
-        print("Preview Deltas:")
-        for section, values in derived["preview_only_deltas"].items():
-            print(f"- {section}: {values}")
-    if derived["notes"]:
-        print("Notes:")
-        for note in derived["notes"]:
-            print(f"- {note}")
+    _print_derived_policy_tail(derived)
     return 0
 
 
@@ -701,17 +706,65 @@ def _print_policy_simulate(args: argparse.Namespace) -> int:
         print(f"Score Cap:     {simulation['score_cap']}")
     print(f"Score Delta:   {simulation['score_delta']:+d}")
     print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
-    if derived["triggered_rules"]:
-        print("Rules:         " + "; ".join(derived["triggered_rules"]))
-    if derived["preview_only_deltas"]:
-        print("Preview Deltas:")
-        for section, values in derived["preview_only_deltas"].items():
-            print(f"- {section}: {values}")
-    if simulation["notes"]:
-        print("Notes:")
-        for note in simulation["notes"]:
-            print(f"- {note}")
+    _print_derived_policy_tail(derived, notes=simulation["notes"])
     return 0
+
+
+def _handle_scan_cmd(parsed: argparse.Namespace, summary_mode: str) -> int:
+    target = _validate_target(parsed.target)
+    advisory_response = _validate_optional_file(parsed.advisory_response)
+    return _execute_scan(
+        target=target, level=parsed.level, fmt=parsed.format, out_dir=parsed.out,
+        explain=parsed.explain, advisory_mode=parsed.advisory, advisory_response=advisory_response,
+        policy_name=parsed.policy, tier_gate=parsed.tier_gate, summary_mode=summary_mode,
+        workflow="scan",
+    )
+
+
+def _handle_gate_cmd(parsed: argparse.Namespace, summary_mode: str) -> int:
+    target = _validate_target(parsed.target)
+    return _execute_scan(
+        target=target, level=parsed.level, fmt=parsed.format, out_dir=parsed.out,
+        explain=parsed.explain, advisory_mode="none", advisory_response=None,
+        policy_name=parsed.policy, tier_gate=parsed.min_tier, summary_mode=summary_mode,
+        workflow="gate",
+    )
+
+
+def _resolve_advisory_params(parsed: argparse.Namespace) -> tuple[str, Path | None]:
+    cmd = parsed.advisory_command
+    if cmd == "validate":
+        return "validate", None
+    if cmd == "packet":
+        return "packet", None
+    if cmd == "call":
+        return "call", None
+    if cmd == "check-response":
+        return "none", _validate_optional_file(parsed.response)
+    return "none", None
+
+
+def _handle_advisory_cmd(parsed: argparse.Namespace, summary_mode: str) -> int:
+    target = _validate_target(parsed.target)
+    advisory_mode, advisory_response = _resolve_advisory_params(parsed)
+    return _execute_scan(
+        target=target, level=parsed.level, fmt=parsed.format, out_dir=parsed.out,
+        explain=parsed.explain, advisory_mode=advisory_mode, advisory_response=advisory_response,
+        policy_name=parsed.policy, tier_gate=None, summary_mode=summary_mode,
+        workflow=_workflow_label(parsed.command, parsed.advisory_command),
+    )
+
+
+def _handle_policy_cmd(parsed: argparse.Namespace) -> int:
+    if parsed.policy_command == "list":
+        return _print_policy_list()
+    if parsed.policy_command == "explain":
+        return _print_policy_explain(parsed.profile_name)
+    if parsed.policy_command == "derive":
+        return _print_policy_derive(parsed)
+    if parsed.policy_command == "simulate":
+        return _print_policy_simulate(parsed)
+    return 2
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -724,73 +777,13 @@ def main(argv: list[str] | None = None) -> int:
     summary_mode = _resolve_summary_mode(parsed)
 
     if parsed.command in {"scan", "audit"}:
-        target = _validate_target(parsed.target)
-        advisory_response = _validate_optional_file(parsed.advisory_response)
-        return _execute_scan(
-            target=target,
-            level=parsed.level,
-            fmt=parsed.format,
-            out_dir=parsed.out,
-            explain=parsed.explain,
-            advisory_mode=parsed.advisory,
-            advisory_response=advisory_response,
-            policy_name=parsed.policy,
-            tier_gate=parsed.tier_gate,
-            summary_mode=summary_mode,
-            workflow="scan",
-        )
-
+        return _handle_scan_cmd(parsed, summary_mode)
     if parsed.command == "gate":
-        target = _validate_target(parsed.target)
-        return _execute_scan(
-            target=target,
-            level=parsed.level,
-            fmt=parsed.format,
-            out_dir=parsed.out,
-            explain=parsed.explain,
-            advisory_mode="none",
-            advisory_response=None,
-            policy_name=parsed.policy,
-            tier_gate=parsed.min_tier,
-            summary_mode=summary_mode,
-            workflow="gate",
-        )
-
+        return _handle_gate_cmd(parsed, summary_mode)
     if parsed.command == "advisory":
-        target = _validate_target(parsed.target)
-        advisory_response = None
-        advisory_mode = "none"
-        if parsed.advisory_command == "validate":
-            advisory_mode = "validate"
-        elif parsed.advisory_command == "packet":
-            advisory_mode = "packet"
-        elif parsed.advisory_command == "call":
-            advisory_mode = "call"
-        elif parsed.advisory_command == "check-response":
-            advisory_response = _validate_optional_file(parsed.response)
-        return _execute_scan(
-            target=target,
-            level=parsed.level,
-            fmt=parsed.format,
-            out_dir=parsed.out,
-            explain=parsed.explain,
-            advisory_mode=advisory_mode,
-            advisory_response=advisory_response,
-            policy_name=parsed.policy,
-            tier_gate=None,
-            summary_mode=summary_mode,
-            workflow=_workflow_label(parsed.command, parsed.advisory_command),
-        )
-
+        return _handle_advisory_cmd(parsed, summary_mode)
     if parsed.command == "policy":
-        if parsed.policy_command == "list":
-            return _print_policy_list()
-        if parsed.policy_command == "explain":
-            return _print_policy_explain(parsed.profile_name)
-        if parsed.policy_command == "derive":
-            return _print_policy_derive(parsed)
-        if parsed.policy_command == "simulate":
-            return _print_policy_simulate(parsed)
+        return _handle_policy_cmd(parsed)
 
     parser.print_help()
     return 2

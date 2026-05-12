@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stem-ai-airi-detector-mapping.schema.v1",
+  "title": "STEM BIO-AI AIRI Detector Mapping",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mapping_version",
+    "registry_version",
+    "bundle_version",
+    "attribution_note",
+    "detector_mappings",
+    "known_gaps"
+  ],
+  "properties": {
+    "mapping_version": { "type": "string" },
+    "registry_version": { "type": "string" },
+    "bundle_version": { "type": "string" },
+    "attribution_note": { "type": "string" },
+    "detector_mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detector_id",
+          "risk_id",
+          "coverage_type",
+          "mapping_confidence",
+          "review_status",
+          "subdomain_id",
+          "title",
+          "justification",
+          "introduced_in"
+        ],
+        "properties": {
+          "detector_id": { "type": "string" },
+          "risk_id": { "type": "string" },
+          "coverage_type": { "type": "string" },
+          "mapping_confidence": { "type": "string" },
+          "review_status": { "type": "string" },
+          "subdomain_id": { "type": "string" },
+          "title": { "type": "string" },
+          "justification": { "type": "string" },
+          "introduced_in": { "type": "string" }
+        }
+      }
+    },
+    "known_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "subdomain_id", "gap_scope", "note"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "subdomain_id": { "type": "string" },
+          "gap_scope": {
+            "type": "string",
+            "enum": ["in_runtime_bundle", "outside_runtime_bundle_reference"]
+          },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

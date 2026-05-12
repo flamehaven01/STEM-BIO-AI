@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stem-ai-airi-registry.schema.v1",
+  "title": "STEM BIO-AI AIRI Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registry_version",
+    "upstream_name",
+    "upstream_source_url",
+    "upstream_version",
+    "upstream_snapshot_date",
+    "upstream_license",
+    "upstream_row_count",
+    "local_transform_version",
+    "local_transform_date",
+    "attribution_note",
+    "risks"
+  ],
+  "properties": {
+    "registry_version": { "type": "string" },
+    "upstream_name": { "type": "string" },
+    "upstream_source_url": { "type": "string" },
+    "upstream_version": { "type": "string" },
+    "upstream_snapshot_date": { "type": "string" },
+    "upstream_license": { "type": "string" },
+    "upstream_row_count": { "type": "integer", "minimum": 1 },
+    "local_transform_version": { "type": "string" },
+    "local_transform_date": { "type": "string" },
+    "attribution_note": { "type": "string" },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "description",
+          "level",
+          "parent_category_id",
+          "subdomain_id",
+          "paper_ref",
+          "paper_title",
+          "causal_entity",
+          "causal_intent",
+          "causal_timing",
+          "in_runtime_bundle"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "level": { "type": "string" },
+          "parent_category_id": { "type": "string" },
+          "subdomain_id": { "type": "string" },
+          "paper_ref": { "type": "string" },
+          "paper_title": { "type": "string" },
+          "causal_entity": { "type": "string" },
+          "causal_intent": { "type": "string" },
+          "causal_timing": { "type": "string" },
+          "in_runtime_bundle": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

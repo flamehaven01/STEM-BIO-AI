@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.6.8
+Version: 1.7.1
 Status: **Stable**
 Supersedes: historical v1.5 draft contract
 
@@ -71,7 +71,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.6.8"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.7.1"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -86,10 +86,10 @@ All fields below are present in every `audit_repository()` result.
 | `calibration_profile.tool_version_last_validated` | string | Last tool version whose runtime constants were checked against this profile |
 | `calibration_profile.profile_name` | string | Active profile label selected by CLI `--policy` |
 | `calibration_profile.profile_status` | string | Profile lifecycle status (`authoritative_release`, `experimental`, etc.) |
-| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.6.8`; later `"authoritative"` when scan scoring reads policy values directly |
+| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.7.1`; later `"authoritative"` when scan scoring reads policy values directly |
 | `calibration_profile.policy_sha256` | string | Canonical SHA256 surfaced by the runtime artifact; profile files may carry `null` before authoritative read-through |
 
-In `1.6.8`, `scan --policy <name>` still keeps authoritative scan scoring on the deterministic runtime-constant path. Policy selection changes surfaced metadata only; governed score-delta preview belongs to `stem policy simulate`.
+In `1.7.1`, `scan --policy <name>` still keeps authoritative scan scoring on the deterministic runtime-constant path. Policy selection changes surfaced metadata only; governed score-delta preview belongs to `stem policy simulate`.
 
 ### Target (Locked)
 
@@ -172,9 +172,34 @@ Stage 4 does not affect `score.final_score` or `score.formal_tier`.
 | `stage_traceability` | object | Per-stage traceability notes keyed by `stage_1`, `stage_2r`, `stage_3`, `stage_4`, `bio_diagnostics` |
 | `regulatory_traceability` | object | Flattened traceability summary layer with additive `items` list |
 | `measurement_basis` | object | Per-stage description of detection method |
+| `airi_risk_coverage` | object | AIRI registry/bundle/mapping provenance plus covered-risk and known-gap summaries |
 | `notable_positive_evidence` | array | Human-readable positive signals |
 | `notable_risks` | array | Human-readable risk signals |
 | `file_hashes_sha256` | object | SHA-256 hashes of key files (README, manifests) |
+
+### AIRI Coverage Layer (Additive)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `airi_risk_coverage.airi_version` | string | Upstream AIRI version label surfaced from the local registry snapshot |
+| `airi_risk_coverage.airi_source` | string | Human-readable upstream source / license string |
+| `airi_risk_coverage.airi_registry_version` | string | Local full-registry version |
+| `airi_risk_coverage.airi_bundle_version` | string | Local runtime-bundle version |
+| `airi_risk_coverage.airi_mapping_version` | string | Local detector-mapping registry version |
+| `airi_risk_coverage.airi_bundle_scope` | string | Runtime bundle scope label |
+| `airi_risk_coverage.airi_upstream_snapshot_date` | string | Snapshot date for the local upstream import |
+| `airi_risk_coverage.airi_upstream_license` | string | Upstream license label |
+| `airi_risk_coverage.airi_attribution_note` | string | Artifact-level attribution statement |
+| `airi_risk_coverage.total_risks_in_registry` | integer | Count of risk rows in the full local registry |
+| `airi_risk_coverage.total_risks_in_bundle` | integer | Count of risk rows in the curated runtime bundle |
+| `airi_risk_coverage.total_risks_in_detector_scope` | integer | Count of risk IDs referenced by the active detector mapping |
+| `airi_risk_coverage.detectors_triggered` | array | Triggered detector IDs used for this coverage result |
+| `airi_risk_coverage.covered_risks` | array | Covered AIRI risks with detector references |
+| `airi_risk_coverage.covered_count` | integer | Count of covered risks |
+| `airi_risk_coverage.coverage_rate` | number | Covered risks / total risks in detector scope |
+| `airi_risk_coverage.known_gaps` | array | Combined known-gap list from the local mapping registry |
+| `airi_risk_coverage.known_gaps_in_bundle` | array | Known gaps that are inside the current runtime bundle |
+| `airi_risk_coverage.known_gaps_outside_bundle` | array | Known gaps tracked against the full registry but not included in the runtime bundle |
 
 ### Regulatory Traceability Layer (Additive)
 

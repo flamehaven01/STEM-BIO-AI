@@ -1,3 +1,3 @@
 """STEM BIO-AI local audit CLI."""
 
-__version__ = "1.6.8"
+__version__ = "1.7.1"
