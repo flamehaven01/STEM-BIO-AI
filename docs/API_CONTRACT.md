@@ -160,6 +160,18 @@ Stage 4 does not affect `score.final_score` or `score.formal_tier`.
 | `code_integrity.C3_dead_or_deprecated_patient_adjacent_paths` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 | `code_integrity.C4_exception_handling_clinical_adjacent_paths` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 
+### Code Contract (Locked)
+
+`code_contract` is the Layer 2 AST contract-detector summary. It is additive at
+the detector-family level, but the published `CC1`/`CC2`/`CC3` keys below are
+stable once released.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `code_contract.CC1_clinical_zero_default` | object | `{count: integer, status: "PASS"/"WARN"}` — public confidence / threshold parameters defaulted to `0.0` |
+| `code_contract.CC2_api_contract` | object | `{count: integer, status: "PASS"/"WARN"}` — README-declared names cross-checked against package `__all__` exports |
+| `code_contract.CC3_shallow_validator` | object | `{count: integer, status: "PASS"/"WARN"}` — `validate_*` / `check_*` functions using only `len()` without regex structure checks |
+
 ### Evidence and Diagnostics (Locked structure, Additive content)
 
 | Field | Type | Description |

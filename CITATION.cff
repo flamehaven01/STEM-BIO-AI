@@ -4,13 +4,13 @@ title: "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI R
 version: "1.7.1"
 type: software
 license: Apache-2.0
-doi: "10.5281/zenodo.20116303"
+doi: "10.5281/zenodo.20139732"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.20116303"
+    value: "10.5281/zenodo.20139732"
     description: "Zenodo archived release"
 repository-code: "https://github.com/flamehaven01/STEM-BIO-AI"
-url: "https://doi.org/10.5281/zenodo.20116303"
+url: "https://doi.org/10.5281/zenodo.20139732"
 abstract: >-
   Deterministic local evidence-surface scanner for bio and medical AI repositories.
   Produces reproducible T0-T4 review-priority tiers, a separate replication lane,

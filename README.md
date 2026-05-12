@@ -16,7 +16,7 @@
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
   <a href="https://huggingface.co/spaces/Flamehaven/stem-bio-ai"><img src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-yellow.svg" alt="HF Space"></a>
-  <a href="https://doi.org/10.5281/zenodo.20116303"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20116303.svg" alt="DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.20139732"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20139732.svg" alt="DOI"></a>
 </p>
 
 ---
@@ -369,7 +369,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
 Current DOI-backed archive:
-- <https://doi.org/10.5281/zenodo.20116303>
+- <https://doi.org/10.5281/zenodo.20139732>
 
 ```bibtex
 @software{stem-bio-ai,
@@ -377,8 +377,8 @@ Current DOI-backed archive:
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
   version = {1.7.1},
   year    = {2026},
-  doi     = {10.5281/zenodo.20116303},
-  url     = {https://doi.org/10.5281/zenodo.20116303}
+  doi     = {10.5281/zenodo.20139732},
+  url     = {https://doi.org/10.5281/zenodo.20139732}
 }
 ```
 

@@ -77,6 +77,24 @@ This prevents the bundled 184-risk subset from being confused with the full upst
 
 ---
 
+## Public Schema Location
+
+The AIRI governance schemas remain in `docs/`:
+
+- `docs/airi_registry.schema.json`
+- `docs/airi_detector_mapping.schema.json`
+
+They are kept here intentionally because they are public governance / contract
+reference files, not hidden implementation details. The runtime scanner reads
+the normalized JSON registries under `stem_ai/data/`; the `docs/` schemas
+describe and validate those public data shapes for reviewers, contributors, and
+downstream integrators.
+
+Do not delete or relocate these schema files unless every packaging, manifest,
+and documentation reference is updated with them.
+
+---
+
 ## Runtime Contract
 
 `airi_risk_coverage` in scan results must surface:
