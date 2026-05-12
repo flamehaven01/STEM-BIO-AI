@@ -15,6 +15,7 @@ from __future__ import annotations
 import ast
 import re
 from collections import defaultdict
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
@@ -82,6 +83,31 @@ def _flush_code_block(
     return names
 
 
+def _iter_contract_python_modules(
+    target: Path,
+) -> Iterator[tuple[Path, str, ast.AST, list[str]]]:
+    """Yield parsed Python modules eligible for contract-detector analysis."""
+    for path in iter_python_files(target):
+        if any(p in path.parts for p in _SKIP_DIRS):
+            continue
+        try:
+            source = path.read_text(encoding="utf-8", errors="replace")
+            tree = ast.parse(source)
+        except (OSError, SyntaxError):
+            continue
+        yield path, source, tree, source.splitlines()
+
+
+def _iter_public_functions(tree: ast.AST) -> Iterator[ast.FunctionDef | ast.AsyncFunctionDef]:
+    """Yield non-private function definitions from an AST."""
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        if node.name.startswith("_"):
+            continue
+        yield node
+
+
 # ── CC-1: clinical zero default ─────────────────────────────────────────────
 
 def _detect_clinical_zero_default(
@@ -91,24 +117,9 @@ def _detect_clinical_zero_default(
 ) -> int:
     """Find public functions where confidence/threshold param defaults to 0 or 0.0."""
     hits = 0
-    for path in iter_python_files(target):
-        if any(p in path.parts for p in _SKIP_DIRS):
-            continue
-        try:
-            source = path.read_text(encoding="utf-8", errors="replace")
-            tree = ast.parse(source)
-        except (OSError, SyntaxError):
-            continue
-
-        lines = source.splitlines()
-        for node in ast.walk(tree):
-            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                continue
-            if node.name.startswith("_"):
-                continue
-
+    for path, _source, tree, lines in _iter_contract_python_modules(target):
+        for node in _iter_public_functions(tree):
             candidate_pairs = _collect_candidate_pairs(node.args)
-
             for arg, default in candidate_pairs:
                 if not _CLINICAL_PARAM_RE.search(arg.arg):
                     continue
@@ -224,19 +235,8 @@ def _detect_shallow_validator(
     """Find validate_*/check_* functions that use len() but no regex structure check."""
     hits = 0
     _RE_CALL = re.compile(r"\bre\.(match|search|fullmatch|compile)\b")
-    for path in iter_python_files(target):
-        if any(p in path.parts for p in _SKIP_DIRS):
-            continue
-        try:
-            source = path.read_text(encoding="utf-8", errors="replace")
-            tree = ast.parse(source)
-        except (OSError, SyntaxError):
-            continue
-
-        lines = source.splitlines()
-        for node in ast.walk(tree):
-            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                continue
+    for path, source, tree, lines in _iter_contract_python_modules(target):
+        for node in _iter_public_functions(tree):
             if not _VALIDATOR_NAME_RE.match(node.name):
                 continue
 
