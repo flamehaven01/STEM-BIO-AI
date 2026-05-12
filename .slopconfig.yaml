@@ -1,7 +1,10 @@
 exclude_dirs:
   - tmp
+  - audits
   - build
   - dist
+  - stem_output
+  - .manual_verify
   - .pytest_cache
   - .tmp_build_temp
   - .tmp_pycompile
@@ -11,5 +14,13 @@ exclude_dirs:
   - "*.egg-info"
 
 exclude_files:
+  - "tmp/*"
+  - "build/*"
   - "*/tmp/*"
   - "*/build/*"
+  - "audits/*"
+  - "*/audits/*"
+  - "stem_output*/*"
+  - "*/stem_output*/*"
+  - ".manual_verify/*"
+  - "*/.manual_verify/*"

@@ -8,8 +8,8 @@ from __future__ import annotations
 from typing import Any
 
 from .render_html_components import (
-    _C, _STAGE_TIPS, _AIRI_DOMAIN_COLORS,
-    xt, tier_color, status_color, tip_icon,
+    _C, _STAGE_TIPS,
+    xt, tier_color, tip_icon,
     svg_gauge, svg_donut, svg_hbar,
     integrity_card, domain_card, airi_row, evidence_row,
 )
