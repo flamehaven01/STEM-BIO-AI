@@ -39,6 +39,49 @@ _SKIP_DIRS = frozenset({
 })
 
 
+# ── helpers ──────────────────────────────────────────────────────────────────
+
+def _collect_candidate_pairs(args: ast.arguments) -> list[tuple[Any, Any]]:
+    """Return (arg, default) pairs for all params that carry a default value."""
+    pairs: list[tuple[Any, Any]] = []
+    offset = len(args.args) - len(args.defaults)
+    for i, default in enumerate(args.defaults):
+        idx = offset + i
+        if idx < len(args.args):
+            pairs.append((args.args[idx], default))
+    for kw_arg, kw_default in zip(args.kwonlyargs, args.kw_defaults):
+        if kw_default is not None:
+            pairs.append((kw_arg, kw_default))
+    return pairs
+
+
+def _parse_all_assign(node: ast.Assign) -> set[str]:
+    """Extract string literals from an __all__ = [...] assignment node."""
+    if not isinstance(node.value, (ast.List, ast.Tuple)):
+        return set()
+    return {
+        elt.value
+        for elt in node.value.elts
+        if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
+    }
+
+
+def _flush_code_block(
+    block_lines: list[tuple[int, str]],
+) -> dict[str, list[int]]:
+    """Extract importable names from a single README code block."""
+    names: dict[str, list[int]] = defaultdict(list)
+    for blineno, bline in block_lines:
+        for m in _README_IMPORT_RE.finditer(bline):
+            if not m.group(2):
+                continue
+            for name in re.split(r"[,\s]+", m.group(2).strip()):
+                name = name.strip()
+                if name and name != "*":
+                    names[name].append(blineno)
+    return names
+
+
 # ── CC-1: clinical zero default ─────────────────────────────────────────────
 
 def _detect_clinical_zero_default(
@@ -64,21 +107,7 @@ def _detect_clinical_zero_default(
             if node.name.startswith("_"):
                 continue
 
-            args = node.args
-            positional_args = args.args
-            n_defaults = len(args.defaults)
-            n_pos = len(positional_args)
-            offset = n_pos - n_defaults
-
-            # (arg, default) pairs: positional with defaults + kwonly with kw_defaults
-            candidate_pairs: list[tuple[Any, Any]] = []
-            for i, default in enumerate(args.defaults):
-                arg_idx = offset + i
-                if arg_idx < len(positional_args):
-                    candidate_pairs.append((positional_args[arg_idx], default))
-            for kw_arg, kw_default in zip(args.kwonlyargs, args.kw_defaults):
-                if kw_default is not None:
-                    candidate_pairs.append((kw_arg, kw_default))
+            candidate_pairs = _collect_candidate_pairs(node.args)
 
             for arg, default in candidate_pairs:
                 if not _CLINICAL_PARAM_RE.search(arg.arg):
@@ -127,10 +156,7 @@ def _extract_package_all(target: Path) -> frozenset[str]:
             if not (isinstance(node, ast.Assign) and
                     any(isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets)):
                 continue
-            if isinstance(node.value, (ast.List, ast.Tuple)):
-                for elt in node.value.elts:
-                    if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
-                        names.add(elt.value)
+            names.update(_parse_all_assign(node))
     return frozenset(names)
 
 
@@ -143,17 +169,10 @@ def _readme_claimed_names(readme: str) -> dict[str, list[int]]:
         line = raw.strip()
         if line.startswith("```"):
             if in_block:
-                for blineno, bline in block_lines:
-                    for m in _README_IMPORT_RE.finditer(bline):
-                        if m.group(2):
-                            for name in re.split(r"[,\s]+", m.group(2).strip()):
-                                name = name.strip()
-                                if name and name != "*":
-                                    names[name].append(blineno)
+                for n, lns in _flush_code_block(block_lines).items():
+                    names[n].extend(lns)
                 block_lines = []
-                in_block = False
-            else:
-                in_block = True
+            in_block = not in_block
         elif in_block:
             block_lines.append((lineno, line))
     return names

@@ -1,0 +1,15 @@
+exclude_dirs:
+  - tmp
+  - build
+  - dist
+  - .pytest_cache
+  - .tmp_build_temp
+  - .tmp_pycompile
+  - .tmp_pytest
+  - .tmp_pytest_run
+  - __pycache__
+  - "*.egg-info"
+
+exclude_files:
+  - "*/tmp/*"
+  - "*/build/*"
