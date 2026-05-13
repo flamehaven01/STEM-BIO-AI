@@ -32,11 +32,7 @@ def available_policy_names() -> list[str]:
     return sorted(set(names))
 
 
-@lru_cache(maxsize=None)
-def _load_calibration_profile_cached(profile_name: str) -> dict[str, Any]:
-    path = _policy_path(profile_name)
-    if not path.exists():
-        raise ValueError(f"Calibration profile not found: {profile_name}")
+def _load_profile_from_path(path: Path) -> dict[str, Any]:
     profile = json.loads(path.read_text(encoding="utf-8"))
     validate_profile(profile)
     profile = deepcopy(profile)
@@ -45,8 +41,25 @@ def _load_calibration_profile_cached(profile_name: str) -> dict[str, Any]:
     return profile
 
 
+@lru_cache(maxsize=None)
+def _load_calibration_profile_cached(profile_name: str) -> dict[str, Any]:
+    path = _policy_path(profile_name)
+    if not path.exists():
+        raise ValueError(f"Calibration profile not found: {profile_name}")
+    return _load_profile_from_path(path)
+
+
 def load_calibration_profile(profile_name: str = "default") -> dict[str, Any]:
     return deepcopy(_load_calibration_profile_cached(profile_name))
+
+
+def load_calibration_profile_file(profile_path: str | Path) -> dict[str, Any]:
+    path = Path(profile_path).expanduser().resolve()
+    if not path.exists():
+        raise ValueError(f"Calibration profile file not found: {path}")
+    if not path.is_file():
+        raise ValueError(f"Calibration profile file must be a file: {path}")
+    return _load_profile_from_path(path)
 
 
 def compute_policy_sha256(profile: dict[str, Any]) -> str:

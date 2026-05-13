@@ -21,6 +21,7 @@ stem policy list                         # available calibration profiles
 stem policy explain <name>               # inspect one calibration profile
 stem policy derive [INTENT OPTIONS]      # translate researcher intent
 stem policy simulate <folder> [INTENT OPTIONS]
+stem policy simulate <folder> --profile-file PROFILE.json
 ```
 
 Backward compatibility remains in place:
@@ -101,7 +102,7 @@ and surface through:
 
 ## Policy Intent Workflows
 
-`stem policy derive` applies the documented 0-5 translation rule table:
+`stem policy derive` applies the documented 1-5 translation rule table:
 
 ```bash
 stem policy derive \
@@ -120,6 +121,15 @@ stem policy simulate /path/to/repo \
   --reproducibility-priority 2 \
   --structured-limitations-requirement 3
 ```
+
+For domain experimentation without registering a new named profile, `simulate` can also load a local profile file:
+
+```bash
+stem policy simulate /path/to/repo \
+  --profile-file policy/drafts/scoring_profile.reproducibility_first.v1.json
+```
+
+In this mode, the profile file must remain schema-valid and `mirror_only`. The file is used for preview only and is not added to the packaged named-profile set.
 
 Current `1.7.2` rule scope is intentionally narrow:
 

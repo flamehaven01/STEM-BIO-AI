@@ -93,20 +93,34 @@ def derive_policy_intent(
 
 def simulate_policy_outcome(
     result: dict[str, Any],
-    derived: dict[str, Any],
+    derived: dict[str, Any] | None,
     *,
     baseline_profile_name: str = "default",
+    external_profile: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     baseline_profile = load_calibration_profile(baseline_profile_name)
     effective_profile = deepcopy(baseline_profile)
-    outcome_type = derived["outcome_type"]
-    recommended_profile = derived["recommended_profile"]
+    notes: list[str]
 
-    if outcome_type == "named_profile" and recommended_profile != baseline_profile_name:
-        effective_profile = load_calibration_profile(recommended_profile)
-    elif outcome_type == "preview_only":
-        _apply_preview_deltas(effective_profile, derived.get("preview_only_deltas", {}))
-        validate_profile(effective_profile)
+    if external_profile is not None:
+        effective_profile = deepcopy(external_profile)
+        outcome_type = "external_profile_file"
+        notes = [
+            f"Local profile file used for simulation only: {effective_profile.get('policy_path', '(unknown path)')}",
+            "This simulation does not register or promote the local file on the authoritative score path.",
+        ]
+    else:
+        if derived is None:
+            raise ValueError("derived policy intent is required unless an external profile is supplied")
+        outcome_type = derived["outcome_type"]
+        recommended_profile = derived["recommended_profile"]
+        notes = list(derived.get("notes", []))
+
+        if outcome_type == "named_profile" and recommended_profile != baseline_profile_name:
+            effective_profile = load_calibration_profile(recommended_profile)
+        elif outcome_type == "preview_only":
+            _apply_preview_deltas(effective_profile, derived.get("preview_only_deltas", {}))
+            validate_profile(effective_profile)
 
     raw_score = _simulate_weighted_raw_score(result, effective_profile)
     score_cap = _simulate_score_cap(result, effective_profile)
@@ -119,6 +133,11 @@ def simulate_policy_outcome(
         "baseline_profile": baseline_profile_name,
         "effective_profile": effective_profile["profile_name"],
         "effective_policy_version": effective_profile["policy_version"],
+        "effective_profile_status": effective_profile["profile_status"],
+        "effective_profile_read_mode": effective_profile["profile_read_mode"],
+        "effective_policy_sha256": effective_profile["policy_sha256"],
+        "effective_profile_source": "local_file" if external_profile is not None else "named_profile",
+        "effective_profile_path": effective_profile.get("policy_path"),
         "outcome_type": outcome_type,
         "raw_score_before_cap": raw_score,
         "score_cap": score_cap,
@@ -127,7 +146,7 @@ def simulate_policy_outcome(
         "score_delta": final_score - baseline_final,
         "raw_score_delta": raw_score - baseline_raw,
         "formal_score_changed": final_score != baseline_final,
-        "notes": list(derived.get("notes", [])),
+        "notes": notes,
     }
     return simulation
 

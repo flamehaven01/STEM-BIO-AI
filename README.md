@@ -59,6 +59,7 @@ stem policy list
 stem policy explain strict_clinical_adjacency
 stem policy derive --clinical-strictness 4 --code-integrity-priority 3 --reproducibility-priority 2 --structured-limitations-requirement 3
 stem policy simulate /path/to/bio-ai-repo --clinical-strictness 4 --code-integrity-priority 3 --reproducibility-priority 2 --structured-limitations-requirement 3
+stem policy simulate /path/to/bio-ai-repo --profile-file policy/drafts/scoring_profile.reproducibility_first.v1.json
 stem advisory validate /path/to/bio-ai-repo
 stem advisory packet /path/to/bio-ai-repo --output advisory_out
 stem advisory check-response /path/to/bio-ai-repo --response provider_advisory.json
@@ -72,7 +73,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.7.2`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.7.2`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. The intent interview uses a governed `1–5` posture scale, while official score-affecting policy changes still require profile promotion rather than direct ad hoc tuning.
 

@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
-from .calibration_profile import available_policy_names, load_calibration_profile
+from .calibration_profile import available_policy_names, load_calibration_profile, load_calibration_profile_file
 from .policy_intent import derive_policy_intent, simulate_policy_outcome
 from .render import write_outputs
 from .scanner import audit_repository
@@ -163,8 +163,13 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Preview how a derived posture would change the current repository outcome",
         description="Run the deterministic scan, then simulate a named-profile or preview-only policy outcome without changing the stored scan contract.",
     )
-    _add_intent_arguments(policy_simulate)
+    _add_intent_arguments(policy_simulate, required=False)
     policy_simulate.add_argument("target", help="Path to a local repository")
+    policy_simulate.add_argument(
+        "--profile-file",
+        default=None,
+        help="Path to a local calibration profile JSON for simulation-only use",
+    )
 
     return parser
 
@@ -244,12 +249,12 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
     )
 
 
-def _add_intent_arguments(parser: argparse.ArgumentParser) -> None:
+def _add_intent_arguments(parser: argparse.ArgumentParser, *, required: bool = True) -> None:
     parser.add_argument("--baseline", choices=_policy_choices(), default="default", help="Baseline named profile")
-    parser.add_argument("--clinical-strictness", type=int, choices=range(1, 6), required=True, help="1-5 scale")
-    parser.add_argument("--code-integrity-priority", type=int, choices=range(1, 6), required=True, help="1-5 scale")
-    parser.add_argument("--reproducibility-priority", type=int, choices=range(1, 6), required=True, help="1-5 scale")
-    parser.add_argument("--structured-limitations-requirement", type=int, choices=range(1, 6), required=True, help="1-5 scale")
+    parser.add_argument("--clinical-strictness", type=int, choices=range(1, 6), required=required, help="1-5 scale")
+    parser.add_argument("--code-integrity-priority", type=int, choices=range(1, 6), required=required, help="1-5 scale")
+    parser.add_argument("--reproducibility-priority", type=int, choices=range(1, 6), required=required, help="1-5 scale")
+    parser.add_argument("--structured-limitations-requirement", type=int, choices=range(1, 6), required=required, help="1-5 scale")
 
 
 def _normalize_argv(argv: list[str]) -> list[str]:
@@ -662,6 +667,18 @@ def _intent_answers_from_args(args: argparse.Namespace) -> dict[str, int]:
     }
 
 
+def _has_intent_answers(args: argparse.Namespace) -> bool:
+    return all(
+        getattr(args, name) is not None
+        for name in (
+            "clinical_strictness",
+            "code_integrity_priority",
+            "reproducibility_priority",
+            "structured_limitations_requirement",
+        )
+    )
+
+
 def _print_derived_policy_tail(derived: dict, notes: list | None = None) -> None:
     if derived["triggered_rules"]:
         print("Rules:         " + "; ".join(derived["triggered_rules"]))
@@ -689,14 +706,49 @@ def _print_policy_derive(args: argparse.Namespace) -> int:
 
 def _print_policy_simulate(args: argparse.Namespace) -> int:
     target = _validate_target(args.target)
-    derived = derive_policy_intent(_intent_answers_from_args(args), baseline_profile_name=args.baseline)
     result = audit_repository(target, policy_name=args.baseline)
-    simulation = simulate_policy_outcome(result, derived, baseline_profile_name=args.baseline)
+    using_profile_file = args.profile_file is not None
+    has_answers = _has_intent_answers(args)
+
+    if using_profile_file and has_answers:
+        raise SystemExit("Use either intent answers or --profile-file for policy simulate, not both.")
+    if not using_profile_file and not has_answers:
+        raise SystemExit("Provide either all 1-5 intent answers or --profile-file for policy simulate.")
 
     print("STEM BIO-AI policy simulation")
     print(f"Target:        {result['target']['name']}")
     print("Mode:          preview only; baseline scan scoring remains authoritative")
     print(f"Baseline:      {args.baseline} -> {result['score']['final_score']}/100 ({result['score']['formal_tier']})")
+
+    if using_profile_file:
+        profile = load_calibration_profile_file(args.profile_file)
+        if profile["profile_read_mode"] != "mirror_only":
+            raise SystemExit("External profile files for simulation must remain mirror_only.")
+        simulation = simulate_policy_outcome(
+            result,
+            None,
+            baseline_profile_name=args.baseline,
+            external_profile=profile,
+        )
+        print(
+            f"Simulation:    {simulation['effective_profile']} [local_file] -> "
+            f"{simulation['final_score']}/100 ({simulation['formal_tier']})"
+        )
+        print(f"Outcome Type:  {simulation['outcome_type']}")
+        print(f"Profile File:  {simulation['effective_profile_path']}")
+        print(f"Profile Hash:  {simulation['effective_policy_sha256']}")
+        if simulation["score_cap"] is not None:
+            print(f"Score Cap:     {simulation['score_cap']}")
+        print(f"Score Delta:   {simulation['score_delta']:+d}")
+        print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
+        if simulation["notes"]:
+            print("Notes:")
+            for note in simulation["notes"]:
+                print(f"- {note}")
+        return 0
+
+    derived = derive_policy_intent(_intent_answers_from_args(args), baseline_profile_name=args.baseline)
+    simulation = simulate_policy_outcome(result, derived, baseline_profile_name=args.baseline)
     print(
         f"Simulation:    {simulation['effective_profile']} -> "
         f"{simulation['final_score']}/100 ({simulation['formal_tier']})"

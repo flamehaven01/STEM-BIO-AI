@@ -34,6 +34,7 @@ from stem_ai.calibration_profile import (
     available_policy_names,
     calibration_profile_metadata,
     load_calibration_profile,
+    load_calibration_profile_file,
     validate_profile,
 )
 from stem_ai.cli import main as cli_main
@@ -2041,6 +2042,24 @@ def test_audit_repository_can_surface_selected_policy_metadata(tmp_path: Path) -
     assert calibration["profile_status"] == "experimental"
 
 
+def test_load_calibration_profile_file_surfaces_hash_and_path(tmp_path: Path) -> None:
+    profile_path = tmp_path / "profile.json"
+    profile = load_calibration_profile("default")
+    profile["profile_name"] = "external_profile_file"
+    profile["profile_status"] = "preview_only"
+    profile["policy_sha256"] = None
+    profile.pop("policy_path", None)
+    profile_path.write_text(json.dumps(profile, indent=2), encoding="utf-8")
+
+    loaded = load_calibration_profile_file(profile_path)
+
+    assert loaded["profile_name"] == "external_profile_file"
+    assert loaded["profile_status"] == "preview_only"
+    assert loaded["policy_path"] == str(profile_path.resolve())
+    assert isinstance(loaded["policy_sha256"], str)
+    assert len(loaded["policy_sha256"]) == 64
+
+
 def test_policy_list_cli_surfaces_available_profiles(capsys) -> None:
     code = cli_main(["policy", "list"])
     captured = capsys.readouterr()
@@ -2328,6 +2347,72 @@ def test_policy_simulate_cli_surfaces_score_delta_for_strict_profile(tmp_path: P
     assert "Mode:          preview only; baseline scan scoring remains authoritative" in captured.out
     assert "Simulation:    strict_clinical_adjacency" in captured.out
     assert "Score Delta:" in captured.out
+
+
+def test_policy_simulate_cli_accepts_local_profile_file(tmp_path: Path, capsys) -> None:
+    repo = tmp_path / "repo"
+    _write(
+        repo / "README.md",
+        "Bioinformatics repository for clinical trial biomarker analysis and medical imaging.\n"
+        "Limitations are documented.\n"
+    )
+    _write(repo / "requirements.txt", "numpy==1.26.4\n")
+    _write(repo / ".github" / "workflows" / "ci.yml", "name: test\n")
+    _write(repo / "tests" / "test_domain.py", "def test_clinical_trial_variant_pipeline(): pass\n")
+    _write(repo / "CHANGELOG.md", "# Changelog\n\n## v1.0.1\n- Fixed bug in pipeline.\n")
+
+    profile_path = tmp_path / "reproducibility_first.json"
+    profile = load_calibration_profile("default")
+    profile["profile_name"] = "reproducibility_first"
+    profile["policy_version"] = "ca-policy-1.0-repro-first"
+    profile["profile_status"] = "experimental"
+    profile["stage_4_policy"] = {"emphasis": "stronger_than_baseline"}
+    profile["policy_sha256"] = None
+    profile.pop("policy_path", None)
+    profile_path.write_text(json.dumps(profile, indent=2), encoding="utf-8")
+
+    code = cli_main([
+        "policy",
+        "simulate",
+        str(repo),
+        "--profile-file", str(profile_path),
+    ])
+    captured = capsys.readouterr()
+
+    assert code == 0
+    assert "Simulation:    reproducibility_first [local_file]" in captured.out
+    assert "Outcome Type:  external_profile_file" in captured.out
+    assert "Profile File:" in captured.out
+    assert "Profile Hash:" in captured.out
+
+
+def test_policy_simulate_cli_rejects_mixing_profile_file_and_intent_answers(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    _write(repo / "README.md", "Bioinformatics repository.\n")
+
+    profile_path = tmp_path / "profile.json"
+    profile = load_calibration_profile("default")
+    profile["profile_name"] = "external_profile_file"
+    profile["profile_status"] = "preview_only"
+    profile["policy_sha256"] = None
+    profile.pop("policy_path", None)
+    profile_path.write_text(json.dumps(profile, indent=2), encoding="utf-8")
+
+    try:
+        cli_main([
+            "policy",
+            "simulate",
+            str(repo),
+            "--profile-file", str(profile_path),
+            "--clinical-strictness", "4",
+            "--code-integrity-priority", "3",
+            "--reproducibility-priority", "2",
+            "--structured-limitations-requirement", "3",
+        ])
+    except SystemExit as exc:
+        assert "Use either intent answers or --profile-file" in str(exc)
+    else:
+        raise AssertionError("Expected policy simulate to reject mixed profile-file and intent input")
 
 
 def test_regulatory_basis_review_required_flips_when_registry_is_stale() -> None:
