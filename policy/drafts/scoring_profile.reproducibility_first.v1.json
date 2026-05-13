@@ -2,7 +2,7 @@
   "policy_schema_version": "1",
   "policy_version": "ca-policy-1.0-repro-first",
   "tool_version_introduced": "1.7.3",
-  "tool_version_last_validated": "1.7.2",
+  "tool_version_last_validated": "1.7.3",
   "profile_name": "reproducibility_first",
   "profile_status": "experimental",
   "profile_read_mode": "mirror_only",

@@ -1,6 +1,6 @@
 # Advisory Runtime Boundary
 
-Version: 1.7.2
+Version: 1.7.3
 Status: Public operational note for `stem advisory call`
 
 ---
@@ -9,11 +9,11 @@ Status: Public operational note for `stem advisory call`
 
 `stem advisory packet` and `stem advisory validate` are deterministic local contract operations.
 
-`stem advisory call` is different. It is the explicit runtime boundary where a downstream provider adapter may be invoked. In v1.7.2, this mode exists to make the boundary visible and enforce its security contract before real provider execution is attached.
+`stem advisory call` is different. It is the explicit runtime boundary where a downstream provider adapter may be invoked. In v1.7.3, this mode exists to make the boundary visible and enforce its security contract before real provider execution is attached.
 
 ---
 
-## What `stem advisory call` Does In v1.7.2
+## What `stem advisory call` Does In v1.7.3
 
 - builds the same provider-budgeted advisory input packet
 - exports provider request metadata
@@ -86,7 +86,7 @@ Artifacts are sanitized before write. This is the last boundary if upstream reda
 
 ## What This Mode Does Not Yet Do
 
-v1.7.2 does **not** ship a live provider adapter.
+v1.7.3 does **not** ship a live provider adapter.
 
 That means:
 

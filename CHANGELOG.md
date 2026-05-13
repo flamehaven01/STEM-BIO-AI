@@ -10,6 +10,21 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.3] - 2026-05-13
+
+### Changed
+- Removed two confirmed unused helpers from the active runtime surface:
+  - `stem_ai/detectors.py::collect_evidence`
+  - `stem_ai/app.py::_gradio_major`
+- Refreshed the Hugging Face / Gradio demo text in `stem_ai/app.py` so the UI no longer advertises stale `1.6.0` wording and now reflects the current deterministic layer set.
+- Rotated the active package, CLI, policy, documentation, and MICA version surfaces to `v1.7.3`.
+
+### Verified
+- Confirmed the removed helpers had no active runtime callers in the current repository.
+- Re-ran import smoke for `stem_ai.detectors` after dead-code removal.
+
+---
+
 ## [1.7.2] - 2026-05-12
 
 ### Changed

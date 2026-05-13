@@ -11,11 +11,6 @@ from .detector_surface import collect_surface_findings
 from .evidence import EvidenceFinding
 
 
-def collect_evidence(target: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    evidence_ledger, ast_summary, _stage_4 = collect_evidence_bundle(target)
-    return evidence_ledger, ast_summary
-
-
 def collect_evidence_bundle(target: Path) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any]]:
     findings: list[EvidenceFinding] = []
     counters: dict[tuple[str, str], int] = defaultdict(int)

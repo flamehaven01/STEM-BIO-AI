@@ -26,13 +26,6 @@ _DEFAULT_REPO = "https://github.com/flamehaven01/STEM-BIO-AI"
 _PLACEHOLDER_REPO = "https://github.com/<owner>/<bio-medical-ai-repo>"
 
 
-def _gradio_major() -> int:
-    try:
-        return int(str(gr.__version__).split(".", 1)[0])
-    except (AttributeError, TypeError, ValueError):
-        return 4
-
-
 def _blocks_kwargs() -> dict[str, str]:
     params = inspect.signature(gr.Blocks).parameters
     return {"css": _CSS} if "css" in params else {}
@@ -298,10 +291,10 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
-            <p style="{_CARD_TITLE}">What 1.6.0 adds</p>
+            <p style="{_CARD_TITLE}">Current Deterministic Layers</p>
             <p style="{_CARD_BODY}">
               Deterministic bio diagnostics for SMILES surface checks, optional RDKit validation, parser-guard detection,
-              silent mock fallback detection, and an evidence-only regulatory traceability assistant.
+              silent mock fallback detection, contract-surface checks, and an evidence-only regulatory traceability assistant.
             </p>
           </div>
           <div style="{_CARD_STYLE}">
@@ -327,7 +320,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
     gr.Markdown(
         "Paste a public bio/medical AI repository URL below. The demo works best on repositories "
         "with README/docs/tests/dependency files. Private repositories should be audited locally.\n\n"
-        "> STEM BIO-AI v1.6.0 adds deterministic SMILES diagnostics, silent-mock detection, and a registry-driven regulatory traceability note layer.\n\n"
+        "> STEM BIO-AI includes deterministic bio diagnostics, contract checks, and a registry-driven regulatory traceability note layer.\n\n"
         "> Note: This Space scans the current default branch of a public GitHub repository at run time. "
         "Results may differ from commit-pinned benchmark artifacts or older local audit snapshots."
     )

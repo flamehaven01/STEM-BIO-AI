@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.2-informational.svg" alt="v1.7.2"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.3-informational.svg" alt="v1.7.3"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -73,7 +73,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.7.2`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.7.3`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. The intent interview uses a governed `1–5` posture scale, while official score-affecting policy changes still require profile promotion rather than direct ad hoc tuning.
 
@@ -175,7 +175,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 
 ```
 <repo>_experiment_results.json   # machine-readable score + full evidence object
-<repo>_report.html               # interactive 5-section HTML dashboard (v1.7.2+)
+<repo>_report.html               # interactive 5-section HTML dashboard (v1.7.0+)
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
 <repo>_detailed_3p.pdf           # Level 2 stage analysis
@@ -187,7 +187,7 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 
 ## HTML Report Dashboard
 
-`--format html` generates a self-contained interactive dashboard (v1.7.2+). Single `.html` file — no network, no external dependencies.
+`--format html` generates a self-contained interactive dashboard (v1.7.0+). Single `.html` file — no network, no external dependencies.
 
 <p align="center">
   <img src="docs/assets/html_report_preview.png" alt="STEM BIO-AI interactive HTML dashboard" width="760">

@@ -1,6 +1,6 @@
 # Example Audits
 
-Version: 1.7.2
+Version: 1.7.3
 Status: Public proof-surface index
 
 ---
