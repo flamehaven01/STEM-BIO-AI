@@ -10,6 +10,21 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.5] - 2026-05-13
+
+### Added
+- Added additive evidence-ledger quality fields so findings now surface `evidence_status` and `confidence` directly in runtime artifacts and report surfaces.
+- Added `audit_freshness` metadata to scan results, including review-cycle guidance, expiry date, and change-triggered re-audit hints.
+
+### Changed
+- Surfaced audit-freshness summaries in Markdown, explain, and HTML outputs so review packets show recency expectations explicitly instead of leaving them implicit.
+- Cleaned two confirmed single-file slop findings in active runtime surfaces:
+  - removed an unused `json` import from `stem_ai/scanner.py`
+  - replaced an empty `except` branch in `stem_ai/render_html.py` with explicit `continue`
+- Rotated the active package, CLI, documentation, policy, and MICA version surfaces to `v1.7.5`.
+
+---
+
 ## [1.7.4] - 2026-05-13
 
 ### Added

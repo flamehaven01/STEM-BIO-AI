@@ -200,7 +200,7 @@ def _section4(airi: dict) -> str:
             if d in domain_counts:
                 domain_counts[d] += 1
         except (ValueError, IndexError):
-            pass
+            continue
     domain_boxes = "".join(domain_card(d, domain_counts[d]) for d in range(1, 8))
 
     c_rows = "".join(airi_row(r, "covered") for r in all_risks[:24])

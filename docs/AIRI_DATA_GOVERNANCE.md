@@ -1,6 +1,6 @@
 # AIRI Data Governance
 
-Version: 1.7.4
+Version: 1.7.5
 Status: Active governance note for the local AIRI data layer
 
 ---
@@ -109,5 +109,6 @@ and documentation reference is updated with them.
 - `known_gaps_outside_bundle`
 
 This keeps AIRI usage auditable from the artifact itself.
+
 
 
