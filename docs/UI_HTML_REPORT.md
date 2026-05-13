@@ -9,7 +9,15 @@ stem scan /path/to/repo --format html
 stem scan /path/to/repo --format all    # JSON + MD + HTML + PDF in one pass
 ```
 
-Output: `stem_output/<repo>_report.html`
+Output:
+
+- default root: `stem_output/<repo_slug>/<repo_slug>_report.html`
+- custom output directory: `<output_dir>/<repo_slug>_report.html`
+
+Example:
+
+- browser preview: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/examples/maziyarpanahi_openmed_report.html>
+- raw artifact: [`docs/examples/maziyarpanahi_openmed_report.html`](examples/maziyarpanahi_openmed_report.html)
 
 ## 5-Section Structure
 

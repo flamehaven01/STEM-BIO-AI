@@ -111,13 +111,11 @@ Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
 ## Triage Tiers
 
-| Tier | Score | Recommended Action |
-|------|------:|-------------------|
-| **T0 Rejected** | 0 – 39 | Insufficient evidence — do not rely on without independent expert validation |
-| **T1 Quarantine** | 40 – 54 | Exploratory review only — expert validation required before any use |
-| **T2 Caution** | 55 – 69 | Research reference and supervised non-clinical technical review only |
-| **T3 Supervised** | 70 – 84 | Supervised institutional review candidate |
-| **T4 Candidate** | 85 – 100 | Strong evidence posture — clinical deployment still requires independent validation |
+- **T0 Rejected (0–39):** insufficient evidence — do not rely on without independent expert validation
+- **T1 Quarantine (40–54):** exploratory review only — expert validation required before any use
+- **T2 Caution (55–69):** research reference and supervised non-clinical technical review only
+- **T3 Supervised (70–84):** supervised institutional review candidate
+- **T4 Candidate (85–100):** strong evidence posture — clinical deployment still requires independent validation
 
 Clinical-adjacent repositories without an explicit disclaimer are **hard-capped at T2** (score ≤ 69).
 Repositories with unbounded CA-DIRECT claims are **hard-capped at T0** (score ≤ 39).
@@ -204,6 +202,10 @@ Each run writes to `--out DIR` (default: `stem_output/`).
 <p align="center">
   <img src="docs/assets/html_report_preview.png" alt="STEM BIO-AI interactive HTML dashboard" width="760">
 </p>
+
+**Example interactive HTML audit**
+- Open in browser: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/examples/maziyarpanahi_openmed_report.html>
+- Raw HTML artifact: [`docs/examples/maziyarpanahi_openmed_report.html`](docs/examples/maziyarpanahi_openmed_report.html)
 
 **5 sections:** Executive Summary · Score Matrix · Code Integrity (expandable cards) · AIRI Risk Coverage (toggle) · Evidence Detail (filter chips)
 
@@ -383,14 +385,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
-Current DOI-backed archive for the latest Zenodo-published release (`v1.7.1`):
+Current concept DOI-backed archive for the `1.7.4` line:
 - <https://doi.org/10.5281/zenodo.20154479>
 
 ```bibtex
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.7.1},
+  version = {1.7.4},
   year    = {2026},
   doi     = {10.5281/zenodo.20154479},
   url     = {https://doi.org/10.5281/zenodo.20154479}
