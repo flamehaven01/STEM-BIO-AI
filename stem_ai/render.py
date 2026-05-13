@@ -167,6 +167,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         f"**Stage 4 Replication Score:** **{result.get('replication_score', 0)} / 100**",
         f"**Replication Tier:** **{result.get('replication_tier', 'R0')}**",
         "",
+        *_markdown_freshness_section(result.get("audit_freshness", {})),
         "## Reasoning Diagnostics",
         "",
         _markdown_reasoning_summary(result.get("reasoning_model", {})),
@@ -250,6 +251,7 @@ def render_explain(result: dict[str, Any]) -> str:
     out += _explain_bio_section(result)
     out += _explain_regulatory_section(result)
     out += _explain_airi_section(result.get("airi_risk_coverage", {}))
+    out += _explain_freshness_section(result.get("audit_freshness", {}))
     out += _explain_ast_section(result.get("ast_signal_summary", {}))
     out += _explain_s4_section(result.get("stage_4_rubric", {}))
     out += _explain_reasoning_section(result.get("reasoning_model", {}))
@@ -305,6 +307,23 @@ def _markdown_advisory_section(advisory: dict[str, Any] | None) -> list[str]:
         f"**Provider:** `{advisory.get('provider', 'none')}`",
         f"**Mode:** `{advisory.get('mode', 'unknown')}`",
         f"**Invalid Citations:** {len(advisory.get('invalid_citations', []))}",
+        "",
+    ]
+
+
+def _markdown_freshness_section(freshness: dict[str, Any]) -> list[str]:
+    if not freshness:
+        return []
+    triggers = ", ".join(freshness.get("change_triggers", [])[:4])
+    reasons = ", ".join(freshness.get("change_triggered_reaudit_reasons", [])) or "none"
+    return [
+        "## Audit Freshness",
+        "",
+        f"**Review After:** **{freshness.get('review_after_days', 'n/a')} days**",
+        f"**Expires On:** `{freshness.get('expires_on', 'unknown')}`",
+        f"**Change-triggered re-audit recommended now:** `{freshness.get('change_triggered_reaudit_recommended_now', False)}`",
+        f"**Current re-audit reasons:** `{reasons}`",
+        f"**Trigger examples:** `{triggers}`",
         "",
     ]
 
@@ -418,6 +437,10 @@ def _explain_finding_lines(f: dict[str, Any]) -> list[str]:
     lines = [f"  [{occ}]  {file_str}", f"         finding_id: {f['finding_id']}"]
     if f.get("pattern_id"):
         lines.append(f"         pattern : {f['pattern_id']}")
+    if f.get("evidence_status"):
+        lines.append(f"         evidence: {f['evidence_status']}")
+    if f.get("confidence"):
+        lines.append(f"         conf    : {f['confidence']}")
     if f.get("snippet"):
         lines.append(f"         snippet : \"{f['snippet']}\"")
     if f.get("explanation"):
@@ -467,6 +490,26 @@ def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
             lines.append(
                 f"    - {gap.get('id', 'unknown')} | {gap.get('title', 'unknown')}"
             )
+    lines.append("")
+    return lines
+
+
+def _explain_freshness_section(freshness: dict[str, Any]) -> list[str]:
+    if not freshness:
+        return []
+    lines = [_EXPLAIN_SEP, "Audit Freshness", ""]
+    lines.append(f"  review_after_days               {freshness.get('review_after_days', 'n/a')}")
+    lines.append(f"  expires_on                      {freshness.get('expires_on', 'unknown')}")
+    lines.append(f"  freshness_basis                 {freshness.get('freshness_basis', 'unknown')}")
+    lines.append(
+        f"  change_triggered_reaudit_now    {freshness.get('change_triggered_reaudit_recommended_now', False)}"
+    )
+    lines.append(
+        f"  change_triggered_reasons        {', '.join(freshness.get('change_triggered_reaudit_reasons', [])) or 'none'}"
+    )
+    lines.append(
+        f"  trigger_examples                {', '.join(freshness.get('change_triggers', [])[:4])}"
+    )
     lines.append("")
     return lines
 

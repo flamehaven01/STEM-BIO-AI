@@ -5,7 +5,7 @@ import json
 import re
 import subprocess
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -135,11 +135,12 @@ def audit_repository(
         has_disclaimer,
     )
     evidence_ledger, ast_signal_summary, stage_4 = collect_evidence_bundle(target)
+    evidence_ledger = [_normalize_evidence_finding(f) for f in evidence_ledger]
 
     cc_findings: list[EvidenceFinding] = []
     cc_counters: dict[tuple[str, str], int] = defaultdict(int)
     cc_summary = collect_contract_findings(target, readme, cc_findings, cc_counters)
-    evidence_ledger.extend(f.to_dict() for f in cc_findings)
+    evidence_ledger.extend(_normalize_evidence_finding(f.to_dict()) for f in cc_findings)
 
     stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text, changelog_text)
     code_integrity = _code_integrity_from_findings(evidence_ledger)
@@ -227,6 +228,7 @@ def audit_repository(
         },
         "calibration_profile": calibration_profile_metadata(calibration_profile),
     }
+    result["audit_freshness"] = _build_audit_freshness(result, audit_date)
     result["regulatory_basis"] = build_regulatory_basis(audit_date)
     result["stage_traceability"] = build_stage_traceability(result)
     result["regulatory_traceability"] = build_regulatory_traceability(result)
@@ -247,6 +249,77 @@ def audit_repository(
     if advisory_response_path is not None:
         result["ai_advisory"] = validate_advisory_response_file(result, advisory_response_path)
     return result
+
+
+def _normalize_evidence_finding(finding: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(finding)
+    normalized.setdefault("evidence_status", _default_evidence_status(normalized.get("status", "")))
+    normalized.setdefault(
+        "confidence",
+        _default_finding_confidence(normalized.get("status", ""), normalized.get("match_type", "")),
+    )
+    return normalized
+
+
+def _default_evidence_status(status: str) -> str:
+    mapping = {
+        "detected": "confirmed_present",
+        "absent": "confirmed_missing",
+        "not_detected": "not_found_in_reviewed_sources",
+        "not_applicable": "not_applicable",
+        "manual_review_required": "manual_review_required",
+        "error": "collection_error",
+    }
+    return mapping.get(str(status), "observed")
+
+
+def _default_finding_confidence(status: str, match_type: str) -> str:
+    status = str(status)
+    match_type = str(match_type)
+    if status in {"error", "manual_review_required"}:
+        return "low"
+    if status == "not_detected":
+        return "medium"
+    if match_type in {"ast", "regex", "file_presence", "dependency"}:
+        return "high"
+    if match_type in {"aggregate", "metadata", "limit"}:
+        return "medium"
+    return "medium"
+
+
+def _build_audit_freshness(result: dict[str, Any], audit_date: date) -> dict[str, Any]:
+    classification = result.get("classification", {})
+    file_hashes = result.get("file_hashes_sha256", {})
+    commit = result.get("target", {}).get("commit")
+    ca_severity = classification.get("ca_severity", "none")
+    review_after_days = 45 if ca_severity != "none" else 90
+    freshness_basis = "clinical_adjacent_short_cycle" if ca_severity != "none" else "standard_cycle"
+    expires_on = audit_date + timedelta(days=review_after_days)
+    change_triggers = [
+        "git_commit_changed",
+        "readme_or_docs_claim_surface_changed",
+        "dependency_manifest_changed",
+        "dataset_or_model_reference_changed",
+        "ci_or_reproducibility_surface_changed",
+        "changelog_or_release_hygiene_surface_changed",
+    ]
+    reasons: list[str] = []
+    if not commit:
+        reasons.append("git_commit_unavailable")
+    if not file_hashes:
+        reasons.append("key_file_hashes_unavailable")
+    return {
+        "review_after_days": review_after_days,
+        "freshness_basis": freshness_basis,
+        "expires_on": expires_on.isoformat(),
+        "expired": audit_date > expires_on,
+        "anchored_commit": commit,
+        "hashes_available_for": sorted(file_hashes.keys()),
+        "change_triggered_reaudit_supported": bool(commit) or bool(file_hashes),
+        "change_triggered_reaudit_recommended_now": bool(reasons),
+        "change_triggered_reaudit_reasons": reasons,
+        "change_triggers": change_triggers,
+    }
 
 
 def _score_stage_1(readme: str, docs_text: str, package_text: str, ca_severity: str, has_disclaimer: bool) -> tuple[int, dict[str, Any]]:

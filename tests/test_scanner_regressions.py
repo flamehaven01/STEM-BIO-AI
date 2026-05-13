@@ -72,6 +72,42 @@ def test_loose_dependency_ranges_warn(tmp_path: Path) -> None:
     assert result["code_integrity"]["C2_dependency_pinning"]["status"] == "WARN"
 
 
+def test_evidence_findings_surface_confidence_and_evidence_status(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
+    _write(tmp_path / "requirements.txt", "numpy>=1.26\n")
+
+    result = audit_repository(tmp_path)
+    finding = next(f for f in result["evidence_ledger"] if f["detector"] == "C2_dependency_pinning")
+
+    assert finding["evidence_status"] == "confirmed_present"
+    assert finding["confidence"] == "high"
+
+
+def test_audit_freshness_surfaces_expiry_and_reaudit_triggers(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Automated diagnostic decision support research package.\n")
+
+    result = audit_repository(tmp_path)
+    freshness = result["audit_freshness"]
+
+    assert freshness["review_after_days"] == 45
+    assert freshness["freshness_basis"] == "clinical_adjacent_short_cycle"
+    assert "git_commit_changed" in freshness["change_triggers"]
+    assert "readme_or_docs_claim_surface_changed" in freshness["change_triggers"]
+    assert "expires_on" in freshness
+
+
+def test_markdown_and_explain_surface_audit_freshness(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, "brief", 1)
+    explain = render_explain(result)
+
+    assert "## Audit Freshness" in markdown
+    assert "Audit Freshness" in explain
+    assert "review_after_days" in explain
+
+
 def test_exact_dependency_pins_pass(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
     _write(tmp_path / "requirements.txt", "gradio==4.44.1\nreportlab==4.2.5\n")

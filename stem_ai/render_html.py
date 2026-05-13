@@ -85,6 +85,7 @@ def _section1(result: dict, final: int, tc: str,
         if notable else ""
     )
     calibration = result.get("calibration_profile", {})
+    freshness = result.get("audit_freshness", {})
     policy_name = xt(str(calibration.get("profile_name", "unknown")))
     policy_status = xt(str(calibration.get("profile_status", "unknown")))
     policy_mode = xt(str(calibration.get("profile_read_mode", "unknown")))
@@ -98,12 +99,26 @@ def _section1(result: dict, final: int, tc: str,
         if calibration_note
         else ""
     )
+    freshness_block = (
+        f'<div class="panel" style="margin-top:14px;padding:14px 16px">'
+        f'<div style="font-size:12px;font-weight:700;color:{_C["navy"]};margin-bottom:6px">'
+        f'Audit Freshness</div>'
+        f'<div style="font-size:12px;line-height:1.55;color:{_C["dgray"]}">'
+        f'Review after: {xt(str(freshness.get("review_after_days", "n/a")))} days | '
+        f'Expires on: {xt(str(freshness.get("expires_on", "unknown")))}<br>'
+        f'Change-triggered re-audit now: '
+        f'{xt(str(freshness.get("change_triggered_reaudit_recommended_now", False)))}'
+        f'</div></div>'
+        if freshness
+        else ""
+    )
     return (
         f'<section id="s1">'
         f'<h2 class="s-title">Executive Summary</h2>'
         f'{alert}'
         f'<div class="stats-grid">{stats}</div>'
         f'{policy_block}'
+        f'{freshness_block}'
         f'{notable_block}'
         f'</section>'
     )

@@ -76,6 +76,21 @@ All fields below are present in every `audit_repository()` result.
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
 
+### Audit Freshness (Additive)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `audit_freshness.review_after_days` | integer | Suggested review window before the audit should be treated as stale |
+| `audit_freshness.freshness_basis` | string | Rule used to choose the review window, e.g. `clinical_adjacent_short_cycle` |
+| `audit_freshness.expires_on` | string | ISO 8601 date after which the audit should be reviewed again |
+| `audit_freshness.expired` | boolean | Whether the audit is past its review window on generation date |
+| `audit_freshness.anchored_commit` | string\|null | Commit SHA used as the current audit anchor |
+| `audit_freshness.hashes_available_for` | array | Key files with surfaced SHA-256 hashes |
+| `audit_freshness.change_triggered_reaudit_supported` | boolean | Whether commit/hash anchors exist for change-triggered re-audit checks |
+| `audit_freshness.change_triggered_reaudit_recommended_now` | boolean | True when missing anchors make immediate re-audit caution appropriate |
+| `audit_freshness.change_triggered_reaudit_reasons` | array | Machine-readable reasons such as `git_commit_unavailable` |
+| `audit_freshness.change_triggers` | array | Canonical trigger classes that should force a re-audit on change |
+
 ### Calibration Profile (Implemented Mirror-Only Surface)
 
 | Field | Type | Description |
@@ -252,6 +267,8 @@ Each item in `evidence_ledger` has the following fields:
 | `detector` | string | Detector name (e.g., `"S1_readme_bio_terms"`) |
 | `pattern_id` | string | Pattern version identifier |
 | `status` | string | `"detected"` / `"not_detected"` / `"absent"` / `"not_applicable"` / `"manual_review_required"` / `"error"` |
+| `evidence_status` | string | Additive evidence-state label such as `confirmed_present`, `confirmed_missing`, or `not_found_in_reviewed_sources` |
+| `confidence` | string | Additive confidence label: `high`, `medium`, or `low` |
 | `severity` | string | `"info"` / `"warn"` |
 | `file` | string | Relative path from repo root, or `"."` for repo-level |
 | `line` | integer | Line number (0 if not applicable) |
