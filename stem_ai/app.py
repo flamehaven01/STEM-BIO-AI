@@ -233,6 +233,22 @@ _CSS = """
 }
 .hero h1 { font-size: 40px; line-height: 1.05; margin: 0 0 10px; font-weight: 800; }
 .hero p  { font-size: 16px; max-width: 820px; margin: 0; opacity: 0.92; line-height: 1.6; }
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 4px 0 22px;
+}
+@media (max-width: 1200px) {
+  .overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 """
 
 _CARD_STYLE = (
@@ -274,7 +290,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
     )
     gr.HTML(
         f"""
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:4px 0 22px;">
+        <div class="overview-grid">
           <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">No API key required</p>
             <p style="{_CARD_BODY}">Clones a public GitHub repository and runs a fully

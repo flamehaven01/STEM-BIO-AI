@@ -17,6 +17,7 @@ Rubric refinements and additions use patch versions (1.0.x).
   - `stem_ai/detectors.py::collect_evidence`
   - `stem_ai/app.py::_gradio_major`
 - Refreshed the Hugging Face / Gradio demo text in `stem_ai/app.py` so the UI no longer advertises stale `1.6.0` wording and now reflects the current deterministic layer set.
+- Tightened the Hugging Face overview-card grid in `stem_ai/app.py` so desktop layouts stay at a stable 3-column arrangement instead of expanding to 4 columns on wide screens, while still collapsing responsively on smaller widths.
 - Standardized CLI artifact output under `stem_output/<repo_slug>` whenever the output root is `stem_output`, so repeated local scans stay grouped by target repository without changing other custom output paths.
 - Rotated the active package, CLI, policy, documentation, and MICA version surfaces to `v1.7.3`.
 
