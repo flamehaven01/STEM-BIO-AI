@@ -670,6 +670,73 @@ Recommended roles:
 
 This division keeps domain experts involved without sacrificing reproducibility.
 
+### 11.4.1 Researcher Participation Rules
+
+The participation model should stay simple:
+
+- researchers may propose posture changes
+- researchers may run `derive` and `simulate`
+- researchers may edit personal or branch-local preview profiles for comparison work
+- researchers should not directly redefine the release-grade default policy on the authoritative score path
+
+The key distinction is:
+
+- `preview_only` and `experimental` are valid spaces for domain input
+- `authoritative_release` is a governed release artifact
+
+This means a researcher can legitimately say:
+
+> "for this domain, I want stricter clinical-adjacent treatment and stronger reproducibility emphasis"
+
+but should not unilaterally convert that statement into:
+
+- new official tier boundaries
+- new default caps
+- new score-bearing detector promotion
+- new release-grade policy semantics
+
+The system should therefore optimize for:
+
+- easy posture expression
+- easy repository-specific simulation
+- hard-to-mutate official policy
+
+### 11.4.2 Operating Principles
+
+Operationally, the collaboration rule is:
+
+1. the researcher expresses domain priorities
+2. the tool translates those priorities into a visible named-profile recommendation or `preview_only` delta
+3. the policy steward decides whether that posture remains local, becomes experimental, or is promoted into a release-grade policy artifact
+
+In practice:
+
+- a researcher should be able to explore calibration without editing scanner code
+- a steward should be able to reject score-affecting drift even when the local preview is reasonable
+- artifacts should clearly distinguish personal preview from official release policy
+
+The intended output is not "personalized truth."
+
+The intended output is:
+
+- a stable official score policy
+- a transparent preview lane for domain-specific posture testing
+- an explicit governance path between the two
+
+### 11.4.3 Responsibility Matrix
+
+| Action | Researcher | Policy steward | Tool |
+|---|---|---|---|
+| express domain posture | primary | optional review | guided input surface |
+| run `stem policy derive` | primary | optional review | translates intent |
+| run `stem policy simulate` | primary | optional review | computes baseline vs preview |
+| edit `preview_only` deltas for local exploration | allowed | review optional | validates bounded deltas |
+| create or modify `experimental` named profiles | propose | approve / reject | validates profile schema and metadata |
+| promote a profile to `benchmark_candidate` | propose evidence | required approval | records status transition |
+| promote a profile to `authoritative_release` | provide domain rationale | required approval | requires parity / benchmark metadata |
+| change default release policy semantics | no unilateral authority | required owner | records artifact provenance |
+| change score-bearing detector status | no unilateral authority | required owner | enforces transition metadata |
+
 ### 11.5 Promotion Path
 
 Recommended progression:
@@ -685,6 +752,47 @@ That promotion should update:
 - `profile_status`
 - `policy_sha256`
 - changelog / rationale references when score logic changes
+
+### 11.5.1 Promotion Gates
+
+The progression above should not be symbolic only.
+
+Each transition should have an explicit gate:
+
+| From | To | Minimum gate |
+|---|---|---|
+| `preview_only` | `experimental` | profile file exists, schema-valid, bounded diff documented, repository-side simulation reviewed |
+| `experimental` | `benchmark_candidate` | compared against default on named fixtures or benchmark repos, intended score deltas explained, no hidden arithmetic |
+| `benchmark_candidate` | `authoritative_release` | parity or benchmark note completed, rationale updated, changelog entry prepared, steward approval recorded |
+| `authoritative_release` | `deprecated` | replacement or retirement note recorded, artifact comparability preserved |
+
+The intent is to prevent one common failure mode:
+
+> a locally useful domain tweak quietly becoming the new official score policy without an explicit release decision
+
+### 11.5.2 What Researchers Can Change Directly
+
+Researchers should be allowed to directly change:
+
+- intent-scale answers
+- selected baseline profile for simulation
+- branch-local `preview_only` deltas inside documented bounds
+- explanatory notes attached to why a preview better matches the domain
+
+Researchers should not directly change, on the authoritative path:
+
+- default release profile semantics
+- tier boundaries for the official score
+- detector graduation state
+- score-bearing penalty activation rules
+- release-grade policy status labels
+
+If a domain team wants one of those changes, the correct path is:
+
+1. simulate locally
+2. capture the proposed diff
+3. compare against default on real repositories
+4. propose promotion through the governed profile path
 
 ### 11.6 Interface Direction
 

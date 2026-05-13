@@ -55,6 +55,32 @@ Changes to the core rubric in `spec/STEM-AI_v1.1.2_CORE.md` follow strict rules:
 - Must include impact analysis on existing audit results
 - Must be approved by a maintainer
 
+### 6. Calibration Profile Proposals
+
+Calibration contributions are welcome, but they follow a stricter path than normal docs or discrimination-example edits.
+
+Allowed contribution shapes:
+
+- propose new `derive` / `simulate` posture examples
+- propose bounded `preview_only` deltas
+- propose an `experimental` named profile with documented diffs
+- provide benchmark or repository-side comparison evidence for profile promotion
+
+Not allowed as direct contribution outcomes:
+
+- silently changing the authoritative default scoring policy
+- introducing ad hoc CLI numeric tuning knobs
+- promoting score-affecting detector logic without documented policy/rationale review
+
+If you want to change calibration behavior:
+
+1. describe the domain posture you want
+2. show the `default` vs preview/profile comparison on a real repository
+3. document the proposed policy diff
+4. explain whether the change should stay `preview_only`, become `experimental`, or be considered for future authoritative promotion
+
+Authoritative score policy changes still require governed profile promotion, rationale updates, and maintainer review. See [`docs/CALIBRATION_PROFILE_DESIGN.md`](docs/CALIBRATION_PROFILE_DESIGN.md).
+
 ## Pull Request Process
 
 1. Fork the repository
