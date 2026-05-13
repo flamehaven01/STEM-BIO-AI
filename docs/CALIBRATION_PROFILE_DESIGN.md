@@ -437,11 +437,11 @@ Before users touch any named policy, STEM BIO-AI should reduce the interpretatio
 - what the researcher actually cares about
 - what the default profile currently emphasizes
 
-The implemented mechanism is a **researcher intent layer** built around short `0–5` scales.
+The implemented mechanism is a **researcher intent layer** built around short `1–5` scales.
 
 Important boundary:
 
-> the `0–5` scale is a UX input surface, not part of the formal score engine.
+> the `1–5` scale is a UX input surface, not part of the formal score engine.
 
 In other words:
 
@@ -453,8 +453,7 @@ Instead, the scale helps the system infer which existing policy posture is close
 
 Recommended scale interpretation:
 
-- `0` = do not emphasize this factor
-- `1` = very light emphasis
+- `1` = minimal emphasis
 - `2` = light emphasis
 - `3` = moderate emphasis
 - `4` = strong emphasis
@@ -531,11 +530,11 @@ Example:
 
 This should fall back to `preview_only` in the initial implementation rather than pretending one named posture has clear priority.
 
-Zero-value meaning:
+Lower-bound meaning:
 
-- `0` means minimal emphasis
-- `0` does **not** remove or disable an axis
-- therefore `0` participates in threshold checks such as `<= 2`
+- `1` means minimal emphasis
+- `1` does **not** remove or disable an axis
+- therefore the minimum scale value still participates in threshold checks such as `<= 2`
 
 Current "default already matches" rule:
 
@@ -623,6 +622,41 @@ Current starter diff:
 | `strict_clinical_adjacency` | `0.40 / 0.20 / 0.40` | tighter `ca_no_disclaimer_cap=60`, tighter `t0_hard_floor_cap=35` | same as `default` | `baseline` |
 
 Any additional named profile must document its concrete diff here before it becomes eligible for CLI recommendation.
+
+### 11.2.6 Next UX Step: `simulate --profile-file`
+
+The next reasonable researcher-facing extension is a simulation-only profile file input.
+
+Recommended shape:
+
+```bash
+stem policy simulate <repo> --profile-file my_profile.json
+```
+
+This should be allowed because it improves domain experimentation without weakening the authoritative scan contract.
+
+Intended behavior:
+
+- load a local profile file through the same schema and runtime validation path
+- treat the file as simulation-only input
+- do not register the file as an installed named profile automatically
+- do not let `scan --policy` or `gate --policy` consume it on the authoritative path
+
+Required guardrails:
+
+- schema-valid before simulation starts
+- `profile_read_mode` must remain `mirror_only` or `preview_only` for external profile-file simulation
+- artifact output must clearly mark the file as local simulation input, not a packaged release profile
+- profile hash should still be surfaced so simulation outputs remain comparable
+
+Recommended artifact labels for this future path:
+
+- `profile_name = external_profile_file`
+- `profile_status = preview_only`
+- `profile_source = local_file`
+- `policy_sha256 = <computed canonical hash>`
+
+The goal is to let researchers try domain-specific posture proposals without creating a backdoor around governed named-profile promotion.
 
 ### 11.3 Side-by-Side Simulation
 
@@ -807,6 +841,7 @@ Recommended later UX additions:
 - wizard-style policy derivation
 - side-by-side simulation view
 - profile diff explanation panel
+- `simulate --profile-file <path>` for governed local experimentation without named-profile promotion
 
 The guiding rule is:
 
@@ -857,7 +892,7 @@ Phase 1 parity target fields:
 
 ### 1.6.7: derive/simulate preview
 
-- added `stem policy derive` for auditable 0–5 intent translation
+- added `stem policy derive` for auditable intent translation, now standardized on the governed `1–5` posture scale
 - added `stem policy simulate <repo>` for baseline-vs-preview outcome comparison
 - kept derive/simulate outputs mirror-only so authoritative scoring remains unchanged
 
@@ -897,6 +932,56 @@ This architecture does **not** aim to:
 - replace benchmark or manual review with profile editing
 
 It only aims to make calibration easier to maintain **without weakening lane boundaries**.
+
+---
+
+## 15. Draft: `reproducibility_first`
+
+`reproducibility_first` is still deferred as an active named recommendation, but a draft posture is reasonable now.
+
+Draft intent:
+
+- researchers want reproducibility evidence to matter more in review posture
+- they do not necessarily want stricter clinical caps
+- they are usually asking for stronger replication scrutiny, not a different claim-risk philosophy
+
+Draft profile shape:
+
+| Profile | Stage weights | Clinical posture | B2 posture | Stage 4 posture |
+|---|---|---|---|---|
+| `reproducibility_first` (draft) | `0.40 / 0.20 / 0.40` | same as `default` | same as `default` | `stronger_than_baseline` |
+
+Recommended initial metadata:
+
+- `profile_status = experimental`
+- `profile_read_mode = mirror_only`
+- `policy_version = ca-policy-1.0-repro-first`
+
+Important limitation:
+
+In the current engine, Stage 4 remains a separate replication lane and does not alter `score.final_score`.
+
+That means `reproducibility_first` is currently useful for:
+
+- simulation posture comparison
+- replication-lane emphasis
+- future promotion groundwork
+
+but not yet for:
+
+- score-authoritative final-score change on the formal scan path
+
+So the draft should remain deferred until one of the following is true:
+
+1. there is a release-grade rationale for how stronger replication posture should affect official review outcomes
+2. the simulation/report surface exposes a meaningful replication-posture difference without pretending it changed the formal score
+3. a future Phase 2 read-through explicitly defines what parts of Stage 4 posture become authoritative and under what governance rule
+
+Until then, high reproducibility intent should continue to:
+
+- fall back to `preview_only`
+- raise Stage 4 emphasis in simulation
+- avoid pretending that an official release-grade named profile already exists
 
 ---
 

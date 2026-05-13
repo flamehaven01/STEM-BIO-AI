@@ -74,7 +74,7 @@ Clone the target repository first; the CLI operates on local paths only.
 
 Calibration profiles are implemented in `mirror_only` mode in `1.7.2`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
-Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. Official score-affecting policy changes still require governed profile promotion rather than direct ad hoc tuning.
+Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. The intent interview uses a governed `1–5` posture scale, while official score-affecting policy changes still require profile promotion rather than direct ad hoc tuning.
 
 Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 

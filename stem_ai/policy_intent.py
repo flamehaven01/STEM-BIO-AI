@@ -20,8 +20,8 @@ def validate_intent_answers(answers: dict[str, int]) -> None:
         raise ValueError(f"Missing intent answers: {', '.join(missing)}")
     for key in INTENT_KEYS:
         value = answers[key]
-        if not isinstance(value, int) or value < 0 or value > 5:
-            raise ValueError(f"{key} must be an integer in 0..5")
+        if not isinstance(value, int) or value < 1 or value > 5:
+            raise ValueError(f"{key} must be an integer in 1..5")
 
 
 def derive_policy_intent(

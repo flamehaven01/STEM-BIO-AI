@@ -154,7 +154,7 @@ def _build_parser() -> argparse.ArgumentParser:
     policy_derive = policy_subparsers.add_parser(
         "derive",
         help="Translate researcher intent into a named profile or preview-only delta",
-        description="Apply the documented top-down rule table to a 0-5 researcher intent surface.",
+        description="Apply the documented top-down rule table to a 1-5 researcher intent surface.",
     )
     _add_intent_arguments(policy_derive)
 
@@ -246,10 +246,10 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
 
 def _add_intent_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--baseline", choices=_policy_choices(), default="default", help="Baseline named profile")
-    parser.add_argument("--clinical-strictness", type=int, choices=range(0, 6), required=True, help="0-5 scale")
-    parser.add_argument("--code-integrity-priority", type=int, choices=range(0, 6), required=True, help="0-5 scale")
-    parser.add_argument("--reproducibility-priority", type=int, choices=range(0, 6), required=True, help="0-5 scale")
-    parser.add_argument("--structured-limitations-requirement", type=int, choices=range(0, 6), required=True, help="0-5 scale")
+    parser.add_argument("--clinical-strictness", type=int, choices=range(1, 6), required=True, help="1-5 scale")
+    parser.add_argument("--code-integrity-priority", type=int, choices=range(1, 6), required=True, help="1-5 scale")
+    parser.add_argument("--reproducibility-priority", type=int, choices=range(1, 6), required=True, help="1-5 scale")
+    parser.add_argument("--structured-limitations-requirement", type=int, choices=range(1, 6), required=True, help="1-5 scale")
 
 
 def _normalize_argv(argv: list[str]) -> list[str]:
