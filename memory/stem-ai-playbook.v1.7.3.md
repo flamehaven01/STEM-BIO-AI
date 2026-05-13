@@ -234,6 +234,12 @@ auto-update when the file is copied from a prior version.
    - current surface path + current value
    - resolution action taken
 
+### Current Operational Caution
+
+- `stem_ai.app` eagerly imports Gradio and builds the demo surface at module import time.
+- In constrained environments this can dominate narrow test runs, especially when trying to validate policy/calibration behavior only.
+- Treat this as a test-structure concern. Do not infer calibration instability from UI-import latency alone.
+
 
 
 

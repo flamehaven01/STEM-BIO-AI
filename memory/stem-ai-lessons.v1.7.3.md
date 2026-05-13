@@ -313,6 +313,14 @@ Evidence visibility and score credit are separate design choices.
 **Resolution:** Strengthened mirror-only wording across CLI, Markdown, explain, API-contract, and calibration-architecture surfaces; preview simulation now revalidates bounded deltas after application and uses profile-aware C1 penalty math.
 **Lesson:** If a policy surface is preview-only, the UI must say so repeatedly and concretely. Boundary honesty is part of the architecture, not just release notes.
 
+---
+
+### L-026: Narrow Policy Tests Can Be Dominated by Demo Import Cost
+**Patch context:** v1.7.3 post-release maintenance
+**Failure mode:** Narrow `policy`/`calibration` test runs appeared unstable because the environment spent disproportionate time importing Gradio and constructing the demo surface through `stem_ai.app`, even though the policy logic itself remained small and deterministic.
+**Resolution:** Record this as an environment/testing boundary rather than a calibration defect. Keep small calibration changes smoke-verified when necessary, prefer future lazy demo construction, and avoid treating UI import latency as evidence of score-path instability.
+**Lesson:** When deterministic logic appears slow, isolate infrastructure-heavy imports before attributing the problem to the scoring or calibration layer.
+
 
 
 

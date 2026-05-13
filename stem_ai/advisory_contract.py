@@ -35,17 +35,22 @@ def known_finding_ids(result: dict[str, Any]) -> set[str]:
     return {str(finding.get("finding_id")) for finding in result.get("evidence_ledger", [])}
 
 
-def cited_finding_ids(advisory: dict[str, Any]) -> set[str]:
-    cited: set[str] = set()
+def _iter_section_items(advisory: dict[str, Any]):
+    """Yield (section, index, item) for each dict item across the two advisory sections."""
     for section in ("reviewer_notes", "inspection_priorities"):
         items = advisory.get(section, [])
         if not isinstance(items, list):
             continue
-        for item in items:
-            if not isinstance(item, dict):
-                continue
-            for cite in item.get("cites", []) or []:
-                cited.add(str(cite))
+        for index, item in enumerate(items):
+            if isinstance(item, dict):
+                yield section, index, item
+
+
+def cited_finding_ids(advisory: dict[str, Any]) -> set[str]:
+    cited: set[str] = set()
+    for _section, _index, item in _iter_section_items(advisory):
+        for cite in item.get("cites", []) or []:
+            cited.add(str(cite))
     return cited
 
 
@@ -289,16 +294,10 @@ def _missing_citation_items(advisory: dict[str, Any]) -> list[str]:
 
 def _prohibited_claims(advisory: dict[str, Any]) -> list[str]:
     claims: list[str] = []
-    for section in ("reviewer_notes", "inspection_priorities"):
-        items = advisory.get(section, [])
-        if not isinstance(items, list):
-            continue
-        for item in items:
-            if not isinstance(item, dict):
-                continue
-            text = " ".join(str(item.get(key, "")) for key in ("claim", "reason", "recommended_action"))
-            if _PROHIBITED_CLAIMS.search(text):
-                claims.append(text)
+    for _section, _index, item in _iter_section_items(advisory):
+        text = " ".join(str(item.get(key, "")) for key in ("claim", "reason", "recommended_action"))
+        if _PROHIBITED_CLAIMS.search(text):
+            claims.append(text)
     return claims
 
 
