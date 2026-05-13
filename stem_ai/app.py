@@ -310,6 +310,13 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">AIRI — AI Risk Index</p>
+            <p style="{_CARD_BODY}">
+              Maps triggered detectors to the curated MIT AI Risk Repository runtime bundle so
+              covered risks, known gaps, and detector-scope coverage stay visible in every scan.
+            </p>
+          </div>
+          <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">Local CLI</p>
             <p style="{_CARD_BODY}">Run locally for downloadable artifacts:</p>
             <code style="{_CODE_PILL}">stem &lt;folder&gt; --level 3 --format all --explain</code>

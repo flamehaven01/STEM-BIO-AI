@@ -173,6 +173,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "",
         *_markdown_advisory_section(result.get("ai_advisory")),
         *_markdown_regulatory_section(result),
+        *_markdown_airi_section(result.get("airi_risk_coverage", {})),
         "## Code Integrity",
     ]
     for key, item in result["code_integrity"].items():
@@ -248,6 +249,7 @@ def render_explain(result: dict[str, Any]) -> str:
         out += _explain_detector_group(detector, findings)
     out += _explain_bio_section(result)
     out += _explain_regulatory_section(result)
+    out += _explain_airi_section(result.get("airi_risk_coverage", {}))
     out += _explain_ast_section(result.get("ast_signal_summary", {}))
     out += _explain_s4_section(result.get("stage_4_rubric", {}))
     out += _explain_reasoning_section(result.get("reasoning_model", {}))
@@ -364,6 +366,40 @@ def _markdown_regulatory_section(result: dict[str, Any]) -> list[str]:
     return lines
 
 
+def _markdown_airi_section(airi: dict[str, Any]) -> list[str]:
+    if not airi:
+        return []
+    covered = airi.get("covered_count", 0)
+    total = airi.get("total_risks_in_detector_scope", 0)
+    rate = airi.get("coverage_rate", 0)
+    bundle_scope = airi.get("airi_bundle_scope", "unknown")
+    snapshot = airi.get("airi_upstream_snapshot_date", "unknown")
+    lines = [
+        "## AIRI Coverage",
+        "",
+        f"**Covered Risks:** **{covered} / {total}**",
+        f"**Coverage Rate:** `{rate:.3f}`",
+        f"**Bundle Scope:** `{bundle_scope}`",
+        f"**Upstream Snapshot:** `{snapshot}`",
+    ]
+    covered_risks = airi.get("covered_risks", [])
+    if covered_risks:
+        lines.append("")
+        lines.append("**Examples of Covered AIRI Risks**")
+        for risk in covered_risks[:3]:
+            lines.append(
+                f"- `{risk.get('id', 'unknown')}` — {risk.get('title', 'unknown')} "
+                f"(covered by: {', '.join(risk.get('covered_by', []))})"
+            )
+    gaps = airi.get("known_gaps_in_bundle", [])
+    if gaps:
+        lines.append("")
+        lines.append("**Known Gaps In Bundle**")
+        for gap in gaps[:2]:
+            lines.append(f"- `{gap.get('id', 'unknown')}` — {gap.get('title', 'unknown')}")
+    return lines
+
+
 def _explain_detector_group(detector: str, findings: list[dict[str, Any]]) -> list[str]:
     label = _explain_status_label({f["status"] for f in findings})
     noun = "finding" if len(findings) == 1 else "findings"
@@ -397,6 +433,40 @@ def _explain_ast_section(ast: dict[str, Any]) -> list[str]:
         return []
     lines = [_EXPLAIN_SEP, "AST Signal Summary", ""]
     lines += [f"  {k:<34} {v}" for k, v in ast.items() if v is not None]
+    lines.append("")
+    return lines
+
+
+def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
+    if not airi:
+        return []
+    lines = [
+        _EXPLAIN_SEP,
+        "AIRI Coverage",
+        "",
+        f"  covered_count                  {airi.get('covered_count', 0)}",
+        f"  detector_scope_total           {airi.get('total_risks_in_detector_scope', 0)}",
+        f"  coverage_rate                  {airi.get('coverage_rate', 0)}",
+        f"  bundle_scope                   {airi.get('airi_bundle_scope', 'unknown')}",
+        f"  upstream_snapshot              {airi.get('airi_upstream_snapshot_date', 'unknown')}",
+    ]
+    covered_risks = airi.get("covered_risks", [])
+    if covered_risks:
+        lines.append("")
+        lines.append("  covered examples:")
+        for risk in covered_risks[:3]:
+            lines.append(
+                f"    - {risk.get('id', 'unknown')} | {risk.get('title', 'unknown')} "
+                f"| covered_by={','.join(risk.get('covered_by', []))}"
+            )
+    gaps = airi.get("known_gaps_in_bundle", [])
+    if gaps:
+        lines.append("")
+        lines.append("  known gaps in bundle:")
+        for gap in gaps[:2]:
+            lines.append(
+                f"    - {gap.get('id', 'unknown')} | {gap.get('title', 'unknown')}"
+            )
     lines.append("")
     return lines
 
