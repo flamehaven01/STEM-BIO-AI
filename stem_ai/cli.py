@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -292,6 +293,18 @@ def _validate_optional_file(raw_path: str | None) -> Path | None:
     return path
 
 
+def _safe_output_segment(name: str) -> str:
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", name.strip()).strip("-")
+    return slug or "scan_target"
+
+
+def _resolve_output_dir(raw_out_dir: str, target: Path) -> Path:
+    output_dir = Path(raw_out_dir).expanduser().resolve()
+    if output_dir.name != "stem_output":
+        return output_dir
+    return output_dir / _safe_output_segment(target.name)
+
+
 def _resolve_summary_mode(args: argparse.Namespace) -> str:
     if getattr(args, "quiet", False):
         return "off"
@@ -549,7 +562,7 @@ def _execute_scan(
         advisory=advisory_mode,
         advisory_response_path=advisory_response,
     )
-    output_dir = Path(out_dir).expanduser().resolve()
+    output_dir = _resolve_output_dir(out_dir, target)
     created = write_outputs(result, output_dir, mode, pages, fmt, explain=explain)
     gate_passed, gate_message = _evaluate_tier_gate(result, tier_gate)
 

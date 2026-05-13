@@ -1566,6 +1566,26 @@ def test_cli_shorthand_defaults_to_scan_command_and_output_alias(tmp_path: Path,
     assert list(out_dir.glob("*_experiment_results.json"))
 
 
+def test_cli_output_under_stem_output_creates_repo_subfolder(tmp_path: Path) -> None:
+    repo = tmp_path / "Bio Repo"
+    _write(repo / "README.md", "Bio repository for molecular analysis.\n")
+    out_dir = tmp_path / "stem_output"
+
+    code = cli_main([
+        "scan",
+        str(repo),
+        "--format", "json",
+        "--summary", "off",
+        "--output", str(out_dir),
+    ])
+
+    repo_out = out_dir / "Bio-Repo"
+
+    assert code == 0
+    assert repo_out.is_dir()
+    assert list(repo_out.glob("*_experiment_results.json"))
+
+
 def test_cli_summary_surfaces_ast_cap_limit(monkeypatch, tmp_path: Path, capsys) -> None:
     monkeypatch.setattr(detectors, "MAX_AST_FILES", 1)
     repo = tmp_path / "repo"
