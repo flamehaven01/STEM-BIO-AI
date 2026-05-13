@@ -1,6 +1,6 @@
 # Advisory Secret Handling
 
-Version: 1.7.3
+Version: 1.7.4
 Status: Operational policy for provider-neutral advisory handoff
 
 ---
@@ -123,7 +123,7 @@ This keeps deterministic scoring and external provider execution on separate tru
 
 ## Runtime Guardrails
 
-`stem advisory call` is an explicit provider-call boundary. In v1.7.3 the runtime exports:
+`stem advisory call` is an explicit provider-call boundary. In v1.7.4 the runtime exports:
 
 - centralized redaction policy
 - adapter logging policy
@@ -133,4 +133,5 @@ This keeps deterministic scoring and external provider execution on separate tru
 This keeps call intent observable even when a provider adapter is not yet implemented.
 
 See also: [`docs/ADVISORY_RUNTIME.md`](ADVISORY_RUNTIME.md)
+
 

@@ -28,9 +28,9 @@ include policy/scoring_profile.schema.json
 include policy/scoring_profile.default.v1.json
 include policy/scoring_profile.strict_clinical_adjacency.v1.json
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.7.3.json
-include memory/stem-ai-playbook.v1.7.3.md
-include memory/stem-ai-lessons.v1.7.3.md
+include memory/stem-ai.mica.v1.7.4.json
+include memory/stem-ai-playbook.v1.7.4.md
+include memory/stem-ai-lessons.v1.7.4.md
 
 recursive-include stem_ai *.py
 recursive-include stem_ai *.json
@@ -45,6 +45,8 @@ prune audits
 prune build
 prune dist
 prune tmp
+prune .tmp*
+prune tmp*
 prune stem_output*
 prune stem_ai.egg-info
 

@@ -287,7 +287,7 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     if calibration.get("profile_read_mode") != "mirror_only":
         return None
     return (
-        "mirror-only in 1.7.3 — selected profile metadata is surfaced in artifacts, "
+        "mirror-only in 1.7.4 — selected profile metadata is surfaced in artifacts, "
         "but authoritative scan scoring still follows deterministic runtime constants. "
         "Preview-only posture changes, including Stage 4 replication emphasis, do not "
         "change the formal score until a future read-through phase. "

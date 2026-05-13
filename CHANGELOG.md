@@ -10,6 +10,24 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.4] - 2026-05-13
+
+### Added
+- Added simulation-only local profile-file support to `stem policy simulate`, allowing schema-valid researcher profile experiments without registering a new named policy or opening the authoritative score path.
+
+### Changed
+- Surfaced AIRI summary material more clearly across the demo and report outputs, including the Hugging Face overview card and markdown/explain report sections.
+- Clarified policy simulation output so replication-lane posture changes, cap effects, and mirror-only boundaries are explained directly instead of appearing as unexplained zero-delta previews.
+- Standardized default CLI artifact routing under `stem_output/<repo_slug>` whenever the output root is `stem_output`.
+- Refined the Hugging Face demo layout so the overview cards stay in a stable 3-column desktop grid instead of expanding to 4 columns on wide screens.
+- Simplified advisory packet section traversal in `stem_ai/advisory_contract.py` with a low-risk helper extraction.
+- Rotated the active package, CLI, documentation, policy, and MICA version surfaces to `v1.7.4`.
+
+### Notes
+- PyPI uploads for this release should use freshly built `1.7.4` artifacts only. Do not upload stale archives from older `dist/` contents.
+
+---
+
 ## [1.7.3] - 2026-05-13
 
 ### Changed
