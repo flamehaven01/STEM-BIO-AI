@@ -693,6 +693,37 @@ def _print_derived_policy_tail(derived: dict, notes: list | None = None) -> None
             print(f"- {note}")
 
 
+def _format_optional_cap(value: int | None) -> str:
+    return "none" if value is None else str(value)
+
+
+def _print_simulation_tail(simulation: dict) -> None:
+    print(f"Outcome Type:  {simulation['outcome_type']}")
+    print(
+        "Profile Mode:  "
+        f"{simulation['effective_profile_status']} | "
+        f"{simulation['effective_profile_read_mode']} | "
+        f"{simulation['effective_profile_source']}"
+    )
+    if simulation.get("effective_profile_path"):
+        print(f"Profile File:  {simulation['effective_profile_path']}")
+    print(f"Profile Hash:  {simulation['effective_policy_sha256']}")
+    print(
+        "Replication:   "
+        f"baseline={simulation['baseline_stage_4_emphasis']} | "
+        f"simulation={simulation['effective_stage_4_emphasis']}"
+    )
+    print(
+        "Cap Effect:    "
+        f"baseline={_format_optional_cap(simulation['baseline_score_cap'])} | "
+        f"simulation={_format_optional_cap(simulation['score_cap'])}"
+    )
+    print(f"Score Delta:   {simulation['score_delta']:+d}")
+    print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
+    if simulation["replication_posture_changed"] and not simulation["formal_score_changed"]:
+        print("Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.2")
+
+
 def _print_policy_derive(args: argparse.Namespace) -> int:
     derived = derive_policy_intent(_intent_answers_from_args(args), baseline_profile_name=args.baseline)
     print("STEM BIO-AI policy derive")
@@ -734,13 +765,7 @@ def _print_policy_simulate(args: argparse.Namespace) -> int:
             f"Simulation:    {simulation['effective_profile']} [local_file] -> "
             f"{simulation['final_score']}/100 ({simulation['formal_tier']})"
         )
-        print(f"Outcome Type:  {simulation['outcome_type']}")
-        print(f"Profile File:  {simulation['effective_profile_path']}")
-        print(f"Profile Hash:  {simulation['effective_policy_sha256']}")
-        if simulation["score_cap"] is not None:
-            print(f"Score Cap:     {simulation['score_cap']}")
-        print(f"Score Delta:   {simulation['score_delta']:+d}")
-        print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
+        _print_simulation_tail(simulation)
         if simulation["notes"]:
             print("Notes:")
             for note in simulation["notes"]:
@@ -753,11 +778,7 @@ def _print_policy_simulate(args: argparse.Namespace) -> int:
         f"Simulation:    {simulation['effective_profile']} -> "
         f"{simulation['final_score']}/100 ({simulation['formal_tier']})"
     )
-    print(f"Outcome Type:  {simulation['outcome_type']}")
-    if simulation["score_cap"] is not None:
-        print(f"Score Cap:     {simulation['score_cap']}")
-    print(f"Score Delta:   {simulation['score_delta']:+d}")
-    print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
+    _print_simulation_tail(simulation)
     _print_derived_policy_tail(derived, notes=simulation["notes"])
     return 0
 

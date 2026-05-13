@@ -54,6 +54,7 @@ from stem_ai.reasoning_model import (
 from stem_ai.regulatory_traceability import build_regulatory_basis
 from stem_ai.redaction import redact_object, redaction_policy, sanitize_artifact_text, secret_scan
 from stem_ai.render import _explain_status_label, render_explain, render_markdown, render_pdf_pages
+from stem_ai.render_html import render_html
 from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
 
 
@@ -2024,11 +2025,16 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     result = audit_repository(tmp_path)
     markdown = render_markdown(result, mode="brief", pages=1)
     explain = render_explain(result)
+    html = render_html(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
     assert "**Calibration Effect:** mirror-only in 1.7.2" in markdown
+    assert "Stage 4 replication emphasis" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
     assert "Policy Mode: mirror-only in 1.7.2" in explain
+    assert "Stage 4 replication emphasis" in explain
+    assert "Policy Surface: default (authoritative_release, mirror_only)" in html
+    assert "Stage 4 replication emphasis" in html
 
 
 def test_audit_repository_can_surface_selected_policy_metadata(tmp_path: Path) -> None:
@@ -2382,8 +2388,11 @@ def test_policy_simulate_cli_accepts_local_profile_file(tmp_path: Path, capsys) 
     assert code == 0
     assert "Simulation:    reproducibility_first [local_file]" in captured.out
     assert "Outcome Type:  external_profile_file" in captured.out
+    assert "Profile Mode:  experimental | mirror_only | local_file" in captured.out
     assert "Profile File:" in captured.out
     assert "Profile Hash:" in captured.out
+    assert "Replication:   baseline=baseline | simulation=stronger_than_baseline" in captured.out
+    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.2" in captured.out
 
 
 def test_policy_simulate_cli_rejects_mixing_profile_file_and_intent_answers(tmp_path: Path) -> None:

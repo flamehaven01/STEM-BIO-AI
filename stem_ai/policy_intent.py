@@ -101,6 +101,7 @@ def simulate_policy_outcome(
     baseline_profile = load_calibration_profile(baseline_profile_name)
     effective_profile = deepcopy(baseline_profile)
     notes: list[str]
+    baseline_stage_4_emphasis = baseline_profile.get("stage_4_policy", {}).get("emphasis", "unknown")
 
     if external_profile is not None:
         effective_profile = deepcopy(external_profile)
@@ -123,12 +124,26 @@ def simulate_policy_outcome(
             validate_profile(effective_profile)
 
     raw_score = _simulate_weighted_raw_score(result, effective_profile)
+    baseline_score_cap = _baseline_score_cap(result)
     score_cap = _simulate_score_cap(result, effective_profile)
     final_score = min(raw_score, score_cap) if score_cap is not None else raw_score
     tier = _tier_from_policy(final_score, effective_profile["tier_policy"])
+    effective_stage_4_emphasis = effective_profile.get("stage_4_policy", {}).get("emphasis", "unknown")
 
     baseline_raw = int(result["score"]["raw_score_before_floor"])
     baseline_final = int(result["score"]["final_score"])
+    replication_posture_changed = effective_stage_4_emphasis != baseline_stage_4_emphasis
+    if replication_posture_changed:
+        notes.append(
+            "Stage 4 replication posture changed: "
+            f"{baseline_stage_4_emphasis} -> {effective_stage_4_emphasis}."
+        )
+    if replication_posture_changed and final_score == baseline_final:
+        notes.append(
+            "Formal score remained unchanged because Stage 4 is still a separate "
+            "replication lane in 1.7.2."
+        )
+
     simulation = {
         "baseline_profile": baseline_profile_name,
         "effective_profile": effective_profile["profile_name"],
@@ -139,8 +154,13 @@ def simulate_policy_outcome(
         "effective_profile_source": "local_file" if external_profile is not None else "named_profile",
         "effective_profile_path": effective_profile.get("policy_path"),
         "outcome_type": outcome_type,
+        "baseline_stage_4_emphasis": baseline_stage_4_emphasis,
+        "effective_stage_4_emphasis": effective_stage_4_emphasis,
+        "replication_posture_changed": replication_posture_changed,
+        "baseline_score_cap": baseline_score_cap,
         "raw_score_before_cap": raw_score,
         "score_cap": score_cap,
+        "score_cap_changed": score_cap != baseline_score_cap,
         "final_score": final_score,
         "formal_tier": tier,
         "score_delta": final_score - baseline_final,
@@ -187,6 +207,13 @@ def _simulate_score_cap(result: dict[str, Any], profile: dict[str, Any]) -> int 
     if classification.get("ca_severity") != "none" and not classification.get("has_explicit_clinical_boundary"):
         return int(clinical_policy["ca_no_disclaimer_cap"])
     return None
+
+
+def _baseline_score_cap(result: dict[str, Any]) -> int | None:
+    classification = result["classification"]
+    if classification.get("t0_hard_floor"):
+        return 39
+    return classification.get("score_cap")
 
 
 def _tier_from_policy(score: int, tier_policy: dict[str, Any]) -> str:

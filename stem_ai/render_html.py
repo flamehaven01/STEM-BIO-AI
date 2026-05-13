@@ -16,6 +16,17 @@ from .render_html_components import (
 from .render_html_styles import build_css, JS
 
 
+def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
+    if calibration.get("profile_read_mode") != "mirror_only":
+        return None
+    return (
+        "Mirror-only policy surface: selected profile metadata is shown in this report, "
+        "but authoritative scan scoring still follows deterministic runtime constants. "
+        "Preview-only posture changes, including Stage 4 replication emphasis, do not "
+        "change the formal score until a future read-through phase."
+    )
+
+
 def _nav() -> str:
     links = [
         ("#s1", "1. Summary"), ("#s2", "2. Score Matrix"),
@@ -73,11 +84,26 @@ def _section1(result: dict, final: int, tc: str,
         f'Notable Risks</h3>{notable}</div>'
         if notable else ""
     )
+    calibration = result.get("calibration_profile", {})
+    policy_name = xt(str(calibration.get("profile_name", "unknown")))
+    policy_status = xt(str(calibration.get("profile_status", "unknown")))
+    policy_mode = xt(str(calibration.get("profile_read_mode", "unknown")))
+    calibration_note = _calibration_effect_note(calibration)
+    policy_block = (
+        f'<div class="panel" style="margin-top:20px;padding:14px 16px">'
+        f'<div style="font-size:12px;font-weight:700;color:{_C["navy"]};margin-bottom:6px">'
+        f'Policy Surface: {policy_name} ({policy_status}, {policy_mode})</div>'
+        f'<div style="font-size:12px;line-height:1.55;color:{_C["dgray"]}">'
+        f'{xt(calibration_note)}</div></div>'
+        if calibration_note
+        else ""
+    )
     return (
         f'<section id="s1">'
         f'<h2 class="s-title">Executive Summary</h2>'
         f'{alert}'
         f'<div class="stats-grid">{stats}</div>'
+        f'{policy_block}'
         f'{notable_block}'
         f'</section>'
     )

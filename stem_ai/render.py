@@ -287,7 +287,9 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     return (
         "mirror-only in 1.7.2 — selected profile metadata is surfaced in artifacts, "
         "but authoritative scan scoring still follows deterministic runtime constants. "
-        "Use `stem policy simulate` to preview governed score deltas."
+        "Preview-only posture changes, including Stage 4 replication emphasis, do not "
+        "change the formal score until a future read-through phase. "
+        "Use `stem policy simulate` to preview governed score deltas and posture changes."
     )
 
 
