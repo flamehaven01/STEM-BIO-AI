@@ -97,36 +97,6 @@ Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
 ---
 
-## The AI Risk Repository (AIRI)
-
-STEM BIO-AI uses local derived data from the MIT **AI Risk Repository (AIRI)** as a broader risk-vocabulary layer around deterministic repository findings.
-
-Upstream references:
-
-- MIT AI Risk Repository: <https://airisk.mit.edu/>
-- AI Incident Tracker: <https://airisk.mit.edu/ai-incident-tracker>
-
-How AIRI is used here:
-
-- AIRI does **not** replace the local scoring and audit system
-- AIRI does **not** prove harm, causality, clinical safety, or regulatory status
-- AIRI helps place local findings into a wider risk vocabulary for review
-
-In the current `1.7.4` line, AIRI is used through three local governed layers:
-
-1. full normalized local registry
-2. curated runtime bundle used by deterministic scans
-3. detector-to-risk mapping registry plus known-gap tracking
-
-This allows STEM BIO-AI to keep scan behavior local and deterministic while still surfacing broader AI risk language, provenance, and bundle-scope boundaries in runtime artifacts.
-
-License / provenance note:
-
-- Upstream AIRI source license: `MIT`
-- Local attribution and usage details: [`docs/AIRI_DATA_GOVERNANCE.md`](docs/AIRI_DATA_GOVERNANCE.md), [`docs/THIRD_PARTY_DATA.md`](docs/THIRD_PARTY_DATA.md)
-
----
-
 ## Triage Tiers
 
 - **T0 Rejected (0–39):** insufficient evidence — do not rely on without independent expert validation
@@ -331,6 +301,36 @@ stem advisory check-response /path/to/repo --response FILE
 Full contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
 Secret policy: [`docs/ADVISORY_SECRET_HANDLING.md`](docs/ADVISORY_SECRET_HANDLING.md)
 Runtime boundary: [`docs/ADVISORY_RUNTIME.md`](docs/ADVISORY_RUNTIME.md)
+
+---
+
+## The AI Risk Repository (AIRI)
+
+STEM BIO-AI uses local derived data from the MIT **AI Risk Repository (AIRI)** as a broader risk-vocabulary layer around deterministic repository findings.
+
+Upstream references:
+
+- MIT AI Risk Repository: <https://airisk.mit.edu/>
+- AI Incident Tracker: <https://airisk.mit.edu/ai-incident-tracker>
+
+How AIRI is used here:
+
+- AIRI does **not** replace the local scoring and audit system
+- AIRI does **not** prove harm, causality, clinical safety, or regulatory status
+- AIRI helps place local findings into a wider risk vocabulary for review
+
+In the current `1.7.4` line, AIRI is used through three local governed layers:
+
+1. full normalized local registry
+2. curated runtime bundle used by deterministic scans
+3. detector-to-risk mapping registry plus known-gap tracking
+
+This allows STEM BIO-AI to keep scan behavior local and deterministic while still surfacing broader AI risk language, provenance, and bundle-scope boundaries in runtime artifacts.
+
+License / provenance note:
+
+- Upstream AIRI source license: `MIT`
+- Local attribution and usage details: [`docs/AIRI_DATA_GOVERNANCE.md`](docs/AIRI_DATA_GOVERNANCE.md), [`docs/THIRD_PARTY_DATA.md`](docs/THIRD_PARTY_DATA.md)
 
 ---
 
