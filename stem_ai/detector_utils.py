@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import configparser
+import json
 import re
 from collections.abc import Iterable
 from pathlib import Path
@@ -142,6 +143,10 @@ def manifest_dependency_entries(path: Path, text: str) -> list[tuple[int, str, s
         return _environment_entries(text)
     if name == "setup.cfg":
         return _setup_cfg_entries(text)
+    if name == "package.json":
+        return _package_json_entries(text)
+    if name in {"package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock"}:
+        return []
     if name == "pyproject.toml" or suffix == ".toml":
         return _pyproject_entries(text)
     return [(line_number, entry, snippet) for line_number, snippet in enumerate(text.splitlines(), start=1) for entry in dependency_entries(snippet)]
@@ -278,6 +283,27 @@ def _pyproject_entries(text: str) -> list[tuple[int, str, str]]:
             for value in values:
                 rows.append((line_number, f"{key.strip()} {value.strip()}", snippet))
             continue
+    return rows
+
+
+def _package_json_entries(text: str) -> list[tuple[int, str, str]]:
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError:
+        return []
+    rows: list[tuple[int, str, str]] = []
+    lines = text.splitlines()
+    sections = ("dependencies", "devDependencies", "optionalDependencies", "peerDependencies")
+    for section in sections:
+        deps = payload.get(section)
+        if not isinstance(deps, dict):
+            continue
+        for name, version in deps.items():
+            if not isinstance(name, str) or not isinstance(version, str):
+                continue
+            line_number = _find_line_number({idx + 1: line for idx, line in enumerate(lines)}, f'"{name}"')
+            snippet = lines[line_number - 1] if 0 < line_number <= len(lines) else f'"{name}": "{version}"'
+            rows.append((line_number, f"{name} {version}", snippet))
     return rows
 
 

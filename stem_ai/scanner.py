@@ -109,7 +109,20 @@ def audit_repository(
     readme = _read_first(target, ["README.md", "README.rst", "readme.md"])
     docs_text = _read_many(target / "docs", max_files=30)
     package_text = _read_first(target, ["pyproject.toml", "setup.py", "setup.cfg", "package.json"])
-    dep_text = _read_first(target, ["environment.yml", "requirements.txt", "pyproject.toml", "setup.cfg"])
+    dep_text = _read_first(
+        target,
+        [
+            "environment.yml",
+            "requirements.txt",
+            "pyproject.toml",
+            "setup.cfg",
+            "package-lock.json",
+            "pnpm-lock.yaml",
+            "yarn.lock",
+            "npm-shrinkwrap.json",
+            "package.json",
+        ],
+    )
     workflow_text = _read_many(target / ".github" / "workflows", max_files=20)
     test_text = _read_many(target / "tests", max_files=40)
     changelog_text = _read_first(target, ["CHANGELOG.md", "CHANGELOG", "NEWS.md"])

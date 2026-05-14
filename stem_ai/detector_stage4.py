@@ -120,7 +120,24 @@ def _environment_lock_evidence(
     counters: dict[tuple[str, str], int],
     items: dict[str, dict[str, Any]],
 ) -> None:
-    paths = existing_named_files(target, ["environment.yml", "environment.yaml", "requirements.txt", "requirements.lock", "poetry.lock", "uv.lock", "Pipfile.lock", "conda-lock.yml", "conda-lock.yaml"])
+    paths = existing_named_files(
+        target,
+        [
+            "environment.yml",
+            "environment.yaml",
+            "requirements.txt",
+            "requirements.lock",
+            "poetry.lock",
+            "uv.lock",
+            "Pipfile.lock",
+            "conda-lock.yml",
+            "conda-lock.yaml",
+            "package-lock.json",
+            "pnpm-lock.yaml",
+            "yarn.lock",
+            "npm-shrinkwrap.json",
+        ],
+    )
     detected = bool(paths)
     for path in paths:
         add_finding(target, findings, counters, "S4_environment_lock_evidence", "environment_lock_file_v1", "detected", "info", path, 0, relative_path(target, path).as_posix(), "file_presence", "Environment, dependency, or lock manifest detected.")
@@ -135,9 +152,43 @@ def _exact_pins_or_hashes(
     counters: dict[tuple[str, str], int],
     items: dict[str, dict[str, Any]],
 ) -> None:
-    paths = existing_named_files(target, ["requirements.txt", "pyproject.toml", "setup.cfg", "environment.yml", "environment.yaml", "requirements.lock", "poetry.lock", "uv.lock", "Pipfile.lock"])
+    paths = existing_named_files(
+        target,
+        [
+            "requirements.txt",
+            "pyproject.toml",
+            "setup.cfg",
+            "environment.yml",
+            "environment.yaml",
+            "requirements.lock",
+            "poetry.lock",
+            "uv.lock",
+            "Pipfile.lock",
+            "package-lock.json",
+            "pnpm-lock.yaml",
+            "yarn.lock",
+            "npm-shrinkwrap.json",
+        ],
+    )
     detected = False
     for path in paths:
+        if _is_lock_manifest(path):
+            detected = True
+            add_finding(
+                target,
+                findings,
+                counters,
+                "S4_exact_dependency_pins_or_hashes",
+                "exact_pin_or_hash_v1",
+                "detected",
+                "info",
+                path,
+                0,
+                relative_path(target, path).as_posix(),
+                "file_presence",
+                "Lock manifest with exact dependency resolution detected.",
+            )
+            continue
         lines = read_text(path).splitlines()
         for line_number, line in enumerate(lines, start=1):
             if not (EXACT_PINNED_DEP.search(line) or HASH_PIN.search(line)):
@@ -398,3 +449,7 @@ def _glob_files(target: Path, suffixes: set[str]) -> list[Path]:
         if path.is_file() and path.suffix.lower() in suffixes and not any(part in SKIP_DIRS for part in path.parts)
     ]
     return sorted(paths, key=lambda p: relative_path(target, p).as_posix())[:50]
+
+
+def _is_lock_manifest(path: Path) -> bool:
+    return path.name.lower() in {"package-lock.json", "pnpm-lock.yaml", "yarn.lock", "npm-shrinkwrap.json"}

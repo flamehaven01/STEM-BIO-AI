@@ -55,7 +55,34 @@ def collect_surface_findings(
     funding_paths = existing_named_files(target, ["FUNDING.md", "CITATION.cff", "AUTHORS.md"])
     workflow_paths = list(iter_text_files(target / ".github" / "workflows", max_files=20))
     test_paths = list(iter_text_files(target / "tests", max_files=40))
-    dep_paths = existing_named_files(target, ["environment.yml", "requirements.txt", "pyproject.toml", "setup.cfg"])
+    provenance_manifest_paths = existing_named_files(
+        target,
+        [
+            "environment.yml",
+            "requirements.txt",
+            "pyproject.toml",
+            "setup.cfg",
+            "package-lock.json",
+            "pnpm-lock.yaml",
+            "yarn.lock",
+            "npm-shrinkwrap.json",
+            "package.json",
+        ],
+    )
+    dependency_pinning_paths = existing_named_files(
+        target,
+        [
+            "environment.yml",
+            "requirements.txt",
+            "pyproject.toml",
+            "setup.cfg",
+            "package.json",
+            "package-lock.json",
+            "pnpm-lock.yaml",
+            "yarn.lock",
+            "npm-shrinkwrap.json",
+        ],
+    )
     changelog_paths = existing_named_files(target, ["CHANGELOG.md", "CHANGELOG", "NEWS.md"])
     code_paths = list(iter_code_files(target, max_files=200))
     deprecated_paths = list(iter_deprecated_files(target, max_files=120))
@@ -77,14 +104,14 @@ def collect_surface_findings(
     regex_line_detector(target, findings, counters, "S3_T2_domain_tests", "domain_tests_bio_terms_v1", BIO_TERMS, test_paths, "Domain-specific test text detected.", normalize_underscores=True)
     file_presence_detector(target, findings, counters, "S3_T3_changelog_release_hygiene", "changelog_presence_v1", changelog_paths, "Changelog or release-history file exists.")
     regex_detector(target, findings, counters, "S3_T3_changelog_bugfix_evidence", "changelog_bugfix_terms_v1", CHANGELOG_BUG_TERMS, changelog_paths, "Bug-fix, patch, or security entry detected in changelog.")
-    file_presence_detector(target, findings, counters, "S3_B1_dependency_manifest", "dependency_manifest_presence_v1", dep_paths, "Dependency or environment manifest exists.")
+    file_presence_detector(target, findings, counters, "S3_B1_dependency_manifest", "dependency_manifest_presence_v1", provenance_manifest_paths, "Dependency or environment manifest exists.")
     regex_detector(target, findings, counters, "S3_B1_data_source_language", "data_source_terms_v1", DATA_SOURCE_TERMS, [*readme_paths, *docs_paths], "Data source, dataset citation, IRB, or provenance language detected.")
     regex_detector(target, findings, counters, "S3_B2_bias_limitations", "bias_limitations_v2", BIAS_LIMITATION_TERMS, [*readme_paths, *docs_paths], "Bias, limitation, or validation-boundary language detected.")
     regex_detector(target, findings, counters, "S3_B2_measurement_evidence", "bias_measurement_terms_v1", BIAS_MEASUREMENT_TERMS, [*readme_paths, *docs_paths, *test_paths], "Quantitative bias/limitation measurement or related test evidence detected.")
     regex_detector(target, findings, counters, "S3_B3_coi_funding", "coi_funding_v1", COI_FUNDING_TERMS, [*readme_paths, *docs_paths, *funding_paths], "COI, funding, sponsor, or acknowledgement language detected.")
     regex_detector(target, findings, counters, "S2_package_bio_terms", "package_bio_terms_v1", BIO_TERMS, package_paths, "Package metadata exposes bio/medical vocabulary.")
     credential_detector(target, findings, counters, code_paths)
-    dependency_pinning_detector(target, findings, counters, dep_paths)
+    dependency_pinning_detector(target, findings, counters, dependency_pinning_paths)
     regex_detector(target, findings, counters, "C3_dead_or_deprecated_patient_adjacent_paths", "deprecated_patient_metadata_v1", PATIENT_METADATA, deprecated_paths, "Patient-adjacent metadata pattern detected in deprecated/legacy/archive path.")
     fail_open_detector(target, findings, counters, code_paths)
 

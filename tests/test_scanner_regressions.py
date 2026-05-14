@@ -948,6 +948,20 @@ def test_stage4_dataset_url_does_not_credit_generic_data_api_marketing_line(tmp_
     assert any(f["status"] == "not_detected" for f in findings)
 
 
+def test_stage4_javascript_lockfiles_count_as_lock_and_exact_resolution_evidence(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical repository.\n"
+        "Dataset: https://zenodo.org/records/12345\n",
+    )
+    _write(tmp_path / "pnpm-lock.yaml", "lockfileVersion: '9.0'\n")
+
+    result = audit_repository(tmp_path)
+
+    assert result["stage_4_rubric"]["S4_environment_lock_evidence"]["score"] == 10
+    assert result["stage_4_rubric"]["S4_exact_dependency_pins_or_hashes"]["score"] == 10
+
+
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
     _write(tmp_path / "requirements.txt", "numpy>=1.26\n")
@@ -1934,10 +1948,12 @@ def test_stage3_provenance_three_tiers() -> None:
     no_dep, _ = _score_provenance("", "", "")
     basic, _ = _score_provenance("numpy==1.26.4", "Bioinformatics repo.", "")
     with_source, _ = _score_provenance("numpy==1.26.4", "Data from Zenodo. IRB approved.", "")
+    js_lock_with_source, _ = _score_provenance("lockfileVersion: '9.0'\n", "Data from Zenodo. IRB approved.", "")
 
     assert no_dep == 0
     assert basic == 10
     assert with_source == 15
+    assert js_lock_with_source == 15
 
 
 def test_stage3_bias_three_tiers() -> None:
