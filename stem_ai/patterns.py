@@ -42,6 +42,7 @@ REPRODUCIBILITY_TERMS = re.compile(r"\b(reproducib|replicat|rerun|recreate resul
 STAGE2R_CLINICAL_DEPLOYMENT_CLAIMS = re.compile(r"\b(clinical decision support|patient-facing|diagnos(?:is|tic)|treatment recommendation|treatment guidance|triage|risk score|medical advice|clinical deployment|clinical workflow)\b", re.I)
 STAGE2R_WORKFLOW_CLAIMS = re.compile(r"\b(quickstart|run|pipeline|workflow|command line|cli|demo|example notebook|pytest|unittest|test suite|continuous integration|CI)\b", re.I)
 STAGE2R_ENTRYPOINT_TERMS = re.compile(r"(\[project\.scripts\]|console_scripts|entry_points|scripts\s*=|def\s+main\s*\()", re.I)
+LOCAL_SELF_HOST_CLAIM_TERMS = re.compile(r"\b(self-hosted|self hosted|self-host|local environment|local mode|offline work|local SQLite|no authentication required|unlimited queries|local development)\b", re.I)
 SECRET_TERMS = re.compile(r"(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9_]{20,}|api[_-]?key\s*=\s*['\"][^'\"]{16,})")
 PLACEHOLDER_SECRET_VALUES = re.compile(
     r"(super-secret|dummy|example|fake|placeholder|test[_-]?key|your[_-]?(api[_-]?)?key|"

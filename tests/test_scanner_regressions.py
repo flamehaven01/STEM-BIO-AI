@@ -962,6 +962,42 @@ def test_stage4_javascript_lockfiles_count_as_lock_and_exact_resolution_evidence
     assert result["stage_4_rubric"]["S4_exact_dependency_pins_or_hashes"]["score"] == 10
 
 
+def test_single_external_service_dependency_surfaces_required_provider_lock_in(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Bio\n"
+        "Self-hosted mode is the recommended way to run Bio.\n"
+        "Powered by Valyu's specialized biomedical data API.\n",
+    )
+    _write(
+        tmp_path / ".env.example",
+        "# VALYU API (REQUIRED)\n"
+        "VALYU_API_KEY=valyu_your_api_key_here\n"
+        "# OPENAI API (OPTIONAL)\n"
+        "OPENAI_API_KEY=sk-your_openai_api_key_here\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    by_detector = result["detector_summary"]["by_detector"]["R2R_D5_single_external_service_dependency"]
+    assert by_detector["detected"] >= 2
+    assert "Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence." in result["notable_risks"]
+
+
+def test_single_external_service_dependency_ignores_optional_provider_only_surface(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "# Repo\nOptional OpenAI fallback only.\n")
+    _write(
+        tmp_path / ".env.example",
+        "# OPENAI API (OPTIONAL)\n"
+        "OPENAI_API_KEY=sk-your_openai_api_key_here\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["detector_summary"]["by_detector"]["R2R_D5_single_external_service_dependency"]["not_detected"] == 1
+    assert "Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence." not in result["notable_risks"]
+
+
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
     _write(tmp_path / "requirements.txt", "numpy>=1.26\n")

@@ -216,6 +216,7 @@ def audit_repository(
             clinical_adjacent,
             has_disclaimer,
             code_integrity,
+            evidence_ledger,
             cc_summary,
             self_asserted_compliance=stage_1_rubric.get("R2_regulatory_framework", {}).get("score") == 5,
         ),
@@ -757,6 +758,7 @@ def _risks(
     clinical_adjacent: bool,
     has_disclaimer: bool,
     code_integrity: dict[str, Any],
+    evidence_ledger: list[dict[str, Any]],
     cc_summary: dict[str, Any] | None = None,
     self_asserted_compliance: bool = False,
 ) -> list[str]:
@@ -765,6 +767,8 @@ def _risks(
         risks.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
     if self_asserted_compliance:
         risks.append("Self-asserted compliance or privacy-governance claim requires independent verification.")
+    if _detector_detected(evidence_ledger, "R2R_D5_single_external_service_dependency"):
+        risks.append("Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence.")
     for key, item in code_integrity.items():
         if item["status"] in {"WARN", "FAIL"}:
             risks.append(f"{key}: {item['status']}")
@@ -788,6 +792,13 @@ def _detector_summary(evidence_ledger: list[dict[str, Any]]) -> dict[str, Any]:
         "by_status": by_status,
         "by_detector": by_detector,
     }
+
+
+def _detector_detected(evidence_ledger: list[dict[str, Any]], detector: str) -> bool:
+    return any(
+        str(finding.get("detector", "")) == detector and str(finding.get("status", "")) == "detected"
+        for finding in evidence_ledger
+    )
 
 
 def _hash_key_files(target: Path) -> dict[str, str]:

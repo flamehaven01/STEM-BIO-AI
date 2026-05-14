@@ -41,7 +41,25 @@ from .patterns import (
     REPRODUCIBILITY_TERMS,
     SECRET_TERMS,
     WEAK_REGULATORY_SELF_ASSERTION_TERMS,
+    LOCAL_SELF_HOST_CLAIM_TERMS,
 )
+
+_EXTERNAL_PROVIDER_ENV_MAP: dict[str, str] = {
+    "VALYU_API_KEY": "Valyu",
+    "DAYTONA_API_KEY": "Daytona",
+    "OPENAI_API_KEY": "OpenAI",
+    "ANTHROPIC_API_KEY": "Anthropic",
+    "GEMINI_API_KEY": "Gemini",
+    "OPENAI_COMPATIBLE_API_KEY": "OpenAI-compatible",
+    "SUPABASE_SERVICE_ROLE_KEY": "Supabase",
+    "SUPABASE_ANON_KEY": "Supabase",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "Supabase",
+}
+
+_REQUIRED_HINT = re.compile(r"\brequired\b", re.I)
+_OPTIONAL_HINT = re.compile(r"\boptional\b", re.I)
+_API_KEY_ASSIGNMENT = re.compile(r"^\s*([A-Z0-9_]+_API_KEY)\s*=")
+_PROVIDER_LINE_HINT = re.compile(r"\b(api key|powered by|used for|built with|platform)\b", re.I)
 
 
 def collect_surface_findings(
@@ -52,6 +70,7 @@ def collect_surface_findings(
     readme_paths = existing_named_files(target, ["README.md", "README.rst", "readme.md"])
     docs_paths = list(iter_text_files(target / "docs", max_files=30))
     package_paths = existing_named_files(target, ["pyproject.toml", "setup.py", "setup.cfg", "package.json"])
+    config_paths = existing_named_files(target, [".env.example", ".env.local.example", ".env.sample", "env.example"])
     funding_paths = existing_named_files(target, ["FUNDING.md", "CITATION.cff", "AUTHORS.md"])
     workflow_paths = list(iter_text_files(target / ".github" / "workflows", max_files=20))
     test_paths = list(iter_text_files(target / "tests", max_files=40))
@@ -110,6 +129,7 @@ def collect_surface_findings(
     regex_detector(target, findings, counters, "S3_B2_measurement_evidence", "bias_measurement_terms_v1", BIAS_MEASUREMENT_TERMS, [*readme_paths, *docs_paths, *test_paths], "Quantitative bias/limitation measurement or related test evidence detected.")
     regex_detector(target, findings, counters, "S3_B3_coi_funding", "coi_funding_v1", COI_FUNDING_TERMS, [*readme_paths, *docs_paths, *funding_paths], "COI, funding, sponsor, or acknowledgement language detected.")
     regex_detector(target, findings, counters, "S2_package_bio_terms", "package_bio_terms_v1", BIO_TERMS, package_paths, "Package metadata exposes bio/medical vocabulary.")
+    external_service_dependency_detector(target, findings, counters, [*readme_paths, *docs_paths, *package_paths], config_paths)
     credential_detector(target, findings, counters, code_paths)
     dependency_pinning_detector(target, findings, counters, dependency_pinning_paths)
     regex_detector(target, findings, counters, "C3_dead_or_deprecated_patient_adjacent_paths", "deprecated_patient_metadata_v1", PATIENT_METADATA, deprecated_paths, "Patient-adjacent metadata pattern detected in deprecated/legacy/archive path.")
@@ -307,6 +327,153 @@ def fail_open_detector(
             "ast",
             "No fail-open exception handler detected in executable Python code.",
         )
+
+
+def external_service_dependency_detector(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    surface_paths: Iterable[Path],
+    config_paths: Iterable[Path],
+) -> None:
+    required_env_rows = _required_external_service_rows(target, config_paths)
+    provider_lines = _provider_dependency_lines(target, surface_paths)
+    local_claim_lines = _local_self_host_claim_lines(target, surface_paths)
+    providers = sorted({row["provider"] for row in required_env_rows})
+    if required_env_rows and (provider_lines or local_claim_lines):
+        for row in required_env_rows:
+            add_finding(
+                target,
+                findings,
+                counters,
+                "R2R_D5_single_external_service_dependency",
+                "single_external_service_dependency_v1",
+                "detected",
+                "warn",
+                row["path"],
+                row["line"],
+                row["snippet"],
+                "config",
+                "Required external service API key detected for a named workflow dependency.",
+                {"provider": row["provider"], "env_var": row["env_var"], "required_signal": True},
+            )
+        for row in provider_lines[:3]:
+            add_finding(
+                target,
+                findings,
+                counters,
+                "R2R_D5_single_external_service_dependency",
+                "single_external_service_dependency_v1",
+                "detected",
+                "warn",
+                row["path"],
+                row["line"],
+                row["snippet"],
+                "regex",
+                "Named external service provider is presented as part of the core repository workflow.",
+                {"provider": row["provider"], "line_role": "provider_dependency_claim"},
+            )
+        for row in local_claim_lines[:3]:
+            add_finding(
+                target,
+                findings,
+                counters,
+                "R2R_D5_single_external_service_dependency",
+                "single_external_service_dependency_v1",
+                "detected",
+                "warn",
+                row["path"],
+                row["line"],
+                row["snippet"],
+                "regex",
+                "Local or self-host claims coexist with required external service dependencies.",
+                {
+                    "providers": providers,
+                    "line_role": "local_or_self_host_claim",
+                    "provider_count": len(providers),
+                },
+            )
+        return
+    add_finding(
+        target,
+        findings,
+        counters,
+        "R2R_D5_single_external_service_dependency",
+        "single_external_service_dependency_v1",
+        "not_detected",
+        "info",
+        Path("."),
+        0,
+        "",
+        "aggregate",
+        "No named required external service dependency pattern was detected.",
+    )
+
+
+def _required_external_service_rows(target: Path, config_paths: Iterable[Path]) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for path in sorted(set(config_paths), key=lambda p: relative_path(target, p).as_posix()):
+        section_required = False
+        for line_number, line in enumerate(read_text(path).splitlines(), start=1):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("#"):
+                if _OPTIONAL_HINT.search(stripped):
+                    section_required = False
+                elif _REQUIRED_HINT.search(stripped):
+                    section_required = True
+                continue
+            match = _API_KEY_ASSIGNMENT.match(stripped)
+            if not match:
+                continue
+            env_var = match.group(1)
+            provider = _EXTERNAL_PROVIDER_ENV_MAP.get(env_var)
+            if not provider or not section_required:
+                continue
+            rows.append(
+                {
+                    "path": path,
+                    "line": line_number,
+                    "snippet": line,
+                    "env_var": env_var,
+                    "provider": provider,
+                }
+            )
+    return rows
+
+
+def _provider_dependency_lines(target: Path, surface_paths: Iterable[Path]) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for path in sorted(set(surface_paths), key=lambda p: relative_path(target, p).as_posix()):
+        for line_number, line in enumerate(read_text(path).splitlines(), start=1):
+            if not _PROVIDER_LINE_HINT.search(line) and "API" not in line and "api" not in line:
+                continue
+            provider = _provider_name_from_text(line)
+            if not provider:
+                continue
+            rows.append({"path": path, "line": line_number, "snippet": line, "provider": provider})
+    return rows
+
+
+def _local_self_host_claim_lines(target: Path, surface_paths: Iterable[Path]) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for path in sorted(set(surface_paths), key=lambda p: relative_path(target, p).as_posix()):
+        for line_number, line in enumerate(read_text(path).splitlines(), start=1):
+            if not LOCAL_SELF_HOST_CLAIM_TERMS.search(line):
+                continue
+            rows.append({"path": path, "line": line_number, "snippet": line})
+    return rows
+
+
+def _provider_name_from_text(text: str) -> str | None:
+    lowered = text.lower()
+    for env_var, provider in _EXTERNAL_PROVIDER_ENV_MAP.items():
+        stem = env_var.replace("_API_KEY", "").replace("NEXT_PUBLIC_", "").replace("_SERVICE_ROLE_KEY", "").replace("_ANON_KEY", "")
+        provider_token = provider.lower()
+        if provider_token in lowered or stem.lower().replace("_", " ") in lowered or stem.lower() in lowered:
+            return provider
+    return None
 
 
 def _is_fail_open_handler(node: ast.ExceptHandler) -> bool:
