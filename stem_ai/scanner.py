@@ -767,6 +767,8 @@ def _risks(
         risks.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
     if self_asserted_compliance:
         risks.append("Self-asserted compliance or privacy-governance claim requires independent verification.")
+    if _detector_detected(evidence_ledger, "S1_R2_unsupported_legal_or_compliance_claim"):
+        risks.append("Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources.")
     if _detector_detected(evidence_ledger, "R2R_D5_single_external_service_dependency"):
         risks.append("Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence.")
     for key, item in code_integrity.items():

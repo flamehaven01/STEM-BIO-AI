@@ -43,6 +43,24 @@ STAGE2R_CLINICAL_DEPLOYMENT_CLAIMS = re.compile(r"\b(clinical decision support|p
 STAGE2R_WORKFLOW_CLAIMS = re.compile(r"\b(quickstart|run|pipeline|workflow|command line|cli|demo|example notebook|pytest|unittest|test suite|continuous integration|CI)\b", re.I)
 STAGE2R_ENTRYPOINT_TERMS = re.compile(r"(\[project\.scripts\]|console_scripts|entry_points|scripts\s*=|def\s+main\s*\()", re.I)
 LOCAL_SELF_HOST_CLAIM_TERMS = re.compile(r"\b(self-hosted|self hosted|self-host|local environment|local mode|offline work|local SQLite|no authentication required|unlimited queries|local development)\b", re.I)
+LEGAL_COMPLIANCE_CLAIM_TERMS = re.compile(
+    r"\b(HIPAA(?:[- ]compliant| compliance)?|GDPR(?:[- ]compliant| compliance)?|"
+    r"FDA[- ]ready|FDA[- ]aligned|CE[- ]ready|CE[- ]aligned|IRB[- ]approved|"
+    r"clinical[- ]grade|medical[- ]grade|enterprise[- ]grade compliance|"
+    r"regulated deployment ready)\b",
+    re.I,
+)
+LEGAL_COMPLIANCE_NEGATION_TERMS = re.compile(
+    r"\b(not|without|no|does not|isn't|is not|not guaranteed|not certified|not approved|not cleared|"
+    r"not legal advice|not medical advice|not regulatory advice|requires independent verification)\b",
+    re.I,
+)
+LEGAL_COMPLIANCE_GROUNDING_TERMS = re.compile(
+    r"\b(audit log|audit logging|access control|role-based access|rbac|phi handling|privacy policy|security architecture|incident response|"
+    r"rollback plan|retention policy|deployment boundary|human oversight|compliance documentation|"
+    r"data governance|consent|de-identification|deidentification)\b",
+    re.I,
+)
 SECRET_TERMS = re.compile(r"(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9_]{20,}|api[_-]?key\s*=\s*['\"][^'\"]{16,})")
 PLACEHOLDER_SECRET_VALUES = re.compile(
     r"(super-secret|dummy|example|fake|placeholder|test[_-]?key|your[_-]?(api[_-]?)?key|"

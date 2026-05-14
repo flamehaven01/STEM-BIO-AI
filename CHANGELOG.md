@@ -17,6 +17,8 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Corrected a false-negative path where JavaScript lockfiles were previously ignored in `B1_data_provenance_controls`, `S4_environment_lock_evidence`, and `S4_exact_dependency_pins_or_hashes`, materially changing affected repo scores without changing the formal tier definitions.
 - Added additive `R2R_D5_single_external_service_dependency` detection so repositories can now surface vendor/API lock-in risk in the report layer when self-host or local-operation claims coexist with required named external service dependencies.
 - Kept the new external-service dependency signal out of formal score math and AIRI coverage for now; it currently behaves as a report/evidence/notable-risk surface only.
+- Added additive `S1_R2_unsupported_legal_or_compliance_claim` detection so unsupported `HIPAA`, `FDA-ready`, `CE-ready`, `clinical-grade`, and similar claim language can surface in the report layer when reviewed sources lack stronger governance-grounding evidence.
+- Connected unsupported legal/compliance claims into Stage 1 regulatory traceability as `COMPLIANCE_CLAIM_GROUNDING_SIGNAL`, while keeping the signal out of formal score math and AIRI coverage for now.
 
 ---
 

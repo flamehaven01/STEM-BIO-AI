@@ -34,6 +34,9 @@ from .patterns import (
     HYPE_PERFECT_ACCURACY,
     HYPE_REGULATORY_APPROVAL,
     HYPE_UNIVERSAL_GENERALIZATION,
+    LEGAL_COMPLIANCE_CLAIM_TERMS,
+    LEGAL_COMPLIANCE_GROUNDING_TERMS,
+    LEGAL_COMPLIANCE_NEGATION_TERMS,
     LIMITATIONS_SECTION,
     PATIENT_METADATA,
     PLACEHOLDER_SECRET_VALUES,
@@ -117,6 +120,7 @@ def collect_surface_findings(
     regex_detector(target, findings, counters, "S1_R1_limitations_section", "limitations_section_v1", LIMITATIONS_SECTION, readme_paths, "Explicit limitations or validation-boundary section detected.")
     regex_detector(target, findings, counters, "S1_R2_regulatory_framework", "regulatory_framework_v1", REGULATORY_FRAMEWORK_TERMS, [*readme_paths, *docs_paths], "Regulatory, IRB, SaMD, or clinical-reporting framework language detected.")
     regex_detector(target, findings, counters, "S1_R2_weak_regulatory_self_assertion", "weak_regulatory_self_assertion_v1", WEAK_REGULATORY_SELF_ASSERTION_TERMS, [*readme_paths, *docs_paths], "Self-asserted privacy/compliance language detected without stronger regulatory-framework evidence.")
+    unsupported_legal_or_compliance_claim_detector(target, findings, counters, [*readme_paths, *docs_paths, *package_paths])
     regex_detector(target, findings, counters, "S1_R4_demographic_bias_boundary", "demographic_bias_boundary_v1", DEMOGRAPHIC_BIAS_TERMS, [*readme_paths, *docs_paths], "Demographic, subgroup, fairness, bias, or validation-cohort language detected.")
     regex_detector(target, findings, counters, "S1_R5_reproducibility_provisions", "reproducibility_provisions_v1", REPRODUCIBILITY_TERMS, [*readme_paths, *docs_paths], "Reproducibility, replication, seed, lockfile, or checksum language detected.")
     file_presence_detector(target, findings, counters, "S3_T1_workflow_files", "workflow_presence_v1", workflow_paths, "Workflow file exists.")
@@ -407,6 +411,66 @@ def external_service_dependency_detector(
         "",
         "aggregate",
         "No named required external service dependency pattern was detected.",
+    )
+
+
+def unsupported_legal_or_compliance_claim_detector(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    paths: Iterable[Path],
+) -> None:
+    grounding_present = False
+    claim_rows: list[dict[str, object]] = []
+    for path in sorted(set(paths), key=lambda p: relative_path(target, p).as_posix()):
+        lines = read_text(path).splitlines()
+        for line_number, line in enumerate(lines, start=1):
+            if LEGAL_COMPLIANCE_GROUNDING_TERMS.search(line):
+                grounding_present = True
+            claim_match = LEGAL_COMPLIANCE_CLAIM_TERMS.search(line)
+            if not claim_match:
+                continue
+            if LEGAL_COMPLIANCE_NEGATION_TERMS.search(line):
+                continue
+            claim_rows.append(
+                {
+                    "path": path,
+                    "line": line_number,
+                    "snippet": line,
+                    "claim": claim_match.group(0),
+                }
+            )
+    if claim_rows and not grounding_present:
+        for row in claim_rows[:5]:
+            add_finding(
+                target,
+                findings,
+                counters,
+                "S1_R2_unsupported_legal_or_compliance_claim",
+                "unsupported_legal_or_compliance_claim_v1",
+                "detected",
+                "warn",
+                row["path"],
+                row["line"],
+                row["snippet"],
+                "regex",
+                "Legal, privacy, or compliance claim detected without supporting governance or security-grounding evidence in reviewed sources.",
+                {"claim": row["claim"], "grounding_present": False},
+            )
+        return
+    add_finding(
+        target,
+        findings,
+        counters,
+        "S1_R2_unsupported_legal_or_compliance_claim",
+        "unsupported_legal_or_compliance_claim_v1",
+        "not_detected",
+        "info",
+        Path("."),
+        0,
+        "",
+        "aggregate",
+        "No unsupported legal or compliance claim pattern was detected.",
     )
 
 

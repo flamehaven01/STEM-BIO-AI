@@ -998,6 +998,34 @@ def test_single_external_service_dependency_ignores_optional_provider_only_surfa
     assert "Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence." not in result["notable_risks"]
 
 
+def test_unsupported_legal_claim_surfaces_without_grounding_and_enters_traceability(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "HIPAA-compliant architecture for clinical deployment.\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["detector_summary"]["by_detector"]["S1_R2_unsupported_legal_or_compliance_claim"]["detected"] == 1
+    assert "Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources." in result["notable_risks"]
+    stage1 = result["stage_traceability"]["stage_1"]
+    assert any(item["requirement_id"] == "COMPLIANCE_CLAIM_GROUNDING_SIGNAL" for item in stage1)
+
+
+def test_unsupported_legal_claim_ignored_when_grounding_language_present(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "HIPAA-compliant architecture with audit logging, access control, encryption at rest, and incident response.\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["detector_summary"]["by_detector"]["S1_R2_unsupported_legal_or_compliance_claim"]["not_detected"] == 1
+    assert "Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources." not in result["notable_risks"]
+
+
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
     _write(tmp_path / "requirements.txt", "numpy>=1.26\n")

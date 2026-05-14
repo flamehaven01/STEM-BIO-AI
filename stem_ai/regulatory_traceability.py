@@ -56,6 +56,7 @@ def build_regulatory_traceability(result: dict[str, Any]) -> dict[str, Any]:
 
 def _stage_1_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
     rubric = result.get("stage_1_rubric", {})
+    evidence = result.get("evidence_ledger", [])
     positive_refs = [key for key in (
         "R1_limitations_section",
         "R2_regulatory_framework",
@@ -63,8 +64,9 @@ def _stage_1_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
         "R4_demographic_bias_boundary",
         "R5_reproducibility_provisions",
     ) if rubric.get(key, {}).get("score", 0) > 0]
+    items: list[dict[str, Any]] = []
     if positive_refs:
-        return [_traceability_item(
+        items.append(_traceability_item(
             stage="stage_1",
             requirement_id="EU_AI_ACT_ARTICLE_13",
             mapping_confidence="weak",
@@ -72,7 +74,24 @@ def _stage_1_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
             source_ids=["eu_ai_act_2024_1689", "fda_mlmd_transparency_2024"],
             note="Boundary, intended-use, and limitation language is relevant to transparency scaffolding only.",
             not_assessed=["IFU completeness", "deployer communication workflow"],
-        )]
+        ))
+    unsupported_claim_refs = [
+        finding["finding_id"]
+        for finding in evidence
+        if finding.get("detector") == "S1_R2_unsupported_legal_or_compliance_claim" and finding.get("status") == "detected"
+    ]
+    if unsupported_claim_refs:
+        items.append(_traceability_item(
+            stage="stage_1",
+            requirement_id="COMPLIANCE_CLAIM_GROUNDING_SIGNAL",
+            mapping_confidence="weak_moderate",
+            finding_refs=unsupported_claim_refs[:5],
+            source_ids=["fda_qmsr", "eu_ai_act_2024_1689"],
+            note="Legal or compliance claims without supporting governance evidence are relevant to transparency and quality-system review, not compliance proof.",
+            not_assessed=["formal compliance review", "external certification status"],
+        ))
+    if items:
+        return items
     if not result.get("classification", {}).get("clinical_adjacent"):
         return []
     return [{
