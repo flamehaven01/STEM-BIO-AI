@@ -18,6 +18,10 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ### Changed
 - Surfaced audit-freshness summaries in Markdown, explain, and HTML outputs so review packets show recency expectations explicitly instead of leaving them implicit.
+- Narrowed Stage 1 regulatory-responsibility scoring so self-asserted `HIPAA` or privacy/compliance language no longer receives full regulatory-framework credit; these claims now surface as weaker governance signals that require independent verification.
+- Narrowed Stage 4 dataset-link scoring so generic external `data API` marketing links no longer count as dataset/data-source reproducibility evidence.
+- Added a first-class `S1_R2_weak_regulatory_self_assertion` evidence signal so weak compliance claims are visible in the evidence ledger and explain output instead of appearing only in rubric math.
+- Kept self-asserted compliance risk in the report/scoring layer only; this signal is not yet mapped into AIRI detector coverage and should not be interpreted as AIRI-supported risk coverage.
 - Cleaned two confirmed single-file slop findings in active runtime surfaces:
   - removed an unused `json` import from `stem_ai/scanner.py`
   - replaced an empty `except` branch in `stem_ai/render_html.py` with explicit `continue`

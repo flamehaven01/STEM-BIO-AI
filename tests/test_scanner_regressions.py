@@ -725,6 +725,24 @@ def test_stage1_responsibility_signals_can_reach_cap(tmp_path: Path) -> None:
     assert "S1_R5_reproducibility_provisions" in detectors_seen
 
 
+def test_stage1_hipaa_self_assertion_is_weak_signal_not_full_regulatory_credit(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical repository for molecular review.\n"
+        "HIPAA-compliant architecture when self-hosted.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    rubric = result["stage_1_rubric"]
+    detectors_seen = {finding["detector"] for finding in result["evidence_ledger"] if finding["status"] == "detected"}
+
+    assert result["score"]["stage_1_readme_intent"] == 75
+    assert rubric["R2_regulatory_framework"]["score"] == 5
+    assert "S1_R2_weak_regulatory_self_assertion" in detectors_seen
+    assert "S1_R2_regulatory_framework" not in detectors_seen
+    assert "Self-asserted compliance or privacy-governance claim requires independent verification." in result["notable_risks"]
+
+
 def test_finding_id_uses_posix_paths_and_per_file_occurrence_index() -> None:
     finding_id = make_finding_id("B2_bias_limitations", "docs\\guide.md", 12, 2)
 
@@ -914,6 +932,20 @@ def test_stage4_no_replication_surface_is_r0_and_markdown_reports_lane(tmp_path:
     assert result["replication_tier"] == "R0"
     assert "Stage 4 Replication Score" in markdown
     assert "Stage 4 Replication Evidence" in markdown
+
+
+def test_stage4_dataset_url_does_not_credit_generic_data_api_marketing_line(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical repository for literature review.\n"
+        "- Built with [Valyu](https://platform.valyu.ai) - The unified biomedical data API\n",
+    )
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "S4_dataset_url"]
+
+    assert result["stage_4_rubric"]["S4_dataset_url"]["score"] == 0
+    assert any(f["status"] == "not_detected" for f in findings)
 
 
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:

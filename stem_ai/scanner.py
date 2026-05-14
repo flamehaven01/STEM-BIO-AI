@@ -53,6 +53,7 @@ from .patterns import (
     STAGE2R_ENTRYPOINT_TERMS,
     STAGE2R_WORKFLOW_CLAIMS,
     TEXT_EXTENSIONS,
+    WEAK_REGULATORY_SELF_ASSERTION_TERMS,
 )
 from .regulatory_traceability import (
     build_regulatory_basis,
@@ -198,11 +199,17 @@ def audit_repository(
         "detector_summary": _detector_summary(evidence_ledger),
         "ast_signal_summary": ast_signal_summary,
         "notable_positive_evidence": _positive_evidence(workflow_text, test_text, docs_text, package_text),
-        "notable_risks": _risks(clinical_adjacent, has_disclaimer, code_integrity, cc_summary),
+        "notable_risks": _risks(
+            clinical_adjacent,
+            has_disclaimer,
+            code_integrity,
+            cc_summary,
+            self_asserted_compliance=stage_1_rubric.get("R2_regulatory_framework", {}).get("score") == 5,
+        ),
         "file_hashes_sha256": _hash_key_files(target),
         "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
         "measurement_basis": {
-            "stage_1": "README/package bio-domain regex; hype-claim penalties; limitation, regulatory, disclaimer, demographic-bias, and reproducibility responsibility signals",
+            "stage_1": "README/package bio-domain regex; hype-claim penalties; limitation, strong regulatory-framework signals, weaker self-asserted compliance signals, disclaimer, demographic-bias, and reproducibility responsibility signals",
             "stage_2r": "Repo-local consistency checks across README, package metadata, docs, changelog, test/CI files, and deterministic contradiction/staleness/workflow-support heuristics",
             "stage_3_T1": ".github/workflows/ directory contains files",
             "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
@@ -345,6 +352,8 @@ def _score_stage_1(readme: str, docs_text: str, package_text: str, ca_severity: 
         score += _add_stage1_item(items, "R1_limitations_section", 15, "README contains an explicit limitations or validation-boundary section.")
     if REGULATORY_FRAMEWORK_TERMS.search(responsibility_text):
         score += _add_stage1_item(items, "R2_regulatory_framework", 15, "Regulatory, IRB, SaMD, or clinical-reporting framework language detected.")
+    elif WEAK_REGULATORY_SELF_ASSERTION_TERMS.search(responsibility_text):
+        score += _add_stage1_item(items, "R2_regulatory_framework", 5, "Self-asserted privacy/compliance language detected without stronger regulatory-framework evidence.")
     elif ca_severity == "CA-DIRECT":
         score += _add_stage1_item(items, "R2_regulatory_framework", -10, "CA-DIRECT surface lacks regulatory or governance framework language.")
     elif ca_severity == "CA-INDIRECT":
@@ -736,10 +745,13 @@ def _risks(
     has_disclaimer: bool,
     code_integrity: dict[str, Any],
     cc_summary: dict[str, Any] | None = None,
+    self_asserted_compliance: bool = False,
 ) -> list[str]:
     risks: list[str] = []
     if clinical_adjacent and not has_disclaimer:
         risks.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
+    if self_asserted_compliance:
+        risks.append("Self-asserted compliance or privacy-governance claim requires independent verification.")
     for key, item in code_integrity.items():
         if item["status"] in {"WARN", "FAIL"}:
             risks.append(f"{key}: {item['status']}")

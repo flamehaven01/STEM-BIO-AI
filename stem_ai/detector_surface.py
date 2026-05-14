@@ -40,6 +40,7 @@ from .patterns import (
     REGULATORY_FRAMEWORK_TERMS,
     REPRODUCIBILITY_TERMS,
     SECRET_TERMS,
+    WEAK_REGULATORY_SELF_ASSERTION_TERMS,
 )
 
 
@@ -69,6 +70,7 @@ def collect_surface_findings(
     regex_detector(target, findings, counters, "S1_H6_perfect_accuracy_hype", "hype_perfect_accuracy_v1", HYPE_PERFECT_ACCURACY, readme_paths, "Perfect or guaranteed accuracy claim detected.")
     regex_detector(target, findings, counters, "S1_R1_limitations_section", "limitations_section_v1", LIMITATIONS_SECTION, readme_paths, "Explicit limitations or validation-boundary section detected.")
     regex_detector(target, findings, counters, "S1_R2_regulatory_framework", "regulatory_framework_v1", REGULATORY_FRAMEWORK_TERMS, [*readme_paths, *docs_paths], "Regulatory, IRB, SaMD, or clinical-reporting framework language detected.")
+    regex_detector(target, findings, counters, "S1_R2_weak_regulatory_self_assertion", "weak_regulatory_self_assertion_v1", WEAK_REGULATORY_SELF_ASSERTION_TERMS, [*readme_paths, *docs_paths], "Self-asserted privacy/compliance language detected without stronger regulatory-framework evidence.")
     regex_detector(target, findings, counters, "S1_R4_demographic_bias_boundary", "demographic_bias_boundary_v1", DEMOGRAPHIC_BIAS_TERMS, [*readme_paths, *docs_paths], "Demographic, subgroup, fairness, bias, or validation-cohort language detected.")
     regex_detector(target, findings, counters, "S1_R5_reproducibility_provisions", "reproducibility_provisions_v1", REPRODUCIBILITY_TERMS, [*readme_paths, *docs_paths], "Reproducibility, replication, seed, lockfile, or checksum language detected.")
     file_presence_detector(target, findings, counters, "S3_T1_workflow_files", "workflow_presence_v1", workflow_paths, "Workflow file exists.")

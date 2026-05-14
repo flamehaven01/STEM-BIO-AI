@@ -14,7 +14,11 @@ REPRO_HEADING = re.compile(r"(?im)^\s{0,3}#{1,6}\s+.*\b(reproduc\w*|replicat\w*|
 MAKE_TARGET = re.compile(r"(?im)^(reproduce|replicate|eval|evaluate|benchmark|test|results)\s*:")
 HASH_PIN = re.compile(r"(--hash=sha256:|sha256[:=]|md5[:=])[A-Fa-f0-9]{16,}", re.I)
 PYPROJECT_SCRIPT = re.compile(r"(?im)^\s*\[project\.scripts\]|\bentry_points\b|\bconsole_scripts\b")
-DATASET_CONTEXT = re.compile(r"\b(dataset|data set|data|SRA|GEO|Zenodo|Figshare|Kaggle|OpenML|Hugging ?Face)\b", re.I)
+DATASET_CONTEXT = re.compile(
+    r"\b(dataset|data set|data source|data availability|clinicaltrials\.gov|ClinicalTrials|"
+    r"SRA|GEO|Zenodo|Figshare|Kaggle|OpenML|PhysioNet|MIMIC|Hugging ?Face)\b",
+    re.I,
+)
 MODEL_CONTEXT = re.compile(r"\b(model|weight|checkpoint|ckpt|\.pt|\.pth|\.onnx|safetensors|hugging ?face)\b", re.I)
 LICENSE_RESTRICTION = re.compile(
     r"\b("
