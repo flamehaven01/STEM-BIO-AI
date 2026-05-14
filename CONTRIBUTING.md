@@ -32,7 +32,7 @@ If you encounter a clinical tool, library, or keyword not in the current 60+ tri
 
 ### 3. Template Improvements
 
-Templates in `templates/` can be improved for clarity, completeness, or institutional compatibility. Changes must not alter the scoring logic or output structure defined in `spec/`.
+Templates in `templates/` can be improved for clarity, completeness, or institutional compatibility. Changes must not alter the scoring logic or public output contract described in `docs/SCORING_RATIONALE.md`, `docs/API_CONTRACT.md`, and the active CLI/report surfaces.
 
 ### 4. Script Improvements
 
@@ -42,18 +42,29 @@ Scripts in `scripts/` can be improved for portability, accuracy, or coverage. Al
 - Document their purpose in header comments
 - Not modify any files outside the audit output directory
 
-### 5. Rubric Modifications (Requires Discussion)
+### 5. Rubric and Scoring Modifications (Requires Discussion)
 
-Changes to the core rubric in `spec/STEM-AI_v1.1.2_CORE.md` follow strict rules:
+The public contribution path for rubric changes is the active documentation surface, not `spec/`.
+
+`spec/` is retained as local-only private material and is ignored by Git. Do not target `spec/` in public pull requests.
+
+Score-affecting rubric or policy changes still follow strict rules:
 
 **VARIABLE items** (LLM discretion, evidence narration, output language):
-- Can be modified via PR with rationale
+- Can be discussed and proposed via PR with rationale in active docs
 
 **IMMUTABLE items** (score formula, tier boundaries, weights, hard floors):
 - Require a new version number (e.g., 1.1.1 -> 1.2.0)
 - Must be discussed in a GitHub Issue first
 - Must include impact analysis on existing audit results
 - Must be approved by a maintainer
+
+Target files for public discussion/proposals:
+
+- `docs/SCORING_RATIONALE.md`
+- `docs/API_CONTRACT.md`
+- `docs/CALIBRATION_PROFILE_DESIGN.md`
+- `CHANGELOG.md`
 
 ### 6. Calibration Profile Proposals
 

@@ -15,6 +15,12 @@ audits/fieldbioinformatics_v1_1_2/
 audits/dogfood-v1.5.7-precommit-3repo/
 audits/final-verification-v1.5.7-3repo/
 audits/final-verification-v1.5.8-3repo/
+audits/ab_*/
+audits/clawbio_*/
+audits/dogfood-*/
+audits/bio-detector-benchmark-5repo*/
+audits/external_*
+audits/tmp_*
 artic-network_fieldbioinformatics_detailed_5p/
 stem_output*/
 *.audit.md

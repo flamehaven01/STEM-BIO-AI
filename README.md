@@ -370,7 +370,8 @@ STEM-BIO-AI/
   stem_ai/              # Core Python package
   docs/                 # API contract, advisory runtime/secret policy, scoring rationale, MICA policy, report previews
   memory/               # Versioned MICA archive/playbook/lessons; active layer selected by mica.yaml
-  audits/               # Reference benchmark artifacts
+  audits/               # Historical benchmark/reference artifacts only
+  stem_output/          # Default live CLI output root (generated, ignored)
   scripts/              # Benchmark and validation scripts
   tests/                # Regression test suite
   app.py                # HuggingFace Spaces / Gradio entry point
