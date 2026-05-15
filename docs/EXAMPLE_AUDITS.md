@@ -1,6 +1,6 @@
 # Example Audits
 
-Version: 1.7.5
+Version: 1.7.6
 Status: Public proof-surface index
 
 ---
@@ -63,6 +63,8 @@ When comparing two runs, check these fields first:
 8. `stage_1_rubric`, `stage_2r_rubric`, `stage_3_rubric`, `stage_4_rubric`
 
 If one result comes from the Hugging Face Space and the other from a pinned local benchmark, compare only after confirming both are scanning the same repository snapshot.
+
+
 
 
 

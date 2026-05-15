@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stem-ai"
-version = "1.7.5"
+version = "1.7.6"
 description = "STEM BIO-AI deterministic evidence-surface scanner for bio/medical AI repositories"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -60,9 +60,9 @@ include = ["stem_ai*"]
 ]
 "memory" = [
   "memory/mica.yaml",
-  "memory/stem-ai.mica.v1.7.5.json",
-  "memory/stem-ai-playbook.v1.7.5.md",
-  "memory/stem-ai-lessons.v1.7.5.md",
+  "memory/stem-ai.mica.v1.7.6.json",
+  "memory/stem-ai-playbook.v1.7.6.md",
+  "memory/stem-ai-lessons.v1.7.6.md",
 ]
 
 

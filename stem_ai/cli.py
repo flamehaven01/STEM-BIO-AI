@@ -228,7 +228,7 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         "--policy",
         choices=_policy_choices(),
         default="default",
-        help="Named calibration profile to surface in the result (1.7.5 keeps scan-time policy selection mirror-only)",
+        help="Named calibration profile to surface in the result (1.7.6 keeps scan-time policy selection mirror-only)",
     )
     parser.add_argument(
         "--explain",
@@ -618,7 +618,7 @@ def _print_policy_explain(profile_name: str) -> int:
     print(f"Read Mode:      {profile['profile_read_mode']}")
     print(
         "Scoring Effect: "
-        "mirror-only in 1.7.5; selection is surfaced in artifacts but does not yet reweight score computation"
+        "mirror-only in 1.7.6; selection is surfaced in artifacts but does not yet reweight score computation"
     )
     print()
     print(
@@ -734,7 +734,7 @@ def _print_simulation_tail(simulation: dict) -> None:
     print(f"Score Delta:   {simulation['score_delta']:+d}")
     print(f"Raw Delta:     {simulation['raw_score_delta']:+d}")
     if simulation["replication_posture_changed"] and not simulation["formal_score_changed"]:
-        print("Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.5")
+        print("Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.6")
 
 
 def _print_policy_derive(args: argparse.Namespace) -> int:
@@ -877,5 +877,7 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
 
 
