@@ -7,6 +7,29 @@
 
 ---
 
+## 0. Audit-Ready vs Certified
+
+STEM BIO-AI can support substantial **internal runtime/security/compliance readiness work**, but that is different from external attestation or certification.
+
+### Internal readiness that is realistically in scope
+
+- runtime and security evidence review
+- control mapping and evidence collection
+- validation-package preparation for electronic records / signature workflows
+- access-control, audit-log, traceability, retention, and change-control gap assessment
+- preparation for independent third-party audit or penetration test
+
+### Claims that remain out of scope without external assessment
+
+- issuance of a **SOC 2** report
+- **ISO 13485** certification
+- strong claims of **21 CFR Part 11 compliance**
+- statements such as `independent audit passed`
+
+The correct external-facing posture is therefore usually **audit-ready**, **readiness-assessed**, or **prepared for independent review** unless a real outside assessor has completed the relevant work.
+
+---
+
 ## 1. Regulatory Basis Note for Reports
 When this layer is surfaced in Markdown, PDF, or explain-style reports, the regulatory basis should appear as a **small boxed note** below the traceability section rather than near the main score or tier.
 

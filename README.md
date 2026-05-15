@@ -334,6 +334,31 @@ License / provenance note:
 
 ---
 
+## Runtime / Security / Compliance Boundary
+
+STEM BIO-AI can help teams become more **audit-ready**, but it does not by itself create certification, attestation, or legal compliance.
+
+What can be prepared internally:
+
+- runtime and security evidence review
+- control-matrix and evidence-room preparation
+- validation-package assembly for electronic records / signature workflows
+- gap assessment for logging, access control, change control, retention, and traceability
+- independent third-party audit readiness and penetration-test readiness
+
+What still requires external review or attestation:
+
+- SOC 2 report issuance
+- ISO 13485 certification
+- strong `21 CFR Part 11 compliant` claims
+- `independent audit passed` claims
+
+In other words: internal teams can do substantial readiness work, but external claims still require external auditors, certification bodies, or independent assessors.
+
+Related boundary guidance: [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
+
+---
+
 ## MICA Memory Layer
 
 The repository keeps a versioned MICA memory layer under `memory/` for agent-session initialization,
