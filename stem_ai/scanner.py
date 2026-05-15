@@ -156,7 +156,7 @@ def audit_repository(
     evidence_ledger.extend(_normalize_evidence_finding(f.to_dict()) for f in cc_findings)
 
     stage_3, stage_3_rubric = _score_stage_3(target, readme, docs_text, workflow_text, test_text, dep_text, changelog_text)
-    code_integrity = _code_integrity_from_findings(evidence_ledger)
+    code_integrity = _code_integrity_from_findings(evidence_ledger, clinical_adjacent, has_disclaimer)
 
     weights = {"stage_1": 0.4, "stage_2": 0.2, "stage_3": 0.4}
     risk_penalty = 10 if code_integrity["C1_hardcoded_credentials"]["status"] == "FAIL" else 0
@@ -207,7 +207,7 @@ def audit_repository(
         "stage_4_rubric": stage_4["stage_4_rubric"],
         "code_integrity": code_integrity,
         "code_contract": cc_summary,
-        "airi_risk_coverage": build_airi_coverage(code_integrity, cc_summary, stage_1_rubric, t0_hard_floor),
+        "airi_risk_coverage": build_airi_coverage(code_integrity, cc_summary, stage_1_rubric, t0_hard_floor, evidence_ledger),
         "evidence_ledger": evidence_ledger,
         "detector_summary": _detector_summary(evidence_ledger),
         "ast_signal_summary": ast_signal_summary,
@@ -545,7 +545,11 @@ def _score_bias(bias_text: str, test_text: str) -> tuple[int, str]:
     return 0, "Only a minimal single-term bias/limitations mention was detected; structured boundary language or measurement evidence was not found."
 
 
-def _code_integrity_from_findings(evidence_ledger: list[dict[str, Any]]) -> dict[str, Any]:
+def _code_integrity_from_findings(
+    evidence_ledger: list[dict[str, Any]],
+    clinical_adjacent: bool,
+    has_disclaimer: bool,
+) -> dict[str, Any]:
     detector_defaults = {
         "C1_hardcoded_credentials": ("FAIL", "PASS", "No direct credential patterns detected by local CLI scan."),
         "C2_dependency_pinning": ("WARN", "PASS", "Dependency manifest appears pinned or not present."),
@@ -566,6 +570,39 @@ def _code_integrity_from_findings(evidence_ledger: list[dict[str, Any]]) -> dict
             result[detector] = {"status": detected_status, "evidence": evidence}
         else:
             result[detector] = {"status": pass_status, "evidence": [pass_message]}
+
+    external_dependency_findings = [
+        f
+        for f in evidence_ledger
+        if f.get("detector") == "R2R_D5_single_external_service_dependency" and f.get("status") == "detected"
+    ]
+    if external_dependency_findings:
+        result["C2_dependency_pinning"] = {
+            "status": "WARN",
+            "evidence": [
+                "External operational dependency signal surfaced in code-integrity lane.",
+                *[_finding_summary(f) for f in external_dependency_findings[:3]],
+            ],
+        }
+
+    c4_evidence: list[str] = []
+    if result["C4_exception_handling_clinical_adjacent_paths"]["status"] == "WARN":
+        c4_evidence.extend(result["C4_exception_handling_clinical_adjacent_paths"]["evidence"][:3])
+    unsupported_claim_findings = [
+        f
+        for f in evidence_ledger
+        if f.get("detector") == "S1_R2_unsupported_legal_or_compliance_claim" and f.get("status") == "detected"
+    ]
+    if unsupported_claim_findings:
+        c4_evidence.append("Unsupported legal/compliance claim surfaced in boundary-integrity lane.")
+        c4_evidence.extend(_finding_summary(f) for f in unsupported_claim_findings[:2])
+    if clinical_adjacent and not has_disclaimer:
+        c4_evidence.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
+    if c4_evidence:
+        result["C4_exception_handling_clinical_adjacent_paths"] = {
+            "status": "WARN",
+            "evidence": c4_evidence[:5],
+        }
     return result
 
 

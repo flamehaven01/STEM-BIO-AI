@@ -1026,6 +1026,50 @@ def test_unsupported_legal_claim_ignored_when_grounding_language_present(tmp_pat
     assert "Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources." not in result["notable_risks"]
 
 
+def test_code_integrity_lane_reclassifies_external_dependency_and_unsupported_claim(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "HIPAA-compliant architecture for clinical deployment.\n"
+        "Self-hosted mode is the recommended way to run Bio.\n"
+        "Powered by Valyu's specialized biomedical data API.\n",
+    )
+    _write(
+        tmp_path / ".env.example",
+        "# VALYU API (REQUIRED)\n"
+        "VALYU_API_KEY=valyu_your_api_key_here\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["code_integrity"]["C2_dependency_pinning"]["status"] == "WARN"
+    assert result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["status"] == "WARN"
+    assert any("External operational dependency signal" in item for item in result["code_integrity"]["C2_dependency_pinning"]["evidence"])
+    assert any("Unsupported legal/compliance claim" in item for item in result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["evidence"])
+
+
+def test_airi_coverage_can_be_triggered_by_supported_report_layer_detectors(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "HIPAA-compliant architecture for clinical deployment.\n"
+        "Self-hosted mode is the recommended way to run Bio.\n"
+        "Powered by Valyu's specialized biomedical data API.\n",
+    )
+    _write(
+        tmp_path / ".env.example",
+        "# VALYU API (REQUIRED)\n"
+        "VALYU_API_KEY=valyu_your_api_key_here\n",
+    )
+
+    result = audit_repository(tmp_path)
+    coverage = result["airi_risk_coverage"]
+
+    assert coverage["covered_count"] > 0
+    assert "S1_R2_unsupported_legal_or_compliance_claim" in coverage["detectors_triggered"]
+    assert "R2R_D5_single_external_service_dependency" in coverage["detectors_triggered"]
+
+
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
     _write(tmp_path / "requirements.txt", "numpy>=1.26\n")

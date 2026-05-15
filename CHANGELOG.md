@@ -16,9 +16,9 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Expanded Stage 3 provenance and Stage 4 replication evidence recognition for JavaScript repositories so `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, and `npm-shrinkwrap.json` now count as dependency/provenance or lock-resolution surfaces where appropriate.
 - Corrected a false-negative path where JavaScript lockfiles were previously ignored in `B1_data_provenance_controls`, `S4_environment_lock_evidence`, and `S4_exact_dependency_pins_or_hashes`, materially changing affected repo scores without changing the formal tier definitions.
 - Added additive `R2R_D5_single_external_service_dependency` detection so repositories can now surface vendor/API lock-in risk in the report layer when self-host or local-operation claims coexist with required named external service dependencies.
-- Kept the new external-service dependency signal out of formal score math and AIRI coverage for now; it currently behaves as a report/evidence/notable-risk surface only.
+- Connected the new external-service dependency signal into `code_integrity` as a `C2` warning path and into AIRI coverage when detector mappings are present, while still keeping it out of formal score math.
 - Added additive `S1_R2_unsupported_legal_or_compliance_claim` detection so unsupported `HIPAA`, `FDA-ready`, `CE-ready`, `clinical-grade`, and similar claim language can surface in the report layer when reviewed sources lack stronger governance-grounding evidence.
-- Connected unsupported legal/compliance claims into Stage 1 regulatory traceability as `COMPLIANCE_CLAIM_GROUNDING_SIGNAL`, while keeping the signal out of formal score math and AIRI coverage for now.
+- Connected unsupported legal/compliance claims into Stage 1 regulatory traceability as `COMPLIANCE_CLAIM_GROUNDING_SIGNAL`, into `code_integrity` as a `C4` warning path, and into AIRI coverage where bounded mappings exist, while keeping the signal out of formal score math.
 
 ---
 

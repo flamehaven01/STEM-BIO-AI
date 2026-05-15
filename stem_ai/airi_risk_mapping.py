@@ -73,6 +73,7 @@ def build_airi_coverage(
     cc_summary: dict[str, Any],
     stage_1_rubric: dict[str, Any],
     t0_hard_floor: bool,
+    evidence_ledger: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Build AIRI coverage analysis from deterministic scan results."""
     registry = _load_registry()
@@ -103,6 +104,10 @@ def build_airi_coverage(
         if key in stage_1_rubric and isinstance(stage_1_rubric[key], dict):
             if stage_1_rubric[key].get("score", 0) < 0:
                 triggered.add(key)
+    for finding in evidence_ledger or []:
+        detector = str(finding.get("detector", ""))
+        if finding.get("status") == "detected" and detector in mappings_by_detector:
+            triggered.add(detector)
 
     covered_ids: dict[str, list[str]] = {}
     for detector in triggered:

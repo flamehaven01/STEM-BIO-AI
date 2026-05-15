@@ -421,6 +421,50 @@
       "title": "Safety & Trustworthiness",
       "justification": "Bounded deterministic mapping maintained by STEM BIO-AI governance review.",
       "introduced_in": "1.7.0"
+    },
+    {
+      "detector_id": "S1_R2_unsupported_legal_or_compliance_claim",
+      "risk_id": "69.01.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "False information",
+      "justification": "Unsupported legal or compliance claims can mislead deployment and governance review.",
+      "introduced_in": "1.7.6"
+    },
+    {
+      "detector_id": "S1_R2_unsupported_legal_or_compliance_claim",
+      "risk_id": "39.25.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.4",
+      "title": "Verifiability",
+      "justification": "Unsupported legal or compliance claims reduce reviewability and trustworthy interpretation.",
+      "introduced_in": "1.7.6"
+    },
+    {
+      "detector_id": "R2R_D5_single_external_service_dependency",
+      "risk_id": "60.02.01",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.3",
+      "title": "Reliability issues",
+      "justification": "Material dependency on a single external provider creates operational fragility and failure concentration.",
+      "introduced_in": "1.7.6"
+    },
+    {
+      "detector_id": "R2R_D5_single_external_service_dependency",
+      "risk_id": "72.04.02",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "6.1",
+      "title": "Market Concentration — healthcare single-point failures",
+      "justification": "Material dependency on a single external provider aligns with single-point failure and concentration risk.",
+      "introduced_in": "1.7.6"
     }
   ],
   "known_gaps": [
