@@ -90,36 +90,54 @@ def build_airi_coverage(
     registry_index = _risk_index(registry_risks)
     bundle_index = _risk_index(bundle_risks)
     mappings_by_detector = _mapping_rows_by_detector(mapping_rows)
+    trigger_reasons: dict[str, str] = {}
 
     triggered: set[str] = set()
     for det, info in code_integrity.items():
         if isinstance(info, dict) and info.get("status") in {"WARN", "FAIL"}:
             triggered.add(det)
+            evidence = info.get("evidence") or []
+            if evidence:
+                trigger_reasons.setdefault(det, str(evidence[0]))
     for det, info in cc_summary.items():
         if isinstance(info, dict) and info.get("status") == "WARN":
             triggered.add(det)
+            trigger_reasons.setdefault(det, f"WARN count={info.get('count', 0)}")
     if t0_hard_floor:
         triggered.add("T0_hard_floor")
+        trigger_reasons.setdefault("T0_hard_floor", "T0 hard floor triggered by direct clinical framing without an explicit boundary.")
     for key in ("H1_clinical_certainty_hype", "H3_autonomous_replacement_hype", "B2_bias_limitations"):
         if key in stage_1_rubric and isinstance(stage_1_rubric[key], dict):
             if stage_1_rubric[key].get("score", 0) < 0:
                 triggered.add(key)
+                trigger_reasons.setdefault(key, str(stage_1_rubric[key].get("evidence", "")))
     for finding in evidence_ledger or []:
         detector = str(finding.get("detector", ""))
         if finding.get("status") == "detected" and detector in mappings_by_detector:
             triggered.add(detector)
+            trigger_reasons.setdefault(
+                detector,
+                str(finding.get("explanation") or f"{finding.get('file', '.')}:{finding.get('line', 0)} {finding.get('snippet', '')}").strip(),
+            )
 
-    covered_ids: dict[str, list[str]] = {}
+    covered_ids: dict[str, list[dict[str, str]]] = {}
     for detector in triggered:
         for row in mappings_by_detector.get(detector, []):
             risk_id = str(row.get("risk_id", ""))
             if not risk_id:
                 continue
-            covered_ids.setdefault(risk_id, []).append(detector)
+            covered_ids.setdefault(risk_id, []).append(
+                {
+                    "detector_id": detector,
+                    "mapping_justification": str(row.get("justification", "")).strip(),
+                    "trigger_reason": trigger_reasons.get(detector, ""),
+                }
+            )
 
     covered_risks: list[dict[str, Any]] = []
-    for risk_id, detectors in sorted(covered_ids.items()):
+    for risk_id, details in sorted(covered_ids.items()):
         entry = bundle_index.get(risk_id) or registry_index.get(risk_id, {})
+        detectors = [detail.get("detector_id", "") for detail in details if detail.get("detector_id")]
         covered_risks.append(
             {
                 "id": risk_id,
@@ -128,6 +146,7 @@ def build_airi_coverage(
                 "subdomain_label": entry.get("subdomain_label", ""),
                 "causal_timing": entry.get("causal_timing", ""),
                 "covered_by": detectors,
+                "mapping_details": details,
             }
         )
 

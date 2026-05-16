@@ -124,7 +124,17 @@ def integrity_card(key: str, info: dict[str, Any]) -> str:
     color   = status_color(status)
     evl     = info.get("evidence", [])
     preview = xt(str(evl[0])[:80]) if evl else "No evidence captured"
-    label   = key.replace("_", " ").title()
+    label_map = {
+        "C1_hardcoded_credentials": "C1 Hardcoded Credentials",
+        "C2_dependency_pinning": "C2 Dependency Pinning",
+        "C3_dead_or_deprecated_patient_adjacent_paths": "C3 Deprecated Patient Paths",
+        "C4_exception_handling_clinical_adjacent_paths": "C4 Fail-Open Exceptions",
+        "C5_compliance_boundary_integrity": "C5 Compliance Boundary Integrity",
+        "CC1_clinical_zero_default": "CC1 Clinical Zero Default",
+        "CC2_api_contract": "CC2 API Contract",
+        "CC3_shallow_validator": "CC3 Shallow Validator",
+    }
+    label   = label_map.get(key, key.replace("_", " ").title())
     items   = "".join(f'<li style="margin-bottom:3px">{xt(str(e)[:120])}</li>' for e in evl[:8])
     return (
         f'<div class="card" onclick="toggleCard(this)" tabindex="0"'
@@ -163,7 +173,22 @@ def domain_card(d_num: int, count: int) -> str:
 
 def airi_row(r: dict[str, Any], status: str = "covered") -> str:
     color = _C["green"] if status == "covered" else _C["amber"]
-    det   = ", ".join(r.get("covered_by", [])) if status == "covered" else r.get("note", "")[:70]
+    if status == "covered":
+        details = r.get("mapping_details", [])
+        if details:
+            preview_bits = []
+            for detail in details[:2]:
+                detector_id = str(detail.get("detector_id", "")).strip()
+                reason = str(detail.get("trigger_reason") or detail.get("mapping_justification") or "").strip()
+                if detector_id and reason:
+                    preview_bits.append(f"{detector_id}: {reason}")
+                elif detector_id:
+                    preview_bits.append(detector_id)
+            det = " | ".join(preview_bits) if preview_bits else ", ".join(r.get("covered_by", []))
+        else:
+            det = ", ".join(r.get("covered_by", []))
+    else:
+        det = r.get("note", "")[:70]
     sub   = xt(r.get("subdomain_label", r.get("subdomain_id", "")))[:32]
     cls   = "airi-covered" if status == "covered" else "airi-gaps"
     dom   = str(r.get("subdomain_id", "0")).split(".")[0]

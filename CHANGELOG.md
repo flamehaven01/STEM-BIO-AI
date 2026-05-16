@@ -14,6 +14,17 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.7.7] - 2026-05-16
+
+### Changed
+- Split the former overloaded `C4` output surface so executable fail-open exception handling remains in `C4_exception_handling_clinical_adjacent_paths`, while unsupported compliance or clinical-boundary integrity warnings now surface in the new `C5_compliance_boundary_integrity` lane.
+- Added additive detector traceability to `stage_2r_rubric` and `stage_3_rubric` items through `detector_id` and `decision_basis`, making summary and report outputs more inspectable without changing score math.
+- Extended AIRI covered-risk records with additive `mapping_details` reasoning objects so report surfaces can explain why a detector mapped to a specific AIRI risk instead of showing only the coverage count.
+- Updated Markdown, explain, HTML, and PDF report surfaces so AIRI examples now show bounded `why mapped` reasoning and Code Integrity surfaces expose the new `C5` lane.
+- Rotated the active package, CLI, documentation, policy, and MICA version surfaces to `v1.7.7`.
+
+---
+
 ## [1.7.6] - 2026-05-16
 
 ### Changed

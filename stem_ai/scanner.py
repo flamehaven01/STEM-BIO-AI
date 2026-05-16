@@ -406,24 +406,79 @@ def _score_stage_2r(
     clinical_adjacent: bool,
     has_disclaimer: bool,
 ) -> tuple[int, dict[str, Any]]:
-    items: dict[str, Any] = {"baseline": {"score": 60, "evidence": "Non-nascent local repository baseline."}}
+    items: dict[str, Any] = {
+        "baseline": {
+            "score": 60,
+            "evidence": "Non-nascent local repository baseline.",
+            "detector_id": "stage2r_baseline",
+            "decision_basis": "repository has sufficient local structure to enter repo-local consistency review",
+        }
+    }
     score = 60
     if readme and package_text and _shared_terms(readme, package_text):
-        score += _add_stage2r_item(items, "R2R_1_readme_package_code_alignment", 15, "README has domain overlap with package metadata or entry points.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_1_readme_package_code_alignment",
+            15,
+            "README has domain overlap with package metadata or entry points.",
+            decision_basis="shared bio-domain terms detected across README and package metadata",
+        )
     if readme and docs_text and _shared_terms(readme, docs_text):
-        score += _add_stage2r_item(items, "R2R_2_readme_docs_alignment", 10, "README has domain overlap with docs/tutorial/troubleshooting surfaces.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_2_readme_docs_alignment",
+            10,
+            "README has domain overlap with docs/tutorial/troubleshooting surfaces.",
+            decision_basis="shared bio-domain terms detected across README and docs/tutorial surfaces",
+        )
     if (workflow_text or test_text) and re.search(r"(test|pytest|unittest|ci|workflow)", readme + workflow_text + test_text, re.I):
-        score += _add_stage2r_item(items, "R2R_3_readme_test_ci_alignment", 10, "Test/CI surfaces are present and locally consistent.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_3_readme_test_ci_alignment",
+            10,
+            "Test/CI surfaces are present and locally consistent.",
+            decision_basis="workflow/test support terms found across README and local support surfaces",
+        )
     if _limitation_repeated(readme, docs_text, changelog_text):
-        score += _add_stage2r_item(items, "R2R_4_limitation_repetition", 10, "Limitation or validation-boundary language repeats across independent repository surfaces.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_4_limitation_repetition",
+            10,
+            "Limitation or validation-boundary language repeats across independent repository surfaces.",
+            decision_basis="limitations or validation-boundary language detected in at least two repository surfaces",
+        )
     if _has_internal_clinical_contradiction(readme, docs_text, package_text, has_disclaimer):
-        score += _add_stage2r_item(items, "R2R_D1_internal_clinical_boundary_contradiction", -20, "Explicit clinical-use boundary conflicts with clinical deployment or decision-support claims.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_D1_internal_clinical_boundary_contradiction",
+            -20,
+            "Explicit clinical-use boundary conflicts with clinical deployment or decision-support claims.",
+            decision_basis="explicit clinical boundary and clinical deployment/support claims co-occur in reviewed sources",
+        )
     if clinical_adjacent and not has_disclaimer:
-        score += _add_stage2r_item(items, "R2R_D2_missing_clinical_use_boundary", -20, "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_D2_missing_clinical_use_boundary",
+            -20,
+            "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.",
+            decision_basis="clinical_adjacent=True and explicit non-clinical boundary was not detected",
+        )
     if _version_mismatch(readme, package_text):
-        score += _add_stage2r_item(items, "R2R_D3_stale_metadata", -10, "README version metadata conflicts with package metadata version.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_D3_stale_metadata",
+            -10,
+            "README version metadata conflicts with package metadata version.",
+            decision_basis="README version marker and package version marker differ",
+        )
     if _unsupported_workflow_claim(readme, docs_text, package_text, workflow_text, test_text, code_text):
-        score += _add_stage2r_item(items, "R2R_D4_unsupported_workflow_claim", -15, "README/docs claim runnable workflow, CLI, test, or demo support without matching local support surfaces.")
+        score += _add_stage2r_item(
+            items,
+            "R2R_D4_unsupported_workflow_claim",
+            -15,
+            "README/docs claim runnable workflow, CLI, test, or demo support without matching local support surfaces.",
+            decision_basis="workflow/demo/CLI claims detected while workflow, tests, or local support entrypoints are absent",
+        )
     final = _clamp(score)
     items["calculation"] = f"60 plus local consistency additions/deductions = {final}"
     items["stage_2r_score"] = final
@@ -431,8 +486,19 @@ def _score_stage_2r(
     return final, items
 
 
-def _add_stage2r_item(items: dict[str, Any], key: str, score: int, evidence: str) -> int:
-    items[key] = {"score": score, "evidence": evidence}
+def _add_stage2r_item(
+    items: dict[str, Any],
+    key: str,
+    score: int,
+    evidence: str,
+    decision_basis: str | None = None,
+) -> int:
+    items[key] = {
+        "score": score,
+        "evidence": evidence,
+        "detector_id": key,
+        "decision_basis": decision_basis or evidence,
+    }
     return score
 
 
@@ -504,12 +570,48 @@ def _score_stage_3(target: Path, readme: str, docs_text: str, workflow_text: str
     raw_max = 80
     score = round((raw_score / raw_max) * 100)
     rubric = {
-        "T1_CI_CD": {"score": ci, "max": 15, "evidence": "Workflow files detected." if ci else "No workflow files detected."},
-        "T2_domain_tests": {"score": tests, "max": 15, "evidence": "Domain-specific test text detected." if tests == 15 else "Tests present but domain specificity is limited." if tests else "No tests detected."},
-        "T3_changelog_release_hygiene": {"score": changelog, "max": 15, "evidence": changelog_evidence},
-        "B1_data_provenance_controls": {"score": provenance, "max": 15, "evidence": provenance_evidence},
-        "B2_bias_limitations": {"score": bias, "max": 15, "evidence": bias_evidence},
-        "B3_coi_funding": {"score": coi, "max": 5, "evidence": "COI, funding, sponsor, or acknowledgement language detected." if coi else "No COI/funding disclosure detected by local CLI scan."},
+        "T1_CI_CD": {
+            "score": ci,
+            "max": 15,
+            "evidence": "Workflow files detected." if ci else "No workflow files detected.",
+            "detector_id": "S3_T1_workflow_files",
+            "decision_basis": "workflow files present under .github/workflows/" if ci else "no workflow files present under .github/workflows/",
+        },
+        "T2_domain_tests": {
+            "score": tests,
+            "max": 15,
+            "evidence": "Domain-specific test text detected." if tests == 15 else "Tests present but domain specificity is limited." if tests else "No tests detected.",
+            "detector_id": "S3_T2_domain_tests",
+            "decision_basis": "tests surface present with bio-domain vocabulary" if tests == 15 else "tests surface present without clear bio-domain specificity" if tests else "no tests surface detected",
+        },
+        "T3_changelog_release_hygiene": {
+            "score": changelog,
+            "max": 15,
+            "evidence": changelog_evidence,
+            "detector_id": "S3_T3_changelog_release_hygiene",
+            "decision_basis": "CHANGELOG/NEWS presence plus bug-fix or patch-entry detection",
+        },
+        "B1_data_provenance_controls": {
+            "score": provenance,
+            "max": 15,
+            "evidence": provenance_evidence,
+            "detector_id": "S3_B1_dependency_manifest",
+            "decision_basis": "dependency or lock manifest presence plus data-source, dataset, or IRB language review",
+        },
+        "B2_bias_limitations": {
+            "score": bias,
+            "max": 15,
+            "evidence": bias_evidence,
+            "detector_id": "S3_B2_bias_limitations",
+            "decision_basis": "bias/limitations vocabulary with optional measurement-evidence escalation",
+        },
+        "B3_coi_funding": {
+            "score": coi,
+            "max": 5,
+            "evidence": "COI, funding, sponsor, or acknowledgement language detected." if coi else "No COI/funding disclosure detected by local CLI scan.",
+            "detector_id": "S3_B3_coi_funding",
+            "decision_basis": "COI/funding/sponsor language review across README, docs, FUNDING, CITATION, and AUTHORS surfaces",
+        },
         "stage_3_raw_total": {"score": raw_score, "max": raw_max, "evidence": "Raw rubric total before normalization to 100."},
     }
     return _clamp(score), rubric
@@ -555,6 +657,7 @@ def _code_integrity_from_findings(
         "C2_dependency_pinning": ("WARN", "PASS", "Dependency manifest appears pinned or not present."),
         "C3_dead_or_deprecated_patient_adjacent_paths": ("WARN", "PASS", "No deprecated patient-adjacent metadata patterns detected."),
         "C4_exception_handling_clinical_adjacent_paths": ("WARN", "PASS", "No executable fail-open exception handler detected."),
+        "C5_compliance_boundary_integrity": ("WARN", "PASS", "No compliance-boundary integrity warning detected in current report layer."),
     }
     findings_by_detector: dict[str, list[dict[str, Any]]] = {key: [] for key in detector_defaults}
     for finding in evidence_ledger:
@@ -585,23 +688,21 @@ def _code_integrity_from_findings(
             ],
         }
 
-    c4_evidence: list[str] = []
-    if result["C4_exception_handling_clinical_adjacent_paths"]["status"] == "WARN":
-        c4_evidence.extend(result["C4_exception_handling_clinical_adjacent_paths"]["evidence"][:3])
+    c5_evidence: list[str] = []
     unsupported_claim_findings = [
         f
         for f in evidence_ledger
         if f.get("detector") == "S1_R2_unsupported_legal_or_compliance_claim" and f.get("status") == "detected"
     ]
     if unsupported_claim_findings:
-        c4_evidence.append("Unsupported legal/compliance claim surfaced in boundary-integrity lane.")
-        c4_evidence.extend(_finding_summary(f) for f in unsupported_claim_findings[:2])
+        c5_evidence.append("Unsupported legal/compliance claim surfaced in boundary-integrity lane.")
+        c5_evidence.extend(_finding_summary(f) for f in unsupported_claim_findings[:2])
     if clinical_adjacent and not has_disclaimer:
-        c4_evidence.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
-    if c4_evidence:
-        result["C4_exception_handling_clinical_adjacent_paths"] = {
+        c5_evidence.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
+    if c5_evidence:
+        result["C5_compliance_boundary_integrity"] = {
             "status": "WARN",
-            "evidence": c4_evidence[:5],
+            "evidence": c5_evidence[:5],
         }
     return result
 

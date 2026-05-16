@@ -171,7 +171,7 @@ def _section3(integrity: dict, cc: dict) -> str:
             }
     cards = "".join(integrity_card(k, v) for k, v in combined.items() if isinstance(v, dict))
     hint = tip_icon(
-        "C1-C4: static code checks (credentials, dependencies, deprecated paths, exceptions). "
+        "C1-C5: static code and governance checks (credentials, dependencies, deprecated paths, exceptions, compliance boundaries). "
         "CC1-CC3: Layer 2 AST contract detectors. Click any card to expand evidence."
     )
     return (

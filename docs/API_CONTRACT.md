@@ -1,6 +1,6 @@
 # STEM BIO-AI Public API Contract
 
-Version: 1.7.6
+Version: 1.7.7
 Status: **Stable**
 Supersedes: historical v1.5 draft contract
 
@@ -71,7 +71,7 @@ All fields below are present in every `audit_repository()` result.
 | Field | Type | Description |
 |-------|------|-------------|
 | `schema_version` | string | `"stem-ai-local-cli-result-v1.6"` — bumped on breaking change |
-| `stem_ai_version` | string | Package version (e.g. `"1.7.6"`) |
+| `stem_ai_version` | string | Package version (e.g. `"1.7.7"`) |
 | `generated_at_local` | string | ISO 8601 date of scan |
 | `execution_mode` | string | Always `"LOCAL_ANALYSIS"` for the CLI |
 | `method` | string | Human-readable method description |
@@ -101,10 +101,10 @@ All fields below are present in every `audit_repository()` result.
 | `calibration_profile.tool_version_last_validated` | string | Last tool version whose runtime constants were checked against this profile |
 | `calibration_profile.profile_name` | string | Active profile label selected by CLI `--policy` |
 | `calibration_profile.profile_status` | string | Profile lifecycle status (`authoritative_release`, `experimental`, etc.) |
-| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.7.6`; later `"authoritative"` when scan scoring reads policy values directly |
+| `calibration_profile.profile_read_mode` | string | `"mirror_only"` in `1.7.7`; later `"authoritative"` when scan scoring reads policy values directly |
 | `calibration_profile.policy_sha256` | string | Canonical SHA256 surfaced by the runtime artifact; profile files may carry `null` before authoritative read-through |
 
-In `1.7.6`, `scan --policy <name>` still keeps authoritative scan scoring on the deterministic runtime-constant path. Policy selection changes surfaced metadata only; governed score-delta preview belongs to `stem policy simulate`.
+In `1.7.7`, `scan --policy <name>` still keeps authoritative scan scoring on the deterministic runtime-constant path. Policy selection changes surfaced metadata only; governed score-delta preview belongs to `stem policy simulate`.
 
 ### Target (Locked)
 
@@ -156,6 +156,8 @@ In `1.7.6`, `scan --policy <name>` still keeps authoritative scan scoring on the
 
 Rubric item keys within each object are stable once published. New keys may be added.
 The `score`, `max`, and `evidence` sub-fields are stable for all existing keys.
+Published rubric items may also carry additive `detector_id` and `decision_basis`
+sub-fields to surface the detector trace and human-readable decision rationale.
 
 ### Replication Lane (Locked)
 
@@ -174,6 +176,7 @@ Stage 4 does not affect `score.final_score` or `score.formal_tier`.
 | `code_integrity.C2_dependency_pinning` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 | `code_integrity.C3_dead_or_deprecated_patient_adjacent_paths` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 | `code_integrity.C4_exception_handling_clinical_adjacent_paths` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
+| `code_integrity.C5_compliance_boundary_integrity` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 
 ### Code Contract (Locked)
 
@@ -222,6 +225,7 @@ stable once released.
 | `airi_risk_coverage.total_risks_in_detector_scope` | integer | Count of risk IDs referenced by the active detector mapping |
 | `airi_risk_coverage.detectors_triggered` | array | Triggered detector IDs used for this coverage result |
 | `airi_risk_coverage.covered_risks` | array | Covered AIRI risks with detector references |
+| `airi_risk_coverage.covered_risks[*].mapping_details` | array | Additive reasoning objects `{detector_id, mapping_justification, trigger_reason}` for each matched detector-to-risk link |
 | `airi_risk_coverage.covered_count` | integer | Count of covered risks |
 | `airi_risk_coverage.coverage_rate` | number | Covered risks / total risks in detector scope |
 | `airi_risk_coverage.known_gaps` | array | Combined known-gap list from the local mapping registry |
@@ -382,6 +386,7 @@ See `docs/SCORING_RATIONALE.md` for the derivation and calibration gap disclosur
   the runtime behavior of the scanned repository.
 - **LLM-mode audits**: The full spec (LLM-native runtime with Stage 2 cross-platform
   verification) operates under a separate execution contract not covered here.
+
 
 
 

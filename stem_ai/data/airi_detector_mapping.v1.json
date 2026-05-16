@@ -465,6 +465,28 @@
       "title": "Market Concentration — healthcare single-point failures",
       "justification": "Material dependency on a single external provider aligns with single-point failure and concentration risk.",
       "introduced_in": "1.7.6"
+    },
+    {
+      "detector_id": "C5_compliance_boundary_integrity",
+      "risk_id": "24.01.03",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "7.3",
+      "title": "Safe exploration problem with widely deployed AI assistants",
+      "justification": "Weak compliance and clinical-boundary integrity can cause users to over-trust unsafe exploration in clinical-adjacent contexts.",
+      "introduced_in": "1.7.6"
+    },
+    {
+      "detector_id": "C5_compliance_boundary_integrity",
+      "risk_id": "69.01.00",
+      "coverage_type": "direct",
+      "mapping_confidence": "bounded",
+      "review_status": "active",
+      "subdomain_id": "3.1",
+      "title": "False information",
+      "justification": "Unsupported legal or compliance boundary language can mislead reviewers about operational safety and permissible use.",
+      "introduced_in": "1.7.6"
     }
   ],
   "known_gaps": [

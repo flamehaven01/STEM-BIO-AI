@@ -197,10 +197,16 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         lines.extend(["", "## Stage 2R Evidence"])
         for key, item in result["stage_2r_rubric"].items():
             if isinstance(item, dict):
-                lines.append(f"- **{key}:** {item.get('score', '')} — {item.get('evidence', '')}")
+                lines.append(
+                    f"- **{key}:** {item.get('score', '')} — {item.get('evidence', '')}"
+                    f"{_rubric_trace_suffix(item)}"
+                )
         lines.extend(["", "## Stage 3 Evidence"])
         for key, item in result["stage_3_rubric"].items():
-            lines.append(f"- **{key}:** {item['score']} / {item['max']} — {item['evidence']}")
+            lines.append(
+                f"- **{key}:** {item['score']} / {item['max']} — {item['evidence']}"
+                f"{_rubric_trace_suffix(item)}"
+            )
         lines.extend(["", "## Stage 4 Replication Evidence"])
         for key, item in result.get("stage_4_rubric", {}).items():
             lines.append(f"- **{key}:** {item['score']} / {item['max']} — {item['evidence']}")
@@ -289,7 +295,7 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     if calibration.get("profile_read_mode") != "mirror_only":
         return None
     return (
-        "mirror-only in 1.7.6 — selected profile metadata is surfaced in artifacts, "
+        "mirror-only in 1.7.7 — selected profile metadata is surfaced in artifacts, "
         "but authoritative scan scoring still follows deterministic runtime constants. "
         "Preview-only posture changes, including Stage 4 replication emphasis, do not "
         "change the formal score until a future read-through phase. "
@@ -406,9 +412,10 @@ def _markdown_airi_section(airi: dict[str, Any]) -> list[str]:
         lines.append("")
         lines.append("**Examples of Covered AIRI Risks**")
         for risk in covered_risks[:3]:
+            reason = _airi_reason_summary(risk)
             lines.append(
                 f"- `{risk.get('id', 'unknown')}` — {risk.get('title', 'unknown')} "
-                f"(covered by: {', '.join(risk.get('covered_by', []))})"
+                f"(covered by: {', '.join(risk.get('covered_by', []))}; why: {reason})"
             )
     gaps = airi.get("known_gaps_in_bundle", [])
     if gaps:
@@ -478,9 +485,10 @@ def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
         lines.append("")
         lines.append("  covered examples:")
         for risk in covered_risks[:3]:
+            reason = _airi_reason_summary(risk)
             lines.append(
                 f"    - {risk.get('id', 'unknown')} | {risk.get('title', 'unknown')} "
-                f"| covered_by={','.join(risk.get('covered_by', []))}"
+                f"| covered_by={','.join(risk.get('covered_by', []))} | why={reason}"
             )
     gaps = airi.get("known_gaps_in_bundle", [])
     if gaps:
@@ -492,6 +500,33 @@ def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
             )
     lines.append("")
     return lines
+
+
+def _rubric_trace_suffix(item: dict[str, Any]) -> str:
+    detector = str(item.get("detector_id", "")).strip()
+    basis = str(item.get("decision_basis", "")).strip()
+    parts: list[str] = []
+    if detector:
+        parts.append(f"detector={detector}")
+    if basis:
+        parts.append(f"basis={basis}")
+    if not parts:
+        return ""
+    return f" `[{' | '.join(parts)}]`"
+
+
+def _airi_reason_summary(risk: dict[str, Any]) -> str:
+    details = risk.get("mapping_details", [])
+    if not details:
+        return "bounded detector-to-risk mapping"
+    snippets: list[str] = []
+    for detail in details[:2]:
+        detector = str(detail.get("detector_id", "")).strip()
+        trigger = str(detail.get("trigger_reason", "")).strip()
+        justification = str(detail.get("mapping_justification", "")).strip()
+        reason = trigger or justification or "bounded detector-to-risk mapping"
+        snippets.append(f"{detector}: {reason}" if detector else reason)
+    return " ; ".join(snippets)
 
 
 def _explain_freshness_section(freshness: dict[str, Any]) -> list[str]:
@@ -851,6 +886,7 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         "C2_dependency_pinning": "C2 Dependency Pinning",
         "C3_dead_or_deprecated_patient_adjacent_paths": "C3 Deprecated Paths",
         "C4_exception_handling_clinical_adjacent_paths": "C4 Exception Handling",
+        "C5_compliance_boundary_integrity": "C5 Compliance Boundary",
     }
     for key, item in ci.items():
         s = item["status"]
@@ -1179,7 +1215,11 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
         "R2R_1_readme_package_code_alignment": "R2R-1: README / Package Alignment",
         "R2R_2_readme_docs_alignment": "R2R-2: README / Docs Alignment",
         "R2R_3_readme_test_ci_alignment": "R2R-3: README / Test-CI Alignment",
+        "R2R_4_limitation_repetition": "R2R-4: Limitation Repetition",
+        "R2R_D1_internal_clinical_boundary_contradiction": "R2R-D1: Internal Clinical Boundary Contradiction (PENALTY)",
         "R2R_D2_missing_clinical_use_boundary": "R2R-D2: Missing Clinical Boundary (PENALTY)",
+        "R2R_D3_stale_metadata": "R2R-D3: Stale Metadata (PENALTY)",
+        "R2R_D4_unsupported_workflow_claim": "R2R-D4: Unsupported Workflow Claim (PENALTY)",
     }
     _ev_tooltip = {
         "baseline": "Every repository that is not nascent starts at 60. "
@@ -1190,21 +1230,30 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
                     "indicating consistent external communication.",
         "R2R_3_readme_test_ci_alignment": "Test and CI surfaces are present and reference the same "
                     "domain as the README.",
+        "R2R_4_limitation_repetition": "Limitation or validation-boundary language repeats across more than one repository surface.",
+        "R2R_D1_internal_clinical_boundary_contradiction": "A non-clinical boundary is declared, but clinical deployment/support claims still appear elsewhere.",
         "R2R_D2_missing_clinical_use_boundary": "Clinical-adjacent repository lacks an explicit "
                     "'research use only' or 'not for diagnostic use' boundary — high review risk.",
+        "R2R_D3_stale_metadata": "Version metadata appears inconsistent across README and package surfaces.",
+        "R2R_D4_unsupported_workflow_claim": "README or docs describe runnable workflow support that local tests, workflows, or entrypoints do not substantiate.",
     }
 
     s2r_items: list[tuple[str, str, str, str]] = []
     for key in ("baseline", "R2R_1_readme_package_code_alignment",
                 "R2R_2_readme_docs_alignment", "R2R_3_readme_test_ci_alignment",
-                "R2R_D2_missing_clinical_use_boundary"):
+                "R2R_4_limitation_repetition", "R2R_D1_internal_clinical_boundary_contradiction",
+                "R2R_D2_missing_clinical_use_boundary", "R2R_D3_stale_metadata",
+                "R2R_D4_unsupported_workflow_claim"):
         item = rubric.get(key)
         if item is None or not isinstance(item, dict):
             continue
         sc = item.get("score", 0)
         ev_raw = item.get("evidence", "")
         ev_ext = _ev_tooltip.get(key, "")
+        trace = _rubric_trace_suffix(item).strip(" `")
         combined_ev = f"{ev_raw} — {ev_ext}" if ev_ext else ev_raw
+        if trace:
+            combined_ev = f"{combined_ev} — {trace}"
         if key == "baseline":
             col = _DGRAY
             sc_str = f"+{sc}"
@@ -1277,8 +1326,12 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         mx = item.get("max", 15)
         ev = item.get("evidence", "")
         ext = _ev_ext.get(key, "")
+        trace = _rubric_trace_suffix(item).strip(" `")
         col = _GREEN if sc == mx else (_AMBER if sc > 0 else _RED)
-        t_items.append((label, f"{sc} / {mx}", col, f"{ev} — {ext}" if ext else ev))
+        combined = f"{ev} — {ext}" if ext else ev
+        if trace:
+            combined = f"{combined} — {trace}"
+        t_items.append((label, f"{sc} / {mx}", col, combined))
 
     b_items: list[tuple[str, str, str, str]] = []
     for key, label in [
@@ -1291,11 +1344,15 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         mx = item.get("max", 15)
         ev = item.get("evidence", "")
         ext = _ev_ext.get(key, "")
+        trace = _rubric_trace_suffix(item).strip(" `")
         not_detectable = "local CLI scan" in ev
         col = (_GREEN if sc == mx else (_AMBER if sc > 0 else
                (_DGRAY if not_detectable else _RED)))
         note = " [Manual review required]" if not_detectable else ""
-        b_items.append((label, f"{sc} / {mx}{note}", col, f"{ev} — {ext}" if ext else ev))
+        combined = f"{ev} — {ext}" if ext else ev
+        if trace:
+            combined = f"{combined} — {trace}"
+        b_items.append((label, f"{sc} / {mx}{note}", col, combined))
 
     chip3 = _mini_score("S3 Score", s3, 100, _SLATE)
 
@@ -1384,6 +1441,10 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
             "Replace broad 'except Exception: pass' or 'except: return True' patterns with "
             "specific error types and explicit failure logging. In clinical-adjacent code paths, "
             "any silent failure is a patient safety risk. Fail closed, not open.",
+        "C5_compliance_boundary_integrity":
+            "Treat privacy, legal, or clinical-adjacent claims as governance obligations. "
+            "If README or product text invokes HIPAA, compliance, or self-hosted clinical safety, "
+            "surface supporting controls, operating boundaries, and deployment constraints explicitly.",
     }
 
     _desc = {
@@ -1399,6 +1460,9 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
         "C4_exception_handling_clinical_adjacent_paths":
             "Detects fail-open exception patterns: 'except Exception: pass' or "
             "'except: return True' in code — these silently ignore errors that could corrupt clinical outputs.",
+        "C5_compliance_boundary_integrity":
+            "Detects unsupported legal/compliance claims or clinical-boundary weaknesses in reviewed repository "
+            "sources, including self-asserted privacy/compliance language without visible governance grounding.",
     }
 
     short = {
@@ -1406,6 +1470,7 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
         "C2_dependency_pinning": "C2: Dependency Pinning",
         "C3_dead_or_deprecated_patient_adjacent_paths": "C3: Deprecated Patient Paths",
         "C4_exception_handling_clinical_adjacent_paths": "C4: Fail-Open Exceptions",
+        "C5_compliance_boundary_integrity": "C5: Compliance Boundary Integrity",
     }
 
     ci_items: list[tuple[str, str, str, str]] = []
@@ -1543,6 +1608,9 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
             "Replace broad exception handlers with specific error types and explicit logging. "
             "In any clinical-adjacent code path: fail closed, not open. "
             "Never silently return True or pass on exception.",
+        "C5_compliance_boundary_integrity: WARN":
+            "Do not rely on unsupported legal, privacy, or clinical-boundary claims. "
+            "Add explicit deployment boundaries, governance controls, and operational evidence before using such language.",
     }
 
     no_major_risks = not risks or risks == ["No major local risks detected by the CLI scan."]
@@ -1783,6 +1851,7 @@ def _ascii(t: str) -> str:
 
 def _safe_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", name).strip("_") or "stem_audit"
+
 
 
 

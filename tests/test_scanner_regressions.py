@@ -1043,9 +1043,10 @@ def test_code_integrity_lane_reclassifies_external_dependency_and_unsupported_cl
     result = audit_repository(tmp_path)
 
     assert result["code_integrity"]["C2_dependency_pinning"]["status"] == "WARN"
-    assert result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["status"] == "WARN"
+    assert result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["status"] == "PASS"
+    assert result["code_integrity"]["C5_compliance_boundary_integrity"]["status"] == "WARN"
     assert any("External operational dependency signal" in item for item in result["code_integrity"]["C2_dependency_pinning"]["evidence"])
-    assert any("Unsupported legal/compliance claim" in item for item in result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["evidence"])
+    assert any("Unsupported legal/compliance claim" in item for item in result["code_integrity"]["C5_compliance_boundary_integrity"]["evidence"])
 
 
 def test_airi_coverage_can_be_triggered_by_supported_report_layer_detectors(tmp_path: Path) -> None:
@@ -1068,6 +1069,7 @@ def test_airi_coverage_can_be_triggered_by_supported_report_layer_detectors(tmp_
     assert coverage["covered_count"] > 0
     assert "S1_R2_unsupported_legal_or_compliance_claim" in coverage["detectors_triggered"]
     assert "R2R_D5_single_external_service_dependency" in coverage["detectors_triggered"]
+    assert any(risk.get("mapping_details") for risk in coverage["covered_risks"])
 
 
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:
@@ -1503,6 +1505,7 @@ def test_execute_advisory_call_returns_explicit_not_implemented_error_without_ne
             "C2_dependency_pinning": {"status": "PASS", "evidence": ["none"]},
             "C3_dead_or_deprecated_patient_adjacent_paths": {"status": "PASS", "evidence": ["none"]},
             "C4_exception_handling_clinical_adjacent_paths": {"status": "PASS", "evidence": ["none"]},
+            "C5_compliance_boundary_integrity": {"status": "PASS", "evidence": ["none"]},
         },
         "detector_summary": {},
         "reasoning_model": {},
@@ -2240,10 +2243,10 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     html = render_html(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
-    assert "**Calibration Effect:** mirror-only in 1.7.2" in markdown
+    assert "**Calibration Effect:** mirror-only in 1.7.7" in markdown
     assert "Stage 4 replication emphasis" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
-    assert "Policy Mode: mirror-only in 1.7.2" in explain
+    assert "Policy Mode: mirror-only in 1.7.7" in explain
     assert "Stage 4 replication emphasis" in explain
     assert "Policy Surface: default (authoritative_release, mirror_only)" in html
     assert "Stage 4 replication emphasis" in html
@@ -2295,7 +2298,7 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.7.2" in captured.out
+    assert "Scoring Effect: mirror-only in 1.7.7" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
 
@@ -2604,7 +2607,7 @@ def test_policy_simulate_cli_accepts_local_profile_file(tmp_path: Path, capsys) 
     assert "Profile File:" in captured.out
     assert "Profile Hash:" in captured.out
     assert "Replication:   baseline=baseline | simulation=stronger_than_baseline" in captured.out
-    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.2" in captured.out
+    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.7" in captured.out
 
 
 def test_policy_simulate_cli_rejects_mixing_profile_file_and_intent_answers(tmp_path: Path) -> None:
@@ -2654,4 +2657,5 @@ def test_fallback_citations_exclude_not_detected_and_absent_statuses() -> None:
     }
 
     assert _fallback_citations(result) == ["D", "C"]
+
 
