@@ -209,8 +209,14 @@ def evidence_row(ev: dict[str, Any]) -> str:
     sev = str(ev.get("severity", ev.get("status", "INFO"))).upper()
     sc  = _STATUS_COLOR.get(sev, _C["dgray"])
     det = xt(str(ev.get("detector", ev.get("check", "")))[:32])
-    raw_msg = ev.get("message", ev.get("detail", ""))
-    msg = xt(str(raw_msg if raw_msg else ev)[:90])
+    raw_msg = (
+        ev.get("explanation")
+        or ev.get("message")
+        or ev.get("detail")
+        or ev.get("snippet")
+        or ""
+    )
+    msg = xt(str(raw_msg)[:90]) if raw_msg else "No human-readable evidence summary available."
     loc = xt(str(ev.get("file", ev.get("path", "")))[:50])
     return (
         f'<tr class="ev-row ev-{sev.lower()}"'

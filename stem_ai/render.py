@@ -1583,6 +1583,7 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
     risks = result.get("notable_risks", [])
     positive = result.get("notable_positive_evidence", [])
     score = result["score"]
+    airi = result.get("airi_risk_coverage", {})
 
     # Priority Improvements
     story += _sec_hdr("Priority Improvement Roadmap", _RED)
@@ -1647,6 +1648,38 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
             _style(f"PE_{ev[:4]}", 8, 12, _DGRAY),
         ))
 
+    # AIRI summary
+    if airi:
+        story.append(Spacer(1, 3 * mm))
+        story += _sec_hdr("AIRI Coverage Summary", _TEAL)
+        story.append(Paragraph(
+            f'<font color="{_DGRAY}" size="8">'
+            f'Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b> '
+            f'| Coverage Rate: <b>{airi.get("coverage_rate", 0):.3f}</b> '
+            f'| Bundle Scope: <b>{_xt(str(airi.get("airi_bundle_scope", "unknown")))}</b>'
+            f'</font>',
+            _style("AIRIPDF_SUMMARY", 8, 12, _DGRAY),
+        ))
+        covered_risks = airi.get("covered_risks", [])
+        if covered_risks:
+            for risk in covered_risks[:3]:
+                reason = _airi_reason_summary(risk)
+                story.append(Paragraph(
+                    f'<font color="{_DGRAY}" size="8">&#8226; <b>{_xt(str(risk.get("id", "—")))}</b> '
+                    f'{_xt(str(risk.get("title", "")))}'
+                    f'{f" — why: {_xt(reason)}" if reason else ""}</font>',
+                    _style(f"AIRIPDF_{str(risk.get('id', 'risk'))[:8]}", 8, 11, _DGRAY),
+                ))
+        gaps = airi.get("known_gaps_in_bundle", [])
+        if gaps:
+            gap_preview = ", ".join(
+                f"{g.get('id', '—')} {_xt(str(g.get('title', '')))}" for g in gaps[:2]
+            )
+            story.append(Paragraph(
+                f'<font color="{_DGRAY}" size="8">Known gaps preview: {gap_preview}</font>',
+                _style("AIRIPDF_GAPS", 8, 11, _DGRAY),
+            ))
+
     # Method Boundary
     story.append(Spacer(1, 4 * mm))
     story += _sec_hdr("Method Boundary", _DGRAY)
@@ -1709,6 +1742,7 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
 def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list[str]]:
     score = result["score"]
     ast_note = _ast_scope_note(result)
+    airi = result.get("airi_risk_coverage", {})
     brief = [
         "STEM BIO-AI Local Audit Brief",
         f"Target: {result['target']['name']}",
@@ -1749,7 +1783,26 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         sets.append(_fit_page(["Code Integrity",
             *[f"- {k}: {v['status']} {v['evidence'][0]}" for k, v in result["code_integrity"].items()],
             *([f"- AST analysis scope: {ast_note}"] if ast_note else [])]))
-        sets.append(_fit_page(["Method Boundary", result["method"]]))
+        airi_lines = [
+            "AIRI Coverage Summary",
+            f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
+            f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
+            f"- Bundle Scope: {airi.get('airi_bundle_scope', 'unknown')}",
+        ]
+        for risk in airi.get("covered_risks", [])[:3]:
+            reason = _airi_reason_summary(risk)
+            line = f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+            if reason:
+                line += f" | why: {reason}"
+            airi_lines.append(line)
+        for gap in airi.get("known_gaps_in_bundle", [])[:2]:
+            airi_lines.append(f"- gap: {gap.get('id', '—')} {gap.get('title', '')}")
+        sets.append(_fit_page([
+            *airi_lines,
+            "",
+            "Method Boundary",
+            result["method"],
+        ]))
     return sets[:pages]
 
 

@@ -108,6 +108,17 @@ and documentation reference is updated with them.
 - `known_gaps_in_bundle`
 - `known_gaps_outside_bundle`
 
+Covered AIRI entries may also carry additive `mapping_details` objects. These are
+bounded local reasoning records with:
+
+- `detector_id`
+- `mapping_justification`
+- `trigger_reason`
+
+This is a detector-to-risk explanation layer, not an upstream AIRI verdict.
+If a report-layer or regulatory-layer warning has no AIRI mapping row, it must
+remain outside AIRI coverage counts rather than being implied into coverage.
+
 This keeps AIRI usage auditable from the artifact itself.
 
 

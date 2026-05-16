@@ -250,9 +250,9 @@ Stage 4 produces a separate R0–R4 replication tier that informs institutional 
 
 ---
 
-## 14. C1–C4: Code Integrity
+## 14. C1–C5: Code Integrity
 
-C1–C4 are code-level checks available only in LOCAL_ANALYSIS mode. They do not contribute to S1/S2R/S3 scoring.
+C1–C5 are code-level or governance-boundary checks available only in LOCAL_ANALYSIS mode. They do not contribute to S1/S2R/S3 scoring except for the explicit C1 penalty.
 
 | Item | Signal | Effect |
 |------|--------|--------|
@@ -260,8 +260,16 @@ C1–C4 are code-level checks available only in LOCAL_ANALYSIS mode. They do not
 | C2 Dependency pinning | Loose `>=` or unversioned deps in manifests | WARN only, no score change |
 | C3 Deprecated patient paths | Patient metadata patterns in deprecated/legacy/archive dirs | WARN only, no score change |
 | C4 Fail-open exceptions | `except: pass` or `except Exception: pass` in code | WARN only, no score change |
+| C5 Compliance boundary integrity | Unsupported legal/compliance claims or missing clinical-boundary integrity in reviewed sources | WARN only, no score change |
 
-Only C1 affects the final score. C2–C4 are reported as code integrity warnings because they represent elevated risk but do not rise to the level of score penalties in the current calibration.
+Only C1 affects the final score. C2–C5 are reported as risk surfaces because they represent elevated engineering or governance concern but do not rise to the level of score penalties in the current calibration.
+
+The C4/C5 split is deliberate in `1.7.7`:
+
+- `C4` is reserved for executable fail-open exception behavior in code.
+- `C5` is reserved for compliance, legal, or clinical-boundary integrity warnings surfaced from reviewed repository sources.
+
+This prevents unsupported compliance claims from appearing as if they were code-level exception findings.
 
 ---
 
@@ -277,6 +285,9 @@ The penalty/bonus magnitudes reflect the relative severity of each signal (clini
 
 **Stage 3 bounded scoring still loses depth information.**
 The CLI now distinguishes basic presence from stronger deterministic evidence for T3, B1, and B2. It still cannot judge whether a changelog is comprehensive, whether data-source language is sufficient for a specific institution, or whether a small domain test suite is scientifically adequate. This remains a precision tradeoff for determinism.
+
+**AIRI coverage is bounded by detector mappings, not by total risk imagination.**
+`airi_risk_coverage` only counts risks reached through local detector mappings. Report-layer or regulatory-layer concerns that have no AIRI mapping row remain outside the coverage numerator even if a reviewer believes the repo is plausibly relevant to those risks.
 
 **Local-10 benchmark validates consistency, not correctness.**
 The ten-repo benchmark (within-1-tier 100% after v1.3.1) tests that the scorer is internally stable. It does not test whether the tier assignments are clinically meaningful.

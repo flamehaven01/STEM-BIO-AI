@@ -25,7 +25,7 @@ Example:
 |---------|-----|---------|
 | **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, T0 alert banner |
 | **Score Matrix** | `#s2` | Stage bars (S1/S2R/S3/S4) with formula tooltip |
-| **Code Integrity & Contract** | `#s3` | C1–C4 + CC1–CC3 expandable cards |
+| **Code Integrity & Contract** | `#s3` | C1–C5 + CC1–CC3 expandable cards |
 | **AIRI Risk Coverage** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table |
 | **Evidence Detail** | `#s5` | Full evidence ledger with severity filter chips |
 
@@ -41,14 +41,14 @@ SVG semicircle speedometer (0–100). Arc color matches the tier:
 - T4: green (`#1A7A47`)
 
 ### Expandable Cards (Section 3)
-Each `C1–C4` / `CC1–CC3` card is clickable. Click expands the full evidence list (up to 8 entries). The caret rotates 180° on expand. Keyboard accessible via Enter/Space.
+Each `C1–C5` / `CC1–CC3` card is clickable. Click expands the full evidence list (up to 8 entries). The caret rotates 180° on expand. Keyboard accessible via Enter/Space.
 
 ```
-[C4 Exception Handling Clinical Adjacent Paths]   WARN ▾
-  bare except in infer.py:42 ← collapsed
+[C5 Compliance Boundary Integrity]   WARN ▾
+  unsupported compliance claim in README.md ← collapsed
   ──────────────────────────────────────────────
-  - bare_except @ openmed/inference.py:42
-  - bare_except @ openmed/utils.py:17       ← expanded
+  - README.md:262 - HIPAA-compliant architecture (when self-hosted)
+  - Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.       ← expanded
 ```
 
 ### AIRI 7-Domain Shortcut Cards (Section 4)
@@ -128,6 +128,14 @@ The AIRI coverage section maps STEM-BIO-AI detectors to a governed local AIRI la
 
 The runtime HTML report reflects the curated bundle, not the entire AIRI universe.
 
+Covered rows now show a short bounded explanation built from:
+
+- the local detector ID,
+- the detector-to-risk mapping justification, and
+- the trigger reason surfaced by the scan.
+
+This helps reviewers understand *why* a risk appears in AIRI coverage without implying that AIRI independently audited the repository.
+
 Coverage rate = covered risk IDs / total IDs in detector scope.
 
 | Detector | AIRI Risk IDs Covered |
@@ -136,6 +144,7 @@ Coverage rate = covered risk IDs / total IDs in detector scope.
 | `CC3_shallow_validator` | 65.03.03, 02.01.03, 16.02.01, 47.03.01, 70.02.01 |
 | `T0_hard_floor` | 41.04.00, 61.02.28, 18.05.03, 56.14.00, 47.02.12, 16.05.02, 43.01.00 |
 | `C4_exception_handling_clinical_adjacent_paths` | 70.01.02, 24.01.03, 60.02.01 |
+| `C5_compliance_boundary_integrity` | 24.01.03, 69.01.00 |
 
 Five known gaps are reported for risks that require dynamic evaluation or extend beyond static scan scope.
 
