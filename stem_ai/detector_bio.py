@@ -81,53 +81,66 @@ def _iter_ast_code_contexts(paths: list[Path]) -> Iterable[AstCodeContext]:
     for path in paths:
         if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
-        text = read_text(path)
-        if not text:
-            continue
         try:
-            tree = ast.parse(text)
-        except SyntaxError:
+            stat = path.stat()
+        except OSError:
             continue
-        constants: list[ast.Constant] = []
-        constant_assign_parents: dict[int, ast.Assign] = {}
-        assigns: list[ast.Assign] = []
-        assign_body_context: dict[int, tuple[list[ast.stmt], int]] = {}
-        calls: list[ast.Call] = []
-        try_nodes: list[ast.Try] = []
-        if_nodes: list[ast.If] = []
-        for owner in ast.walk(tree):
-            if isinstance(owner, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Module)):
-                for index, stmt in enumerate(owner.body):
-                    if isinstance(stmt, ast.Assign):
-                        assign_body_context[id(stmt)] = (owner.body, index)
-        queue: deque[ast.AST] = deque([tree])
-        while queue:
-            node = queue.popleft()
-            if isinstance(node, ast.Constant):
-                constants.append(node)
-            elif isinstance(node, ast.Assign):
-                assigns.append(node)
-                if isinstance(node.value, ast.Constant):
-                    constant_assign_parents[id(node.value)] = node
-            elif isinstance(node, ast.Call):
-                calls.append(node)
-            elif isinstance(node, ast.Try):
-                try_nodes.append(node)
-            elif isinstance(node, ast.If):
-                if_nodes.append(node)
-            queue.extend(ast.iter_child_nodes(node))
-        yield AstCodeContext(
-            path=path,
-            tree=tree,
-            lines=text.splitlines(),
-            constants=constants,
-            constant_assign_parents=constant_assign_parents,
-            assigns=assigns,
-            assign_body_context=assign_body_context,
-            calls=calls,
-            try_nodes=try_nodes,
-            if_nodes=if_nodes,
-        )
+        ctx = _build_ast_context_cached(str(path), stat.st_mtime_ns, stat.st_size)
+        if ctx is not None:
+            yield ctx
+
+
+@lru_cache(maxsize=512)
+def _build_ast_context_cached(path_str: str, mtime_ns: int, size: int) -> AstCodeContext | None:
+    del mtime_ns, size
+    path = Path(path_str)
+    text = read_text(path)
+    if not text:
+        return None
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return None
+    constants: list[ast.Constant] = []
+    constant_assign_parents: dict[int, ast.Assign] = {}
+    assigns: list[ast.Assign] = []
+    assign_body_context: dict[int, tuple[list[ast.stmt], int]] = {}
+    calls: list[ast.Call] = []
+    try_nodes: list[ast.Try] = []
+    if_nodes: list[ast.If] = []
+    for owner in ast.walk(tree):
+        if isinstance(owner, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Module)):
+            for index, stmt in enumerate(owner.body):
+                if isinstance(stmt, ast.Assign):
+                    assign_body_context[id(stmt)] = (owner.body, index)
+    queue: deque[ast.AST] = deque([tree])
+    while queue:
+        node = queue.popleft()
+        if isinstance(node, ast.Constant):
+            constants.append(node)
+        elif isinstance(node, ast.Assign):
+            assigns.append(node)
+            if isinstance(node.value, ast.Constant):
+                constant_assign_parents[id(node.value)] = node
+        elif isinstance(node, ast.Call):
+            calls.append(node)
+        elif isinstance(node, ast.Try):
+            try_nodes.append(node)
+        elif isinstance(node, ast.If):
+            if_nodes.append(node)
+        queue.extend(ast.iter_child_nodes(node))
+    return AstCodeContext(
+        path=path,
+        tree=tree,
+        lines=text.splitlines(),
+        constants=constants,
+        constant_assign_parents=constant_assign_parents,
+        assigns=assigns,
+        assign_body_context=assign_body_context,
+        calls=calls,
+        try_nodes=try_nodes,
+        if_nodes=if_nodes,
+    )
 
 
 def _collect_smiles_surface_findings(

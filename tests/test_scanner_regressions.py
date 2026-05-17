@@ -418,6 +418,27 @@ def test_bio_smiles_rdkit_validation_skips_availability_check_without_candidates
     assert any(f["status"] == "not_detected" for f in findings)
 
 
+def test_bio_ast_context_cache_avoids_reparsing_same_file(monkeypatch, tmp_path: Path) -> None:
+    import stem_ai.detector_bio as detector_bio
+
+    detector_bio._build_ast_context_cached.cache_clear()
+    _write(tmp_path / "pipeline.py", "candidate_smiles = 'CC(=O)O'\n")
+    path = tmp_path / "pipeline.py"
+    calls = {"count": 0}
+    original_parse = detector_bio.ast.parse
+
+    def counted_parse(*args, **kwargs):
+        calls["count"] += 1
+        return original_parse(*args, **kwargs)
+
+    monkeypatch.setattr(detector_bio.ast, "parse", counted_parse)
+
+    list(detector_bio._iter_ast_code_contexts([path]))
+    list(detector_bio._iter_ast_code_contexts([path]))
+
+    assert calls["count"] == 1
+
+
 def test_bio_smiles_parser_guard_flags_missing_none_check(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
     _write(
