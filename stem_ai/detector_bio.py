@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 from collections import deque
+from functools import lru_cache
 import os
 import re
 from dataclasses import dataclass
@@ -240,7 +241,7 @@ def _collect_smiles_rdkit_validation_findings(
     ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    rdkit_available = _rdkit_is_available()
+    candidate_seen = False
     for ctx in ast_contexts:
         for node in ctx.constants:
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
@@ -250,9 +251,25 @@ def _collect_smiles_rdkit_validation_findings(
                 continue
             if not _smiles_context_permits(node, value, ctx.constant_assign_parents.get(id(node))):
                 continue
+            candidate_seen = True
             parsed = _rdkit_mol_from_smiles(value)
             if parsed is _RDKIT_UNAVAILABLE:
-                continue
+                add_finding(
+                    target,
+                    findings,
+                    counters,
+                    "BIO_smiles_rdkit_validation",
+                    "bio_smiles_rdkit_invalid_v1",
+                    "not_applicable",
+                    "info",
+                    Path("."),
+                    0,
+                    "",
+                    "ast",
+                    "RDKit optional validation lane unavailable in current environment.",
+                    {"lane": "A1_optional_rdkit"},
+                )
+                return
             if parsed is not None:
                 continue
             detected = True
@@ -273,25 +290,23 @@ def _collect_smiles_rdkit_validation_findings(
             )
     if detected:
         return
-    status = "not_detected" if rdkit_available else "not_applicable"
-    explanation = (
-        "RDKit optional validation lane found no invalid SMILES-like candidates."
-        if rdkit_available
-        else "RDKit optional validation lane unavailable in current environment."
-    )
     add_finding(
         target,
         findings,
         counters,
         "BIO_smiles_rdkit_validation",
         "bio_smiles_rdkit_invalid_v1",
-        status,
+        "not_detected",
         "info",
         Path("."),
         0,
         "",
         "ast",
-        explanation,
+        (
+            "RDKit optional validation lane found no invalid SMILES-like candidates."
+            if candidate_seen
+            else "RDKit optional validation lane not exercised because no SMILES-like candidates were detected."
+        ),
         {"lane": "A1_optional_rdkit"},
     )
 
@@ -839,20 +854,24 @@ def _smiles_atom_count(value: str) -> int:
     return count
 
 
-def _rdkit_mol_from_smiles(smiles: str):
+@lru_cache(maxsize=1)
+def _load_rdkit_chem():
     try:
         from rdkit import Chem  # type: ignore
+        return Chem
     except ImportError:
         return _RDKIT_UNAVAILABLE
+
+
+def _rdkit_mol_from_smiles(smiles: str):
+    chem = _load_rdkit_chem()
+    if chem is _RDKIT_UNAVAILABLE:
+        return _RDKIT_UNAVAILABLE
     try:
-        return Chem.MolFromSmiles(smiles)
+        return chem.MolFromSmiles(smiles)
     except Exception:
         return None
 
 
 def _rdkit_is_available() -> bool:
-    try:
-        import rdkit  # type: ignore  # noqa: F401
-        return True
-    except ImportError:
-        return False
+    return _load_rdkit_chem() is not _RDKIT_UNAVAILABLE

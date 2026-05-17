@@ -15,6 +15,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 ### Changed
 - Reduced `detector_bio.py` repeated AST parse/parent-annotation overhead by building file AST contexts once per scan, pre-bucketing core node classes (`Constant`, `Assign`, `Call`, `Try`, `If`), and reusing them across the SMILES, parser-guard, silent-mock, and run-trace collectors. This is a semantics-preserving performance optimization only.
 - Tightened bio-detector scan boundaries by excluding `.manual_verify` from generated/non-runtime paths and replacing the broad trace-manifest `rglob("*")` walk with a pruned filesystem traversal that preserves existing detector semantics while lowering trace-scan overhead.
+- Deferred the RDKit optional lane until at least one SMILES-like candidate is present, and cached the optional `rdkit.Chem` import so availability/import work is not repeated unnecessarily across candidate checks.
 
 ---
 

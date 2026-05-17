@@ -401,6 +401,23 @@ def test_bio_smiles_rdkit_validation_reports_not_detected_when_available_without
     assert any(f["status"] == "not_detected" for f in findings)
 
 
+def test_bio_smiles_rdkit_validation_skips_availability_check_without_candidates(monkeypatch, tmp_path: Path) -> None:
+    import stem_ai.detector_bio as detector_bio
+
+    def fail_if_called():
+        raise AssertionError("_rdkit_is_available should not run when there are no SMILES candidates")
+
+    monkeypatch.setattr(detector_bio, "_rdkit_is_available", fail_if_called)
+    monkeypatch.setattr(detector_bio, "_rdkit_mol_from_smiles", lambda smiles: object())
+    _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
+    _write(tmp_path / "pipeline.py", "PRIMARY = '#8b949e'\n")
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_smiles_rdkit_validation"]
+
+    assert any(f["status"] == "not_detected" for f in findings)
+
+
 def test_bio_smiles_parser_guard_flags_missing_none_check(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for molecular generation.\n")
     _write(
