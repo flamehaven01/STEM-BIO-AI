@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+from collections import deque
 import os
 import re
 from dataclasses import dataclass
@@ -52,7 +53,9 @@ class AstCodeContext:
     tree: ast.AST
     lines: list[str]
     constants: list[ast.Constant]
+    constant_assign_parents: dict[int, ast.Assign]
     assigns: list[ast.Assign]
+    assign_body_context: dict[int, tuple[list[ast.stmt], int]]
     calls: list[ast.Call]
     try_nodes: list[ast.Try]
     if_nodes: list[ast.If]
@@ -84,29 +87,42 @@ def _iter_ast_code_contexts(paths: list[Path]) -> Iterable[AstCodeContext]:
             tree = ast.parse(text)
         except SyntaxError:
             continue
-        _annotate_parents(tree)
         constants: list[ast.Constant] = []
+        constant_assign_parents: dict[int, ast.Assign] = {}
         assigns: list[ast.Assign] = []
+        assign_body_context: dict[int, tuple[list[ast.stmt], int]] = {}
         calls: list[ast.Call] = []
         try_nodes: list[ast.Try] = []
         if_nodes: list[ast.If] = []
-        for node in ast.walk(tree):
+        for owner in ast.walk(tree):
+            if isinstance(owner, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Module)):
+                for index, stmt in enumerate(owner.body):
+                    if isinstance(stmt, ast.Assign):
+                        assign_body_context[id(stmt)] = (owner.body, index)
+        queue: deque[ast.AST] = deque([tree])
+        while queue:
+            node = queue.popleft()
             if isinstance(node, ast.Constant):
                 constants.append(node)
             elif isinstance(node, ast.Assign):
                 assigns.append(node)
+                if isinstance(node.value, ast.Constant):
+                    constant_assign_parents[id(node.value)] = node
             elif isinstance(node, ast.Call):
                 calls.append(node)
             elif isinstance(node, ast.Try):
                 try_nodes.append(node)
             elif isinstance(node, ast.If):
                 if_nodes.append(node)
+            queue.extend(ast.iter_child_nodes(node))
         yield AstCodeContext(
             path=path,
             tree=tree,
             lines=text.splitlines(),
             constants=constants,
+            constant_assign_parents=constant_assign_parents,
             assigns=assigns,
+            assign_body_context=assign_body_context,
             calls=calls,
             try_nodes=try_nodes,
             if_nodes=if_nodes,
@@ -127,7 +143,7 @@ def _collect_smiles_surface_findings(
             value = node.value.strip()
             if not _looks_like_smiles(value):
                 continue
-            if not _smiles_context_permits(node, value):
+            if not _smiles_context_permits(node, value, ctx.constant_assign_parents.get(id(node))):
                 continue
             issues = _smiles_issues(value)
             if not issues:
@@ -182,7 +198,7 @@ def _collect_smiles_parser_guard_findings(
             parser_call = _call_name(node.value)
             if parser_call not in SMILES_PARSER_CALLS:
                 continue
-            if _guarded_against_none(node, target_node.id):
+            if _guarded_against_none(node, target_node.id, ctx.assign_body_context.get(id(node))):
                 continue
             detected = True
             add_finding(
@@ -232,7 +248,7 @@ def _collect_smiles_rdkit_validation_findings(
             value = node.value.strip()
             if not _looks_like_smiles(value):
                 continue
-            if not _smiles_context_permits(node, value):
+            if not _smiles_context_permits(node, value, ctx.constant_assign_parents.get(id(node))):
                 continue
             parsed = _rdkit_mol_from_smiles(value)
             if parsed is _RDKIT_UNAVAILABLE:
@@ -535,10 +551,9 @@ def _smiles_assign_target_permits(target: ast.Name, value: str) -> bool:
     return _is_strong_smiles_variable(target.id, value)
 
 
-def _smiles_context_permits(node: ast.Constant, value: str) -> bool:
-    parent = getattr(node, "parent", None)
-    if isinstance(parent, ast.Assign):
-        for target in parent.targets:
+def _smiles_context_permits(node: ast.Constant, value: str, parent_assign: ast.Assign | None) -> bool:
+    if isinstance(parent_assign, ast.Assign):
+        for target in parent_assign.targets:
             if isinstance(target, ast.Name) and _smiles_assign_target_permits(target, value):
                 return True
     if any(tok in value.lower() for tok in ("cl", "br", "@", "#", "=")):
@@ -582,17 +597,14 @@ def _call_name(node: ast.AST) -> str:
     return ""
 
 
-def _guarded_against_none(assign_node: ast.Assign, variable_name: str) -> bool:
-    parent = getattr(assign_node, "parent", None)
-    body: list[ast.stmt] | None = None
-    if isinstance(parent, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Module)):
-        body = parent.body
-    if body is None:
+def _guarded_against_none(
+    assign_node: ast.Assign,
+    variable_name: str,
+    body_context: tuple[list[ast.stmt], int] | None,
+) -> bool:
+    if body_context is None:
         return False
-    try:
-        index = body.index(assign_node)
-    except ValueError:
-        return False
+    body, index = body_context
     for stmt in body[index + 1 : index + 4]:
         if _stmt_checks_none(stmt, variable_name):
             return True
@@ -751,12 +763,6 @@ def _keyword_bool(node: ast.Call, name: str) -> bool:
 
 def _has_keyword(node: ast.Call, name: str) -> bool:
     return any(kw.arg == name for kw in node.keywords)
-
-
-def _annotate_parents(tree: ast.AST) -> None:
-    for parent in ast.walk(tree):
-        for child in ast.iter_child_nodes(parent):
-            setattr(child, "parent", parent)
 
 
 def _is_generated_path(path: Path) -> bool:
