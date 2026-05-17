@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -15,7 +16,7 @@ _RDKIT_UNAVAILABLE = object()
 SMILES_ALLOWED = re.compile(r"^[A-Za-z0-9@+\-\[\]\(\)=#$%\\/\.]+$")
 HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6,8}$")
 VERSIONISH = re.compile(r"^[A-Za-z0-9_.-]*[._-]\d+[A-Za-z0-9_.-]*$")
-GENERATED_PATH_PARTS = {"build", "dist", "audits", "stem_output", "tmp"}
+GENERATED_PATH_PARTS = {"build", "dist", "audits", "stem_output", "tmp", ".manual_verify"}
 SMILES_PARSER_CALLS = {"MolFromSmiles", "Chem.MolFromSmiles", "AllChem.MolFromSmiles", "dm.to_mol", "to_mol"}
 SMILES_CONTEXT_TOKENS = ("smiles", "smarts", "molecule", "mol", "ligand", "compound", "substrate", "chem")
 SMILES_MULTI_CHAR_ATOMS = (
@@ -387,20 +388,7 @@ def _collect_trace_manifest_findings(
                 "Traceability-related runtime event keyword detected.",
                 {"matched_term": match.group(1).lower()},
             )
-    for path in sorted(target.rglob("*"), key=lambda p: p.as_posix()):
-        if not path.is_file():
-            continue
-        if path.suffix.lower() not in TRACE_SCAN_SUFFIXES:
-            continue
-        if _is_generated_path(path):
-            continue
-        if path.name in TRACE_MANIFEST_NAMES:
-            continue
-        if is_fixture_like_path(path):
-            continue
-        rel = path.relative_to(target).as_posix()
-        if not TRACE_FILE_HINT.search(rel):
-            continue
+    for path in _iter_trace_candidate_files(target):
         text = read_text(path)
         if not text:
             continue
@@ -440,6 +428,29 @@ def _collect_trace_manifest_findings(
             "file_presence",
             "No traceability manifest or runtime audit-log schema surface detected.",
         )
+
+
+def _iter_trace_candidate_files(target: Path) -> Iterable[Path]:
+    root = target.resolve()
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [
+            name for name in dirnames
+            if name.lower() not in GENERATED_PATH_PARTS
+            and name.lower() not in {"__pycache__", ".git", ".hg", ".svn", ".venv", "node_modules"}
+        ]
+        current = Path(dirpath)
+        for filename in filenames:
+            path = current / filename
+            if path.suffix.lower() not in TRACE_SCAN_SUFFIXES:
+                continue
+            if path.name in TRACE_MANIFEST_NAMES:
+                continue
+            if is_fixture_like_path(path):
+                continue
+            rel = path.relative_to(root).as_posix()
+            if not TRACE_FILE_HINT.search(rel):
+                continue
+            yield path
 
 
 def _collect_run_trace_findings(

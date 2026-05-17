@@ -504,6 +504,26 @@ def test_bio_silent_mock_detector_ignores_test_fixture_paths(tmp_path: Path) -> 
     assert any(f["status"] == "not_detected" for f in findings)
 
 
+def test_bio_detectors_ignore_manual_verify_paths(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for immunology analysis.\n")
+    _write(
+        tmp_path / ".manual_verify" / "trial.py",
+        "import os\n"
+        "os.system('blastn sample.fa')\n",
+    )
+    _write(
+        tmp_path / ".manual_verify" / "audit_trace.md",
+        "decision_event: override\n",
+    )
+
+    result = audit_repository(tmp_path)
+    run_findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_run_trace"]
+    trace_findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_trace_manifest"]
+
+    assert any(f["status"] == "not_detected" for f in run_findings)
+    assert any(f["status"] == "not_detected" for f in trace_findings)
+
+
 def test_bio_trace_manifest_detector_flags_traceability_files_and_keywords(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bio repository for traceable molecular analysis.\n")
     _write(
@@ -538,6 +558,21 @@ def test_bio_trace_manifest_detector_flags_keywords_in_docs(tmp_path: Path) -> N
     assert findings
     matched_terms = {f.get("metadata", {}).get("matched_term") for f in findings if "metadata" in f}
     assert "override_event" in matched_terms
+
+
+def test_bio_trace_manifest_detector_still_detects_non_generated_trace_surface(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for traceable molecular analysis.\n")
+    _write(
+        tmp_path / "traceability" / "audit_trace.md",
+        "decision_event: override\n"
+        "timestamp: 2026-05-17\n",
+    )
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "BIO_trace_manifest" and f["status"] == "detected"]
+
+    assert findings
+    assert any(f["pattern_id"] == "bio_trace_manifest_keyword_v1" for f in findings)
 
 
 def test_bio_trace_manifest_detector_reports_not_detected_when_absent(tmp_path: Path) -> None:
