@@ -1,6 +1,9 @@
 # HTML Report Dashboard
 
-STEM BIO-AI v1.7.0 introduced a **self-contained interactive HTML dashboard** as the primary human-readable output format. In v1.7.2, the AIRI section was aligned to the governed local AIRI registry/runtime-bundle model. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
+Version: 1.7.8
+Status: Active HTML/PDF surface note
+
+STEM BIO-AI ships a **self-contained interactive HTML dashboard** as the primary human-readable output format. In the current `1.7.8` line, the dashboard reflects the post-`C4/C5/C6` code-integrity split, AIRI detector-to-risk reasoning, policy-surface metadata, and audit-freshness summaries. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
 
 ## Generating the Report
 
@@ -25,7 +28,7 @@ Example:
 |---------|-----|---------|
 | **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, T0 alert banner |
 | **Score Matrix** | `#s2` | Stage bars (S1/S2R/S3/S4) with formula tooltip |
-| **Code Integrity & Contract** | `#s3` | C1–C6 + CC1–CC3 expandable cards |
+| **Code Integrity & Contract** | `#s3` | C1–C6 + CC1–CC3 expandable cards, with C4/C5/C6 split visible |
 | **AIRI Risk Coverage** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table |
 | **Evidence Detail** | `#s5` | Full evidence ledger with severity filter chips |
 
@@ -69,6 +72,14 @@ Click a domain card → risk table filters to that domain only. Click the same c
 ### AIRI Toggle (Section 4)
 Two-button toggle: `[Covered (n)]` / `[Gaps (n)]`. Composes with the domain filter — both conditions must be satisfied for a row to be visible.
 
+Covered AIRI rows surface bounded `why` reasoning derived from:
+
+- the triggered local detector ID,
+- the local detector-to-risk mapping justification, and
+- the trigger reason surfaced by the scan.
+
+This is a review aid only. It does not mean AIRI independently audited the repository.
+
 ### Evidence Filter Chips (Section 5)
 One-click severity filter: `All` `FAIL` `WARN` `PASS` `INFO`. Filters `ev-row` elements by CSS class; active chip highlighted in navy.
 
@@ -96,6 +107,8 @@ The HTML renderer is split into three modules (each < 250 lines):
 | `stem_ai/render_html_styles.py` | `build_css(tc)` f-string (tier-color parameterized), `.domain-card/.domain-active` CSS, `JS` constant with `filterDomain()` + `_applyAiriFilter()` |
 | `stem_ai/render_html.py` | Five `_section*()` assemblers + domain-count computation + `render_html(result)` entry point |
 
+The matching one-page PDF surface now includes an additive `AIRI Coverage Summary` block so AIRI coverage, known gaps, and bounded `why:` explanations are not limited to HTML/Markdown only.
+
 ## Report Preview
 
 ![HTML Report Preview](assets/html_report_preview.png)
@@ -104,7 +117,7 @@ The HTML renderer is split into three modules (each < 250 lines):
 
 ## Color Palette
 
-Refined in v1.7.0 to align with AIRI Navigator's visual language — deeper saturation, cooler backgrounds, AIRI-standard crimson for risk indicators.
+Refined across the `1.7.x` line to align with AIRI Navigator's visual language — deeper saturation, cooler backgrounds, AIRI-standard crimson for risk indicators.
 
 | Role | Token | Value |
 |------|-------|-------|
@@ -138,13 +151,19 @@ This helps reviewers understand *why* a risk appears in AIRI coverage without im
 
 Coverage rate = covered risk IDs / total IDs in detector scope.
 
+Representative active mapping rows in the `1.7.8` line:
+
 | Detector | AIRI Risk IDs Covered |
 |----------|----------------------|
 | `CC1_clinical_zero_default` | 62.15.02, 02.09.00, 30.01.02, 69.01.01, 16.03.01 |
 | `CC3_shallow_validator` | 65.03.03, 02.01.03, 16.02.01, 47.03.01, 70.02.01 |
 | `T0_hard_floor` | 41.04.00, 61.02.28, 18.05.03, 56.14.00, 47.02.12, 16.05.02, 43.01.00 |
-| `C4_exception_handling_clinical_adjacent_paths` | 70.01.02, 24.01.03, 60.02.01 |
+| `C2_dependency_pinning` | 33.01.05, 24.04.01 |
+| `S1_R2_unsupported_legal_or_compliance_claim` | 69.01.00, 39.25.00 |
+| `R2R_D5_single_external_service_dependency` | 60.02.01, 72.04.02 |
 | `C5_compliance_boundary_integrity` | 24.01.03, 69.01.00 |
+
+`C4_exception_handling_clinical_adjacent_paths` remains reserved for executable fail-open exception behavior in code.
 
 `C6_mock_auth_or_fail_open_boundary` is currently a report-layer/code-integrity surface only. It does not yet carry an AIRI mapping row.
 

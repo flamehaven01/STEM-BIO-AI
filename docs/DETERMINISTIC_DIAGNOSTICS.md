@@ -1,7 +1,7 @@
 # Deterministic Diagnostics for Bio-AI Integrity
-## Version 1.3.0 (Implemented Deterministic Lane, Optional AI-Assisted Review)
+## Version 1.7.8 (Active deterministic bio diagnostics note)
 
-This document is the active deterministic diagnostics specification for STEM-BIO-AI. The local lane is implemented as evidence-bearing repository diagnostics. The optional AI lane remains advisory, opt-in, and non-authoritative.
+This document is the active deterministic diagnostics specification for STEM BIO-AI's bio-focused deterministic lane. The local lane is implemented as evidence-bearing repository diagnostics inside `stem_ai/detector_bio.py`. The optional AI lane remains advisory, opt-in, and non-authoritative.
 
 ---
 
@@ -22,7 +22,7 @@ The local deterministic lane is authoritative for hard findings. The AI lane is 
 
 ---
 
-## 1A. Implementation Status (STEM BIO-AI v1.6.0)
+## 1A. Implementation Status (STEM BIO-AI v1.7.8)
 
 Implemented now:
 1. `SMILES-DECEPT` Lane A0 conservative surface scanner
@@ -32,10 +32,11 @@ Implemented now:
 5. `RUN-TRACE` bio-tool subprocess heuristics
 6. Markdown / explain report surfacing for bio deterministic diagnostics
 7. Registry-driven regulatory traceability attachment using deterministic evidence without score override
+8. Performance-oriented AST context reuse, node pre-bucketing, generated-path pruning, and optional RDKit gating that preserve detector semantics while reducing scan overhead
 
 Implemented as evidence-only:
 1. Findings are emitted into `evidence_ledger`
-2. Findings appear in Markdown and `--explain`
+2. Findings appear in Markdown, HTML, PDF summaries, and `--explain`
 3. Findings do not change `final_score` or `formal_tier`
 
 Not yet implemented:
@@ -135,14 +136,23 @@ Not yet implemented:
 ---
 
 ## 3. Integration with STEM-BIO-AI CORE
-These diagnostics will map to the existing **Code Integrity (C1-C4)** rubric in `STEM-AI_v1.1.2_CORE.md`:
+These diagnostics align with the current **Code Integrity (C1-C6)** and bio-diagnostic surfaces in the `1.7.8` line:
 
-*   **SMILES-DECEPT** -> **C3 (Dead/Mock clinical paths)**
-*   **MOUNT-AUDIT** -> **C1 (Hardcoded/Insecure config)**
-*   **RUN-TRACE** -> **C4 (Unsafe exception/output handling)**
-*   **SILENT-MOCK** -> **C3/C4 (Mock-as-functional or fail-open continuation)**
+- **SMILES-DECEPT** -> bio deterministic diagnostics surface first; possible future linkage to `C3` or a dedicated bio-integrity lane after benchmark review
+- **MOUNT-AUDIT** -> future hardening candidate; not currently shipped in the active runtime
+- **RUN-TRACE** -> bio deterministic diagnostics surface first; may later inform `C4` or downstream governance review if benchmarked
+- **SILENT-MOCK** -> bio deterministic diagnostics surface first; conceptually adjacent to `C6` when mock or demo behavior weakens local/self-host trust boundaries, but not currently score-linked
+- **TRACE-MANIFEST** -> Stage 4 / regulatory-traceability support surface, not a direct Code Integrity penalty lane
 
 **Regulatory Relevance Note:** These mappings are engineering-risk mappings inside STEM-BIO-AI CORE. They should not be restated externally as direct evidence of legal compliance without the traceability boundaries described in `REGULATORY_MAPPING.md`.
+
+**Current boundary note:** `C4`, `C5`, and `C6` are now intentionally split:
+
+- `C4` is reserved for executable fail-open exception behavior in code
+- `C5` is reserved for unsupported legal/compliance or clinical-boundary integrity warnings
+- `C6` is reserved for mock-auth, auto-login, or no-auth local/self-host trust-boundary warnings
+
+The deterministic bio diagnostics lane can support or contextualize these surfaces, but it does not silently rewrite them.
 
 ---
 
@@ -199,7 +209,7 @@ These detectors should not all enter scoring at the same time.
 
 3.  **SILENT-MOCK**
     * Initial mode: evidence + recommended severity
-    * Strongest candidate for eventual `C3/C4` score impact after benchmark confirmation
+    * Strongest candidate for eventual `C3/C6` score impact after benchmark confirmation
 
 Any future score impact must be justified by commit-pinned benchmark evidence and explicit false-positive review.
 
@@ -236,7 +246,7 @@ This shape preserves the rule that deterministic evidence is primary while still
     - positive controls: known silent-mock, unsafe subprocess, malformed/placeholder SMILES repos  
     - negative controls: mature bioinformatics repos with legitimate subprocess usage and explicit parser guards  
     - ambiguous controls: demo/tutorial repos where mock data is clearly scoped and disclosed
-2.  **Develop:** Implement `stem_ai/detector_bio.py` to house these specialized bio-deterministic checks.
+2.  **Develop:** Continue extending `stem_ai/detector_bio.py` and its fixture set while preserving deterministic evidence contracts.
 3.  **Verify (Local Lane):** Measure precision, recall, false-positive classes, and false-negative classes on commit-pinned fixtures for syntax, parser-guard, silent-mock, and subprocess findings.
 4.  **Verify (AI Lane):** Add an optional provider-neutral advisory packet for suspicious SMILES batches and compare AI annotations against deterministic flags.
 5.  **Calibrate:** Only after benchmark evidence and reproducible detector output should any SMILES-derived or subprocess-derived signal affect final scoring.
