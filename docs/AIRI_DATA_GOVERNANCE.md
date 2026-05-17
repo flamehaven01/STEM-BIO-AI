@@ -1,6 +1,6 @@
 # AIRI Data Governance
 
-Version: 1.7.7
+Version: 1.7.8
 Status: Active governance note for the local AIRI data layer
 
 ---
@@ -120,6 +120,7 @@ If a report-layer or regulatory-layer warning has no AIRI mapping row, it must
 remain outside AIRI coverage counts rather than being implied into coverage.
 
 This keeps AIRI usage auditable from the artifact itself.
+
 
 
 

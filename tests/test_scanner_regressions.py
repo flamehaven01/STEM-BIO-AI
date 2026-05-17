@@ -2275,10 +2275,10 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     html = render_html(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
-    assert "**Calibration Effect:** mirror-only in 1.7.7" in markdown
+    assert "**Calibration Effect:** mirror-only in 1.7.8" in markdown
     assert "Stage 4 replication emphasis" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
-    assert "Policy Mode: mirror-only in 1.7.7" in explain
+    assert "Policy Mode: mirror-only in 1.7.8" in explain
     assert "Stage 4 replication emphasis" in explain
     assert "Policy Surface: default (authoritative_release, mirror_only)" in html
     assert "Stage 4 replication emphasis" in html
@@ -2330,7 +2330,7 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.7.7" in captured.out
+    assert "Scoring Effect: mirror-only in 1.7.8" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
 
@@ -2639,7 +2639,7 @@ def test_policy_simulate_cli_accepts_local_profile_file(tmp_path: Path, capsys) 
     assert "Profile File:" in captured.out
     assert "Profile Hash:" in captured.out
     assert "Replication:   baseline=baseline | simulation=stronger_than_baseline" in captured.out
-    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.7" in captured.out
+    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.8" in captured.out
 
 
 def test_policy_simulate_cli_rejects_mixing_profile_file_and_intent_answers(tmp_path: Path) -> None:
@@ -2689,5 +2689,6 @@ def test_fallback_citations_exclude_not_detected_and_absent_statuses() -> None:
     }
 
     assert _fallback_citations(result) == ["D", "C"]
+
 
 

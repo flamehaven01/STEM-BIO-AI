@@ -12,12 +12,18 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ## [Unreleased]
 
+---
+
+## [1.7.8] - 2026-05-17
+
 ### Added
 - Added additive `C6_mock_auth_or_fail_open_boundary` detection so mock authentication, auto-login, or no-auth self-host/local trust-boundary signals can surface as a dedicated Code Integrity lane without changing formal score math.
 
 ### Changed
 - Updated Markdown, explain, HTML, and PDF output surfaces so `C6` appears consistently across `code_integrity`, report cards, remediation guidance, and proof traces.
 - Clarified public documentation and API descriptions from `C1–C5` to `C1–C6`, and documented that `C6` is currently a report-layer/code-integrity warning rather than an AIRI-mapped detector lane.
+- Performed a safe `detector_bio.py` structural cleanup by extracting the shared AST-path iteration helper and reusing it across multiple bio detectors, reducing duplicated parsing logic without changing detector semantics.
+- Rotated the active package, CLI, documentation, policy, and MICA version surfaces to `v1.7.8`.
 
 ---
 

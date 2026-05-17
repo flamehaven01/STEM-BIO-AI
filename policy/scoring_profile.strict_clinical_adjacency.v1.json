@@ -2,7 +2,7 @@
   "policy_schema_version": "1",
   "policy_version": "ca-policy-1.0-strict-ca",
   "tool_version_introduced": "1.6.5",
-  "tool_version_last_validated": "1.7.7",
+  "tool_version_last_validated": "1.7.8",
   "profile_name": "strict_clinical_adjacency",
   "profile_status": "experimental",
   "profile_read_mode": "mirror_only",
@@ -55,6 +55,7 @@
   },
   "policy_sha256": null
 }
+
 
 
 

@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.7-informational.svg" alt="v1.7.7"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.8-informational.svg" alt="v1.7.8"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -73,7 +73,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.7.7`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.7.8`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. The intent interview uses a governed `1–5` posture scale, while official score-affecting policy changes still require profile promotion rather than direct ad hoc tuning.
 
@@ -324,7 +324,7 @@ How AIRI is used here:
 - AIRI does **not** prove harm, causality, clinical safety, or regulatory status
 - AIRI helps place local findings into a wider risk vocabulary for review
 
-In the current `1.7.7` line, AIRI is used through three local governed layers:
+In the current `1.7.8` line, AIRI is used through three local governed layers:
 
 1. full normalized local registry
 2. curated runtime bundle used by deterministic scans
@@ -434,14 +434,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
-Current concept DOI-backed archive for the `1.7.7` line:
+Current concept DOI-backed archive for the `1.7.8` line:
 - <https://doi.org/10.5281/zenodo.20154479>
 
 ```bibtex
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.7.7},
+  version = {1.7.8},
   year    = {2026},
   doi     = {10.5281/zenodo.20154479},
   url     = {https://doi.org/10.5281/zenodo.20154479}
@@ -455,6 +455,7 @@ Current concept DOI-backed archive for the `1.7.7` line:
 Apache 2.0. See [LICENSE](LICENSE).
 
 Maintained by [flamehaven01](https://github.com/flamehaven01)
+
 
 
 

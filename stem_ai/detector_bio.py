@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import re
 from pathlib import Path
+from typing import Callable
 
 from .detector_utils import add_finding, is_fixture_like_path, iter_code_files, iter_python_files, read_text, source_line
 from .evidence import EvidenceFinding
@@ -57,13 +58,7 @@ def collect_bio_findings(
     _collect_run_trace_findings(target, findings, counters, code_paths)
 
 
-def _collect_smiles_surface_findings(
-    target: Path,
-    findings: list[EvidenceFinding],
-    counters: dict[tuple[str, str], int],
-    paths: list[Path],
-) -> None:
-    detected = False
+def _iter_ast_code_contexts(paths: list[Path]):
     for path in paths:
         if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
@@ -75,7 +70,17 @@ def _collect_smiles_surface_findings(
         except SyntaxError:
             continue
         _annotate_parents(tree)
-        lines = text.splitlines()
+        yield path, tree, text.splitlines()
+
+
+def _collect_smiles_surface_findings(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    paths: list[Path],
+) -> None:
+    detected = False
+    for path, tree, lines in _iter_ast_code_contexts(paths):
         for node in ast.walk(tree):
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
                 continue
@@ -127,18 +132,7 @@ def _collect_smiles_parser_guard_findings(
     paths: list[Path],
 ) -> None:
     detected = False
-    for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
-            continue
-        text = read_text(path)
-        if not text:
-            continue
-        try:
-            tree = ast.parse(text)
-        except SyntaxError:
-            continue
-        _annotate_parents(tree)
-        lines = text.splitlines()
+    for path, tree, lines in _iter_ast_code_contexts(paths):
         for node in ast.walk(tree):
             if not isinstance(node, ast.Assign) or len(node.targets) != 1:
                 continue
@@ -191,18 +185,7 @@ def _collect_smiles_rdkit_validation_findings(
 ) -> None:
     detected = False
     rdkit_available = _rdkit_is_available()
-    for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
-            continue
-        text = read_text(path)
-        if not text:
-            continue
-        try:
-            tree = ast.parse(text)
-        except SyntaxError:
-            continue
-        _annotate_parents(tree)
-        lines = text.splitlines()
+    for path, tree, lines in _iter_ast_code_contexts(paths):
         for node in ast.walk(tree):
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
                 continue
@@ -257,6 +240,37 @@ def _collect_smiles_rdkit_validation_findings(
     )
 
 
+def _process_mock_node_finding(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    path: Path,
+    node: ast.AST,
+    lines: list[str],
+) -> str | None:
+    if isinstance(node, ast.Try):
+        reason = _import_failure_sets_mock_flag(node)
+        if reason:
+            add_finding(
+                target, findings, counters,
+                "BIO_silent_mock_fallback", "bio_silent_mock_v1", "detected", "warn",
+                path, getattr(node, "lineno", 0), source_line(lines, getattr(node, "lineno", 0)),
+                "ast", "Silent mock or simulated-data fallback detected in a biological dependency path.",
+                {"reason": reason},
+            )
+            return "detected"
+    if isinstance(node, ast.If) and _is_explicit_demo_mode_branch(node):
+        add_finding(
+            target, findings, counters,
+            "BIO_silent_mock_fallback", "bio_silent_mock_v1", "not_applicable", "info",
+            path, getattr(node, "lineno", 0), source_line(lines, getattr(node, "lineno", 0)),
+            "ast", "Explicit demo or simulated-data branch detected; treated as disclosed non-production behavior.",
+            {"reason": "explicit_demo_mode_branch"},
+        )
+        return "not_applicable"
+    return None
+
+
 def _collect_silent_mock_findings(
     target: Path,
     findings: list[EvidenceFinding],
@@ -265,69 +279,18 @@ def _collect_silent_mock_findings(
 ) -> None:
     detected = False
     not_applicable = False
-    for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
-            continue
-        text = read_text(path)
-        if not text:
-            continue
-        try:
-            tree = ast.parse(text)
-        except SyntaxError:
-            continue
-        _annotate_parents(tree)
-        lines = text.splitlines()
+    for path, tree, lines in _iter_ast_code_contexts(paths):
         for node in ast.walk(tree):
-            if isinstance(node, ast.Try):
-                reason = _import_failure_sets_mock_flag(node)
-                if reason:
-                    detected = True
-                    add_finding(
-                        target,
-                        findings,
-                        counters,
-                        "BIO_silent_mock_fallback",
-                        "bio_silent_mock_v1",
-                        "detected",
-                        "warn",
-                        path,
-                        getattr(node, "lineno", 0),
-                        source_line(lines, getattr(node, "lineno", 0)),
-                        "ast",
-                        "Silent mock or simulated-data fallback detected in a biological dependency path.",
-                        {"reason": reason},
-                    )
-            if isinstance(node, ast.If):
-                if _is_explicit_demo_mode_branch(node):
-                    not_applicable = True
-                    add_finding(
-                        target,
-                        findings,
-                        counters,
-                        "BIO_silent_mock_fallback",
-                        "bio_silent_mock_v1",
-                        "not_applicable",
-                        "info",
-                        path,
-                        getattr(node, "lineno", 0),
-                        source_line(lines, getattr(node, "lineno", 0)),
-                        "ast",
-                        "Explicit demo or simulated-data branch detected; treated as disclosed non-production behavior.",
-                        {"reason": "explicit_demo_mode_branch"},
-                    )
+            result = _process_mock_node_finding(target, findings, counters, path, node, lines)
+            if result == "detected":
+                detected = True
+            elif result == "not_applicable":
+                not_applicable = True
     if not detected and not not_applicable:
         add_finding(
-            target,
-            findings,
-            counters,
-            "BIO_silent_mock_fallback",
-            "bio_silent_mock_v1",
-            "not_detected",
-            "info",
-            Path("."),
-            0,
-            "",
-            "ast",
+            target, findings, counters,
+            "BIO_silent_mock_fallback", "bio_silent_mock_v1", "not_detected", "info",
+            Path("."), 0, "", "ast",
             "No silent mock or simulated-data fallback patterns detected in production code paths.",
         )
 
@@ -441,18 +404,7 @@ def _collect_run_trace_findings(
     paths: list[Path],
 ) -> None:
     detected = False
-    for path in paths:
-        if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
-            continue
-        text = read_text(path)
-        if not text:
-            continue
-        try:
-            tree = ast.parse(text)
-        except SyntaxError:
-            continue
-        _annotate_parents(tree)
-        lines = text.splitlines()
+    for path, tree, lines in _iter_ast_code_contexts(paths):
         for node in ast.walk(tree):
             if not isinstance(node, ast.Call):
                 continue
@@ -492,36 +444,47 @@ def _collect_run_trace_findings(
         )
 
 
+def _smiles_has_structure_or_entropy(value: str) -> bool:
+    if any(ch in value for ch in "()[]=#123456789"):
+        return True
+    condensed = value.replace(".", "")
+    return len(condensed) >= 8 and len(set(condensed)) <= 2 and bool(re.search(r"[BCNOFPSIbcnops]", condensed))
+
+
+_SMILES_RULES: list[tuple[str, Callable[[str], bool]]] = [
+    ("len_range",    lambda v: 3 <= len(v) <= 256),
+    ("charset",      lambda v: bool(SMILES_ALLOWED.fullmatch(v))),
+    ("not_excluded", lambda v: not _is_obviously_not_smiles(v)),
+    ("token_stream", lambda v: _token_stream_is_smiles_like(v)),
+    ("min_atoms",    lambda v: _smiles_atom_count(v) >= 2),
+    ("structure",    lambda v: _smiles_has_structure_or_entropy(v)),
+    ("bio_atom",     lambda v: bool(re.search(r"[BCNOFPSIbcnops]", v))),
+]
+
+
+def _apply_smiles_rule(value: str) -> bool:
+    return all(check(value) for _, check in _SMILES_RULES)
+
+
 def _looks_like_smiles(value: str) -> bool:
-    if len(value) < 3 or len(value) > 256:
-        return False
-    if not SMILES_ALLOWED.fullmatch(value):
-        return False
-    if _is_obviously_not_smiles(value):
-        return False
-    if not _token_stream_is_smiles_like(value):
-        return False
-    if _smiles_atom_count(value) < 2:
-        return False
-    if not any(ch in value for ch in "()[]=#123456789"):
-        condensed = value.replace(".", "")
-        if not (len(condensed) >= 8 and len(set(condensed)) <= 2 and re.search(r"[BCNOFPSIbcnops]", condensed)):
-            return False
-    return bool(re.search(r"[BCNOFPSIbcnops]", value))
+    return _apply_smiles_rule(value)
+
+
+def _smiles_assign_target_permits(target: ast.Name, value: str) -> bool:
+    if any(tok in target.id.lower() for tok in SMILES_CONTEXT_TOKENS):
+        return True
+    condensed = value.replace("(", "").replace(")", "").replace("[", "").replace("]", "")
+    if len(condensed) >= 8 and len(set(condensed)) <= 2 and re.search(r"[BCNOFPSIbcnops]", condensed):
+        return True
+    return _is_strong_smiles_variable(target.id, value)
 
 
 def _smiles_context_permits(node: ast.Constant, value: str) -> bool:
     parent = getattr(node, "parent", None)
     if isinstance(parent, ast.Assign):
         for target in parent.targets:
-            if isinstance(target, ast.Name) and any(tok in target.id.lower() for tok in SMILES_CONTEXT_TOKENS):
+            if isinstance(target, ast.Name) and _smiles_assign_target_permits(target, value):
                 return True
-            if isinstance(target, ast.Name):
-                condensed = value.replace("(", "").replace(")", "").replace("[", "").replace("]", "")
-                if len(condensed) >= 8 and len(set(condensed)) <= 2 and re.search(r"[BCNOFPSIbcnops]", condensed):
-                    return True
-                if _is_strong_smiles_variable(target.id, value):
-                    return True
     if any(tok in value.lower() for tok in ("cl", "br", "@", "#", "=")):
         return True
     if re.search(r"\d", value) and any(ch in value for ch in "()[]=#"):
@@ -621,16 +584,21 @@ def _handler_is_import_error(node: ast.AST) -> bool:
     return False
 
 
+def _assign_sets_mock_behavior(node: ast.Assign) -> bool:
+    for target in node.targets:
+        if not isinstance(target, ast.Name):
+            continue
+        if target.id in MOCK_FLAG_NAMES and isinstance(node.value, ast.Constant) and node.value.value is True:
+            return True
+        if any(tok in target.id.lower() for tok in MOCK_NAME_TOKENS):
+            return True
+    return False
+
+
 def _stmt_sets_mock_behavior(stmt: ast.stmt) -> bool:
     for node in ast.walk(stmt):
-        if isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name):
-                    name = target.id.lower()
-                    if target.id in MOCK_FLAG_NAMES and isinstance(node.value, ast.Constant) and node.value.value is True:
-                        return True
-                    if any(tok in name for tok in MOCK_NAME_TOKENS):
-                        return True
+        if isinstance(node, ast.Assign) and _assign_sets_mock_behavior(node):
+            return True
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             if any(tok in node.value.lower() for tok in MOCK_NAME_TOKENS):
                 return True
@@ -645,49 +613,39 @@ def _is_explicit_demo_mode_branch(node: ast.If) -> bool:
     return any(tok in branch_text for tok in MOCK_NAME_TOKENS)
 
 
+def _subprocess_trace_result(call_name: str, node: ast.Call) -> dict[str, object] | None:
+    tool = _matched_bio_tool(_command_text(node))
+    if not tool:
+        return None
+    shell_true = _keyword_bool(node, "shell")
+    timeout_present = _has_keyword(node, "timeout")
+    tainted = _command_uses_tainted_name(node)
+    meta = {"call_name": call_name, "bio_tool": tool, "shell_true": shell_true,
+            "external_input_taint": tainted, "timeout_present": timeout_present}
+    if shell_true and tainted:
+        pid, sev = "bio_run_trace_shell_tainted_v1", "warn"
+        msg = "Known bio-tool subprocess call uses shell=True with probable external-input taint."
+    elif (call_name == "subprocess.run" and node.args
+          and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str) and tainted):
+        pid, sev = "bio_run_trace_string_tainted_v1", "warn"
+        msg = "Known bio-tool subprocess uses a string command with probable external-input taint."
+    elif shell_true:
+        pid, sev = "bio_run_trace_shell_v1", "info"
+        msg = "Known bio-tool subprocess uses shell=True."
+    elif not timeout_present:
+        pid, sev = "bio_run_trace_timeout_v1", "info"
+        msg = "Known bio-tool subprocess call has no explicit timeout."
+    else:
+        return None
+    return {"pattern_id": pid, "severity": sev, "explanation": msg, "metadata": meta}
+
+
 def _run_trace_metadata(node: ast.Call) -> dict[str, object] | None:
     call_name = _call_name(node)
     if call_name in {"subprocess.run", "subprocess.Popen"}:
-        command_text = _command_text(node)
-        tool = _matched_bio_tool(command_text)
-        if not tool:
-            return None
-        shell_true = _keyword_bool(node, "shell")
-        timeout_present = _has_keyword(node, "timeout")
-        tainted = _command_uses_tainted_name(node)
-        if shell_true and tainted:
-            severity = "warn"
-            explanation = "Known bio-tool subprocess call uses shell=True with probable external-input taint."
-            pattern_id = "bio_run_trace_shell_tainted_v1"
-        elif call_name == "subprocess.run" and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str) and tainted:
-            severity = "warn"
-            explanation = "Known bio-tool subprocess uses a string command with probable external-input taint."
-            pattern_id = "bio_run_trace_string_tainted_v1"
-        elif shell_true:
-            severity = "info"
-            explanation = "Known bio-tool subprocess uses shell=True."
-            pattern_id = "bio_run_trace_shell_v1"
-        elif not timeout_present:
-            severity = "info"
-            explanation = "Known bio-tool subprocess call has no explicit timeout."
-            pattern_id = "bio_run_trace_timeout_v1"
-        else:
-            return None
-        return {
-            "pattern_id": pattern_id,
-            "severity": severity,
-            "explanation": explanation,
-            "metadata": {
-                "call_name": call_name,
-                "bio_tool": tool,
-                "shell_true": shell_true,
-                "external_input_taint": tainted,
-                "timeout_present": timeout_present,
-            },
-        }
+        return _subprocess_trace_result(call_name, node)
     if call_name == "os.system":
-        command_text = _command_text(node)
-        tool = _matched_bio_tool(command_text)
+        tool = _matched_bio_tool(_command_text(node))
         if not tool:
             return None
         return {
@@ -695,10 +653,8 @@ def _run_trace_metadata(node: ast.Call) -> dict[str, object] | None:
             "severity": "warn",
             "explanation": "Known bio-tool invocation uses os.system, which is hard to constrain safely.",
             "metadata": {
-                "call_name": call_name,
-                "bio_tool": tool,
-                "shell_true": True,
-                "external_input_taint": _command_uses_tainted_name(node),
+                "call_name": call_name, "bio_tool": tool,
+                "shell_true": True, "external_input_taint": _command_uses_tainted_name(node),
                 "timeout_present": False,
             },
         }

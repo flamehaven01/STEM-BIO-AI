@@ -141,7 +141,7 @@ def simulate_policy_outcome(
     if replication_posture_changed and final_score == baseline_final:
         notes.append(
             "Formal score remained unchanged because Stage 4 is still a separate "
-            "replication lane in 1.7.7."
+            "replication lane in 1.7.8."
         )
 
     simulation = {
@@ -237,6 +237,7 @@ def _tier_from_policy(score: int, tier_policy: dict[str, Any]) -> str:
     else:
         tier_key = names[4]
     return f"{tier_key} {labels.get(tier_key, tier_key)}"
+
 
 
 

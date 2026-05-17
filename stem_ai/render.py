@@ -295,7 +295,7 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     if calibration.get("profile_read_mode") != "mirror_only":
         return None
     return (
-        "mirror-only in 1.7.7 — selected profile metadata is surfaced in artifacts, "
+        "mirror-only in 1.7.8 — selected profile metadata is surfaced in artifacts, "
         "but authoritative scan scoring still follows deterministic runtime constants. "
         "Preview-only posture changes, including Stage 4 replication emphasis, do not "
         "change the formal score until a future read-through phase. "
@@ -876,6 +876,7 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
     ci = result["code_integrity"]
     risks = result["notable_risks"]
     positive = result.get("notable_positive_evidence", [])
+    airi = result.get("airi_risk_coverage", {})
 
     ci_rows = [[Paragraph(
         f'<font color="{_WHITE}"><b>Code Integrity</b></font>',
@@ -924,14 +925,33 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
 
     risk_lines = "".join(f'&#8226; {_xt(r[:110])}<br/>' for r in risks[:4])
     pos_lines  = "".join(f'&#8226; {_xt(p[:110])}<br/>' for p in positive[:3])
+    airi_lines = ""
+    if airi:
+        airi_lines += (
+            f'&#8226; Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b>'
+            f' | Rate: <b>{airi.get("coverage_rate", 0):.3f}</b><br/>'
+        )
+        covered = airi.get("covered_risks", [])
+        if covered:
+            first = covered[0]
+            reason = _airi_reason_summary(first)
+            airi_lines += (
+                f'&#8226; {_xt(str(first.get("id", "—")))} {_xt(_clip_words(str(first.get("title", "")), 9))}'
+                f'{f"<br/>&nbsp;&nbsp;why: {_xt(_clip_words(reason, 16))}" if reason else ""}'
+            )
     right_rows = [
         [Paragraph(f'<font color="{_WHITE}"><b>Remediation Targets</b></font>', _style("RH1", 9, 12, _WHITE, True))],
         [Paragraph(f'<font color="{_DGRAY}" size="8">{risk_lines}</font>', _style("RL1", 8, 11, _DGRAY))],
         [Paragraph(f'<font color="{_WHITE}"><b>Positive Evidence</b></font>', _style("PH1", 9, 12, _WHITE, True))],
         [Paragraph(f'<font color="{_DGRAY}" size="8">{pos_lines}</font>', _style("PL1", 8, 11, _DGRAY))],
     ]
+    if airi_lines:
+        right_rows.extend([
+            [Paragraph(f'<font color="{_WHITE}"><b>AIRI Coverage</b></font>', _style("AH1", 9, 12, _WHITE, True))],
+            [Paragraph(f'<font color="{_DGRAY}" size="8">{airi_lines}</font>', _style("AL1", 7.8, 10.5, _DGRAY))],
+        ])
     right_tbl = Table(right_rows, colWidths=["100%"])
-    right_tbl.setStyle(TableStyle([
+    right_style = [
         ("BACKGROUND",    (0, 0), (0, 0), _hx(_RED)),
         ("BACKGROUND",    (0, 1), (0, 1), _hx(_LGRAY)),
         ("BACKGROUND",    (0, 2), (0, 2), _hx(_GREEN)),
@@ -940,7 +960,13 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
         ("LEFTPADDING",   (0, 0), (-1, -1), 6),
         ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
-    ]))
+    ]
+    if airi_lines:
+        right_style.extend([
+            ("BACKGROUND", (0, 4), (0, 4), _hx(_TEAL)),
+            ("BACKGROUND", (0, 5), (0, 5), _hx(_LGRAY)),
+        ])
+    right_tbl.setStyle(TableStyle(right_style))
 
     left_stack = [ci_tbl]
     bio_tbl = _bio_diagnostics_pdf_table(result)
@@ -1754,6 +1780,20 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
     score = result["score"]
     ast_note = _ast_scope_note(result)
     airi = result.get("airi_risk_coverage", {})
+    airi_brief = [
+        "",
+        "AIRI Coverage Summary",
+        f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
+        f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
+    ]
+    covered_risks = airi.get("covered_risks", [])
+    if covered_risks:
+        risk = covered_risks[0]
+        reason = _airi_reason_summary(risk)
+        line = f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+        if reason:
+            line += f" | why: {reason}"
+        airi_brief.append(line)
     brief = [
         "STEM BIO-AI Local Audit Brief",
         f"Target: {result['target']['name']}",
@@ -1773,6 +1813,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         "",
         "Top Risks",
         *[f"- {r}" for r in result["notable_risks"][:4]],
+        *airi_brief,
         "",
         "Not clinical certification. Not regulatory clearance. Not medical advice.",
     ]
@@ -1915,6 +1956,7 @@ def _ascii(t: str) -> str:
 
 def _safe_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", name).strip("_") or "stem_audit"
+
 
 
 
