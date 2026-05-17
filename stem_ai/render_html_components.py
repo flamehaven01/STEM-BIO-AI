@@ -130,6 +130,7 @@ def integrity_card(key: str, info: dict[str, Any]) -> str:
         "C3_dead_or_deprecated_patient_adjacent_paths": "C3 Deprecated Patient Paths",
         "C4_exception_handling_clinical_adjacent_paths": "C4 Fail-Open Exceptions",
         "C5_compliance_boundary_integrity": "C5 Compliance Boundary Integrity",
+        "C6_mock_auth_or_fail_open_boundary": "C6 Mock Auth / Fail-Open Boundary",
         "CC1_clinical_zero_default": "CC1 Clinical Zero Default",
         "CC2_api_contract": "CC2 API Contract",
         "CC3_shallow_validator": "CC3 Shallow Validator",

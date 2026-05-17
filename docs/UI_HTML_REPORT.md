@@ -25,7 +25,7 @@ Example:
 |---------|-----|---------|
 | **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, T0 alert banner |
 | **Score Matrix** | `#s2` | Stage bars (S1/S2R/S3/S4) with formula tooltip |
-| **Code Integrity & Contract** | `#s3` | C1–C5 + CC1–CC3 expandable cards |
+| **Code Integrity & Contract** | `#s3` | C1–C6 + CC1–CC3 expandable cards |
 | **AIRI Risk Coverage** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table |
 | **Evidence Detail** | `#s5` | Full evidence ledger with severity filter chips |
 
@@ -41,7 +41,7 @@ SVG semicircle speedometer (0–100). Arc color matches the tier:
 - T4: green (`#1A7A47`)
 
 ### Expandable Cards (Section 3)
-Each `C1–C5` / `CC1–CC3` card is clickable. Click expands the full evidence list (up to 8 entries). The caret rotates 180° on expand. Keyboard accessible via Enter/Space.
+Each `C1–C6` / `CC1–CC3` card is clickable. Click expands the full evidence list (up to 8 entries). The caret rotates 180° on expand. Keyboard accessible via Enter/Space.
 
 ```
 [C5 Compliance Boundary Integrity]   WARN ▾
@@ -145,6 +145,8 @@ Coverage rate = covered risk IDs / total IDs in detector scope.
 | `T0_hard_floor` | 41.04.00, 61.02.28, 18.05.03, 56.14.00, 47.02.12, 16.05.02, 43.01.00 |
 | `C4_exception_handling_clinical_adjacent_paths` | 70.01.02, 24.01.03, 60.02.01 |
 | `C5_compliance_boundary_integrity` | 24.01.03, 69.01.00 |
+
+`C6_mock_auth_or_fail_open_boundary` is currently a report-layer/code-integrity surface only. It does not yet carry an AIRI mapping row.
 
 Five known gaps are reported for risks that require dynamic evaluation or extend beyond static scan scope.
 

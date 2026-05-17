@@ -177,6 +177,7 @@ Stage 4 does not affect `score.final_score` or `score.formal_tier`.
 | `code_integrity.C3_dead_or_deprecated_patient_adjacent_paths` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 | `code_integrity.C4_exception_handling_clinical_adjacent_paths` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 | `code_integrity.C5_compliance_boundary_integrity` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
+| `code_integrity.C6_mock_auth_or_fail_open_boundary` | object | `{status: "PASS"/"WARN", evidence: [...]}` |
 
 ### Code Contract (Locked)
 

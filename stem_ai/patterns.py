@@ -43,6 +43,12 @@ STAGE2R_CLINICAL_DEPLOYMENT_CLAIMS = re.compile(r"\b(clinical decision support|p
 STAGE2R_WORKFLOW_CLAIMS = re.compile(r"\b(quickstart|run|pipeline|workflow|command line|cli|demo|example notebook|pytest|unittest|test suite|continuous integration|CI)\b", re.I)
 STAGE2R_ENTRYPOINT_TERMS = re.compile(r"(\[project\.scripts\]|console_scripts|entry_points|scripts\s*=|def\s+main\s*\()", re.I)
 LOCAL_SELF_HOST_CLAIM_TERMS = re.compile(r"\b(self-hosted|self hosted|self-host|local environment|local mode|offline work|local SQLite|no authentication required|unlimited queries|local development)\b", re.I)
+MOCK_AUTH_FAIL_OPEN_TERMS = re.compile(
+    r"\b(mock authentication|mock auth|auto-login|auto login|dev@localhost|"
+    r"no sign-?up/sign-?in required|no authentication required|auth disabled|authentication disabled|"
+    r"skip auth|bypass auth|mock auth object|mock auth session|mock auth user)\b",
+    re.I,
+)
 LEGAL_COMPLIANCE_CLAIM_TERMS = re.compile(
     r"\b(HIPAA(?:[- ]compliant| compliance)?|GDPR(?:[- ]compliant| compliance)?|"
     r"FDA[- ]ready|FDA[- ]aligned|CE[- ]ready|CE[- ]aligned|IRB[- ]approved|"

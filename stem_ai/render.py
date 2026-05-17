@@ -887,6 +887,7 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         "C3_dead_or_deprecated_patient_adjacent_paths": "C3 Deprecated Paths",
         "C4_exception_handling_clinical_adjacent_paths": "C4 Exception Handling",
         "C5_compliance_boundary_integrity": "C5 Compliance Boundary",
+        "C6_mock_auth_or_fail_open_boundary": "C6 Mock Auth Boundary",
     }
     for key, item in ci.items():
         s = item["status"]
@@ -1445,6 +1446,9 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
             "Treat privacy, legal, or clinical-adjacent claims as governance obligations. "
             "If README or product text invokes HIPAA, compliance, or self-hosted clinical safety, "
             "surface supporting controls, operating boundaries, and deployment constraints explicitly.",
+        "C6_mock_auth_or_fail_open_boundary":
+            "Do not present self-host, local-mode, or privacy-sensitive flows as production-like if they rely on "
+            "mock authentication, auto-login, or no-auth convenience boundaries. Separate demo convenience from trust posture.",
     }
 
     _desc = {
@@ -1463,6 +1467,9 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
         "C5_compliance_boundary_integrity":
             "Detects unsupported legal/compliance claims or clinical-boundary weaknesses in reviewed repository "
             "sources, including self-asserted privacy/compliance language without visible governance grounding.",
+        "C6_mock_auth_or_fail_open_boundary":
+            "Detects mock-auth, auto-login, or no-auth local/self-host boundary patterns in README, config, and code "
+            "when trust-boundary language suggests a stronger operational posture than the reviewed sources support.",
     }
 
     short = {
@@ -1471,6 +1478,7 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
         "C3_dead_or_deprecated_patient_adjacent_paths": "C3: Deprecated Patient Paths",
         "C4_exception_handling_clinical_adjacent_paths": "C4: Fail-Open Exceptions",
         "C5_compliance_boundary_integrity": "C5: Compliance Boundary Integrity",
+        "C6_mock_auth_or_fail_open_boundary": "C6: Mock Auth / Fail-Open Boundary",
     }
 
     ci_items: list[tuple[str, str, str, str]] = []
@@ -1612,6 +1620,9 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
         "C5_compliance_boundary_integrity: WARN":
             "Do not rely on unsupported legal, privacy, or clinical-boundary claims. "
             "Add explicit deployment boundaries, governance controls, and operational evidence before using such language.",
+        "C6_mock_auth_or_fail_open_boundary: WARN":
+            "Do not treat mock-auth, auto-login, or no-auth self-host flows as production-ready trust boundaries. "
+            "Separate convenience development paths from privacy, security, and compliance posture claims.",
     }
 
     no_major_risks = not risks or risks == ["No major local risks detected by the CLI scan."]

@@ -229,8 +229,8 @@ def audit_repository(
             "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
             "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists; max credit requires bug-fix, patch, or security entries",
             "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists; max credit requires data-source, dataset-citation, or IRB language",
-            "stage_3_B2": "bias/limitation vocabulary present in README and docs; max credit requires quantitative measurement evidence or related test coverage",
-            "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
+        "stage_3_B2": "bias/limitation vocabulary present in README and docs; max credit requires quantitative measurement evidence or related test coverage",
+        "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
             "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, license/use-scope restriction evidence, CLI/seed/example signals",
             "ca_severity": "Clinical/diagnostic term regex match in README, docs, and package metadata",
             "ca_taxonomy_governance": f"{CA_TAXONOMY_VERSION} from {CA_TAXONOMY_SOURCE}; reference markdown is informative, not authoritative runtime source.",
@@ -238,6 +238,7 @@ def audit_repository(
             "C2": "Dependency-manifest-only pin check across requirements/environment/setup.cfg/pyproject dependency sections; ignores non-dependency metadata lines",
             "C3": "Patient metadata patterns in deprecated/legacy/archive directories (regex)",
             "C4": "AST-backed detection of executable fail-open Python exception handlers (except/pass or except/return True)",
+            "C6": "Mock-auth, auto-login, or no-auth local/self-host boundary signals surfaced from README/docs/config/code review",
             "CC1": "AST scan for public functions with confidence/threshold parameter defaulting to 0 or 0.0.",
             "CC2": "README code-block import names compared against package __all__; flags names claimed as importable but absent.",
             "CC3": "AST scan for validate_*/check_* functions using len() but no re.match/search structure check.",
@@ -658,6 +659,7 @@ def _code_integrity_from_findings(
         "C3_dead_or_deprecated_patient_adjacent_paths": ("WARN", "PASS", "No deprecated patient-adjacent metadata patterns detected."),
         "C4_exception_handling_clinical_adjacent_paths": ("WARN", "PASS", "No executable fail-open exception handler detected."),
         "C5_compliance_boundary_integrity": ("WARN", "PASS", "No compliance-boundary integrity warning detected in current report layer."),
+        "C6_mock_auth_or_fail_open_boundary": ("WARN", "PASS", "No mock-auth or fail-open local-boundary warning detected in reviewed sources."),
     }
     findings_by_detector: dict[str, list[dict[str, Any]]] = {key: [] for key in detector_defaults}
     for finding in evidence_ledger:
@@ -703,6 +705,20 @@ def _code_integrity_from_findings(
         result["C5_compliance_boundary_integrity"] = {
             "status": "WARN",
             "evidence": c5_evidence[:5],
+        }
+
+    c6_findings = [
+        f
+        for f in evidence_ledger
+        if f.get("detector") == "C6_mock_auth_or_fail_open_boundary" and f.get("status") == "detected"
+    ]
+    if c6_findings:
+        result["C6_mock_auth_or_fail_open_boundary"] = {
+            "status": "WARN",
+            "evidence": [
+                "Mock-auth or auto-login boundary surfaced in code-integrity lane.",
+                *[_finding_summary(f) for f in c6_findings[:4]],
+            ][:5],
         }
     return result
 

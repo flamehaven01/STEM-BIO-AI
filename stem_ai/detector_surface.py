@@ -38,6 +38,7 @@ from .patterns import (
     LEGAL_COMPLIANCE_GROUNDING_TERMS,
     LEGAL_COMPLIANCE_NEGATION_TERMS,
     LIMITATIONS_SECTION,
+    MOCK_AUTH_FAIL_OPEN_TERMS,
     PATIENT_METADATA,
     PLACEHOLDER_SECRET_VALUES,
     REGULATORY_FRAMEWORK_TERMS,
@@ -134,6 +135,14 @@ def collect_surface_findings(
     regex_detector(target, findings, counters, "S3_B3_coi_funding", "coi_funding_v1", COI_FUNDING_TERMS, [*readme_paths, *docs_paths, *funding_paths], "COI, funding, sponsor, or acknowledgement language detected.")
     regex_detector(target, findings, counters, "S2_package_bio_terms", "package_bio_terms_v1", BIO_TERMS, package_paths, "Package metadata exposes bio/medical vocabulary.")
     external_service_dependency_detector(target, findings, counters, [*readme_paths, *docs_paths, *package_paths], config_paths)
+    mock_auth_or_fail_open_boundary_detector(
+        target,
+        findings,
+        counters,
+        [*readme_paths, *docs_paths, *package_paths],
+        config_paths,
+        code_paths,
+    )
     credential_detector(target, findings, counters, code_paths)
     dependency_pinning_detector(target, findings, counters, dependency_pinning_paths)
     regex_detector(target, findings, counters, "C3_dead_or_deprecated_patient_adjacent_paths", "deprecated_patient_metadata_v1", PATIENT_METADATA, deprecated_paths, "Patient-adjacent metadata pattern detected in deprecated/legacy/archive path.")
@@ -471,6 +480,81 @@ def unsupported_legal_or_compliance_claim_detector(
         "",
         "aggregate",
         "No unsupported legal or compliance claim pattern was detected.",
+    )
+
+
+def mock_auth_or_fail_open_boundary_detector(
+    target: Path,
+    findings: list[EvidenceFinding],
+    counters: dict[tuple[str, str], int],
+    surface_paths: Iterable[Path],
+    config_paths: Iterable[Path],
+    code_paths: Iterable[Path],
+) -> None:
+    review_paths = [*surface_paths, *config_paths, *code_paths]
+    local_claim_rows = _local_self_host_claim_lines(target, [*surface_paths, *config_paths])
+    mock_rows: list[dict[str, object]] = []
+    for path in sorted(set(review_paths), key=lambda p: relative_path(target, p).as_posix()):
+        lines = read_text(path).splitlines()
+        for line_number, line in enumerate(lines, start=1):
+            match = MOCK_AUTH_FAIL_OPEN_TERMS.search(line)
+            if not match:
+                continue
+            mock_rows.append(
+                {
+                    "path": path,
+                    "line": line_number,
+                    "snippet": line,
+                    "match": match.group(0),
+                }
+            )
+    if mock_rows:
+        for row in mock_rows[:4]:
+            add_finding(
+                target,
+                findings,
+                counters,
+                "C6_mock_auth_or_fail_open_boundary",
+                "mock_auth_fail_open_boundary_v1",
+                "detected",
+                "warn",
+                row["path"],
+                row["line"],
+                row["snippet"],
+                "regex",
+                "Mock-auth, auto-login, or no-auth local/self-host boundary surfaced in reviewed sources.",
+                {"match": row["match"], "local_claim_context": bool(local_claim_rows)},
+            )
+        for row in local_claim_rows[:2]:
+            add_finding(
+                target,
+                findings,
+                counters,
+                "C6_mock_auth_or_fail_open_boundary",
+                "mock_auth_fail_open_boundary_v1",
+                "detected",
+                "warn",
+                row["path"],
+                row["line"],
+                row["snippet"],
+                "regex",
+                "Local or self-host claims coexist with mock-auth or auto-login boundary signals.",
+                {"line_role": "local_or_self_host_claim"},
+            )
+        return
+    add_finding(
+        target,
+        findings,
+        counters,
+        "C6_mock_auth_or_fail_open_boundary",
+        "mock_auth_fail_open_boundary_v1",
+        "not_detected",
+        "info",
+        Path("."),
+        0,
+        "",
+        "aggregate",
+        "No mock-auth or fail-open local-boundary pattern was detected.",
     )
 
 

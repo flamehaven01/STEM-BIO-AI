@@ -124,7 +124,7 @@ Final = (Stage 1 × 0.40) + (Stage 2R × 0.20) + (Stage 3 × 0.40) − C1 Penalt
 | **Stage 2R** Repo-Local Consistency | 20% | Vocabulary overlap across README, docs, package metadata, CI, and tests; limitation repetition; contradiction, staleness, and unsupported-workflow deductions |
 | **Stage 3** Code/Bio Responsibility | 40% | CI presence; domain test coverage; changelog hygiene (T3); data provenance and IRB/dataset citation (B1); bias/limitation measurement evidence (B2); conflict-of-interest disclosure (B3) |
 | **Stage 4** Replication Evidence | Separate lane | Containers; reproducibility targets; dependency locks/pins; dataset and model artifact references; seed, CLI, and citation signals; license/use-scope restrictions |
-| **C1–C5** Code Integrity | Penalty / advisory | Hardcoded credentials (C1, −10 pts); dependency pinning and external-service fragility (C2); deprecated patient-adjacent paths (C3); fail-open exception handlers (C4); compliance and clinical-boundary integrity (C5) |
+| **C1–C6** Code Integrity | Penalty / advisory | Hardcoded credentials (C1, −10 pts); dependency pinning and external-service fragility (C2); deprecated patient-adjacent paths (C3); fail-open exception handlers (C4); compliance and clinical-boundary integrity (C5); mock-auth or no-auth local/self-host boundary warnings (C6) |
 
 Stage 4 is reported as `replication_score` / `replication_tier` and does **not** affect `score.final_score`. Full scoring rationale and calibration gap disclosures are in [`docs/SCORING_RATIONALE.md`](docs/SCORING_RATIONALE.md).
 
@@ -139,7 +139,7 @@ flowchart LR
     B --> D[Stage 2R\nRepo-local consistency]
     B --> E[Stage 3\nCode/bio responsibility]
     B --> F[Stage 4\nReplication lane]
-    B --> K[C1–C5\nCode integrity]
+    B --> K[C1–C6\nCode integrity]
     B --> CC[CC1–CC3\nAST contract detectors]
     C --> G[Weighted evidence score]
     D --> G

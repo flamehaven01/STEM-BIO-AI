@@ -250,9 +250,9 @@ Stage 4 produces a separate R0–R4 replication tier that informs institutional 
 
 ---
 
-## 14. C1–C5: Code Integrity
+## 14. C1–C6: Code Integrity
 
-C1–C5 are code-level or governance-boundary checks available only in LOCAL_ANALYSIS mode. They do not contribute to S1/S2R/S3 scoring except for the explicit C1 penalty.
+C1–C6 are code-level or governance-boundary checks available only in LOCAL_ANALYSIS mode. They do not contribute to S1/S2R/S3 scoring except for the explicit C1 penalty.
 
 | Item | Signal | Effect |
 |------|--------|--------|
@@ -261,15 +261,17 @@ C1–C5 are code-level or governance-boundary checks available only in LOCAL_ANA
 | C3 Deprecated patient paths | Patient metadata patterns in deprecated/legacy/archive dirs | WARN only, no score change |
 | C4 Fail-open exceptions | `except: pass` or `except Exception: pass` in code | WARN only, no score change |
 | C5 Compliance boundary integrity | Unsupported legal/compliance claims or missing clinical-boundary integrity in reviewed sources | WARN only, no score change |
+| C6 Mock-auth / fail-open boundary | Mock authentication, auto-login, or no-auth local/self-host trust boundary signals | WARN only, no score change |
 
-Only C1 affects the final score. C2–C5 are reported as risk surfaces because they represent elevated engineering or governance concern but do not rise to the level of score penalties in the current calibration.
+Only C1 affects the final score. C2–C6 are reported as risk surfaces because they represent elevated engineering or governance concern but do not rise to the level of score penalties in the current calibration.
 
-The C4/C5 split is deliberate in `1.7.7`:
+The C4/C5/C6 split is deliberate in `1.7.7`:
 
 - `C4` is reserved for executable fail-open exception behavior in code.
 - `C5` is reserved for compliance, legal, or clinical-boundary integrity warnings surfaced from reviewed repository sources.
+- `C6` is reserved for mock-auth, auto-login, or no-auth self-host/local trust-boundary signals surfaced from README, config, and code review.
 
-This prevents unsupported compliance claims from appearing as if they were code-level exception findings.
+This prevents unsupported compliance claims or self-host convenience auth surfaces from appearing as if they were code-level exception findings.
 
 ---
 

@@ -1045,8 +1045,39 @@ def test_code_integrity_lane_reclassifies_external_dependency_and_unsupported_cl
     assert result["code_integrity"]["C2_dependency_pinning"]["status"] == "WARN"
     assert result["code_integrity"]["C4_exception_handling_clinical_adjacent_paths"]["status"] == "PASS"
     assert result["code_integrity"]["C5_compliance_boundary_integrity"]["status"] == "WARN"
+    assert result["code_integrity"]["C6_mock_auth_or_fail_open_boundary"]["status"] == "PASS"
     assert any("External operational dependency signal" in item for item in result["code_integrity"]["C2_dependency_pinning"]["evidence"])
     assert any("Unsupported legal/compliance claim" in item for item in result["code_integrity"]["C5_compliance_boundary_integrity"]["evidence"])
+
+
+def test_code_integrity_lane_surfaces_mock_auth_or_fail_open_boundary(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "Self-hosted mode is the recommended way to run Bio.\n"
+        "No authentication required - Auto-login as dev user.\n",
+    )
+    _write(
+        tmp_path / ".env.example",
+        "NEXT_PUBLIC_APP_MODE=self-hosted\n",
+    )
+    _write(
+        tmp_path / "src" / "auth.py",
+        "DEV_USER_EMAIL = 'dev@localhost'\n"
+        "# Mock auth object for self-hosted mode\n",
+    )
+
+    result = audit_repository(tmp_path)
+
+    assert result["code_integrity"]["C6_mock_auth_or_fail_open_boundary"]["status"] == "WARN"
+    assert any(
+        "Mock-auth or auto-login boundary surfaced" in item
+        for item in result["code_integrity"]["C6_mock_auth_or_fail_open_boundary"]["evidence"]
+    )
+    assert any(
+        f["detector"] == "C6_mock_auth_or_fail_open_boundary" and f["status"] == "detected"
+        for f in result["evidence_ledger"]
+    )
 
 
 def test_airi_coverage_can_be_triggered_by_supported_report_layer_detectors(tmp_path: Path) -> None:
@@ -1506,6 +1537,7 @@ def test_execute_advisory_call_returns_explicit_not_implemented_error_without_ne
             "C3_dead_or_deprecated_patient_adjacent_paths": {"status": "PASS", "evidence": ["none"]},
             "C4_exception_handling_clinical_adjacent_paths": {"status": "PASS", "evidence": ["none"]},
             "C5_compliance_boundary_integrity": {"status": "PASS", "evidence": ["none"]},
+            "C6_mock_auth_or_fail_open_boundary": {"status": "PASS", "evidence": ["none"]},
         },
         "detector_summary": {},
         "reasoning_model": {},
