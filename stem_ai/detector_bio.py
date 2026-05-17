@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 import re
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Iterable
 
 from .detector_utils import add_finding, is_fixture_like_path, iter_code_files, iter_python_files, read_text, source_line
 from .evidence import EvidenceFinding
@@ -42,6 +42,7 @@ TRACE_SCAN_SUFFIXES = {".json", ".yaml", ".yml", ".toml", ".md", ".txt"}
 TRACE_FILE_HINT = re.compile(r"(trace|audit|event|log|manifest|checksum|hash|schema|override|decision)", re.I)
 BIO_TOOL_NAMES = {"blast", "blastn", "blastp", "samtools", "bwa", "bcftools", "bedtools", "minimap2"}
 TAINT_NAME_TOKENS = ("query", "input", "sample", "path", "request", "user", "fastq", "bam", "vcf")
+AstCodeContext = tuple[Path, ast.AST, list[str]]
 
 
 def collect_bio_findings(
@@ -50,15 +51,16 @@ def collect_bio_findings(
     counters: dict[tuple[str, str], int],
 ) -> None:
     code_paths = list(iter_code_files(target, max_files=240))
-    _collect_smiles_surface_findings(target, findings, counters, code_paths)
-    _collect_smiles_rdkit_validation_findings(target, findings, counters, code_paths)
-    _collect_smiles_parser_guard_findings(target, findings, counters, code_paths)
-    _collect_silent_mock_findings(target, findings, counters, code_paths)
+    ast_contexts = list(_iter_ast_code_contexts(code_paths))
+    _collect_smiles_surface_findings(target, findings, counters, ast_contexts)
+    _collect_smiles_rdkit_validation_findings(target, findings, counters, ast_contexts)
+    _collect_smiles_parser_guard_findings(target, findings, counters, ast_contexts)
+    _collect_silent_mock_findings(target, findings, counters, ast_contexts)
     _collect_trace_manifest_findings(target, findings, counters)
-    _collect_run_trace_findings(target, findings, counters, code_paths)
+    _collect_run_trace_findings(target, findings, counters, ast_contexts)
 
 
-def _iter_ast_code_contexts(paths: list[Path]):
+def _iter_ast_code_contexts(paths: list[Path]) -> Iterable[AstCodeContext]:
     for path in paths:
         if path.suffix.lower() != ".py" or is_fixture_like_path(path) or _is_generated_path(path):
             continue
@@ -77,10 +79,10 @@ def _collect_smiles_surface_findings(
     target: Path,
     findings: list[EvidenceFinding],
     counters: dict[tuple[str, str], int],
-    paths: list[Path],
+    ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    for path, tree, lines in _iter_ast_code_contexts(paths):
+    for path, tree, lines in ast_contexts:
         for node in ast.walk(tree):
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
                 continue
@@ -129,10 +131,10 @@ def _collect_smiles_parser_guard_findings(
     target: Path,
     findings: list[EvidenceFinding],
     counters: dict[tuple[str, str], int],
-    paths: list[Path],
+    ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    for path, tree, lines in _iter_ast_code_contexts(paths):
+    for path, tree, lines in ast_contexts:
         for node in ast.walk(tree):
             if not isinstance(node, ast.Assign) or len(node.targets) != 1:
                 continue
@@ -181,11 +183,11 @@ def _collect_smiles_rdkit_validation_findings(
     target: Path,
     findings: list[EvidenceFinding],
     counters: dict[tuple[str, str], int],
-    paths: list[Path],
+    ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
     rdkit_available = _rdkit_is_available()
-    for path, tree, lines in _iter_ast_code_contexts(paths):
+    for path, tree, lines in ast_contexts:
         for node in ast.walk(tree):
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
                 continue
@@ -275,11 +277,11 @@ def _collect_silent_mock_findings(
     target: Path,
     findings: list[EvidenceFinding],
     counters: dict[tuple[str, str], int],
-    paths: list[Path],
+    ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
     not_applicable = False
-    for path, tree, lines in _iter_ast_code_contexts(paths):
+    for path, tree, lines in ast_contexts:
         for node in ast.walk(tree):
             result = _process_mock_node_finding(target, findings, counters, path, node, lines)
             if result == "detected":
@@ -401,10 +403,10 @@ def _collect_run_trace_findings(
     target: Path,
     findings: list[EvidenceFinding],
     counters: dict[tuple[str, str], int],
-    paths: list[Path],
+    ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    for path, tree, lines in _iter_ast_code_contexts(paths):
+    for path, tree, lines in ast_contexts:
         for node in ast.walk(tree):
             if not isinstance(node, ast.Call):
                 continue
