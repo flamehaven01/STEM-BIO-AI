@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable
 
@@ -42,7 +43,18 @@ TRACE_SCAN_SUFFIXES = {".json", ".yaml", ".yml", ".toml", ".md", ".txt"}
 TRACE_FILE_HINT = re.compile(r"(trace|audit|event|log|manifest|checksum|hash|schema|override|decision)", re.I)
 BIO_TOOL_NAMES = {"blast", "blastn", "blastp", "samtools", "bwa", "bcftools", "bedtools", "minimap2"}
 TAINT_NAME_TOKENS = ("query", "input", "sample", "path", "request", "user", "fastq", "bam", "vcf")
-AstCodeContext = tuple[Path, ast.AST, list[str]]
+
+
+@dataclass(slots=True)
+class AstCodeContext:
+    path: Path
+    tree: ast.AST
+    lines: list[str]
+    constants: list[ast.Constant]
+    assigns: list[ast.Assign]
+    calls: list[ast.Call]
+    try_nodes: list[ast.Try]
+    if_nodes: list[ast.If]
 
 
 def collect_bio_findings(
@@ -72,7 +84,32 @@ def _iter_ast_code_contexts(paths: list[Path]) -> Iterable[AstCodeContext]:
         except SyntaxError:
             continue
         _annotate_parents(tree)
-        yield path, tree, text.splitlines()
+        constants: list[ast.Constant] = []
+        assigns: list[ast.Assign] = []
+        calls: list[ast.Call] = []
+        try_nodes: list[ast.Try] = []
+        if_nodes: list[ast.If] = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant):
+                constants.append(node)
+            elif isinstance(node, ast.Assign):
+                assigns.append(node)
+            elif isinstance(node, ast.Call):
+                calls.append(node)
+            elif isinstance(node, ast.Try):
+                try_nodes.append(node)
+            elif isinstance(node, ast.If):
+                if_nodes.append(node)
+        yield AstCodeContext(
+            path=path,
+            tree=tree,
+            lines=text.splitlines(),
+            constants=constants,
+            assigns=assigns,
+            calls=calls,
+            try_nodes=try_nodes,
+            if_nodes=if_nodes,
+        )
 
 
 def _collect_smiles_surface_findings(
@@ -82,8 +119,8 @@ def _collect_smiles_surface_findings(
     ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    for path, tree, lines in ast_contexts:
-        for node in ast.walk(tree):
+    for ctx in ast_contexts:
+        for node in ctx.constants:
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
                 continue
             value = node.value.strip()
@@ -103,9 +140,9 @@ def _collect_smiles_surface_findings(
                 "bio_smiles_surface_v1",
                 "detected",
                 "warn",
-                path,
+                ctx.path,
                 getattr(node, "lineno", 0),
-                source_line(lines, getattr(node, "lineno", 0)),
+                source_line(ctx.lines, getattr(node, "lineno", 0)),
                 "ast",
                 "Suspicious or malformed SMILES-like string detected by conservative surface checks.",
                 {"smiles_text": value, "issues": issues},
@@ -134,8 +171,8 @@ def _collect_smiles_parser_guard_findings(
     ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    for path, tree, lines in ast_contexts:
-        for node in ast.walk(tree):
+    for ctx in ast_contexts:
+        for node in ctx.assigns:
             if not isinstance(node, ast.Assign) or len(node.targets) != 1:
                 continue
             target_node = node.targets[0]
@@ -155,9 +192,9 @@ def _collect_smiles_parser_guard_findings(
                 "bio_smiles_parser_guard_v1",
                 "detected",
                 "warn",
-                path,
+                ctx.path,
                 getattr(node, "lineno", 0),
-                source_line(lines, getattr(node, "lineno", 0)),
+                source_line(ctx.lines, getattr(node, "lineno", 0)),
                 "ast",
                 "SMILES parser result is used without an explicit None/invalid guard.",
                 {"variable": target_node.id, "parser_call": parser_call},
@@ -187,8 +224,8 @@ def _collect_smiles_rdkit_validation_findings(
 ) -> None:
     detected = False
     rdkit_available = _rdkit_is_available()
-    for path, tree, lines in ast_contexts:
-        for node in ast.walk(tree):
+    for ctx in ast_contexts:
+        for node in ctx.constants:
             if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
                 continue
             value = node.value.strip()
@@ -210,9 +247,9 @@ def _collect_smiles_rdkit_validation_findings(
                 "bio_smiles_rdkit_invalid_v1",
                 "detected",
                 "warn",
-                path,
+                ctx.path,
                 getattr(node, "lineno", 0),
-                source_line(lines, getattr(node, "lineno", 0)),
+                source_line(ctx.lines, getattr(node, "lineno", 0)),
                 "ast",
                 "RDKit optional validation lane rejected a SMILES-like string candidate.",
                 {"smiles_text": value, "lane": "A1_optional_rdkit"},
@@ -281,9 +318,15 @@ def _collect_silent_mock_findings(
 ) -> None:
     detected = False
     not_applicable = False
-    for path, tree, lines in ast_contexts:
-        for node in ast.walk(tree):
-            result = _process_mock_node_finding(target, findings, counters, path, node, lines)
+    for ctx in ast_contexts:
+        for node in ctx.try_nodes:
+            result = _process_mock_node_finding(target, findings, counters, ctx.path, node, ctx.lines)
+            if result == "detected":
+                detected = True
+            elif result == "not_applicable":
+                not_applicable = True
+        for node in ctx.if_nodes:
+            result = _process_mock_node_finding(target, findings, counters, ctx.path, node, ctx.lines)
             if result == "detected":
                 detected = True
             elif result == "not_applicable":
@@ -406,8 +449,8 @@ def _collect_run_trace_findings(
     ast_contexts: Iterable[AstCodeContext],
 ) -> None:
     detected = False
-    for path, tree, lines in ast_contexts:
-        for node in ast.walk(tree):
+    for ctx in ast_contexts:
+        for node in ctx.calls:
             if not isinstance(node, ast.Call):
                 continue
             finding = _run_trace_metadata(node)
@@ -422,9 +465,9 @@ def _collect_run_trace_findings(
                 finding["pattern_id"],
                 "detected",
                 finding["severity"],
-                path,
+                ctx.path,
                 getattr(node, "lineno", 0),
-                source_line(lines, getattr(node, "lineno", 0)),
+                source_line(ctx.lines, getattr(node, "lineno", 0)),
                 "ast",
                 finding["explanation"],
                 finding["metadata"],

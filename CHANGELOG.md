@@ -13,7 +13,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 ## [Unreleased]
 
 ### Changed
-- Reduced `detector_bio.py` repeated AST parse/parent-annotation overhead by building file AST contexts once per scan and reusing them across the SMILES, parser-guard, silent-mock, and run-trace collectors. This is a semantics-preserving performance optimization only.
+- Reduced `detector_bio.py` repeated AST parse/parent-annotation overhead by building file AST contexts once per scan, pre-bucketing core node classes (`Constant`, `Assign`, `Call`, `Try`, `If`), and reusing them across the SMILES, parser-guard, silent-mock, and run-trace collectors. This is a semantics-preserving performance optimization only.
 
 ---
 
