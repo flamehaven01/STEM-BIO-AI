@@ -4,6 +4,8 @@ from pathlib import Path
 import json
 from datetime import date
 
+import pytest
+
 import stem_ai.detectors as detectors
 from stem_ai.advisory_contract import (
     _fallback_citations,
@@ -53,7 +55,7 @@ from stem_ai.reasoning_model import (
 )
 from stem_ai.regulatory_traceability import build_regulatory_basis
 from stem_ai.redaction import redact_object, redaction_policy, sanitize_artifact_text, secret_scan
-from stem_ai.render import _explain_status_label, render_explain, render_markdown, render_pdf_pages
+from stem_ai.render import _explain_status_label, render_explain, render_markdown, render_pdf_pages, write_outputs
 from stem_ai.render_html import render_html
 from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
 
@@ -2456,6 +2458,45 @@ def test_cli_scan_accepts_named_policy_and_surfaces_it_in_output(tmp_path: Path,
     assert "Policy: strict_clinical_adjacency [experimental; mirror_only]" in captured.out
     assert "Policy Mode: mirror-only preview; scan scoring still follows authoritative runtime constants." in captured.out
     assert result["calibration_profile"]["profile_name"] == "strict_clinical_adjacency"
+
+
+def test_cli_scan_defaults_to_level_3() -> None:
+    from stem_ai.cli import _build_parser
+
+    parser = _build_parser()
+
+    args = parser.parse_args(["scan", "D:/tmp/example"])
+
+    assert args.level == 3
+
+
+def test_detailed_5p_pdf_renders_exactly_five_pages(tmp_path: Path) -> None:
+    pypdf = pytest.importorskip("pypdf")
+
+    _write(
+        tmp_path / "README.md",
+        "Bioinformatics repository for clinical trial biomarker analysis and medical imaging.\n"
+        "HIPAA-compliant architecture when self-hosted.\n"
+        "World's most powerful open-source bio AI.\n"
+        "PubMed, ClinicalTrials.gov, and DailyMed workflow support.\n",
+    )
+    _write(tmp_path / "package.json", '{\"name\":\"demo-bio\"}\n')
+    _write(tmp_path / "pnpm-lock.yaml", "lockfileVersion: '9.0'\n")
+    _write(tmp_path / "Dockerfile", "FROM python:3.11-slim\n")
+    _write(
+        tmp_path / "src" / "pipeline.py",
+        "def self_host_mode():\n"
+        "    if True:\n"
+        "        return {'user': 'dev@localhost'}\n",
+    )
+
+    result = audit_repository(tmp_path)
+    out_dir = tmp_path / "out"
+    created = write_outputs(result, out_dir, mode="detailed", pages=5, fmt="pdf", explain=False)
+    pdf_path = next(path for path in created if path.suffix == ".pdf")
+    reader = pypdf.PdfReader(str(pdf_path))
+
+    assert len(reader.pages) == 5
 
 
 def test_cli_rejects_invalid_policy_name(tmp_path: Path) -> None:

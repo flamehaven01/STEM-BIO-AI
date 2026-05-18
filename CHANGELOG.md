@@ -17,6 +17,8 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Tightened bio-detector scan boundaries by excluding `.manual_verify` from generated/non-runtime paths and replacing the broad trace-manifest `rglob("*")` walk with a pruned filesystem traversal that preserves existing detector semantics while lowering trace-scan overhead.
 - Deferred the RDKit optional lane until at least one SMILES-like candidate is present, and cached the optional `rdkit.Chem` import so availability/import work is not repeated unnecessarily across candidate checks.
 - Added a file-signature AST context cache for `detector_bio.py` so repeated scans of unchanged Python files in the same process avoid redundant `ast.parse/compile` work while keeping detector semantics unchanged.
+- Changed the CLI default report depth from `--level 1` to `--level 3`, so the plain `stem <repo>` path now emits the full 5-page evidence packet unless the user selects a shallower level.
+- Reworked ReportLab PDF pagination so `detailed_5p.pdf` is now constrained to an actual 5-page output, keeping the executive/regulatory summary on page 1 instead of allowing silent overflow into extra pages.
 
 ---
 

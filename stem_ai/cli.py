@@ -203,12 +203,12 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         "--level",
         type=int,
         choices=[1, 2, 3],
-        default=1,
+        default=3,
         help=(
             "Report depth: "
-            "1=brief 1-page executive summary (default), "
+            "1=brief 1-page executive summary, "
             "2=detailed 3-page stage review, "
-            "3=full 5-page evidence packet"
+            "3=full 5-page evidence packet (default)"
         ),
     )
     parser.add_argument(

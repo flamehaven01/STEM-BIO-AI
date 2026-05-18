@@ -53,7 +53,7 @@ These options work across `scan`, `gate`, and `advisory` workflows unless otherw
 
 | Flag | Values | Default | Description |
 |------|--------|---------|-------------|
-| `--level` | `1`, `2`, `3` | `1` | Report depth: 1=brief 1p, 2=stage review 3p, 3=full packet 5p |
+| `--level` | `1`, `2`, `3` | `3` | Report depth: 1=brief 1p, 2=stage review 3p, 3=full packet 5p |
 | `--format` | `json`, `md`, `pdf`, `all` | command-specific | Artifact format to write |
 | `--out`, `--output` | `DIR` | `stem_output` | Output directory |
 | `--policy` | `NAME` | `default` | Named calibration profile to surface in the scan result |

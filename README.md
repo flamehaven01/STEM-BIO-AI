@@ -164,6 +164,7 @@ Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem
 ## Output Artifacts
 
 Each run writes to `--out DIR` (default: `stem_output/`).
+The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`, which emits the full 5-page evidence packet unless you select a lower level explicitly.
 
 | Level | Pages | Audience | Artifacts |
 |-------|------:|---------|-----------|

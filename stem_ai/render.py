@@ -17,6 +17,7 @@ try:
     from reportlab.lib.units import mm
     from reportlab.platypus import (
         HRFlowable,
+        KeepInFrame,
         PageBreak,
         Paragraph,
         SimpleDocTemplate,
@@ -43,6 +44,8 @@ _DGRAY  = "#4A5568"
 _WHITE  = "#FFFFFF"
 
 _TIER_COLOR = {"T0": _RED, "T1": _RED, "T2": _ORANGE, "T3": _TEAL, "T4": _GREEN}
+_PDF_CONTENT_WIDTH = A4[0] - (28 * mm)
+_PDF_CONTENT_HEIGHT = A4[1] - (24 * mm)
 _BIO_DETECTOR_LABELS = {
     "BIO_smiles_surface_integrity": "SMILES Surface Integrity",
     "BIO_smiles_rdkit_validation": "SMILES RDKit Validation",
@@ -732,7 +735,7 @@ def _page1_executive(result: dict[str, Any], mode: str, pages: int) -> list[Any]
     story.append(Spacer(1, 2 * mm))
     story += _regulatory_basis_box(result)
     story += _footer_block()
-    return story
+    return _single_page_story(story)
 
 
 def _header_block(result: dict[str, Any]) -> list[Any]:
@@ -1064,6 +1067,16 @@ def _footer_block() -> list[Any]:
     ]
 
 
+def _single_page_story(flowables: list[Any], *, break_before: bool = False) -> list[Any]:
+    wrapped = KeepInFrame(
+        _PDF_CONTENT_WIDTH,
+        _PDF_CONTENT_HEIGHT,
+        flowables,
+        mode="shrink",
+    )
+    return ([PageBreak()] if break_before else []) + [wrapped]
+
+
 # ── Detail page dispatcher ────────────────────────────────────────────────────
 def _detail_pages(result: dict[str, Any], pages: int) -> list[Any]:
     story: list[Any] = []
@@ -1146,7 +1159,7 @@ def _rubric_rows(items: list[tuple[str, str, str, str]], id_prefix: str = "R") -
 
 # ── Page 2: Stage 1 + Stage 2R Analysis ──────────────────────────────────────
 def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
-    story: list[Any] = [PageBreak()]
+    story: list[Any] = []
     score = result["score"]
     cls = result["classification"]
     s1 = score["stage_1_readme_intent"]
@@ -1311,12 +1324,12 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
     ))
 
     story += _footer_block()
-    return story
+    return _single_page_story(story, break_before=True)
 
 
 # ── Page 3: Stage 3 Full Breakdown ───────────────────────────────────────────
 def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
-    story: list[Any] = [PageBreak()]
+    story: list[Any] = []
     score = result["score"]
     s3 = score["stage_3_code_bio"]
     rubric = result.get("stage_3_rubric", {})
@@ -1437,12 +1450,12 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         ))
 
     story += _footer_block()
-    return story
+    return _single_page_story(story, break_before=True)
 
 
 # ── Page 4: Code Integrity Deep Dive + Classification (5p only) ───────────────
 def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
-    story: list[Any] = [PageBreak()]
+    story: list[Any] = []
     ci = result["code_integrity"]
     cls = result["classification"]
     hashes = result.get("file_hashes_sha256", {})
@@ -1608,12 +1621,12 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
         story.append(hash_tbl)
 
     story += _footer_block()
-    return story
+    return _single_page_story(story, break_before=True)
 
 
 # ── Page 5: Priority Improvements + Method + Metadata (5p only) ───────────────
 def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
-    story: list[Any] = [PageBreak()]
+    story: list[Any] = []
     risks = result.get("notable_risks", [])
     positive = result.get("notable_positive_evidence", [])
     score = result["score"]
@@ -1772,7 +1785,7 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
     ]))
     story.append(meta_tbl)
     story += _footer_block()
-    return story
+    return _single_page_story(story, break_before=True)
 
 
 # ── plain-text PDF fallback (no reportlab) ───────────────────────────────────
