@@ -1,6 +1,6 @@
-"""5-section interactive HTML report renderer for STEM BIO-AI.
+"""Interactive HTML report renderer for STEM BIO-AI.
 
-Sections: Executive Summary | Score Matrix | Code Integrity | AIRI Coverage | Evidence Detail
+Sections: Executive Summary | Decision Path | Code Integrity | AIRI Coverage | Evidence Detail
 Self-contained: inline CSS + SVG + JS, zero external dependencies.
 """
 from __future__ import annotations
@@ -8,10 +8,18 @@ from __future__ import annotations
 from typing import Any
 
 from .render_html_components import (
-    _C, _STAGE_TIPS,
-    xt, tier_color, tip_icon,
-    svg_gauge, svg_donut, svg_hbar,
-    integrity_card, domain_card, airi_row, evidence_row,
+    _C,
+    _STAGE_TIPS,
+    xt,
+    tier_color,
+    tip_icon,
+    svg_gauge,
+    svg_donut,
+    svg_hbar,
+    integrity_card,
+    domain_card,
+    airi_row,
+    evidence_row,
 )
 from .render_html_styles import build_css, JS
 
@@ -29,8 +37,10 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
 
 def _nav() -> str:
     links = [
-        ("#s1", "1. Summary"), ("#s2", "2. Score Matrix"),
-        ("#s3", "3. Code Integrity"), ("#s4", "4. AIRI Coverage"),
+        ("#s1", "1. Summary"),
+        ("#s2", "2. Decision Path"),
+        ("#s3", "3. Code Integrity"),
+        ("#s4", "4. AIRI Coverage"),
         ("#s5", "5. Evidence"),
     ]
     items = "".join(f'<a href="{h}" class="nav-link">{l}</a>' for h, l in links)
@@ -42,30 +52,108 @@ def _hero(score: dict, final: int, tier: str, tc: str, target: str, date: str) -
     use_scope = xt(str(score.get("use_scope", "")))
     return (
         f'<header class="hero">'
-        f'<div>{gauge}</div>'
-        f'<div>'
-        f'<div class="sub">STEM BIO-AI Local Audit &nbsp;|&nbsp; {date}</div>'
+        f'<div class="hero-left">{gauge}</div>'
+        f'<div class="hero-right">'
+        f'<div class="eyebrow">STEM BIO-AI Local Audit &nbsp;|&nbsp; {date}</div>'
         f'<h1>{target}</h1>'
-        f'<div class="tier">{xt(tier)}</div>'
-        f'<p style="font-size:13px;color:rgba(255,255,255,.75);'
-        f'max-width:520px;line-height:1.5;margin-top:6px">{use_scope}</p>'
+        f'<div class="hero-meta">'
+        f'<span class="tier">{xt(tier)}</span>'
+        f'<span class="hero-chip">Deterministic local scan</span>'
+        f'<span class="hero-chip">No LLM / no network / no runtime execution</span>'
+        f'</div>'
+        f'<p class="lede">{use_scope}</p>'
         f'</div></header>'
     )
 
 
-def _section1(result: dict, final: int, tc: str,
-               s1: int, s2: int, s3: int, s4: int, t0: bool) -> str:
-    alert = ""
-    if t0:
-        alert = (
-            f'<div class="alert-t0">'
-            f'T0 HARD FLOOR TRIGGERED &mdash; Clinical boundary declaration absent. '
-            f'Score capped at {final}/100.</div>'
+def _iter_rubric_rows(rubric: dict[str, Any]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for key, info in rubric.items():
+        if key.endswith("raw_total") or key == "baseline":
+            continue
+        if not isinstance(info, dict):
+            continue
+        score = info.get("score")
+        max_score = info.get("max")
+        if score is None:
+            continue
+        rows.append(
+            {
+                "key": key,
+                "score": int(score),
+                "max": int(max_score) if isinstance(max_score, (int, float)) else None,
+                "evidence": xt(str(info.get("evidence", ""))),
+                "detector_id": xt(str(info.get("detector_id", ""))) if info.get("detector_id") else "",
+                "decision_basis": xt(str(info.get("decision_basis", ""))) if info.get("decision_basis") else "",
+            }
         )
+    return rows
+
+
+def _select_focus_rows(
+    rubric: dict[str, Any],
+    *,
+    negatives_first: bool = True,
+    limit: int = 4,
+) -> list[dict[str, Any]]:
+    rows = [r for r in _iter_rubric_rows(rubric) if r["score"] != 0]
+    if negatives_first:
+        negatives = sorted([r for r in rows if r["score"] < 0], key=lambda r: abs(r["score"]), reverse=True)
+        positives = sorted([r for r in rows if r["score"] > 0], key=lambda r: abs(r["score"]), reverse=True)
+        return (negatives + positives)[:limit]
+    return sorted(rows, key=lambda r: abs(r["score"]), reverse=True)[:limit]
+
+
+def _rubric_focus_list(rows: list[dict[str, Any]]) -> str:
+    if not rows:
+        return '<li class="focus-line muted">No scored rubric movement surfaced.</li>'
+    items = ""
+    for row in rows:
+        sc = row["score"]
+        sign = "+" if sc > 0 else ""
+        detector = (
+            f'<span class="focus-detector">{row["detector_id"]}</span>'
+            if row["detector_id"] else ""
+        )
+        detail = row["decision_basis"] or row["evidence"]
+        items += (
+            f'<li class="focus-line">'
+            f'<div class="focus-top"><span class="focus-key">{xt(row["key"])}</span>'
+            f'<span class="focus-score">{sign}{sc}</span></div>'
+            f'<div class="focus-detail">{detector}{detail}</div>'
+            f'</li>'
+        )
+    return items
+
+
+def _code_integrity_summary(integrity: dict[str, Any]) -> tuple[list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]]:
+    warnings: list[tuple[str, dict[str, Any]]] = []
+    clear: list[tuple[str, dict[str, Any]]] = []
+    for key, info in integrity.items():
+        if not isinstance(info, dict):
+            continue
+        if str(info.get("status", "PASS")).upper() == "PASS":
+            clear.append((key, info))
+        else:
+            warnings.append((key, info))
+    return warnings, clear
+
+
+def _section1(result: dict[str, Any], final: int, tc: str,
+              s1: int, s2: int, s3: int, s4: int, t0: bool) -> str:
+    score = result["score"]
+    calibration = result.get("calibration_profile", {})
+    freshness = result.get("audit_freshness", {})
+    policy_name = xt(str(calibration.get("profile_name", "unknown")))
+    policy_status = xt(str(calibration.get("profile_status", "unknown")))
+    policy_mode = xt(str(calibration.get("profile_read_mode", "unknown")))
+    calibration_note = _calibration_effect_note(calibration)
+
     stats = "".join(
-        f'<div class="stat-card">'
-        f'<div class="stat-val" style="color:{c}">{v}</div>'
-        f'<div class="stat-lbl">{l}</div></div>'
+        f'<div class="metric-card">'
+        f'<div class="metric-value" style="color:{c}">{v}</div>'
+        f'<div class="metric-label">{l}</div>'
+        f'</div>'
         for v, l, c in [
             (final, "Final Score", tc),
             (s1, "S1 Intent", _C["teal"]),
@@ -74,90 +162,165 @@ def _section1(result: dict, final: int, tc: str,
             (s4, "S4 Replication", _C["green"]),
         ]
     )
-    notable = "".join(
-        f'<div class="risk-item">{xt(str(r))}</div>'
-        for r in result.get("notable_risks", [])[:6]
+    risks = result.get("notable_risks", [])[:5]
+    positives = result.get("notable_positive_evidence", [])[:4]
+    stage2_focus = _select_focus_rows(result.get("stage_2r_rubric", {}), negatives_first=True, limit=3)
+    stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=3)
+    alert = (
+        f'<div class="alert-t0">'
+        f'T0 hard floor triggered: direct clinical framing without an explicit boundary declaration. '
+        f'Score capped at {final}/100.'
+        f'</div>'
+        if t0 else ""
     )
-    notable_block = (
-        f'<div style="margin-top:24px">'
-        f'<h3 style="font-size:15px;font-weight:700;color:{_C["navy"]};margin-bottom:12px">'
-        f'Notable Risks</h3>{notable}</div>'
-        if notable else ""
-    )
-    calibration = result.get("calibration_profile", {})
-    freshness = result.get("audit_freshness", {})
-    policy_name = xt(str(calibration.get("profile_name", "unknown")))
-    policy_status = xt(str(calibration.get("profile_status", "unknown")))
-    policy_mode = xt(str(calibration.get("profile_read_mode", "unknown")))
-    calibration_note = _calibration_effect_note(calibration)
-    policy_block = (
-        f'<div class="panel" style="margin-top:20px;padding:14px 16px">'
-        f'<div style="font-size:12px;font-weight:700;color:{_C["navy"]};margin-bottom:6px">'
-        f'Policy Surface: {policy_name} ({policy_status}, {policy_mode})</div>'
-        f'<div style="font-size:12px;line-height:1.55;color:{_C["dgray"]}">'
-        f'{xt(calibration_note)}</div></div>'
-        if calibration_note
-        else ""
-    )
-    freshness_block = (
-        f'<div class="panel" style="margin-top:14px;padding:14px 16px">'
-        f'<div style="font-size:12px;font-weight:700;color:{_C["navy"]};margin-bottom:6px">'
-        f'Audit Freshness</div>'
-        f'<div style="font-size:12px;line-height:1.55;color:{_C["dgray"]}">'
-        f'Review after: {xt(str(freshness.get("review_after_days", "n/a")))} days | '
-        f'Expires on: {xt(str(freshness.get("expires_on", "unknown")))}<br>'
-        f'Change-triggered re-audit now: '
-        f'{xt(str(freshness.get("change_triggered_reaudit_recommended_now", False)))}'
-        f'</div></div>'
-        if freshness
-        else ""
-    )
+    risk_list = "".join(f'<li>{xt(str(r))}</li>' for r in risks) or "<li>No notable risks surfaced.</li>"
+    positive_list = "".join(f'<li>{xt(str(p))}</li>' for p in positives) or "<li>No notable positive evidence surfaced.</li>"
     return (
         f'<section id="s1">'
         f'<h2 class="s-title">Executive Summary</h2>'
         f'{alert}'
-        f'<div class="stats-grid">{stats}</div>'
-        f'{policy_block}'
-        f'{freshness_block}'
-        f'{notable_block}'
+        f'<div class="metric-grid">{stats}</div>'
+        f'<div class="memo-grid">'
+        f'<article class="memo-card memo-primary">'
+        f'<div class="eyebrow">TL;DR</div>'
+        f'<h3>Decision memo</h3>'
+        f'<p class="memo-text">This repository lands at <strong>{xt(str(score.get("formal_tier", "")))}</strong> '
+        f'with a final score of <strong>{final}/100</strong>. The result is driven more by '
+        f'boundary, workflow-support, and governance weaknesses than by classic code-pattern failures.</p>'
+        f'<div class="pill-row"><span class="pill">Policy: {policy_name}</span>'
+        f'<span class="pill">Status: {policy_status}</span>'
+        f'<span class="pill">Mode: {policy_mode}</span></div>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Primary Risks</div>'
+        f'<h3>What pushed the review down</h3>'
+        f'<ul class="memo-list">{risk_list}</ul>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Positive Evidence</div>'
+        f'<h3>What still supports reviewability</h3>'
+        f'<ul class="memo-list">{positive_list}</ul>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Freshness</div>'
+        f'<h3>When to re-check</h3>'
+        f'<p class="memo-text">Review after <strong>{xt(str(freshness.get("review_after_days", "n/a")))}</strong> days. '
+        f'Expires on <strong>{xt(str(freshness.get("expires_on", "unknown")))}</strong>.</p>'
+        f'<p class="memo-note">Change-triggered re-audit now: '
+        f'{xt(str(freshness.get("change_triggered_reaudit_recommended_now", False)))}</p>'
+        f'</article>'
+        f'</div>'
+        f'<div class="memo-grid" style="margin-top:18px">'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Stage 2R Focus</div>'
+        f'<h3>Repo-local contradictions</h3>'
+        f'<ul class="focus-list">{_rubric_focus_list(stage2_focus)}</ul>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Stage 3 Focus</div>'
+        f'<h3>Accountability surfaces</h3>'
+        f'<ul class="focus-list">{_rubric_focus_list(stage3_focus)}</ul>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Policy Boundary</div>'
+        f'<h3>How to read this artifact</h3>'
+        f'<p class="memo-text">{xt(calibration_note) if calibration_note else "Authoritative scoring and surfaced policy metadata are aligned in this release line."}</p>'
+        f'</article>'
+        f'</div>'
         f'</section>'
     )
 
 
-def _section2(s1: int, s2: int, s3: int, s4: int) -> str:
-    stages = [
-        ("Stage 1 &mdash; README Intent",      s1, _C["teal"],   0),
-        ("Stage 2R &mdash; Repo Consistency",  s2, _C["purple"], 1),
-        ("Stage 3 &mdash; Code / Bio",         s3, _C["slate"],  2),
-        ("Stage 4 &mdash; Replication",        s4, _C["green"],  3),
-    ]
-    rows = ""
-    for label, val, color, ti in stages:
-        bar_color = _C["red"] if val < 40 else (_C["amber"] if val < 65 else color)
-        rows += (
-            f'<div class="stage-row">'
-            f'<div style="display:flex;justify-content:space-between;'
-            f'align-items:center;margin-bottom:6px">'
-            f'<span style="font-size:13px;color:{_C["navy"]};font-weight:500;'
-            f'display:flex;align-items:center;gap:6px">'
-            f'{label}{tip_icon(_STAGE_TIPS[ti])}</span>'
-            f'<span style="font-size:14px;font-weight:700;color:{bar_color}">'
-            f'{val}</span></div>'
-            f'{svg_hbar(val, 100, bar_color)}</div>'
-        )
-    score_tip = tip_icon(
-        "Weighted formula: 40% README intent + 20% repo consistency + 40% code/bio. "
-        "T0 hard floor (missing clinical disclaimer) caps score at 39/100 maximum."
+def _stage_card(title: str, value: int, color: str, tip: str, focus_rows: list[dict[str, Any]], summary: str) -> str:
+    bar_color = _C["red"] if value < 40 else (_C["amber"] if value < 65 else color)
+    return (
+        f'<article class="stage-card">'
+        f'<div class="stage-card-top">'
+        f'<div class="stage-name">{title} {tip_icon(tip)}</div>'
+        f'<div class="stage-value" style="color:{bar_color}">{value}</div>'
+        f'</div>'
+        f'{svg_hbar(value, 100, bar_color)}'
+        f'<p class="stage-summary">{xt(summary)}</p>'
+        f'<ul class="focus-list">{_rubric_focus_list(focus_rows)}</ul>'
+        f'</article>'
     )
+
+
+def _config_pattern_card() -> str:
+    return (
+        f'<div class="config-pattern">'
+        f'<div class="config-copy">'
+        f'<div class="eyebrow">Configured, Not Rewritten</div>'
+        f'<h3 class="subhead">Changing review posture does not require touching the score core</h3>'
+        f'<p class="memo-text">Use <code>stem policy simulate</code> with a governed profile file when you want to preview a different review posture. '
+        f'The authoritative score path stays deterministic; the profile is surfaced as metadata and preview-only interpretation.</p>'
+        f'<p class="memo-note">If you only need the default posture, you do not need a profile file at all.</p>'
+        f'</div>'
+        f'<div class="config-grid">'
+        f'<article class="config-card">'
+        f'<div class="config-label">profile.json</div>'
+        f'<pre class="config-code">{{\n  "profile_name": "strict_clinical_adjacency",\n  "profile_read_mode": "mirror_only"\n}}</pre>'
+        f'</article>'
+        f'<article class="config-card">'
+        f'<div class="config-label">command</div>'
+        f'<pre class="config-code">stem policy simulate /path/to/repo --profile-file profile.json</pre>'
+        f'</article>'
+        f'<article class="config-card">'
+        f'<div class="config-label">artifact note</div>'
+        f'<pre class="config-code">Calibration Effect: mirror-only\nPolicy metadata surfaced\nFormal score unchanged</pre>'
+        f'</article>'
+        f'</div>'
+        f'</div>'
+    )
+
+
+def _section2(result: dict[str, Any], s1: int, s2: int, s3: int, s4: int) -> str:
+    stage1_focus = _select_focus_rows(result.get("stage_1_rubric", {}), negatives_first=True, limit=4)
+    stage2_focus = _select_focus_rows(result.get("stage_2r_rubric", {}), negatives_first=True, limit=4)
+    stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=4)
+    stage4_focus = _select_focus_rows(result.get("stage_4_rubric", {}), negatives_first=False, limit=4)
+    cards = "".join([
+        _stage_card(
+            "Stage 1 — README Intent",
+            s1,
+            _C["teal"],
+            _STAGE_TIPS[0],
+            stage1_focus,
+            "Claim language, limitation posture, and clinical boundary wording.",
+        ),
+        _stage_card(
+            "Stage 2R — Repo Consistency",
+            s2,
+            _C["purple"],
+            _STAGE_TIPS[1],
+            stage2_focus,
+            "Internal contradictions between README, workflow claims, and support surfaces.",
+        ),
+        _stage_card(
+            "Stage 3 — Code / Bio Responsibility",
+            s3,
+            _C["slate"],
+            _STAGE_TIPS[2],
+            stage3_focus,
+            "Engineering accountability, provenance, and reviewable responsibility surfaces.",
+        ),
+        _stage_card(
+            "Stage 4 — Replication",
+            s4,
+            _C["green"],
+            _STAGE_TIPS[3],
+            stage4_focus,
+            "Reproducibility evidence is reported separately and does not alter the formal tier.",
+        ),
+    ])
     return (
         f'<section id="s2">'
-        f'<h2 class="s-title">Score Matrix {score_tip}</h2>'
-        f'<div class="panel">'
-        f'{rows}'
-        f'<div class="formula">'
-        f'Final = 0.4 &times; S1 + 0.2 &times; S2R + 0.4 &times; S3 &minus; C1_penalty'
-        f' &nbsp;|&nbsp; T0 floor: max 39/100'
-        f'</div></div></section>'
+        f'<h2 class="s-title">Decision Path {tip_icon("This section explains where the score came from, with rubric-level movement and detector-linked rationale where available.")}</h2>'
+        f'<div class="panel decision-panel">'
+        f'<div class="formula-banner">Final = 0.4 × S1 + 0.2 × S2R + 0.4 × S3 − C1_penalty &nbsp;|&nbsp; Stage 4 remains a separate replication lane.</div>'
+        f'{_config_pattern_card()}'
+        f'<div class="stage-deck">{cards}</div>'
+        f'</div></section>'
     )
 
 
@@ -169,30 +332,50 @@ def _section3(integrity: dict, cc: dict) -> str:
                 "status": v.get("status", "PASS"),
                 "evidence": [f"count={v.get('count', 0)}"],
             }
-    cards = "".join(integrity_card(k, v) for k, v in combined.items() if isinstance(v, dict))
+    warn_pairs, pass_pairs = _code_integrity_summary(combined)
+    warning_cards = "".join(integrity_card(k, v) for k, v in warn_pairs)
+    pass_cards = "".join(integrity_card(k, v) for k, v in pass_pairs)
     hint = tip_icon(
-        "C1-C6: static code and governance checks (credentials, dependencies, deprecated paths, exceptions, compliance boundaries, mock-auth/fail-open local trust boundaries). "
-        "CC1-CC3: Layer 2 AST contract detectors. Click any card to expand evidence."
+        "C1-C6: static code and governance checks. CC1-CC3: Layer 2 AST contract detectors. "
+        "PASS means no mapped trigger was detected in the current rule scope, not that the whole repository is mature."
+    )
+    faq = (
+        f'<div class="faq-block">'
+        f'<details class="faq-item"><summary>Why can Code Integrity contain PASS while the overall score is still low?</summary>'
+        f'<p>Because Code Integrity is a narrow detector family. The formal score is still driven mainly by Stage 1, Stage 2R, and Stage 3 evidence posture.</p></details>'
+        f'<details class="faq-item"><summary>What changed in the C4 / C5 / C6 split?</summary>'
+        f'<p>C4 is now reserved for executable fail-open exception behavior, C5 for unsupported compliance or boundary integrity claims, and C6 for mock-auth or no-auth trust-boundary signals.</p></details>'
+        f'</div>'
     )
     return (
         f'<section id="s3">'
         f'<h2 class="s-title">Code Integrity &amp; Contract {hint}</h2>'
-        f'<div class="card-grid">{cards}</div>'
-        f'</section>'
+        f'<div class="integrity-layout">'
+        f'<div class="panel">'
+        f'<div class="eyebrow">Warnings First</div>'
+        f'<h3 class="subhead">Mapped risk lanes that fired</h3>'
+        f'<div class="card-grid">{warning_cards or "<p class=\"memo-text\">No WARN/FAIL lanes surfaced.</p>"}</div>'
+        f'</div>'
+        f'<div class="panel">'
+        f'<div class="eyebrow">Clear Lanes</div>'
+        f'<h3 class="subhead">What stayed quiet in the current rule scope</h3>'
+        f'<div class="card-grid">{pass_cards}</div>'
+        f'{faq}'
+        f'</div>'
+        f'</div></section>'
     )
 
 
 def _section4(airi: dict) -> str:
     if not airi or "covered_risks" not in airi:
         return ""
-    pct       = float(airi.get("coverage_rate", 0))
+    pct = float(airi.get("coverage_rate", 0))
     covered_n = int(airi.get("covered_count", 0))
-    total_n   = int(airi.get("total_risks_in_detector_scope", 0))
-    gaps      = airi.get("known_gaps", [])
+    total_n = int(airi.get("total_risks_in_detector_scope", 0))
+    gaps = airi.get("known_gaps", [])
     all_risks = airi.get("covered_risks", [])
-    donut     = svg_donut(pct, _C["green"], 90)
+    donut = svg_donut(pct, _C["green"], 98)
 
-    # Count covered risks per AIRI domain (first digit of subdomain_id)
     domain_counts: dict[int, int] = {d: 0 for d in range(1, 8)}
     for r in all_risks:
         try:
@@ -206,55 +389,88 @@ def _section4(airi: dict) -> str:
     c_rows = "".join(airi_row(r, "covered") for r in all_risks[:24])
     g_rows = "".join(airi_row(g, "gap") for g in gaps)
     toggle = (
-        f'<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">'
+        f'<div class="toggle-row">'
         f'<div class="toggle-group">'
-        f'<button class="toggle-btn" data-view="covered"'
-        f' onclick="airiToggle(\'covered\')">Covered ({covered_n})</button>'
-        f'<button class="toggle-btn" data-view="gaps"'
-        f' onclick="airiToggle(\'gaps\')">Gaps ({len(gaps)})</button>'
+        f'<button class="toggle-btn" data-view="covered" onclick="airiToggle(\'covered\')">Covered ({covered_n})</button>'
+        f'<button class="toggle-btn" data-view="gaps" onclick="airiToggle(\'gaps\')">Gaps ({len(gaps)})</button>'
         f'</div>'
-        f'<span style="font-size:11px;color:{_C["dgray"]}">Click a domain to filter</span>'
+        f'<span class="muted-note">Click a domain to filter.</span>'
         f'</div>'
     )
     table = (
         f'<div style="overflow-x:auto"><table class="airi-table">'
-        f'<thead><tr><th>ID</th><th>Risk</th><th>Domain</th>'
-        f'<th>Covered by / Note</th></tr></thead>'
+        f'<thead><tr><th>ID</th><th>Risk</th><th>Domain</th><th>Covered by / Note</th></tr></thead>'
         f'<tbody>{c_rows}{g_rows}</tbody></table></div>'
     )
-    src  = xt(airi.get("airi_version", ""))
+    src = xt(airi.get("airi_version", ""))
     bundle_scope = xt(airi.get("airi_bundle_scope", ""))
     snapshot = xt(airi.get("airi_upstream_snapshot_date", ""))
     license_name = xt(airi.get("airi_upstream_license", ""))
     attribution = xt(airi.get("airi_attribution_note", ""))
     hint = tip_icon(
-        "Coverage rate = risks addressed / total risks in detector scope. "
-        "Gaps are AIRI risks present in scope but not yet covered by any detector. "
-        "The HTML report uses the curated runtime AIRI bundle, not the full upstream registry."
+        "Coverage counts only risks reached through local detector mappings. "
+        "Coverage is not a safety verdict, and unmapped review concerns remain outside the numerator."
+    )
+    faq = (
+        f'<div class="faq-block" style="margin-top:18px">'
+        f'<details class="faq-item"><summary>What does 7 / 32 mean?</summary>'
+        f'<p>It means seven AIRI risk IDs are currently reached by active local detector mappings, out of thirty-two AIRI risk IDs in the current detector scope.</p></details>'
+        f'<details class="faq-item"><summary>What does “why mapped” mean?</summary>'
+        f'<p>Each covered AIRI row carries a bounded explanation built from the triggered detector, the local mapping justification, and the trigger reason surfaced by the scan.</p></details>'
+        f'<details class="faq-item"><summary>What does AIRI not prove here?</summary>'
+        f'<p>AIRI does not independently verify harm, causality, clinical failure, or legal noncompliance. It is a risk-vocabulary layer around local findings.</p></details>'
+        f'</div>'
+    )
+    mapping_pattern = (
+        f'<div class="config-pattern" style="margin-top:18px">'
+        f'<div class="config-copy">'
+        f'<div class="eyebrow">Mapped, Not Guessed</div>'
+        f'<h3 class="subhead">AIRI rows light up through active detector mappings</h3>'
+        f'<p class="memo-text">The report does not infer AIRI coverage from prose alone. '
+        f'Coverage appears when a local detector fires and a governed mapping exists in the current AIRI runtime bundle.</p>'
+        f'</div>'
+        f'<div class="config-grid">'
+        f'<article class="config-card">'
+        f'<div class="config-label">trigger</div>'
+        f'<pre class="config-code">C6_mock_auth_or_fail_open_boundary\nstatus: detected</pre>'
+        f'</article>'
+        f'<article class="config-card">'
+        f'<div class="config-label">mapping</div>'
+        f'<pre class="config-code">R2R_D5_single_external_service_dependency\n→ 72.04.02 Market Concentration</pre>'
+        f'</article>'
+        f'<article class="config-card">'
+        f'<div class="config-label">report surface</div>'
+        f'<pre class="config-code">covered_by: detector id\nwhy: bounded mapping reason</pre>'
+        f'</article>'
+        f'</div>'
+        f'</div>'
     )
     return (
         f'<section id="s4">'
-        f'<h2 class="s-title">MIT AI Risk Repository Coverage {hint}'
-        f'<span style="font-size:12px;color:{_C["dgray"]};font-weight:400;margin-left:4px">'
-        f'{src} | airisk.mit.edu</span></h2>'
+        f'<h2 class="s-title">MIT AI Risk Repository Coverage {hint}<span class="airi-tag">{src} | airisk.mit.edu</span></h2>'
+        f'<div class="airi-layout">'
         f'<div class="panel">'
-        f'<div style="display:flex;gap:28px;align-items:flex-start;'
-        f'flex-wrap:wrap;margin-bottom:20px">'
-        f'<div style="text-align:center;flex-shrink:0">{donut}'
-        f'<div style="font-size:13px;font-weight:600;color:{_C["navy"]};margin-top:8px">'
-        f'{covered_n} / {total_n}</div>'
-        f'<div style="font-size:11px;color:{_C["dgray"]}">risks in scope</div></div>'
-        f'<div style="flex:1;min-width:240px">'
-        f'<p style="font-size:12px;color:{_C["dgray"]};margin-bottom:14px;line-height:1.5">'
-        f'Risks addressed by STEM-BIO-AI detectors across the AIRI V4 '
-        f'curated runtime bundle. Click a domain card to filter. Toggle covered/gaps.'
-        f'</p>'
-        f'<p style="font-size:11px;color:{_C["dgray"]};margin-bottom:0;line-height:1.5">'
-        f'Bundle scope: {bundle_scope} | snapshot: {snapshot} | license: {license_name}<br>'
-        f'{attribution}'
-        f'</p></div></div>'
+        f'<div class="eyebrow">Feature Explainer</div>'
+        f'<h3 class="subhead">What this section is doing</h3>'
+        f'<p class="memo-text">AIRI is used here as a bounded risk-vocabulary layer around deterministic repository findings. '
+        f'The report uses the curated runtime bundle, not the full upstream AIRI universe.</p>'
+        f'<div class="airi-kpi">'
+        f'<div class="airi-donut">{donut}</div>'
+        f'<div class="airi-copy">'
+        f'<div class="metric-inline"><strong>{covered_n} / {total_n}</strong> risks in detector scope</div>'
+        f'<div class="metric-inline">Bundle scope: <strong>{bundle_scope}</strong></div>'
+        f'<div class="metric-inline">Snapshot: <strong>{snapshot}</strong> | License: <strong>{license_name}</strong></div>'
+        f'<p class="memo-note">{attribution}</p>'
+        f'</div></div>'
+        f'{faq}'
+        f'{mapping_pattern}'
+        f'</div>'
+        f'<div class="panel">'
+        f'<div class="eyebrow">Coverage Explorer</div>'
+        f'<h3 class="subhead">Covered and gap rows</h3>'
         f'<div class="domain-grid">{domain_boxes}</div>'
         f'{toggle}{table}'
+        f'</div>'
         f'</div></section>'
     )
 
@@ -268,57 +484,59 @@ def _section5(evidence_ledger: list) -> str:
         )
     n = len(evidence_ledger)
     chips = " ".join(
-        f'<span class="filter-chip{" active" if i == 0 else ""}"'
-        f' data-sev="{s}" onclick="filterEv(\'{s}\')">{l}</span>'
-        for i, (s, l) in enumerate([
-            ("all", f"All ({n})"),
-            ("fail", "FAIL"), ("warn", "WARN"), ("pass", "PASS"), ("info", "INFO"),
-        ])
+        f'<span class="filter-chip{" active" if i == 0 else ""}" data-sev="{s}" onclick="filterEv(\'{s}\')">{l}</span>'
+        for i, (s, l) in enumerate(
+            [
+                ("all", f"All ({n})"),
+                ("fail", "FAIL"),
+                ("warn", "WARN"),
+                ("pass", "PASS"),
+                ("info", "INFO"),
+            ]
+        )
     )
     rows = "".join(evidence_row(ev) for ev in evidence_ledger[:200])
     hint = tip_icon(
-        "Full evidence ledger from all detectors. "
-        "Filter by severity. Capped at 200 entries in HTML view."
+        "Full evidence ledger from all detectors. Filter by severity. Capped at 200 entries in HTML view."
     )
     th = f'style="padding:8px 5px;font-size:11px;text-align:left;color:{_C["dgray"]}"'
     return (
         f'<section id="s5">'
         f'<h2 class="s-title">Evidence Detail {hint}</h2>'
         f'<div class="panel">'
-        f'<div style="margin-bottom:14px">{chips}</div>'
+        f'<div class="toggle-row" style="margin-bottom:14px">{chips}</div>'
         f'<div style="overflow-x:auto">'
         f'<table style="width:100%;border-collapse:collapse">'
         f'<thead><tr style="background:{_C["lgray"]}">'
         f'<th style="padding:8px 5px;width:16px"></th>'
-        f'<th {th}>SEV</th><th {th}>Detector</th>'
-        f'<th {th}>Finding</th><th {th}>File</th>'
+        f'<th {th}>SEV</th><th {th}>Detector</th><th {th}>Finding</th><th {th}>File</th>'
         f'</tr></thead>'
         f'<tbody>{rows}</tbody></table></div></div></section>'
     )
 
 
 def render_html(result: dict[str, Any]) -> str:
-    score  = result["score"]
-    final  = int(score["final_score"])
-    tier   = str(score["formal_tier"])
-    tc     = tier_color(tier)
+    score = result["score"]
+    final = int(score["final_score"])
+    tier = str(score["formal_tier"])
+    tc = tier_color(tier)
     target = xt(str(result["target"]["name"]))
-    date   = xt(str(result.get("generated_at_local", "")))
+    date = xt(str(result.get("generated_at_local", "")))
     s1 = int(score.get("stage_1_readme_intent", 0))
     s2 = int(score.get("stage_2_repo_local_consistency", 0))
     s3 = int(score.get("stage_3_code_bio", 0))
     s4 = int(result.get("replication_score", 0))
     t0 = result.get("classification", {}).get("t0_hard_floor", False)
 
-    css    = build_css(tc)
-    nav    = _nav()
-    hero   = _hero(score, final, tier, tc, target, date)
-    sec1   = _section1(result, final, tc, s1, s2, s3, s4, t0)
-    sec2   = _section2(s1, s2, s3, s4)
-    sec3   = _section3(result.get("code_integrity", {}), result.get("code_contract", {}))
-    sec4   = _section4(result.get("airi_risk_coverage", {}))
-    sec5   = _section5(result.get("evidence_ledger", []))
-    ver    = xt(result.get("stem_ai_version", ""))
+    css = build_css(tc)
+    nav = _nav()
+    hero = _hero(score, final, tier, tc, target, date)
+    sec1 = _section1(result, final, tc, s1, s2, s3, s4, t0)
+    sec2 = _section2(result, s1, s2, s3, s4)
+    sec3 = _section3(result.get("code_integrity", {}), result.get("code_contract", {}))
+    sec4 = _section4(result.get("airi_risk_coverage", {}))
+    sec5 = _section5(result.get("evidence_ledger", []))
+    ver = xt(result.get("stem_ai_version", ""))
 
     return f"""<!DOCTYPE html>
 <html lang="en">
