@@ -397,15 +397,24 @@ def _section4(airi: dict) -> str:
     all_risks = airi.get("covered_risks", [])
     donut = svg_donut(pct, _C["green"], 98)
 
-    domain_counts: dict[int, int] = {d: 0 for d in range(1, 8)}
+    covered_counts: dict[int, int] = {d: 0 for d in range(1, 8)}
+    gap_counts: dict[int, int] = {d: 0 for d in range(1, 8)}
     for r in all_risks:
         try:
             d = int(str(r.get("subdomain_id", "0")).split(".")[0])
-            if d in domain_counts:
-                domain_counts[d] += 1
+            if d in covered_counts:
+                covered_counts[d] += 1
         except (ValueError, IndexError):
             continue
-    domain_boxes = "".join(domain_card(d, domain_counts[d]) for d in range(1, 8))
+    for g in gaps:
+        try:
+            d = int(str(g.get("subdomain_id", "0")).split(".")[0])
+            if d in gap_counts:
+                gap_counts[d] += 1
+        except (ValueError, IndexError):
+            continue
+    domain_boxes = domain_card(0, covered_n, len(gaps))
+    domain_boxes += "".join(domain_card(d, covered_counts[d], gap_counts[d]) for d in range(1, 8))
 
     c_rows = "".join(airi_row(r, "covered") for r in all_risks[:24])
     g_rows = "".join(airi_row(g, "gap") for g in gaps)
@@ -415,7 +424,7 @@ def _section4(airi: dict) -> str:
         f'<button class="toggle-btn" data-view="covered" onclick="airiToggle(\'covered\')">Covered ({covered_n})</button>'
         f'<button class="toggle-btn" data-view="gaps" onclick="airiToggle(\'gaps\')">Gaps ({len(gaps)})</button>'
         f'</div>'
-        f'<span class="muted-note">Click a domain to filter.</span>'
+        f'<span class="muted-note">Click a domain card to filter. Counts are shown as covered / gaps.</span>'
         f'</div>'
     )
     table = (

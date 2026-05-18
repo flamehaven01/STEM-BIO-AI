@@ -158,16 +158,22 @@ def integrity_card(key: str, info: dict[str, Any]) -> str:
     )
 
 
-def domain_card(d_num: int, count: int) -> str:
-    color = _AIRI_DOMAIN_COLORS.get(d_num, _C["dgray"])
-    name  = _AIRI_DOMAIN_NAMES.get(d_num, f"Domain {d_num}")
-    dim   = "opacity:.3;pointer-events:none" if count == 0 else "cursor:pointer"
+def domain_card(d_num: int, covered_count: int, gap_count: int = 0) -> str:
+    if d_num == 0:
+        color = _C["navy"]
+        name = "All Domains"
+    else:
+        color = _AIRI_DOMAIN_COLORS.get(d_num, _C["dgray"])
+        name = _AIRI_DOMAIN_NAMES.get(d_num, f"Domain {d_num}")
+    total = covered_count + gap_count
+    dim = "opacity:.55;cursor:pointer" if total == 0 else "cursor:pointer"
+    badge = f"{covered_count}/{gap_count}"
     return (
         f'<div class="domain-card" data-domain="{d_num}"'
         f' onclick="filterDomain({d_num})" style="{dim}">'
-        f'<span class="domain-num" style="background:{color}">{d_num}</span>'
+        f'<span class="domain-num" style="background:{color}">{"All" if d_num == 0 else d_num}</span>'
         f'<span class="domain-label">{name}</span>'
-        f'<span class="domain-cnt" style="color:{color}">{count}</span>'
+        f'<span class="domain-cnt" style="color:{color}">{badge}</span>'
         f'</div>'
     )
 
