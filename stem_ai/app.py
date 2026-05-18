@@ -335,7 +335,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
           <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">Local CLI</p>
             <p style="{_CARD_BODY}">Run locally for downloadable artifacts:</p>
-            <code style="{_CODE_PILL}">stem &lt;folder&gt; --level 3 --format all --explain</code>
+            <code style="{_CODE_PILL}">stem &lt;folder&gt; --format all --explain</code>
           </div>
         </div>
         """
@@ -361,13 +361,13 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
         with gr.Column(scale=1):
             level_input = gr.Radio(
                 choices=[
-                    ("Brief - 1 page", 1),
-                    ("Standard - 3 pages", 2),
-                    ("Full - 5 pages", 3),
+                    ("Brief - 1 page (legacy)", 1),
+                    ("Standard - 5 pages", 2),
+                    ("Full - 7 pages", 3),
                 ],
-                value=1,
+                value=3,
                 label="Report Level",
-                info="Brief, Standard, or Full report depth.",
+                info="Legacy brief, standard review packet, or full evidence packet.",
             )
     with gr.Row():
         run_button = gr.Button("Run live GitHub audit", variant="primary", scale=2)

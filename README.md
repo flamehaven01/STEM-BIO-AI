@@ -168,7 +168,7 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 
 | Level | Pages | Audience | Artifacts |
 |-------|------:|---------|-----------|
-| `--level 1` | 1 | Executive / triage | Score, tier, stage cards, code integrity summary |
+| `--level 1` | 1 | Executive / triage (legacy) | Score, tier, stage cards, code integrity summary |
 | `--level 2` | 5 | Standard audit review | Level 1 + Stage 1/2R/3/4 breakdown, AIRI summary, closeout page |
 | `--level 3` | 7 | Full evidence packet | Level 2 + Stage 4 replication page, code integrity deep dive, remediation roadmap, metadata page |
 
@@ -209,13 +209,13 @@ Covered AIRI entries now also carry bounded `why mapped` reasoning derived from 
 ## Report Preview
 
 <p align="center">
-  <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="STEM BIO-AI Level 3 report — page 1" width="760">
+  <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="STEM BIO-AI standard 5-page packet — page 1" width="760">
 </p>
 
 **Sample PDF:** [Download the 5-page standard packet preview](docs/assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
 
 <details>
-<summary>View all 5 preview pages</summary>
+<summary>View all 5 standard-packet preview pages</summary>
 
 | Page 1 | Page 2 |
 |--------|--------|
