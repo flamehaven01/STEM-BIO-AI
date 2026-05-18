@@ -278,12 +278,31 @@ function toggleCard(card) {
 var _airiView = 'covered';
 var _airiDomain = 0;
 
+function _updateAiriToggleLabels() {
+  var covered = 0;
+  var gaps = 0;
+  var card = document.querySelector('.domain-card[data-domain="' + _airiDomain + '"]');
+  if (card) {
+    covered = parseInt(card.dataset.covered || '0', 10);
+    gaps = parseInt(card.dataset.gaps || '0', 10);
+  } else {
+    var allCard = document.querySelector('.domain-card[data-domain="0"]');
+    covered = parseInt(allCard?.dataset.covered || '0', 10);
+    gaps = parseInt(allCard?.dataset.gaps || '0', 10);
+  }
+  document.querySelectorAll('.toggle-btn[data-view]').forEach(function(b) {
+    if (b.dataset.view === 'covered') b.textContent = 'Covered (' + covered + ')';
+    if (b.dataset.view === 'gaps') b.textContent = 'Gaps (' + gaps + ')';
+  });
+}
+
 function _applyAiriFilter() {
   document.querySelectorAll('.airi-covered,.airi-gaps').forEach(function(r) {
     var viewOk = r.classList.contains('airi-' + _airiView);
     var domainOk = (_airiDomain === 0 || r.dataset.domain == _airiDomain);
     r.style.display = (viewOk && domainOk) ? '' : 'none';
   });
+  _updateAiriToggleLabels();
 }
 
 function airiToggle(view) {

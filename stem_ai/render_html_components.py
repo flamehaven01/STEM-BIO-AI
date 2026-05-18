@@ -170,6 +170,7 @@ def domain_card(d_num: int, covered_count: int, gap_count: int = 0) -> str:
     badge = f"{covered_count}/{gap_count}"
     return (
         f'<div class="domain-card" data-domain="{d_num}"'
+        f' data-covered="{covered_count}" data-gaps="{gap_count}"'
         f' onclick="filterDomain({d_num})" style="{dim}">'
         f'<span class="domain-num" style="background:{color}">{"All" if d_num == 0 else d_num}</span>'
         f'<span class="domain-label">{name}</span>'
