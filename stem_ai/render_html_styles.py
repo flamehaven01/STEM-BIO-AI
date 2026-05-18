@@ -44,21 +44,27 @@ h1,h2,h3,.stage-name,.metric-value,.tier{{
   position:sticky;top:0;z-index:60;
   background:rgba(255,255,255,.86);
   backdrop-filter:blur(14px);
-  display:flex;gap:4px;overflow-x:auto;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
   border-bottom:1px solid rgba(13,31,60,.08);
   box-shadow:0 8px 24px rgba(13,31,60,.06);
+  padding-right:16px;
 }}
+.nav-links{{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}}
+.nav-brand{{display:grid;justify-items:end;flex-shrink:0;white-space:nowrap;padding-left:12px;border-left:1px solid rgba(13,31,60,.08)}}
+.nav-brand strong{{font-size:11px;letter-spacing:.08em;color:{n}}}
+.nav-brand span{{font-size:10px;color:{dg};font-weight:700}}
 .nav-link{{
   padding:14px 18px;color:{dg};font-size:12px;font-weight:700;
   text-decoration:none;transition:color .2s,background .2s,border-color .2s;
   border-bottom:3px solid transparent;white-space:nowrap;
 }}
-.nav-link:hover{{color:{n};background:rgba(13,31,60,.04)}}
+.nav-link:hover{{color:{n};background:rgba(13,31,60,.04);transform:translateY(-1px)}}
 .nav-link.active{{color:{n};border-bottom-color:{t}}}
 .hero{{
   background:
-    radial-gradient(circle at top right, rgba(255,255,255,.12), transparent 26%),
-    linear-gradient(135deg, {n} 0%, #163457 48%, #24537B 100%);
+    radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 28%),
+    radial-gradient(circle at top left, rgba(255,255,255,.26), transparent 26%),
+    linear-gradient(135deg, #2B547B 0%, #3C6C96 46%, #6E9FBE 100%);
   color:#fff;
   padding:42px 48px 46px;
   display:grid;
@@ -69,8 +75,17 @@ h1,h2,h3,.stage-name,.metric-value,.tier{{
 .hero-left{{display:flex;justify-content:center}}
 .hero-right{{display:flex;flex-direction:column;gap:10px}}
 .hero h1{{font-size:34px;font-weight:700;line-height:1.1;letter-spacing:-.02em}}
+.hero-link{{color:#fff;text-decoration:none;border-bottom:1px solid transparent}}
+.hero-link:hover{{border-bottom-color:rgba(255,255,255,.72)}}
 .eyebrow{{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(13,31,60,.62)}}
-.hero .eyebrow{{color:rgba(255,255,255,.62)}}
+.hero .eyebrow{{color:rgba(255,255,255,.82)}}
+.hero-gauge-card{{
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:22px;
+  padding:18px 20px 14px;
+  box-shadow:0 18px 42px rgba(8,22,38,.18);
+}}
 .hero-meta{{display:flex;gap:10px;flex-wrap:wrap;align-items:center}}
 .tier{{
   display:inline-block;background:{tc};color:#fff;font-size:13px;font-weight:700;
@@ -93,7 +108,15 @@ section{{margin-bottom:34px;scroll-margin-top:72px}}
   padding:24px;
   box-shadow:var(--shadow-soft);
 }}
-.memo-grid,.integrity-layout,.airi-layout{{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}}
+.panel:hover,
+.metric-card:hover,
+.memo-card:hover,
+.stage-card:hover{{
+  box-shadow:var(--shadow-strong);
+  transform:translateY(-2px);
+}}
+.memo-grid{{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}}
+.integrity-stack,.airi-stack{{display:grid;grid-template-columns:1fr;gap:18px}}
 .memo-card,.stage-card{{
   background:{w};
   border:1px solid rgba(13,31,60,.08);
@@ -203,7 +226,7 @@ section{{margin-bottom:34px;scroll-margin-top:72px}}
 .risk-item:hover{{border-left-color:{r};box-shadow:0 2px 8px rgba(0,0,0,.08)}}
 .domain-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px}}
 .domain-card{{display:flex;align-items:center;gap:10px;padding:11px 14px;background:{w};border:1.5px solid {mg};border-radius:12px;transition:border-color .15s,box-shadow .15s;user-select:none}}
-.domain-card:hover{{border-color:{t};box-shadow:0 2px 8px rgba(0,0,0,.1)}}
+.domain-card:hover{{border-color:{t};box-shadow:var(--shadow-strong);transform:translateY(-2px)}}
 .domain-card.domain-active{{border-color:var(--d-color,{t});box-shadow:0 0 0 3px color-mix(in srgb,var(--d-color,{t}) 18%,transparent)}}
 .domain-num{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;color:#fff;font-size:11px;font-weight:800;flex-shrink:0}}
 .domain-label{{font-size:11px;color:{n};font-weight:700;flex:1;line-height:1.3}}
@@ -225,13 +248,14 @@ section{{margin-bottom:34px;scroll-margin-top:72px}}
   .metric-grid{{grid-template-columns:repeat(3,minmax(0,1fr))}}
   .stage-deck{{grid-template-columns:1fr}}
   .memo-card,.memo-card:nth-child(1),.memo-card:nth-child(2),.memo-card:nth-child(3),.memo-card:nth-child(4){{grid-column:span 12}}
-  .integrity-layout,.airi-layout{{grid-template-columns:1fr}}
   .config-pattern{{grid-template-columns:1fr}}
   .config-grid{{grid-template-columns:1fr}}
 }}
 @media(max-width:760px){{
   .hero{{padding:28px 22px;grid-template-columns:1fr}}
   .content{{padding:24px 14px 42px}}
+  .nav{{padding-right:10px}}
+  .nav-brand{{display:none}}
   .nav-link{{padding:12px 12px;font-size:11px}}
   .metric-grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}
 }}

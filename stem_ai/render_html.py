@@ -35,7 +35,7 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     )
 
 
-def _nav() -> str:
+def _nav(ver: str) -> str:
     links = [
         ("#s1", "1. Summary"),
         ("#s2", "2. Decision Path"),
@@ -44,18 +44,39 @@ def _nav() -> str:
         ("#s5", "5. Evidence"),
     ]
     items = "".join(f'<a href="{h}" class="nav-link">{l}</a>' for h, l in links)
-    return f'<nav class="nav" aria-label="Report sections">{items}</nav>'
+    return (
+        f'<nav class="nav" aria-label="Report sections">'
+        f'<div class="nav-links">{items}</div>'
+        f'<div class="nav-brand"><strong>STEM-BIO-AI</strong><span>STEM BIO-AI Local CLI Scan &nbsp;|&nbsp; {ver}</span></div>'
+        f'</nav>'
+    )
+
+
+def _hero_accent(tc: str) -> str:
+    if tc == _C["red"]:
+        return "#D65D6D"
+    if tc == _C["amber"]:
+        return "#D28F22"
+    if tc == _C["green"]:
+        return "#2A8A56"
+    return "#3B86BE"
 
 
 def _hero(score: dict, final: int, tier: str, tc: str, target: str, date: str) -> str:
-    gauge = svg_gauge(final, tc)
+    gauge = svg_gauge(final, _hero_accent(tc))
     use_scope = xt(str(score.get("use_scope", "")))
+    remote = xt(str(score.get("_target_remote", "")))
+    title = (
+        f'<a href="{remote}" class="hero-link" target="_blank" rel="noopener noreferrer">{target}</a>'
+        if remote
+        else target
+    )
     return (
         f'<header class="hero">'
-        f'<div class="hero-left">{gauge}</div>'
+        f'<div class="hero-left"><div class="hero-gauge-card">{gauge}</div></div>'
         f'<div class="hero-right">'
         f'<div class="eyebrow">STEM BIO-AI Local Audit &nbsp;|&nbsp; {date}</div>'
-        f'<h1>{target}</h1>'
+        f'<h1>{title}</h1>'
         f'<div class="hero-meta">'
         f'<span class="tier">{xt(tier)}</span>'
         f'<span class="hero-chip">Deterministic local scan</span>'
@@ -350,7 +371,7 @@ def _section3(integrity: dict, cc: dict) -> str:
     return (
         f'<section id="s3">'
         f'<h2 class="s-title">Code Integrity &amp; Contract {hint}</h2>'
-        f'<div class="integrity-layout">'
+        f'<div class="integrity-stack">'
         f'<div class="panel">'
         f'<div class="eyebrow">Warnings First</div>'
         f'<h3 class="subhead">Mapped risk lanes that fired</h3>'
@@ -448,7 +469,7 @@ def _section4(airi: dict) -> str:
     return (
         f'<section id="s4">'
         f'<h2 class="s-title">MIT AI Risk Repository Coverage {hint}<span class="airi-tag">{src} | airisk.mit.edu</span></h2>'
-        f'<div class="airi-layout">'
+        f'<div class="airi-stack">'
         f'<div class="panel">'
         f'<div class="eyebrow">Feature Explainer</div>'
         f'<h3 class="subhead">What this section is doing</h3>'
@@ -521,6 +542,7 @@ def render_html(result: dict[str, Any]) -> str:
     tier = str(score["formal_tier"])
     tc = tier_color(tier)
     target = xt(str(result["target"]["name"]))
+    score["_target_remote"] = str(result.get("target", {}).get("remote", "")).removesuffix(".git")
     date = xt(str(result.get("generated_at_local", "")))
     s1 = int(score.get("stage_1_readme_intent", 0))
     s2 = int(score.get("stage_2_repo_local_consistency", 0))
@@ -529,7 +551,6 @@ def render_html(result: dict[str, Any]) -> str:
     t0 = result.get("classification", {}).get("t0_hard_floor", False)
 
     css = build_css(tc)
-    nav = _nav()
     hero = _hero(score, final, tier, tc, target, date)
     sec1 = _section1(result, final, tc, s1, s2, s3, s4, t0)
     sec2 = _section2(result, s1, s2, s3, s4)
@@ -537,6 +558,7 @@ def render_html(result: dict[str, Any]) -> str:
     sec4 = _section4(result.get("airi_risk_coverage", {}))
     sec5 = _section5(result.get("evidence_ledger", []))
     ver = xt(result.get("stem_ai_version", ""))
+    nav = _nav(ver)
 
     return f"""<!DOCTYPE html>
 <html lang="en">
