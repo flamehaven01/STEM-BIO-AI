@@ -46,7 +46,7 @@ pip install -e .[pdf]
 # fastest path: scan a local repository
 stem /path/to/bio-ai-repo
 
-# 5-page full evidence packet with proof trace
+# 7-page full evidence packet with proof trace
 stem scan /path/to/bio-ai-repo --level 3 --format all --explain
 ```
 
@@ -164,21 +164,21 @@ Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem
 ## Output Artifacts
 
 Each run writes to `--out DIR` (default: `stem_output/`).
-The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`, which emits the full 5-page evidence packet unless you select a lower level explicitly.
+The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`, which emits the full 7-page evidence packet unless you select a lower level explicitly.
 
 | Level | Pages | Audience | Artifacts |
 |-------|------:|---------|-----------|
 | `--level 1` | 1 | Executive / triage | Score, tier, stage cards, code integrity summary |
-| `--level 2` | 3 | Standard audit review | Level 1 + Stage 1/2R/3 breakdown, gap analysis |
-| `--level 3` | 5 | Full evidence packet | Level 2 + code integrity deep dive, classification analysis, remediation roadmap |
+| `--level 2` | 5 | Standard audit review | Level 1 + Stage 1/2R/3/4 breakdown, AIRI summary, closeout page |
+| `--level 3` | 7 | Full evidence packet | Level 2 + Stage 4 replication page, code integrity deep dive, remediation roadmap, metadata page |
 
 ```
 <repo>_experiment_results.json   # machine-readable score + full evidence object
 <repo>_report.html               # interactive 5-section HTML dashboard (v1.7.0+)
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
-<repo>_detailed_3p.pdf           # Level 2 stage analysis
-<repo>_detailed_5p.pdf           # Level 3 deep review packet
+<repo>_detailed_5p.pdf           # Level 2 standard review packet
+<repo>_detailed_7p.pdf           # Level 3 full review packet
 <repo>_explain.txt               # --explain: file/line/snippet proof trace
 ```
 
@@ -212,7 +212,7 @@ Covered AIRI entries now also carry bounded `why mapped` reasoning derived from 
   <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="STEM BIO-AI Level 3 report — page 1" width="760">
 </p>
 
-**Sample PDF:** [Download the 5-page Level 3 report](docs/assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
+**Sample PDF:** [Download the 5-page standard packet preview](docs/assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
 
 <details>
 <summary>View all 5 preview pages</summary>

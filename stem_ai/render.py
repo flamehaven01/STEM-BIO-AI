@@ -1083,8 +1083,13 @@ def _detail_pages(result: dict[str, Any], pages: int) -> list[Any]:
     story += _page2_stage_analysis(result)
     story += _page3_stage3_analysis(result)
     if pages >= 5:
+        story += _page4_stage4_replication(result)
+    if pages == 5:
+        story += _page5_compact_closure(result)
+    elif pages >= 7:
         story += _page4_integrity_deep(result)
-        story += _page5_method_remediation(result)
+        story += _page6_method_airi(result)
+        story += _page7_report_metadata(result)
     return story
 
 
@@ -1453,7 +1458,70 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
     return _single_page_story(story, break_before=True)
 
 
-# ── Page 4: Code Integrity Deep Dive + Classification (5p only) ───────────────
+# ── Page 4: Stage 4 Replication Deep Dive (5p/7p) ────────────────────────────
+def _page4_stage4_replication(result: dict[str, Any]) -> list[Any]:
+    story: list[Any] = []
+    score = result["score"]
+    stage4_score = result.get("replication_score", 0)
+    stage4_tier = result.get("replication_tier", "R0")
+    rubric = result.get("stage_4_rubric", {})
+
+    story += _sec_hdr("Stage 4 — Replication Evidence Lane  |  Separate lane", _GREEN)
+
+    label_map = {
+        "S4_container_environment": "S4: Container / Runtime Environment",
+        "S4_make_reproduce_target": "S4: Reproduce Target",
+        "S4_environment_lock_evidence": "S4: Environment Lock Evidence",
+        "S4_exact_dependency_pins_or_hashes": "S4: Exact Dependency Pins / Hashes",
+        "S4_readme_reproducibility_section": "S4: Reproducibility Section",
+        "S4_checksum_files": "S4: Checksums / Integrity Files",
+        "S4_dataset_url": "S4: Dataset / Data Source URL",
+        "S4_model_weight_url_or_checksum": "S4: Model Artifact URL / Checksum",
+        "S4_citation_cff": "S4: CITATION.cff",
+        "S4_license_restriction": "S4: License / Use Restriction",
+        "S4_cli_entrypoint": "S4: CLI Entrypoint",
+        "S4_seed_setting": "S4: Deterministic Seed Setting",
+        "S4_runnable_examples": "S4: Runnable Examples",
+    }
+
+    items: list[tuple[str, str, str, str]] = []
+    for key, item in rubric.items():
+        if not isinstance(item, dict) or "score" not in item or "max" not in item:
+            continue
+        sc = item.get("score", 0)
+        mx = item.get("max", 0)
+        color = _GREEN if sc == mx and mx else (_AMBER if sc > 0 else _RED)
+        evidence = item.get("evidence", "")
+        items.append((label_map.get(key, key), f"{sc} / {mx}", color, evidence))
+
+    chip = _mini_score("S4 Score", stage4_score, 100, _GREEN)
+    tbl = _rubric_rows(items, "S4")
+    combined = Table([[chip, tbl]], colWidths=[38 * mm, None])
+    combined.setStyle(TableStyle([
+        ("VALIGN",       (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING",  (0, 0), (-1, -1), 2),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 2),
+    ]))
+    story.append(combined)
+    story.append(Spacer(1, 2 * mm))
+    story.append(Paragraph(
+        f'<font color="{_DGRAY}" size="7.5"><i>Replication tier: {stage4_tier}. '
+        'Stage 4 is reported separately and does not alter the formal score.</i></font>',
+        _style("S4_NOTE", 7.5, 10, _DGRAY),
+    ))
+    story.append(Spacer(1, 3 * mm))
+    story.append(Paragraph(
+        f'<font color="{_DGRAY}" size="8">'
+        f'Final score remains <b>{score["final_score"]} / 100</b> ({_xt(score["formal_tier"])}) even when Stage 4 moves. '
+        'This lane exists to show reproducibility and operational evidence posture separately from the formal repository score.'
+        f'</font>',
+        _style("S4_SCOPE", 8, 11, _DGRAY),
+    ))
+    story += _footer_block()
+    return _single_page_story(story, break_before=True)
+
+
+# ── Page 5: Code Integrity Deep Dive + Classification (7p only) ──────────────
 def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
     story: list[Any] = []
     ci = result["code_integrity"]
@@ -1624,12 +1692,84 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
     return _single_page_story(story, break_before=True)
 
 
-# ── Page 5: Priority Improvements + Method + Metadata (5p only) ───────────────
-def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
+# ── Page 5: Compact Closeout (5p standard packet only) ───────────────────────
+def _page5_compact_closure(result: dict[str, Any]) -> list[Any]:
+    story: list[Any] = []
+    score = result["score"]
+    risks = result.get("notable_risks", [])
+    airi = result.get("airi_risk_coverage", {})
+    ci = result["code_integrity"]
+
+    story += _sec_hdr("Closeout Summary", _NAVY)
+
+    ci_rows: list[tuple[str, str, str, str]] = []
+    short = {
+        "C1_hardcoded_credentials": "C1: Hardcoded Credentials",
+        "C2_dependency_pinning": "C2: Dependency Pinning",
+        "C3_dead_or_deprecated_patient_adjacent_paths": "C3: Deprecated Patient Paths",
+        "C4_exception_handling_clinical_adjacent_paths": "C4: Fail-Open Exceptions",
+        "C5_compliance_boundary_integrity": "C5: Compliance Boundary Integrity",
+        "C6_mock_auth_or_fail_open_boundary": "C6: Mock Auth / Fail-Open Boundary",
+    }
+    for key, cfg in ci.items():
+        status = cfg["status"]
+        color = _status_hex(status)
+        evidence = cfg["evidence"][0] if cfg.get("evidence") else ""
+        ci_rows.append((short.get(key, key), status, color, evidence))
+
+    story.append(_rubric_rows(ci_rows, "CC"))
+    story.append(Spacer(1, 3 * mm))
+
+    if risks:
+        story += _sec_hdr("Top Risks", _RED)
+        for risk in risks[:4]:
+            story.append(Paragraph(
+                f'&#8226; <font color="{_DGRAY}" size="8">{_xt(risk)}</font>',
+                _style(f"TR_{risk[:6]}", 8, 11, _DGRAY),
+            ))
+    if airi:
+        story.append(Spacer(1, 3 * mm))
+        story += _sec_hdr("AIRI Coverage Summary", _TEAL)
+        story.append(Paragraph(
+            f'<font color="{_DGRAY}" size="8">'
+            f'Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b> '
+            f'| Coverage Rate: <b>{airi.get("coverage_rate", 0):.3f}</b></font>',
+            _style("AIRI_COMPACT", 8, 11, _DGRAY),
+        ))
+        for risk in airi.get("covered_risks", [])[:3]:
+            reason = _airi_reason_summary(risk)
+            story.append(Paragraph(
+                f'<font color="{_DGRAY}" size="8">&#8226; <b>{_xt(str(risk.get("id", "—")))}</b> '
+                f'{_xt(str(risk.get("title", "")))}'
+                f'{f" — why: {_xt(reason)}" if reason else ""}</font>',
+                _style(f"AIRC_{str(risk.get('id', 'risk'))[:8]}", 8, 10, _DGRAY),
+            ))
+        if airi.get("known_gaps_in_bundle"):
+            gap_preview = ", ".join(
+                f"{g.get('id', '—')} {_xt(str(g.get('title', '')))}"
+                for g in airi.get("known_gaps_in_bundle", [])[:2]
+            )
+            story.append(Paragraph(
+                f'<font color="{_DGRAY}" size="8">Known gaps preview: {gap_preview}</font>',
+                _style("AIRI_GAPC", 8, 10, _DGRAY),
+            ))
+
+    story.append(Spacer(1, 3 * mm))
+    story += _sec_hdr("Method Boundary", _DGRAY)
+    story.append(Paragraph(
+        f'<font color="{_DGRAY}" size="8"><b>Final score:</b> {score["final_score"]} / 100 ({_xt(score["formal_tier"])})'
+        f'<br/><b>Method:</b> {_xt(result.get("method", ""))}</font>',
+        _style("MBCOMPACT", 8, 11, _DGRAY),
+    ))
+    story += _footer_block()
+    return _single_page_story(story, break_before=True)
+
+
+# ── Page 6: Priority Improvements + AIRI + Method (7p only) ─────────────────
+def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
     story: list[Any] = []
     risks = result.get("notable_risks", [])
     positive = result.get("notable_positive_evidence", [])
-    score = result["score"]
     airi = result.get("airi_risk_coverage", {})
 
     # Priority Improvements
@@ -1746,8 +1886,14 @@ def _page5_method_remediation(result: dict[str, Any]) -> list[Any]:
         _style("MBSCOPE", 8, 11, _DGRAY),
     ))
 
-    # Report Metadata
-    story.append(Spacer(1, 4 * mm))
+    story += _footer_block()
+    return _single_page_story(story, break_before=True)
+
+
+# ── Page 7: Report Metadata (7p only) ────────────────────────────────────────
+def _page7_report_metadata(result: dict[str, Any]) -> list[Any]:
+    story: list[Any] = []
+    score = result["score"]
     story += _sec_hdr("Report Metadata", _NAVY)
     tgt = result["target"]
     meta_items = [
@@ -1843,30 +1989,72 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         f"- {k}: {v['score']} / {v['max']} {v['evidence']}"
         for k, v in result.get("stage_4_rubric", {}).items()
     ]])
-    sets = [_fit_page(brief), p2, p3]
+    p4 = _fit_page([
+        "Stage 4 Replication Evidence",
+        f"- Stage 4 Replication Score: {result.get('replication_score', 0)} / 100 ({result.get('replication_tier', 'R0')})",
+        *[
+            f"- {k}: {v['score']} / {v['max']} {v['evidence']}"
+            for k, v in result.get("stage_4_rubric", {}).items()
+        ],
+    ])
+    sets = [_fit_page(brief), p2, _fit_page([
+        "Stage 3 Evidence",
+        *[f"- {k}: {v['score']} / {v['max']} {v['evidence']}" for k, v in result["stage_3_rubric"].items()]
+    ])]
     if pages == 5:
-        sets.append(_fit_page(["Code Integrity",
+        sets.append(p4)
+        sets.append(_fit_page([
+            "Closeout Summary",
+            "Code Integrity",
             *[f"- {k}: {v['status']} {v['evidence'][0]}" for k, v in result["code_integrity"].items()],
-            *([f"- AST analysis scope: {ast_note}"] if ast_note else [])]))
-        airi_lines = [
+            *([f"- AST analysis scope: {ast_note}"] if ast_note else []),
+            "",
+            "AIRI Coverage Summary",
+            f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
+            f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
+            *[
+                f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+                + (f" | why: {_airi_reason_summary(risk)}" if _airi_reason_summary(risk) else "")
+                for risk in airi.get("covered_risks", [])[:2]
+            ],
+            "",
+            "Method Boundary",
+            result["method"],
+        ]))
+    elif pages >= 7:
+        sets.append(p4)
+        sets.append(_fit_page([
+            "Code Integrity",
+            *[f"- {k}: {v['status']} {v['evidence'][0]}" for k, v in result["code_integrity"].items()],
+            *([f"- AST analysis scope: {ast_note}"] if ast_note else []),
+        ]))
+        sets.append(_fit_page([
+            "Priority Improvement Roadmap",
+            *[f"- {r}" for r in result.get("notable_risks", [])[:4]],
+            "",
             "AIRI Coverage Summary",
             f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
             f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
             f"- Bundle Scope: {airi.get('airi_bundle_scope', 'unknown')}",
-        ]
-        for risk in airi.get("covered_risks", [])[:3]:
-            reason = _airi_reason_summary(risk)
-            line = f"- {risk.get('id', '—')}: {risk.get('title', '')}"
-            if reason:
-                line += f" | why: {reason}"
-            airi_lines.append(line)
-        for gap in airi.get("known_gaps_in_bundle", [])[:2]:
-            airi_lines.append(f"- gap: {gap.get('id', '—')} {gap.get('title', '')}")
-        sets.append(_fit_page([
-            *airi_lines,
+            *[
+                f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+                + (f" | why: {_airi_reason_summary(risk)}" if _airi_reason_summary(risk) else "")
+                for risk in airi.get("covered_risks", [])[:3]
+            ],
             "",
             "Method Boundary",
             result["method"],
+        ]))
+        sets.append(_fit_page([
+            "Report Metadata",
+            f"- Schema Version: {result.get('schema_version', '—')}",
+            f"- STEM BIO-AI Version: {result.get('stem_ai_version', '—')}",
+            f"- Generated (local date): {result.get('generated_at_local', '—')}",
+            f"- Repository: {result['target']['name']}",
+            f"- Branch: {result['target'].get('branch') or '—'}",
+            f"- Commit (HEAD): {(result['target'].get('commit') or '—')[:40]}",
+            f"- Files Scanned: {result['target'].get('file_count', '—')}",
+            f"- Final Score / Tier: {score['final_score']} / 100 — {score['formal_tier']}",
         ]))
     return sets[:pages]
 

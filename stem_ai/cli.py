@@ -14,8 +14,8 @@ from .scanner import audit_repository
 
 _LEVEL_MAP = {
     1: ("brief", 1),
-    2: ("detailed", 3),
-    3: ("detailed", 5),
+    2: ("detailed", 5),
+    3: ("detailed", 7),
 }
 _FORMAT_CHOICES = ["json", "md", "html", "pdf", "all"]
 _SUMMARY_CHOICES = ["full", "compact", "off"]
@@ -207,8 +207,8 @@ def _add_shared_arguments(parser: argparse.ArgumentParser, *, default_format: st
         help=(
             "Report depth: "
             "1=brief 1-page executive summary, "
-            "2=detailed 3-page stage review, "
-            "3=full 5-page evidence packet (default)"
+            "2=standard 5-page review packet, "
+            "3=full 7-page evidence packet (default)"
         ),
     )
     parser.add_argument(

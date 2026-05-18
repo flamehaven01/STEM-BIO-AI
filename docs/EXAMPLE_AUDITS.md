@@ -16,7 +16,7 @@ This project is easier to evaluate through outputs than through claims. This pag
 - Report preview pages: [`docs/assets/report-preview/fieldbioinformatics/`](assets/report-preview/fieldbioinformatics)
 - Sample PDF: [`artic-network_fieldbioinformatics_detailed_5p.pdf`](assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
 
-Use this when you want to inspect the 5-page report shape, stage cards, rubric detail, and disclaimer boundary.
+Use this when you want to inspect the standard 5-page report shape, stage cards, rubric detail, and disclaimer boundary.
 
 ---
 
