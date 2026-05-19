@@ -48,7 +48,7 @@ BIO_TOOL_NAMES = {"blast", "blastn", "blastp", "samtools", "bwa", "bcftools", "b
 TAINT_NAME_TOKENS = ("query", "input", "sample", "path", "request", "user", "fastq", "bam", "vcf")
 
 
-@dataclass(slots=True)
+@dataclass
 class AstCodeContext:
     path: Path
     tree: ast.AST
