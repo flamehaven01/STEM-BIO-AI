@@ -147,14 +147,14 @@ flowchart LR
     K --> G
     CC --> R[code_contract + AIRI coverage]
     F --> H[replication_score / tier]
-    G --> I[JSON result]
+    G --> I[Canonical JSON result]
     H --> I
     R --> I
     I --> L[Evidence ledger]
     I --> M[Explain trace]
-    G --> N[Markdown report]
-    G --> O[PDF packet]
-    G --> P[Interactive HTML dashboard]
+    I --> N[Markdown report]
+    I --> O[PDF packets 1p / 5p / 7p]
+    I --> P[Interactive HTML dashboard]
 ```
 
 Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem_ai/detectors.py`, `stem_ai/detector_surface.py`, `stem_ai/detector_ast.py`, `stem_ai/detector_bio.py`, `stem_ai/detector_contract.py`, `stem_ai/detector_stage4.py`, `stem_ai/evidence.py`, `stem_ai/airi_risk_mapping.py`, `stem_ai/app.py`
@@ -165,6 +165,7 @@ Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem
 
 Each run writes to `--out DIR` (default: `stem_output/`).
 The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`, which emits the full 7-page evidence packet unless you select a lower level explicitly.
+`audits/` is retained only for historical benchmark and reference artifacts; routine CLI output should land in `stem_output/<repo_slug>/`.
 
 | Level | Pages | Audience | Artifacts |
 |-------|------:|---------|-----------|
@@ -196,38 +197,47 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 - Open in browser: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/examples/maziyarpanahi_openmed_report.html>
 - Raw HTML artifact: [`docs/examples/maziyarpanahi_openmed_report.html`](docs/examples/maziyarpanahi_openmed_report.html)
 
-**5 sections:** Executive Summary · Score Matrix · Code Integrity (expandable cards) · AIRI Risk Coverage (toggle) · Evidence Detail (filter chips)
+**5 sections:** Executive Summary · Decision Path · Code Integrity · AIRI Coverage · Evidence Detail
 
-Interactive features: sticky scroll-spy nav · `?` tooltip icons on every metric · click-to-expand evidence cards · covered/gaps toggle for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
+Interactive features: sticky scroll-spy nav · repo hyperlink in the hero header · `?` tooltip icons on every metric · click-to-expand integrity cards · covered/gaps + domain filtering for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
 
-The AIRI section now distinguishes between the **full local AIRI registry**, the **curated runtime bundle** used by deterministic scans, and the **detector mapping registry** that connects STEM BIO-AI findings to AIRI risk IDs. Upstream AIRI provenance is surfaced in runtime artifacts, not only in README/docs.
+Current `1.7.8` HTML semantics:
 
-Covered AIRI entries now also carry bounded `why mapped` reasoning derived from detector-trigger evidence plus the local detector-mapping registry. This is a review aid, not a claim that AIRI independently verified the repository.
+- `Decision Path` explains score construction and policy posture with `Configured, Not Rewritten`
+- `Code Integrity` surfaces the split between `C4` fail-open exceptions, `C5` compliance/boundary integrity, and `C6` mock-auth/no-auth trust boundaries
+- `AIRI Coverage` distinguishes the **full local AIRI registry**, the **curated runtime bundle**, and the **detector mapping registry**
+- covered AIRI rows carry bounded `why mapped` reasoning derived from detector-trigger evidence plus the local detector-mapping registry
+
+This is a review aid, not a claim that AIRI independently verified the repository.
 
 ---
 
 ## Report Preview
 
 <p align="center">
-  <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="STEM BIO-AI standard 5-page packet — page 1" width="760">
+  <img src="docs/assets/report-preview/7p-1.png" alt="STEM BIO-AI full 7-page packet — page 1" width="760">
 </p>
 
-**Sample PDF:** [Download the 5-page standard packet preview](docs/assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
+**Sample PDF:** [Download the 7-page full packet preview](docs/assets/report-preview/yorkeccak_bio_detailed_7p.pdf)
 
 <details>
-<summary>View all 5 standard-packet preview pages</summary>
+<summary>View all 7 full-packet preview pages</summary>
 
 | Page 1 | Page 2 |
 |--------|--------|
-| <img src="docs/assets/report-preview/fieldbioinformatics/page-1.png" alt="Page 1"> | <img src="docs/assets/report-preview/fieldbioinformatics/page-2.png" alt="Page 2"> |
+| <img src="docs/assets/report-preview/7p-1.png" alt="Page 1"> | <img src="docs/assets/report-preview/7p-2.png" alt="Page 2"> |
 
 | Page 3 | Page 4 |
 |--------|--------|
-| <img src="docs/assets/report-preview/fieldbioinformatics/page-3.png" alt="Page 3"> | <img src="docs/assets/report-preview/fieldbioinformatics/page-4.png" alt="Page 4"> |
+| <img src="docs/assets/report-preview/7p-3.png" alt="Page 3"> | <img src="docs/assets/report-preview/7p-4.png" alt="Page 4"> |
 
-| Page 5 |
+| Page 5 | Page 6 |
+|--------|--------|
+| <img src="docs/assets/report-preview/7p-5.png" alt="Page 5"> | <img src="docs/assets/report-preview/7p-6.png" alt="Page 6"> |
+
+| Page 7 |
 |--------|
-| <img src="docs/assets/report-preview/fieldbioinformatics/page-5.png" alt="Page 5"> |
+| <img src="docs/assets/report-preview/7p-7.png" alt="Page 7"> |
 
 </details>
 

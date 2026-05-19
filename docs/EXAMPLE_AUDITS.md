@@ -13,10 +13,10 @@ This project is easier to evaluate through outputs than through claims. This pag
 
 ## Sample Report Packet
 
-- Report preview pages: [`docs/assets/report-preview/fieldbioinformatics/`](assets/report-preview/fieldbioinformatics)
-- Sample PDF: [`artic-network_fieldbioinformatics_detailed_5p.pdf`](assets/report-preview/fieldbioinformatics/artic-network_fieldbioinformatics_detailed_5p.pdf)
+- Report preview pages: [`docs/assets/report-preview/`](assets/report-preview)
+- Sample PDF: [`yorkeccak_bio_detailed_7p.pdf`](assets/report-preview/yorkeccak_bio_detailed_7p.pdf)
 
-Use this when you want to inspect the standard 5-page report shape, stage cards, rubric detail, and disclaimer boundary.
+Use this when you want to inspect the current `1.7.8` full 7-page packet shape, Stage 4 separation, AIRI reasoning, and closeout metadata.
 
 ---
 
@@ -39,6 +39,14 @@ Run locally for full artifacts:
 ```bash
 stem scan /path/to/bio-ai-repo --level 3 --format all --explain
 ```
+
+Live generated output belongs under:
+
+- `stem_output/<repo_slug>/`
+
+Historical benchmark and comparison material remains under:
+
+- `audits/`
 
 Primary artifacts:
 
