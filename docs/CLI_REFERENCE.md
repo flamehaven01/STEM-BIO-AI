@@ -90,8 +90,7 @@ The shorthand remains:
 stem /path/to/repo
 ```
 
-Policy selection is mirror-only in 1.7.8: the chosen profile is surfaced in outputs and summaries, and derive/simulate preview lanes can compare postures, but authoritative score computation still follows the current deterministic runtime constants.
-Policy selection remains mirror-only in scans in 1.7.8. The new `policy derive` and `policy simulate` commands preview governed posture changes without turning those deltas into authoritative scan behavior.
+Policy selection remains mirror-only in scans in `1.7.8`: the chosen profile is surfaced in outputs and summaries, and `policy derive` / `policy simulate` preview governed posture changes without turning those deltas into authoritative scan behavior.
 
 Layer 2 AST contract detectors (`CC1` / `CC2` / `CC3`) run during normal scans
 and surface through:

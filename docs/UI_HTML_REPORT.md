@@ -27,9 +27,9 @@ Example:
 | Section | ID | Content |
 |---------|-----|---------|
 | **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, T0 alert banner |
-| **Score Matrix** | `#s2` | Stage bars (S1/S2R/S3/S4) with formula tooltip |
+| **Decision Path** | `#s2` | Stage bars (S1/S2R/S3/S4), score formula, and policy/configuration explainer |
 | **Code Integrity & Contract** | `#s3` | C1–C6 + CC1–CC3 expandable cards, with C4/C5/C6 split visible |
-| **AIRI Risk Coverage** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table |
+| **AIRI Risk Coverage** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table + domain filter cards |
 | **Evidence Detail** | `#s5` | Full evidence ledger with severity filter chips |
 
 Navigation between sections via a **sticky top navbar** with scroll-spy active state.
@@ -55,10 +55,11 @@ Each `C1–C6` / `CC1–CC3` card is clickable. Click expands the full evidence 
 ```
 
 ### AIRI 7-Domain Shortcut Cards (Section 4)
-Seven domain cards above the risk table, each with a numbered badge, domain name, and covered-risk count. Colors match the MIT AI Risk Navigator palette:
+The AIRI explorer starts with an `All Domains` card, followed by seven domain cards. Each card shows **covered / gaps** counts for that domain. Colors match the MIT AI Risk Navigator palette:
 
 | # | Domain | Badge color |
 |---|--------|------------|
+| All | All Domains | primary navy |
 | 1 | Discrimination & Toxicity | `#B5272A` crimson |
 | 2 | Privacy & Security | `#1E3A6E` deep navy |
 | 3 | Misinformation | `#C07020` amber |
@@ -67,10 +68,10 @@ Seven domain cards above the risk table, each with a numbered badge, domain name
 | 6 | Socioeconomic & Environmental | `#7A6520` olive |
 | 7 | AI System Safety, Failures & Limitations | `#1A5568` dark teal |
 
-Click a domain card → risk table filters to that domain only. Click the same card again → filter cleared. Domains with zero covered risks are dimmed (`opacity:0.3`, non-clickable). Domain filter composes with the Covered/Gaps toggle via `_applyAiriFilter()`.
+Click a domain card → risk table filters to that domain only and the `Covered (n)` / `Gaps (n)` toggle labels update to that domain's counts. Click `All Domains` → full table restored. Cards with `0/0` are dimmed but still document bundle coverage boundaries.
 
 ### AIRI Toggle (Section 4)
-Two-button toggle: `[Covered (n)]` / `[Gaps (n)]`. Composes with the domain filter — both conditions must be satisfied for a row to be visible.
+Two-button toggle: `[Covered (n)]` / `[Gaps (n)]`. Composes with the domain filter — both conditions must be satisfied for a row to be visible. The counts shown on the toggle buttons are dynamic and reflect the current domain selection.
 
 Covered AIRI rows surface bounded `why` reasoning derived from:
 
@@ -99,7 +100,7 @@ Every metric header carries a `?` icon with a `data-tooltip` attribute. CSS `::a
 
 ## Architecture
 
-The HTML renderer is split into three modules (each < 250 lines):
+The HTML renderer is split into three modules:
 
 | File | Role |
 |------|------|
@@ -107,13 +108,19 @@ The HTML renderer is split into three modules (each < 250 lines):
 | `stem_ai/render_html_styles.py` | `build_css(tc)` f-string (tier-color parameterized), `.domain-card/.domain-active` CSS, `JS` constant with `filterDomain()` + `_applyAiriFilter()` |
 | `stem_ai/render_html.py` | Five `_section*()` assemblers + domain-count computation + `render_html(result)` entry point |
 
-The matching one-page PDF surface now includes an additive `AIRI Coverage Summary` block so AIRI coverage, known gaps, and bounded `why:` explanations are not limited to HTML/Markdown only.
+The matching PDF surfaces now track the packet tiers:
+
+- `level 1` → `brief_1p.pdf` (legacy quick brief)
+- `level 2` → `detailed_5p.pdf` (standard review packet)
+- `level 3` → `detailed_7p.pdf` (full evidence packet)
+
+The 5-page and 7-page packets both include AIRI coverage and bounded `why:` explanations, while the 7-page packet adds the deeper closeout and metadata pages.
 
 ## Report Preview
 
 ![HTML Report Preview](assets/html_report_preview.png)
 
-*Screenshot: openmed scan, T1 tier (39/100), T0 hard floor triggered.*
+*Screenshot: current 1.7.8 HTML dashboard surface with the post-C4/C5/C6 integrity split and AIRI domain filtering.*
 
 ## Color Palette
 
