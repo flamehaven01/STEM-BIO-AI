@@ -19,8 +19,8 @@ Output:
 
 Example:
 
-- browser preview: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/examples/maziyarpanahi_openmed_report.html>
-- raw artifact: [`docs/examples/maziyarpanahi_openmed_report.html`](examples/maziyarpanahi_openmed_report.html)
+- browser preview: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/assets/report-preview/yorkeccak_bio_report.html>
+- raw artifact: [`docs/assets/report-preview/yorkeccak_bio_report.html`](assets/report-preview/yorkeccak_bio_report.html)
 
 ## 5-Section Structure
 

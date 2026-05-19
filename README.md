@@ -194,8 +194,8 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 </p>
 
 **Example interactive HTML audit**
-- Open in browser: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/examples/maziyarpanahi_openmed_report.html>
-- Raw HTML artifact: [`docs/examples/maziyarpanahi_openmed_report.html`](docs/examples/maziyarpanahi_openmed_report.html)
+- Open in browser: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/assets/report-preview/yorkeccak_bio_report.html>
+- Raw HTML artifact: [`docs/assets/report-preview/yorkeccak_bio_report.html`](docs/assets/report-preview/yorkeccak_bio_report.html)
 
 **5 sections:** Executive Summary · Decision Path · Code Integrity · AIRI Coverage · Evidence Detail
 
