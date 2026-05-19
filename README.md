@@ -381,6 +381,14 @@ The repository keeps a versioned MICA memory layer under `memory/` for agent-ses
 drift control, and release provenance. Historical snapshots are retained as archive; the active layer
 is selected by `memory/mica.yaml`.
 
+The active package now follows the non-breaking `MICA v0.2.4` runtime contract:
+
+- `memory/mica.yaml` is the composition contract
+- `python tools/mica_pct.py .` validates package integrity
+- `python tools/mica_runtime.py . --format text` emits a portable session summary
+- DI binding remains progressive rather than speculative
+  critical invariants are not mass-rewritten just to satisfy schema formality
+
 Operational reference: [`docs/MICA_MEMORY.md`](docs/MICA_MEMORY.md)
 
 ---

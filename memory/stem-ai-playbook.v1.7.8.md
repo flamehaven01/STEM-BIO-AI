@@ -1,6 +1,6 @@
 # STEM BIO-AI Session Protocol & Rubric Drift Guard
 # Memory Layer — protocol_evolution playbook
-# Version: 1.7.8 | Updated: 2026-05-17
+# Version: 1.7.8 | MICA Contract: 0.2.4 | Updated: 2026-05-19
 
 ---
 
@@ -14,11 +14,23 @@ Every AI session using STEM BIO-AI must begin with this sequence:
 2. Load this archive JSON        -- read project identity, design_invariants, operation_meta
 3. Load memory/stem-ai-lessons.v1.7.8.md -- on demand for edge case disambiguation
 4. Confirm IMMUTABLE rules are loaded from spec/STEM-AI_v1.1.2_CORE.md
-5. Run PCT self-tests (see §3 below)
-6. Report: [MICA READY] stem-ai-bio v1.7.8 | mode: protocol_evolution | invariants: 18 active
+5. Run `python tools/mica_pct.py .`   -- verify PCT-001 through PCT-011
+6. Run `python tools/mica_runtime.py . --format text`
+7. Report: [MICA READY] stem-ai-bio v1.7.8 | mode: protocol_evolution | invariants: 18 active | pct: CLOSED
 ```
 
 If any PCT check fails at critical level, halt and report before proceeding to audit work.
+
+If PCT-010 or PCT-011 warns, continue only after explicitly noting the maturity boundary:
+
+- PCT-010 WARN means critical DI binding is still incomplete
+- PCT-011 WARN means a declared `lesson_ref` path is dead and must be fixed before the next release-memory rotation
+
+The current STEM-BIO-AI memory layer is using the non-breaking `v0.2.4` contract path:
+
+- runtime validation is upgraded now
+- archive history is preserved
+- DI `binding` is added progressively, not speculatively
 
 ---
 
@@ -121,6 +133,9 @@ PCT-007: mica_package_complete — umbrella check: mica.yaml exists + fields val
          all required paths exist + mode coherence satisfied + no critical drift signals.
          Answers: "Is this MICA package in a closed, trustworthy contract state?"
                                                           → error if any sub-condition fails
+PCT-008: hook-trigger coherence                           → info/pass now; fail only if hook_trigger is declared without a hook_script
+PCT-010: critical DI binding completeness                 → warn if critical DIs lack binding.origin_episode
+PCT-011: lesson_ref existence                             → warn if binding.lesson_ref points to a missing file
 
 STEM-001: spec/STEM-AI_v1.1.2_CORE.md referenced in SKILL.md exists on disk
           → warning if file missing (package integrity, not MICA contract integrity)
@@ -173,7 +188,7 @@ When running a batch of real-world audits:
 
 ## 7. Drift Profile
 
-MICA v0.2.0 Drift Profile is active. See `memory/mica.yaml drift_profile` block.
+MICA v0.2.4 Drift Profile is active. See `memory/mica.yaml drift_profile` block.
 
 This profile applies when project surfaces — SKILL.md, CORE spec, playbook, archive, README,
 CHANGELOG — no longer describe the same version or operating state. It does not auto-detect;
@@ -239,6 +254,19 @@ auto-update when the file is copied from a prior version.
 - `stem_ai.app` eagerly imports Gradio and builds the demo surface at module import time.
 - In constrained environments this can dominate narrow test runs, especially when trying to validate policy/calibration behavior only.
 - Treat this as a test-structure concern. Do not infer calibration instability from UI-import latency alone.
+
+### MICA v0.2.4 Hook Volume Note
+
+The active `invocation_protocol` keeps `primary_pattern: readme_protocol`, so no hook is required for normal STEM sessions.
+
+However, `hook_output` is now declared in `memory/mica.yaml` so that a future hook-capable runtime can reuse the same package without changing archive semantics.
+
+Current policy:
+
+- `max_di_lines: 3`
+- `di_filter: violations_only`
+
+This keeps future hook summaries terse and biased toward violated critical invariants rather than dumping every stable DI into session preamble output.
 
 
 

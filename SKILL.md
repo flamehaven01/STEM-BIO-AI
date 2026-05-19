@@ -1,7 +1,7 @@
 ---
 name: stem-ai
 description: "Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories. Audits and reviews open-source bio/medical AI repositories for repository evidence-surface triage using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored review-priority reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess evidence signals for any bio-AI, medical AI, or clinical-adjacent repository."
-version: "1.7.2"
+version: "1.7.8"
 author: "Flamehaven"
 license: "Apache-2.0"
 platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigravity", "universal"]
@@ -9,7 +9,7 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 
 # STEM BIO-AI -- Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories
 
-**Version:** 1.7.2
+**Version:** 1.7.8
 **Codename:** Hippocratic_Code_Engine_Unified
 **Runtime:** LLM-Native + AI CLI (Universal)
 
@@ -33,7 +33,7 @@ platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigrav
 2. **Executive Summary** -- 1-page institutional decision support
 3. **Claim Matrix** -- line-level evidence anchors for every finding
 4. **Evidence Ledger** -- snapshot provenance and artifact tracking
-5. **Code Integrity Report** -- C1-C4 findings (LOCAL_ANALYSIS only)
+5. **Code Integrity Report** -- C1-C6 findings (LOCAL_ANALYSIS only)
 
 ## Audit Layering
 
@@ -63,11 +63,11 @@ The skill will:
 ```
 stem-ai/
   SKILL.md                    <-- You are here (entry point)
-  memory/                     <-- MICA v0.2.0 memory layer (load first)
+  memory/                     <-- MICA v0.2.4 memory layer (load first)
     mica.yaml                 <-- composition contract
-    stem-ai.mica.v1.7.2.json  <-- active archive (selected by mica.yaml)
-    stem-ai-playbook.v1.7.2.md <-- active session protocol (selected by mica.yaml)
-    stem-ai-lessons.v1.7.2.md  <-- active lessons history (selected by mica.yaml)
+    stem-ai.mica.v1.7.8.json  <-- active archive (selected by mica.yaml)
+    stem-ai-playbook.v1.7.8.md <-- active session protocol (selected by mica.yaml)
+    stem-ai-lessons.v1.7.8.md  <-- active lessons history (selected by mica.yaml)
   spec/                       <-- Core rubric, scoring, execution rules
   discrimination/             <-- YES/NO example pairs for scoring consistency
   templates/                  <-- Output templates (report, claim matrix, etc.)
@@ -84,8 +84,9 @@ When activated, load files in this order:
    - Load `memory/mica.yaml` -- verify package structure and mode
    - Load the archive file referenced by `memory/mica.yaml` -- activate 18 IMMUTABLE rules as design_invariants
    - Load the playbook file referenced by `memory/mica.yaml` -- session protocol and rubric drift guard
-   - Run PCT self-tests (PCT-001 through PCT-007). Halt on PCT-001/002/003 failure.
-   - Report: `[MICA READY] stem-ai-bio v1.7.2 | invariants: 18 active`
+   - Run `python tools/mica_pct.py .` -- verify PCT-001 through PCT-011. Halt on PCT-001/002/003/004 failure.
+   - Run `python tools/mica_runtime.py . --format text`
+   - Report: `[MICA READY] stem-ai-bio v1.7.8 | mode: protocol_evolution | invariants: 18 active | pct: CLOSED`
 
 1. **Always load next:** `spec/STEM-AI_v1.1.2_CORE.md`
    This is the canonical rubric and execution instruction.

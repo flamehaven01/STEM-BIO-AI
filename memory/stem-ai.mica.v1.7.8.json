@@ -1,6 +1,6 @@
 {
-  "mica_spec": "0.2.0",
-  "mica_schema_version": "0.2.0",
+  "mica_spec": "0.2.4",
+  "mica_schema_version": "0.2.4",
   "project": {
     "name": "STEM-BIO-AI",
     "full_name": "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories",
@@ -950,12 +950,13 @@
   },
   "operation_meta": {
     "archive_id": "MICA-STEM-BIO-AI-001",
-      "baseline_ref": "v1.7.8-2026-05-17",
+    "mica_schema_version": "0.2.4",
+    "baseline_ref": "v1.7.8-2026-05-17",
     "objective": "Machine-checkable governance layer for STEM BIO-AI deterministic scanner evolution. Encodes 18 base invariants, evidence-ledger traceability, separate replication/reasoning/advisory surfaces, provider-request validation, packet self-checks, CLI enrichment with CI/CD tier-gate and AI transparency, and versioned lessons.",
     "operating_mode": "protocol_evolution",
     "current_state": "active",
-    "update_count": 11,
-  "last_updated": "2026-05-17",
+    "update_count": 12,
+    "last_updated": "2026-05-19",
     "session_count": 0,
     "domain_status": {
       "identity": "stable",
@@ -963,7 +964,7 @@
       "operations": "stable",
       "growth": "active"
     },
-    "invocation_notes": "Primary invocation via local CLI and README contract. MICA v1.7.8 is the active release memory layer. spec/ is local-only private material and is ignored by Git. Evidence-ledger IDs are citation anchors for any AI advisory layer, derive/simulate outputs remain preview-only calibration surfaces rather than score-authoritative runtime policy, and release artifacts now carry DOI-ready citation metadata. In constrained environments, narrow policy/calibration test runs may be dominated by Gradio demo import cost; treat that as an infrastructure boundary rather than immediate evidence of score-path instability."
+    "invocation_notes": "Primary invocation via local CLI and README contract. MICA v1.7.8 is the active release memory layer and now runs under the non-breaking MICA 0.2.4 runtime/validation contract. spec/ is local-only private material and is ignored by Git. Evidence-ledger IDs are citation anchors for any AI advisory layer, derive/simulate outputs remain preview-only calibration surfaces rather than score-authoritative runtime policy, and release artifacts now carry DOI-ready citation metadata. In constrained environments, narrow policy/calibration test runs may be dominated by Gradio demo import cost; treat that as an infrastructure boundary rather than immediate evidence of score-path instability."
   }
 }
 

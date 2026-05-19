@@ -1,4 +1,4 @@
-mica_spec: "0.2.0"
+mica_spec: "0.2.4"
 name: stem-ai-bio
 mode: protocol_evolution
 description: "STEM BIO-AI distributed skill (16+ platforms). Single archive update authority. Platform deployments are read-only consumers. Never update archive in deployed copies."
@@ -22,6 +22,14 @@ layers:
 update_triggers:
   - on_version_bump
   - on_explicit_save
+
+invocation_protocol:
+  primary_pattern: readme_protocol
+  self_test_runtime: readme_protocol_ai_session
+  hook_output_prefix: "[MICA]"
+  hook_output:
+    max_di_lines: 3
+    di_filter: violations_only
 
 archive_policy:
   rotation: on_version_bump
