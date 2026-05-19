@@ -356,6 +356,7 @@ def _section3(integrity: dict, cc: dict) -> str:
     warn_pairs, pass_pairs = _code_integrity_summary(combined)
     warning_cards = "".join(integrity_card(k, v) for k, v in warn_pairs)
     pass_cards = "".join(integrity_card(k, v) for k, v in pass_pairs)
+    warning_fallback = '<p class="memo-text">No WARN/FAIL lanes surfaced.</p>'
     hint = tip_icon(
         "C1-C6: static code and governance checks. CC1-CC3: Layer 2 AST contract detectors. "
         "PASS means no mapped trigger was detected in the current rule scope, not that the whole repository is mature."
@@ -375,7 +376,7 @@ def _section3(integrity: dict, cc: dict) -> str:
         f'<div class="panel">'
         f'<div class="eyebrow">Warnings First</div>'
         f'<h3 class="subhead">Mapped risk lanes that fired</h3>'
-        f'<div class="card-grid">{warning_cards or "<p class=\"memo-text\">No WARN/FAIL lanes surfaced.</p>"}</div>'
+        f'<div class="card-grid">{warning_cards or warning_fallback}</div>'
         f'</div>'
         f'<div class="panel">'
         f'<div class="eyebrow">Clear Lanes</div>'
