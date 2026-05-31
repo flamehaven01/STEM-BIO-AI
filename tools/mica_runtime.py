@@ -6,6 +6,7 @@ Usage:
     python tools/mica_runtime.py [project_root] --format text
     python tools/mica_runtime.py [project_root] --format hook
     python tools/mica_runtime.py [project_root] --format json
+    python tools/mica_runtime.py [project_root] --format session-report
 
 Purpose:
 - resolve MICA package state
@@ -220,6 +221,91 @@ def build_summary(project_root: Path) -> dict[str, Any]:
     return base
 
 
+def _layer_resolution(project_root: Path, mica_yaml_path: Path) -> dict[str, Any]:
+    yd = load_yaml(mica_yaml_path)
+    layers = yd.get("layers", []) if isinstance(yd.get("layers"), list) else []
+    loaded_layers: list[dict[str, Any]] = []
+    missing_required: list[str] = []
+    for layer in layers:
+        if not isinstance(layer, dict):
+            continue
+        rel = layer.get("path")
+        if not isinstance(rel, str):
+            continue
+        exists = (project_root / rel).exists()
+        entry = {
+            "name": layer.get("name"),
+            "path": rel,
+            "required": bool(layer.get("required", True)),
+            "exists": exists,
+            "loading_hint": layer.get("loading_hint"),
+        }
+        loaded_layers.append(entry)
+        if entry["required"] and not exists:
+            missing_required.append(rel)
+    return {
+        "loaded_layers": loaded_layers,
+        "missing_required_layers": missing_required,
+        "required_layers_resolved": not missing_required,
+    }
+
+
+def build_session_report(project_root: Path) -> dict[str, Any]:
+    summary = build_summary(project_root)
+    state, mica_yaml, _legacy = detect_state(project_root)
+    if state == "INVOCATION_MODE" and mica_yaml is not None:
+        load_state = {"state": state, "mica_yaml": str(mica_yaml.relative_to(project_root))}
+        load_state.update(_layer_resolution(project_root, mica_yaml))
+    elif state == "LEGACY_MODE":
+        load_state = {
+            "state": state,
+            "loaded_layers": [],
+            "missing_required_layers": [],
+            "required_layers_resolved": True,
+        }
+    else:
+        load_state = {
+            "state": state,
+            "loaded_layers": [],
+            "missing_required_layers": [],
+            "required_layers_resolved": False,
+        }
+
+    pct = summary.get("pct")
+    if pct == "INACTIVE":
+        drift_status = "DRIFT_BLOCK"
+        gate = "BLOCKED"
+    elif pct == "LEGACY":
+        drift_status = "DRIFT_WARN"
+        gate = "PASS_WITH_WARNINGS"
+    elif pct == "CLOSED":
+        drift_status = "NO_DRIFT"
+        gate = "PASS"
+    else:
+        drift_status = "DRIFT_BLOCK"
+        gate = "BLOCKED"
+
+    return {
+        "archive_version": summary.get("version"),
+        "load_state": load_state,
+        "self_test": {
+            "pct": pct,
+            "closed_contract": pct == "CLOSED",
+        },
+        "drift_status": {"status": drift_status},
+        "active_invariants": {
+            "critical_count": summary.get("critical_count", 0),
+            "high_count": summary.get("high_count", 0),
+            "critical_ids": [
+                di.get("id")
+                for di in summary.get("critical_invariants", []) or []
+                if isinstance(di, dict) and di.get("id")
+            ],
+        },
+        "gate": gate,
+    }
+
+
 def slug(text: str | None) -> str:
     if not text:
         return ""
@@ -287,10 +373,24 @@ def emit_hook(summary: dict[str, Any]) -> str:
     return "\n".join([first] + di_lines)
 
 
+def emit_session_report(report: dict[str, Any]) -> str:
+    return "\n".join(
+        [
+            "[SESSION READY]",
+            f"Archive: {report.get('archive_version')}",
+            f"Load: {json.dumps(report.get('load_state'), ensure_ascii=False)}",
+            f"Self-test: {json.dumps(report.get('self_test'), ensure_ascii=False)}",
+            f"Drift: {json.dumps(report.get('drift_status'), ensure_ascii=False)}",
+            f"Active invariants: {json.dumps(report.get('active_invariants'), ensure_ascii=False)}",
+            f"Gate: {report.get('gate')}",
+        ]
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Emit portable MICA runtime summaries.")
     parser.add_argument("project_root", nargs="?", default=".")
-    parser.add_argument("--format", choices=["text", "json", "hook"], default="text")
+    parser.add_argument("--format", choices=["text", "json", "hook", "session-report"], default="text")
     args = parser.parse_args()
 
     project_root = Path(args.project_root).resolve()
@@ -301,6 +401,8 @@ def main() -> None:
     summary = build_summary(project_root)
     if args.format == "json":
         print(json.dumps(summary, indent=2))
+    elif args.format == "session-report":
+        print(emit_session_report(build_session_report(project_root)))
     elif args.format == "hook":
         print(emit_hook(summary))
     else:
