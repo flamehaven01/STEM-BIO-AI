@@ -2928,4 +2928,33 @@ def test_html_compacts_repeated_info_evidence_rows(tmp_path: Path) -> None:
     assert "S3_T2_domain_tests" in html
 
 
+def test_markdown_and_explain_note_compacted_narrative_surfaces(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, "brief", 1)
+    explain = render_explain(result)
+
+    assert "Surface Note" in markdown
+    assert "canonical per-finding rows remain in JSON" in markdown
+    assert "Surface : repeated same-file evidence may be compacted in narrative output" in explain
+
+
+def test_explain_compacts_repeated_info_findings(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
+    _write(
+        tmp_path / "tests" / "test_domain.py",
+        "def test_alpha():\n    assert 'genomics' == 'genomics'\n"
+        "def test_beta():\n    assert 'proteomics' == 'proteomics'\n"
+        "def test_gamma():\n    assert 'clinical' == 'clinical'\n",
+    )
+
+    result = audit_repository(tmp_path)
+    explain = render_explain(result)
+
+    assert "compacted to" in explain
+    assert "Aggregated" in explain
+    assert "S3_T2_domain_tests" in explain
+
+
 

@@ -263,6 +263,7 @@ def render_explain(result: dict[str, Any]) -> str:
         f"Score   : {score['final_score']} / 100  ({score['formal_tier']})",
         f"Replic  : {result.get('replication_score', 0)} / 100"
         f"  ({result.get('replication_tier', 'R0')})",
+        "Surface : repeated same-file evidence may be compacted in narrative output; JSON remains canonical.",
         _EXPLAIN_SEP, "",
     ]
     for detector, findings in grouped.items():
@@ -437,6 +438,7 @@ def _markdown_airi_section(airi: dict[str, Any]) -> list[str]:
         f"**Bundle Scope:** `{bundle_scope}`",
         f"**Upstream Snapshot:** `{snapshot}`",
         "**Interpretation:** This is detector-mapped AIRI coverage inside the current runtime bundle, not a claim that unmapped risks are absent.",
+        "**Surface Note:** repeated same-file evidence may be compacted in human-readable surfaces; canonical per-finding rows remain in JSON.",
     ]
     covered_risks = airi.get("covered_risks", [])
     if covered_risks:
@@ -459,13 +461,66 @@ def _markdown_airi_section(airi: dict[str, Any]) -> list[str]:
 
 
 def _explain_detector_group(detector: str, findings: list[dict[str, Any]]) -> list[str]:
+    compact_findings = _compact_explain_findings(findings)
     label = _explain_status_label({f["status"] for f in findings})
     noun = "finding" if len(findings) == 1 else "findings"
-    lines = [f"{detector}  [{label}]  ({len(findings)} {noun})"]
-    for f in findings:
+    compact_noun = "row" if len(compact_findings) == 1 else "rows"
+    heading = f"{detector}  [{label}]  ({len(findings)} {noun})"
+    if len(compact_findings) != len(findings):
+        heading += f"  -> compacted to {len(compact_findings)} {compact_noun}"
+    lines = [heading]
+    for f in compact_findings:
         lines += _explain_finding_lines(f)
     lines.append("")
     return lines
+
+
+def _compact_explain_findings(findings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    compact: list[dict[str, Any]] = []
+    grouped: dict[tuple[str, str, str, str], dict[str, Any]] = {}
+    grouped_order: list[tuple[str, str, str, str]] = []
+
+    for finding in findings:
+        status = str(finding.get("status", "unknown"))
+        file_path = str(finding.get("file", ""))
+        line = int(finding.get("line", 0) or 0)
+        reason = str(finding.get("explanation") or finding.get("message") or "").strip()
+
+        if status in {"detected", "warn", "pass"} and file_path not in {"", "."} and reason:
+            key = (status, file_path, reason, str(finding.get("pattern_id", "")))
+            if key not in grouped:
+                clone = dict(finding)
+                meta = dict(clone.get("metadata") or {})
+                meta["aggregate_count"] = 1
+                meta["aggregate_lines"] = [line] if line else []
+                meta["aggregate_surface"] = "explain_same_file_reason"
+                clone["metadata"] = meta
+                grouped[key] = clone
+                grouped_order.append(key)
+            else:
+                grouped[key]["metadata"]["aggregate_count"] += 1
+                if line and line not in grouped[key]["metadata"]["aggregate_lines"]:
+                    grouped[key]["metadata"]["aggregate_lines"].append(line)
+            continue
+
+        compact.append(finding)
+
+    for key in grouped_order:
+        group = grouped[key]
+        count = int(group.get("metadata", {}).get("aggregate_count", 1))
+        lines = sorted(group.get("metadata", {}).get("aggregate_lines", []))
+        if count > 1:
+            if lines:
+                preview = ", ".join(str(n) for n in lines[:6])
+                if len(lines) > 6:
+                    preview += ", ..."
+                group["explanation"] = f"{group.get('explanation', '')} Aggregated {count} similar findings from one file (lines: {preview}).".strip()
+            else:
+                group["explanation"] = f"{group.get('explanation', '')} Aggregated {count} similar findings from one file.".strip()
+            group["snippet"] = ""
+        compact.append(group)
+
+    return compact
 
 
 def _explain_finding_lines(f: dict[str, Any]) -> list[str]:
