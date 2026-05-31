@@ -24,6 +24,60 @@ from .render_html_components import (
 from .render_html_styles import build_css, JS
 
 
+def _compress_evidence_for_html(evidence_ledger: list[dict[str, Any]], limit: int = 200) -> list[dict[str, Any]]:
+    compact: list[dict[str, Any]] = []
+    grouped: dict[tuple[str, str, str], dict[str, Any]] = {}
+    grouped_order: list[tuple[str, str, str]] = []
+
+    for ev in evidence_ledger[:limit]:
+        severity = str(ev.get("severity", ev.get("status", "INFO"))).upper()
+        detector = str(ev.get("detector", ev.get("check", "")))
+        file_path = str(ev.get("file", ev.get("path", "")))
+        line = int(ev.get("line", 0) or 0)
+        message = str(ev.get("message") or ev.get("detail") or ev.get("explanation") or "").strip()
+
+        if severity in {"INFO", "WARN", "PASS"} and detector and file_path and file_path != "." and message:
+            key = (severity, detector, file_path, message)
+            if key not in grouped:
+                grouped[key] = {
+                    "severity": severity.lower(),
+                    "status": severity.lower(),
+                    "detector": detector,
+                    "file": file_path,
+                    "line": line,
+                    "snippet": ev.get("snippet", ""),
+                    "message": message,
+                    "aggregate_count": 1,
+                    "aggregate_lines": [line] if line else [],
+                }
+                grouped_order.append(key)
+            else:
+                grouped[key]["aggregate_count"] += 1
+                if line and line not in grouped[key]["aggregate_lines"]:
+                    grouped[key]["aggregate_lines"].append(line)
+            continue
+
+        compact.append(ev)
+
+    for key in grouped_order:
+        group = grouped[key]
+        count = int(group.get("aggregate_count", 1))
+        lines = sorted(group.get("aggregate_lines", []))
+        if count > 1:
+            base = str(group.get("message") or "Repeated informational evidence detected.").strip()
+            if lines:
+                line_preview = ", ".join(str(n) for n in lines[:6])
+                if len(lines) > 6:
+                    line_preview += ", ..."
+                group["message"] = f"{base} Aggregated {count} matches from one file (lines: {line_preview})."
+            else:
+                group["message"] = f"{base} Aggregated {count} matches from one file."
+            group["snippet"] = ""
+        compact.append(group)
+
+    return compact
+
+
 def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     if calibration.get("profile_read_mode") != "mirror_only":
         return None
@@ -517,6 +571,8 @@ def _section5(evidence_ledger: list) -> str:
             f'No evidence entries collected.</div></section>'
         )
     n = len(evidence_ledger)
+    display_rows = _compress_evidence_for_html(evidence_ledger, limit=200)
+    shown = len(display_rows)
     chips = " ".join(
         f'<span class="filter-chip{" active" if i == 0 else ""}" data-sev="{s}" onclick="filterEv(\'{s}\')">{l}</span>'
         for i, (s, l) in enumerate(
@@ -529,16 +585,24 @@ def _section5(evidence_ledger: list) -> str:
             ]
         )
     )
-    rows = "".join(evidence_row(ev) for ev in evidence_ledger[:200])
+    rows = "".join(evidence_row(ev) for ev in display_rows)
     hint = tip_icon(
         "Full evidence ledger from all detectors. Filter by severity. Capped at 200 entries in HTML view."
     )
+    compact_note = ""
+    if shown < min(n, 200):
+        compact_note = (
+            f'<div class="muted" style="margin:0 0 10px 0">'
+            f'Showing {shown} compact rows from the first {min(n, 200)} evidence entries.'
+            f'</div>'
+        )
     th = f'style="padding:8px 5px;font-size:11px;text-align:left;color:{_C["dgray"]}"'
     return (
         f'<section id="s5">'
         f'<h2 class="s-title">Evidence Detail {hint}</h2>'
         f'<div class="panel">'
         f'<div class="toggle-row" style="margin-bottom:14px">{chips}</div>'
+        f'{compact_note}'
         f'<div style="overflow-x:auto">'
         f'<table style="width:100%;border-collapse:collapse">'
         f'<thead><tr style="background:{_C["lgray"]}">'

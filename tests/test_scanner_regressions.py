@@ -2912,4 +2912,20 @@ def test_fallback_citations_exclude_not_detected_and_absent_statuses() -> None:
     assert _fallback_citations(result) == ["D", "C"]
 
 
+def test_html_compacts_repeated_info_evidence_rows(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
+    _write(
+        tmp_path / "tests" / "test_domain.py",
+        "def test_alpha():\n    assert 'genomics' == 'genomics'\n"
+        "def test_beta():\n    assert 'proteomics' == 'proteomics'\n"
+        "def test_gamma():\n    assert 'clinical' == 'clinical'\n",
+    )
+
+    result = audit_repository(tmp_path)
+    html = render_html(result)
+
+    assert "Aggregated" in html
+    assert "S3_T2_domain_tests" in html
+
+
 
