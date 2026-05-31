@@ -1,6 +1,6 @@
 # STEM BIO-AI MICA Memory Layer
 
-Version: 1.7.8  
+Version: 1.7.9
 MICA Contract: 0.2.4  
 Status: Active operational memory contract
 
@@ -72,15 +72,21 @@ Two runtime tools are now part of the package:
 
 - `python tools/mica_pct.py .`
 - `python tools/mica_runtime.py . --format text`
+- `python tools/mica_runtime.py . --format session-report`
+- `python tools/mica_invoke.py . --mode guided --format json`
+- `mica_invoke.bat . --mode forced`
 
 Recommended session-start sequence:
 
 1. load `memory/mica.yaml`
 2. run `python tools/mica_pct.py .`
 3. run `python tools/mica_runtime.py . --format text`
-4. load the archive referenced by `mica.yaml`
-5. load the playbook referenced by `mica.yaml`
-6. load lessons on demand
+4. run `python tools/mica_runtime.py . --format session-report`
+5. if the host supports preflight, use `python tools/mica_invoke.py . --mode guided --format json`
+6. if the session must be hard-gated, start via `mica_invoke.bat . --mode forced`
+7. load the archive referenced by `mica.yaml`
+8. load the playbook referenced by `mica.yaml`
+9. load lessons on demand
 
 Expected posture:
 

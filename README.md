@@ -11,13 +11,24 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.8-informational.svg" alt="v1.7.8"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.7.9-informational.svg" alt="v1.7.9"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
   <a href="https://huggingface.co/spaces/Flamehaven/stem-bio-ai"><img src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-yellow.svg" alt="HF Space"></a>
   <a href="https://doi.org/10.5281/zenodo.20154479"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20154479.svg" alt="DOI"></a>
 </p>
+
+---
+
+**Navigation:**
+[Why](#why-stem-bio-ai) •
+[Quick Start](#quick-start) •
+[Verification](#verification-path) •
+[Architecture](docs/ARCHITECTURE.md) •
+[Trust Boundary](#runtime--security--compliance-boundary) •
+[CLI Reference](docs/CLI_REFERENCE.md) •
+[Scoring Rationale](docs/SCORING_RATIONALE.md)
 
 ---
 
@@ -73,26 +84,62 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.7.8`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.7.9`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. The intent interview uses a governed `1–5` posture scale, while official score-affecting policy changes still require profile promotion rather than direct ad hoc tuning.
 
 Full CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
-**Proof surfaces**
+## Verification Path
+
+Use the same verification surface exposed in CI and package smoke tests:
+
+```bash
+pip install -e ".[pdf]"
+python -m py_compile stem_ai/cli.py stem_ai/scanner.py stem_ai/render.py stem_ai/app.py
+stem --help
+python -m stem_ai --help
+python -m pytest -q
+python -m build
+```
+
+Primary references:
+
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
+- [`docs/SCORING_RATIONALE.md`](docs/SCORING_RATIONALE.md)
+- [`docs/ADVISORY_RUNTIME.md`](docs/ADVISORY_RUNTIME.md)
+- [`SECURITY.md`](SECURITY.md)
+
+## Document Map
+
+Use these docs by review purpose:
+
+**Core operation**
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
+- [`docs/DETERMINISTIC_DIAGNOSTICS.md`](docs/DETERMINISTIC_DIAGNOSTICS.md)
+- [`docs/UI_HTML_REPORT.md`](docs/UI_HTML_REPORT.md)
+
+**Scoring and evidence**
+- [`docs/SCORING_RATIONALE.md`](docs/SCORING_RATIONALE.md)
+- [`docs/EXAMPLE_AUDITS.md`](docs/EXAMPLE_AUDITS.md)
+- [`docs/CALIBRATION_PROFILE_DESIGN.md`](docs/CALIBRATION_PROFILE_DESIGN.md)
+- [`docs/regulatory_basis_registry.v1.json`](docs/regulatory_basis_registry.v1.json)
+
+**Trust boundary and governance**
+- [`SECURITY.md`](SECURITY.md)
+- [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
+- [`docs/ADVISORY_RUNTIME.md`](docs/ADVISORY_RUNTIME.md)
+- [`docs/ADVISORY_SECRET_HANDLING.md`](docs/ADVISORY_SECRET_HANDLING.md)
+- [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
+- [`docs/AIRI_DATA_GOVERNANCE.md`](docs/AIRI_DATA_GOVERNANCE.md)
+- [`docs/THIRD_PARTY_DATA.md`](docs/THIRD_PARTY_DATA.md)
+
+**Public proof surfaces**
 - Demo: [Hugging Face Space](https://huggingface.co/spaces/Flamehaven/stem-bio-ai)
-- API contract: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md)
-- Secret handling: [`docs/ADVISORY_SECRET_HANDLING.md`](docs/ADVISORY_SECRET_HANDLING.md)
-- Advisory runtime boundary: [`docs/ADVISORY_RUNTIME.md`](docs/ADVISORY_RUNTIME.md)
 - Example audits: [`docs/EXAMPLE_AUDITS.md`](docs/EXAMPLE_AUDITS.md)
 - Scoring rationale: [`docs/SCORING_RATIONALE.md`](docs/SCORING_RATIONALE.md)
-- Calibration profile architecture: [`docs/CALIBRATION_PROFILE_DESIGN.md`](docs/CALIBRATION_PROFILE_DESIGN.md)
-- AIRI data governance: [`docs/AIRI_DATA_GOVERNANCE.md`](docs/AIRI_DATA_GOVERNANCE.md)
-- Third-party data attribution: [`docs/THIRD_PARTY_DATA.md`](docs/THIRD_PARTY_DATA.md)
-- Deterministic diagnostics: [`docs/DETERMINISTIC_DIAGNOSTICS.md`](docs/DETERMINISTIC_DIAGNOSTICS.md)
-- Regulatory traceability mapping: [`docs/REGULATORY_MAPPING.md`](docs/REGULATORY_MAPPING.md)
-- Regulatory basis registry: [`docs/regulatory_basis_registry.v1.json`](docs/regulatory_basis_registry.v1.json)
-- CLI reference: [`docs/CLI_REFERENCE.md`](docs/CLI_REFERENCE.md)
 
 
 ---
@@ -197,15 +244,15 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 - Open in browser: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/assets/report-preview/yorkeccak_bio_report.html>
 - Raw HTML artifact: [`docs/assets/report-preview/yorkeccak_bio_report.html`](docs/assets/report-preview/yorkeccak_bio_report.html)
 
-**5 sections:** Executive Summary · Decision Path · Code Integrity · AIRI Coverage · Evidence Detail
+**5 sections:** Executive Summary · Decision Path · Code Integrity · AIRI Risk Triggers · Evidence Detail
 
 Interactive features: sticky scroll-spy nav · repo hyperlink in the hero header · `?` tooltip icons on every metric · click-to-expand integrity cards · covered/gaps + domain filtering for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
 
-Current `1.7.8` HTML semantics:
+Current `1.7.9` HTML semantics:
 
 - `Decision Path` explains score construction and policy posture with `Configured, Not Rewritten`
 - `Code Integrity` surfaces the split between `C4` fail-open exceptions, `C5` compliance/boundary integrity, and `C6` mock-auth/no-auth trust boundaries
-- `AIRI Coverage` distinguishes the **full local AIRI registry**, the **curated runtime bundle**, and the **detector mapping registry**
+- `AIRI Risk Triggers` distinguishes the **full local AIRI registry**, the **curated runtime bundle**, and the **detector mapping registry**
 - covered AIRI rows carry bounded `why mapped` reasoning derived from detector-trigger evidence plus the local detector-mapping registry
 
 This is a review aid, not a claim that AIRI independently verified the repository.
@@ -335,7 +382,7 @@ How AIRI is used here:
 - AIRI does **not** prove harm, causality, clinical safety, or regulatory status
 - AIRI helps place local findings into a wider risk vocabulary for review
 
-In the current `1.7.8` line, AIRI is used through three local governed layers:
+In the current `1.7.9` line, AIRI is used through three local governed layers:
 
 1. full normalized local registry
 2. curated runtime bundle used by deterministic scans
@@ -386,6 +433,9 @@ The active package now follows the non-breaking `MICA v0.2.4` runtime contract:
 - `memory/mica.yaml` is the composition contract
 - `python tools/mica_pct.py .` validates package integrity
 - `python tools/mica_runtime.py . --format text` emits a portable session summary
+- `python tools/mica_runtime.py . --format session-report` emits an opening-state gate packet
+- `python tools/mica_invoke.py . --mode guided --format json` compiles a host-consumable activation packet
+- `mica_invoke.bat . --mode forced` is the Windows forced-preflight entry point
 - DI binding remains progressive rather than speculative
   critical invariants are not mass-rewritten just to satisfy schema formality
 
@@ -453,14 +503,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
-Current concept DOI-backed archive for the `1.7.8` line:
+Current concept DOI-backed archive for the `1.7.9` line:
 - <https://doi.org/10.5281/zenodo.20154479>
 
 ```bibtex
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.7.8},
+  version = {1.7.9},
   year    = {2026},
   doi     = {10.5281/zenodo.20154479},
   url     = {https://doi.org/10.5281/zenodo.20154479}

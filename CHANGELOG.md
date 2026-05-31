@@ -12,7 +12,15 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ## [Unreleased]
 
+---
+
+## [1.7.9] - 2026-05-31
+
 ### Changed
+- Improved audit artifact inspectability by promoting bounded AIRI trigger semantics over bare coverage counts: report surfaces now emphasize `AIRI Risk Triggers`, expose primary/secondary detector roles, and show mapping reasoning directly in human-readable artifacts.
+- Reduced repeated evidence noise across the artifact stack by compacting repeated same-file evidence in HTML and explain surfaces, documenting the same readability rule in Markdown, and surfacing explicit canonical-boundary notes for JSON and PDF outputs.
+- Humanized top-risk summaries and remediation targets so detector output appears as reviewer-usable audit findings instead of raw check IDs, while still preserving full-fidelity detector detail in JSON.
+- Added bounded `tier-impact` and partial-credit semantics to rubric surfaces so Stage 1/2R/3 findings are easier to trace without changing score math.
 - Reduced `detector_bio.py` repeated AST parse/parent-annotation overhead by building file AST contexts once per scan, pre-bucketing core node classes (`Constant`, `Assign`, `Call`, `Try`, `If`), and reusing them across the SMILES, parser-guard, silent-mock, and run-trace collectors. This is a semantics-preserving performance optimization only.
 - Tightened bio-detector scan boundaries by excluding `.manual_verify` from generated/non-runtime paths and replacing the broad trace-manifest `rglob("*")` walk with a pruned filesystem traversal that preserves existing detector semantics while lowering trace-scan overhead.
 - Deferred the RDKit optional lane until at least one SMILES-like candidate is present, and cached the optional `rdkit.Chem` import so availability/import work is not repeated unnecessarily across candidate checks.

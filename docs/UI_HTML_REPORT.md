@@ -1,9 +1,9 @@
 # HTML Report Dashboard
 
-Version: 1.7.8
+Version: 1.7.9
 Status: Active HTML/PDF surface note
 
-STEM BIO-AI ships a **self-contained interactive HTML dashboard** as the primary human-readable output format. In the current `1.7.8` line, the dashboard reflects the post-`C4/C5/C6` code-integrity split, AIRI detector-to-risk reasoning, policy-surface metadata, and audit-freshness summaries. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
+STEM BIO-AI ships a **self-contained interactive HTML dashboard** as the primary human-readable output format. In the current `1.7.9` line, the dashboard reflects the post-`C4/C5/C6` code-integrity split, AIRI detector-to-risk reasoning, policy-surface metadata, and audit-freshness summaries. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
 
 ## Generating the Report
 
@@ -120,7 +120,7 @@ The 5-page and 7-page packets both include AIRI coverage and bounded `why:` expl
 
 ![HTML Report Preview](assets/html_report_preview.png)
 
-*Screenshot: current 1.7.8 HTML dashboard surface with the post-C4/C5/C6 integrity split and AIRI domain filtering.*
+*Screenshot: current 1.7.9 HTML dashboard surface with the post-C4/C5/C6 integrity split and AIRI domain filtering.*
 
 ## Color Palette
 
@@ -158,7 +158,7 @@ This helps reviewers understand *why* a risk appears in AIRI coverage without im
 
 Coverage rate = covered risk IDs / total IDs in detector scope.
 
-Representative active mapping rows in the `1.7.8` line:
+Representative active mapping rows in the `1.7.9` line:
 
 | Detector | AIRI Risk IDs Covered |
 |----------|----------------------|

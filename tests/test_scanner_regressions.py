@@ -2452,12 +2452,13 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     html = render_html(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
-    assert "**Calibration Effect:** mirror-only in 1.7.8" in markdown
+    assert "**Calibration Effect:** mirror-only in 1.7.9" in markdown
     assert "Stage 4 replication emphasis" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
-    assert "Policy Mode: mirror-only in 1.7.8" in explain
+    assert "Policy Mode: mirror-only in 1.7.9" in explain
     assert "Stage 4 replication emphasis" in explain
-    assert "Policy Surface: default (authoritative_release, mirror_only)" in html
+    assert "authoritative_release" in html
+    assert "mirror_only" in html
     assert "Stage 4 replication emphasis" in html
 
 
@@ -2507,7 +2508,7 @@ def test_policy_explain_cli_surfaces_profile_details(capsys) -> None:
 
     assert code == 0
     assert "STEM BIO-AI policy: strict_clinical_adjacency" in captured.out
-    assert "Scoring Effect: mirror-only in 1.7.8" in captured.out
+    assert "Scoring Effect: mirror-only in 1.7.9" in captured.out
     assert "Clinical Caps:  no_disclaimer_cap=60 | t0_hard_floor_cap=35" in captured.out
     assert "Default Diff:" in captured.out
 
@@ -2860,7 +2861,7 @@ def test_policy_simulate_cli_accepts_local_profile_file(tmp_path: Path, capsys) 
     assert "Profile File:" in captured.out
     assert "Profile Hash:" in captured.out
     assert "Replication:   baseline=baseline | simulation=stronger_than_baseline" in captured.out
-    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.8" in captured.out
+    assert "Formal Score:  unchanged; Stage 4 remains a separate replication lane in 1.7.9" in captured.out
 
 
 def test_policy_simulate_cli_rejects_mixing_profile_file_and_intent_answers(tmp_path: Path) -> None:
@@ -2954,7 +2955,25 @@ def test_explain_compacts_repeated_info_findings(tmp_path: Path) -> None:
 
     assert "compacted to" in explain
     assert "Aggregated" in explain
-    assert "S3_T2_domain_tests" in explain
+
+
+def test_json_and_pdf_surface_notes_preserve_canonical_boundary(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path)
+    out_dir = tmp_path / "out"
+    write_outputs(result, out_dir, mode="brief", pages=1, fmt="json", explain=False)
+    payload = json.loads((out_dir / f"{tmp_path.name}_experiment_results.json").read_text(encoding="utf-8"))
+
+    notes = payload.get("artifact_surface_notes", {})
+    assert notes.get("json", "").startswith("JSON remains the canonical full-fidelity artifact")
+    assert "compact repeated same-file evidence" in notes.get(
+        "human_readable_compaction", ""
+    )
+
+    pdf_pages = render_pdf_pages(result, mode="detailed", pages=7)
+    flat_lines = "\n".join("\n".join(page) for page in pdf_pages)
+    assert "Surface Note:" in flat_lines
 
 
 

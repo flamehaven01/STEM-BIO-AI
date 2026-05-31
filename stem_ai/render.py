@@ -136,6 +136,15 @@ def write_outputs(
     return created
 
 
+def _surface_compaction_note(result: dict[str, Any]) -> str:
+    notes = result.get("artifact_surface_notes", {})
+    if isinstance(notes, dict):
+        text = notes.get("human_readable_compaction")
+        if isinstance(text, str) and text.strip():
+            return text.strip()
+    return "Human-readable surfaces may compact repeated same-file evidence; JSON remains the canonical full-fidelity artifact."
+
+
 # ── markdown ──────────────────────────────────────────────────────────────────
 def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     score = result["score"]
@@ -326,7 +335,7 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     if calibration.get("profile_read_mode") != "mirror_only":
         return None
     return (
-        "mirror-only in 1.7.8 — selected profile metadata is surfaced in artifacts, "
+        "mirror-only in 1.7.9 — selected profile metadata is surfaced in artifacts, "
         "but authoritative scan scoring still follows deterministic runtime constants. "
         "Preview-only posture changes, including Stage 4 replication emphasis, do not "
         "change the formal score until a future read-through phase. "
@@ -1878,6 +1887,10 @@ def _page5_compact_closure(result: dict[str, Any]) -> list[Any]:
             f'| Coverage Rate: <b>{airi.get("coverage_rate", 0):.3f}</b></font>',
             _style("AIRI_COMPACT", 8, 11, _DGRAY),
         ))
+        story.append(Paragraph(
+            f'<font color="{_DGRAY}" size="7">{_xt(_surface_compaction_note(result))}</font>',
+            _style("AIRI_COMPACT_NOTE", 7, 10, _DGRAY),
+        ))
         for risk in airi.get("covered_risks", [])[:3]:
             reason = _airi_reason_summary(risk)
             story.append(Paragraph(
@@ -1992,6 +2005,10 @@ def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
             f'</font>',
             _style("AIRIPDF_SUMMARY", 8, 12, _DGRAY),
         ))
+        story.append(Paragraph(
+            f'<font color="{_DGRAY}" size="7">{_xt(_surface_compaction_note(result))}</font>',
+            _style("AIRIPDF_NOTE", 7, 10, _DGRAY),
+        ))
         covered_risks = airi.get("covered_risks", [])
         if covered_risks:
             for risk in covered_risks[:3]:
@@ -2088,6 +2105,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         "AIRI Risk Triggers Summary",
         f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
         f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
+        f"- Surface Note: {_surface_compaction_note(result)}",
     ]
     covered_risks = airi.get("covered_risks", [])
     if covered_risks:
@@ -2159,6 +2177,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
             "AIRI Risk Triggers Summary",
             f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
             f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
+            f"- Surface Note: {_surface_compaction_note(result)}",
             *[
                 f"- {risk.get('id', '—')}: {risk.get('title', '')}"
                 + (f" | {_airi_primary_summary(risk)}" if _airi_primary_summary(risk) else "")
@@ -2184,6 +2203,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
             f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
             f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
             f"- Bundle Scope: {airi.get('airi_bundle_scope', 'unknown')}",
+            f"- Surface Note: {_surface_compaction_note(result)}",
             *[
                 f"- {risk.get('id', '—')}: {risk.get('title', '')}"
                 + (f" | {_airi_primary_summary(risk)}" if _airi_primary_summary(risk) else "")

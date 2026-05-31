@@ -222,6 +222,10 @@ def audit_repository(
         ),
         "file_hashes_sha256": _hash_key_files(target),
         "method": "Deterministic local CLI scan. No LLM, network, or runtime test execution is required.",
+        "artifact_surface_notes": {
+            "json": "JSON remains the canonical full-fidelity artifact. Human-readable surfaces may compact repeated same-file evidence for readability while preserving detector semantics.",
+            "human_readable_compaction": "Markdown, HTML, PDF, and explain outputs may compact repeated same-file evidence rows or narrative blocks. Refer to JSON for full per-finding detail.",
+        },
         "measurement_basis": {
             "stage_1": "README/package bio-domain regex; hype-claim penalties; limitation, strong regulatory-framework signals, weaker self-asserted compliance signals, disclaimer, demographic-bias, and reproducibility responsibility signals",
             "stage_2r": "Repo-local consistency checks across README, package metadata, docs, changelog, test/CI files, and deterministic contradiction/staleness/workflow-support heuristics",
