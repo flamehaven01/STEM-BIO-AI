@@ -58,6 +58,25 @@ def _mapping_rows_by_detector(rows: list[dict[str, Any]]) -> dict[str, list[dict
     return grouped
 
 
+def _mapping_priority(detector_id: str) -> tuple[int, str]:
+    detector_id = str(detector_id)
+    if detector_id.startswith("C"):
+        return (0, detector_id)
+    if detector_id.startswith("CC"):
+        return (1, detector_id)
+    if detector_id.startswith("R2R_"):
+        return (2, detector_id)
+    if detector_id.startswith("S1_"):
+        return (3, detector_id)
+    if detector_id.startswith("H"):
+        return (4, detector_id)
+    if detector_id.startswith("B"):
+        return (5, detector_id)
+    if detector_id.startswith("T0_"):
+        return (6, detector_id)
+    return (7, detector_id)
+
+
 def _missing_data_error() -> dict[str, Any]:
     return {
         "error": (
@@ -137,7 +156,12 @@ def build_airi_coverage(
     covered_risks: list[dict[str, Any]] = []
     for risk_id, details in sorted(covered_ids.items()):
         entry = bundle_index.get(risk_id) or registry_index.get(risk_id, {})
-        detectors = [detail.get("detector_id", "") for detail in details if detail.get("detector_id")]
+        ordered_details = sorted(
+            details,
+            key=lambda detail: _mapping_priority(str(detail.get("detector_id", ""))),
+        )
+        detectors = [detail.get("detector_id", "") for detail in ordered_details if detail.get("detector_id")]
+        primary = ordered_details[0] if ordered_details else {}
         covered_risks.append(
             {
                 "id": risk_id,
@@ -146,7 +170,10 @@ def build_airi_coverage(
                 "subdomain_label": entry.get("subdomain_label", ""),
                 "causal_timing": entry.get("causal_timing", ""),
                 "covered_by": detectors,
-                "mapping_details": details,
+                "primary_detector_id": primary.get("detector_id", ""),
+                "primary_trigger_reason": primary.get("trigger_reason", ""),
+                "secondary_detector_ids": detectors[1:],
+                "mapping_details": ordered_details,
             }
         )
 

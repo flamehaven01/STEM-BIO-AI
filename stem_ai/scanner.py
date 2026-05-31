@@ -228,7 +228,7 @@ def audit_repository(
             "stage_3_T1": ".github/workflows/ directory contains files",
             "stage_3_T2": "tests/ directory contains bio-domain vocabulary (regex)",
             "stage_3_T3": "CHANGELOG.md, CHANGELOG, or NEWS.md file exists; max credit requires bug-fix, patch, or security entries",
-            "stage_3_B1": "requirements.txt, pyproject.toml, or environment.yml file exists; max credit requires data-source, dataset-citation, or IRB language",
+            "stage_3_B1": "Python and JavaScript dependency or lock manifests (requirements.txt, pyproject.toml, environment.yml, package.json, package-lock.json, pnpm-lock.yaml, yarn.lock, npm-shrinkwrap.json) are treated as repository provenance surfaces; max credit still requires data-source, dataset-citation, or IRB language and does not by itself prove dataset lineage",
         "stage_3_B2": "bias/limitation vocabulary present in README and docs; max credit requires quantitative measurement evidence or related test coverage",
         "stage_3_B3": "funding/sponsor/COI vocabulary present in README, docs, or FUNDING.md (regex)",
             "stage_4": "Deterministic replication evidence lane: containers, reproducibility targets, lock/pin/hash evidence, README reproducibility sections, dataset/model artifact references, citation metadata, license/use-scope restriction evidence, CLI/seed/example signals",
@@ -463,6 +463,7 @@ def _score_stage_2r(
             -20,
             "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.",
             decision_basis="clinical_adjacent=True and explicit non-clinical boundary was not detected",
+            tier_impact="can contribute to clinical score ceilings and hard-floor review paths when stronger clinical deployment or certainty claims are also present",
         )
     if _version_mismatch(readme, package_text):
         score += _add_stage2r_item(
@@ -493,12 +494,14 @@ def _add_stage2r_item(
     score: int,
     evidence: str,
     decision_basis: str | None = None,
+    tier_impact: str | None = None,
 ) -> int:
     items[key] = {
         "score": score,
         "evidence": evidence,
         "detector_id": key,
         "decision_basis": decision_basis or evidence,
+        **({"tier_impact": tier_impact} if tier_impact else {}),
     }
     return score
 
@@ -918,20 +921,48 @@ def _risks(
 ) -> list[str]:
     risks: list[str] = []
     if clinical_adjacent and not has_disclaimer:
-        risks.append("Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
+        _append_unique_risk(risks, "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.")
     if self_asserted_compliance:
-        risks.append("Self-asserted compliance or privacy-governance claim requires independent verification.")
+        _append_unique_risk(risks, "Self-asserted compliance or privacy-governance claim requires independent verification.")
     if _detector_detected(evidence_ledger, "S1_R2_unsupported_legal_or_compliance_claim"):
-        risks.append("Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources.")
+        _append_unique_risk(risks, "Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources.")
     if _detector_detected(evidence_ledger, "R2R_D5_single_external_service_dependency"):
-        risks.append("Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence.")
+        _append_unique_risk(risks, "Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence.")
     for key, item in code_integrity.items():
         if item["status"] in {"WARN", "FAIL"}:
-            risks.append(f"{key}: {item['status']}")
+            _append_unique_risk(risks, _humanize_code_integrity_risk(key, item))
     for key, item in (cc_summary or {}).items():
         if isinstance(item, dict) and item.get("status") == "WARN":
-            risks.append(f"{key}: WARN (count={item.get('count', '?')})")
+            _append_unique_risk(risks, _humanize_contract_risk(key, item))
     return risks or ["No major local risks detected by the CLI scan."]
+
+
+def _append_unique_risk(risks: list[str], text: str) -> None:
+    if text and text not in risks:
+        risks.append(text)
+
+
+def _humanize_code_integrity_risk(key: str, item: dict[str, Any]) -> str:
+    evidence = str((item.get("evidence") or [""])[0]).strip()
+    if evidence:
+        return evidence
+    label_map = {
+        "C1_hardcoded_credentials": "Hardcoded credential signal surfaced in code-integrity lane.",
+        "C2_dependency_pinning": "Dependency pinning or external operational dependency signal surfaced in code-integrity lane.",
+        "C3_dead_or_deprecated_patient_adjacent_paths": "Deprecated or legacy patient-adjacent path signal surfaced in code-integrity lane.",
+        "C4_exception_handling_clinical_adjacent_paths": "Executable fail-open exception signal surfaced in code-integrity lane.",
+        "C5_compliance_boundary_integrity": "Compliance-boundary integrity signal surfaced in code-integrity lane.",
+        "C6_mock_auth_or_fail_open_boundary": "Mock-auth or auto-login trust-boundary signal surfaced in code-integrity lane.",
+    }
+    return label_map.get(key, f"{key} surfaced in code-integrity lane.")
+
+
+def _humanize_contract_risk(key: str, item: dict[str, Any]) -> str:
+    count = item.get("count", "?")
+    evidence = str((item.get("evidence") or [""])[0]).strip()
+    if evidence:
+        return evidence
+    return f"Contract check {key} surfaced reviewable issues (count={count})."
 
 
 def _detector_summary(evidence_ledger: list[dict[str, Any]]) -> dict[str, Any]:

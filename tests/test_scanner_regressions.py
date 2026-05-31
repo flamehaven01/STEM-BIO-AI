@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import json
 from datetime import date
 
@@ -58,6 +59,7 @@ from stem_ai.redaction import redact_object, redaction_policy, sanitize_artifact
 from stem_ai.render import _explain_status_label, render_explain, render_markdown, render_pdf_pages, write_outputs
 from stem_ai.render_html import render_html
 from stem_ai.scanner import _score_bias, _score_changelog, _score_provenance, _score_stage_2r, audit_repository
+from stem_ai import __version__
 
 
 def _write(path: Path, text: str) -> None:
@@ -108,6 +110,17 @@ def test_markdown_and_explain_surface_audit_freshness(tmp_path: Path) -> None:
     assert "## Audit Freshness" in markdown
     assert "Audit Freshness" in explain
     assert "review_after_days" in explain
+
+
+def test_release_version_surface_is_consistent() -> None:
+    repo_root = Path(__file__).resolve().parents[1]
+    pyproject_text = (repo_root / "pyproject.toml").read_text(encoding="utf-8")
+    readme_text = (repo_root / "README.md").read_text(encoding="utf-8")
+
+    pyproject_match = re.search(r'^version = "([^"]+)"', pyproject_text, flags=re.MULTILINE)
+    assert pyproject_match is not None
+    assert pyproject_match.group(1) == __version__
+    assert f"stable-v{__version__}" in readme_text
 
 
 def test_exact_dependency_pins_pass(tmp_path: Path) -> None:
@@ -1037,6 +1050,21 @@ def test_stage4_javascript_lockfiles_count_as_lock_and_exact_resolution_evidence
     assert result["stage_4_rubric"]["S4_exact_dependency_pins_or_hashes"]["score"] == 10
 
 
+def test_broad_regex_readme_evidence_is_aggregated_per_file(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical bioinformatics clinical genomics proteomics metabolomics repository.\n"
+        "This bio medical system supports genomics and proteomics review.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    findings = [f for f in result["evidence_ledger"] if f["detector"] == "S1_readme_bio_terms" and f["status"] == "detected"]
+
+    assert len(findings) == 1
+    assert findings[0]["metadata"]["match_count"] > 1
+    assert findings[0]["metadata"]["aggregate_scope"] == "same_file_regex_presence"
+
+
 def test_single_external_service_dependency_surfaces_required_provider_lock_in(tmp_path: Path) -> None:
     _write(
         tmp_path / "README.md",
@@ -1176,6 +1204,54 @@ def test_airi_coverage_can_be_triggered_by_supported_report_layer_detectors(tmp_
     assert "S1_R2_unsupported_legal_or_compliance_claim" in coverage["detectors_triggered"]
     assert "R2R_D5_single_external_service_dependency" in coverage["detectors_triggered"]
     assert any(risk.get("mapping_details") for risk in coverage["covered_risks"])
+    assert any(risk.get("primary_detector_id") for risk in coverage["covered_risks"])
+
+
+def test_markdown_surfaces_humanized_top_risks_and_warn_file_lines(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "HIPAA-compliant architecture for clinical deployment.\n"
+        "Self-hosted mode is the recommended way to run Bio.\n"
+        "Powered by Valyu's specialized biomedical data API.\n",
+    )
+    _write(
+        tmp_path / ".env.example",
+        "# VALYU API (REQUIRED)\n"
+        "VALYU_API_KEY=valyu_your_api_key_here\n",
+    )
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="detailed", pages=7)
+
+    assert "## Top Risks" in markdown
+    assert "C2_dependency_pinning: WARN" not in markdown
+    assert "External operational dependency signal surfaced in code-integrity lane." in markdown
+    assert ".env.example:2 VALYU_API_KEY=valyu_your_api_key_here" in markdown
+    assert "## Remediation Targets" in markdown
+
+
+def test_markdown_airi_gaps_and_reasoning_interpretation_are_not_truncated(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+
+    result = audit_repository(tmp_path)
+    result["airi_risk_coverage"]["known_gaps_in_bundle"] = [
+        {"id": "65.03.03", "title": "Reidentification"},
+        {"id": "70.02.02", "title": "Misinformation — hallucination of clinical knowledge"},
+        {"id": "72.99.99", "title": "Synthetic gap for regression coverage"},
+    ]
+    result["reasoning_model"]["lane_coherence"]["status"] = "heuristic_mixed"
+    result["reasoning_model"]["uncertainty_budget"]["status"] = "review_advised"
+
+    markdown = render_markdown(result, mode="detailed", pages=7)
+    explain = render_explain(result)
+
+    assert "72.99.99" in markdown
+    assert "detector-mapped AIRI coverage inside the current runtime bundle" in markdown
+    assert "manual review is recommended" in markdown
+    assert "known gaps in bundle" in explain
+    assert "72.99.99 | Synthetic gap for regression coverage" in explain
+    assert "review_note" in explain
 
 
 def test_explain_report_covers_detectors_and_stage4_rubric(tmp_path: Path) -> None:
@@ -1305,6 +1381,32 @@ def test_reasoning_surfaces_in_markdown_and_explain(tmp_path: Path) -> None:
     assert "does not override the final score" in markdown
     assert "Reasoning Diagnostics" in explain
     assert "stem-bio-ai-reasoning-v1.3.2" in explain
+
+
+def test_stage2r_boundary_penalty_surfaces_tier_impact_note(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Clinical diagnostic decision support repository for patient triage.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="detailed", pages=7)
+
+    assert "R2R_D2_missing_clinical_use_boundary" in markdown
+    assert "tier-impact=can contribute to clinical score ceilings and hard-floor review paths" in markdown
+
+
+def test_stage1_regulatory_framework_partial_credit_ladder_is_explained(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Bio medical repository.\nHIPAA-compliant architecture when self-hosted.\n",
+    )
+
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="detailed", pages=7)
+
+    assert "R2_regulatory_framework" in markdown
+    assert "partial-credit ladder=+15 strong framework | +5 weak self-asserted compliance" in markdown
 
 
 def test_reasoning_unique_token_count_is_deterministic() -> None:

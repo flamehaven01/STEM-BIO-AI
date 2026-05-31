@@ -183,6 +183,8 @@ def airi_row(r: dict[str, Any], status: str = "covered") -> str:
     color = _C["green"] if status == "covered" else _C["amber"]
     if status == "covered":
         details = r.get("mapping_details", [])
+        primary = str(r.get("primary_detector_id", "")).strip()
+        secondary = [str(det).strip() for det in r.get("secondary_detector_ids", []) if str(det).strip()]
         if details:
             preview_bits = []
             for detail in details[:2]:
@@ -192,9 +194,20 @@ def airi_row(r: dict[str, Any], status: str = "covered") -> str:
                     preview_bits.append(f"{detector_id}: {reason}")
                 elif detector_id:
                     preview_bits.append(detector_id)
-            det = " | ".join(preview_bits) if preview_bits else ", ".join(r.get("covered_by", []))
+            if preview_bits:
+                prefix = f"primary={primary}" if primary else ""
+                if secondary:
+                    prefix += f"; also={','.join(secondary[:2])}" if prefix else f"also={','.join(secondary[:2])}"
+                det = f"{prefix} | {' | '.join(preview_bits)}" if prefix else " | ".join(preview_bits)
+            else:
+                det = ", ".join(r.get("covered_by", []))
         else:
-            det = ", ".join(r.get("covered_by", []))
+            if primary and secondary:
+                det = f"primary={primary}; also={','.join(secondary[:2])}"
+            elif primary:
+                det = f"primary={primary}"
+            else:
+                det = ", ".join(r.get("covered_by", []))
     else:
         det = r.get("note", "")[:70]
     sub   = xt(r.get("subdomain_label", r.get("subdomain_id", "")))[:32]

@@ -154,6 +154,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         *([f"**Calibration Effect:** {calibration_effect}"] if calibration_effect else []),
         f"**Final Score:** **{score['final_score']} / 100**",
         f"**Formal Tier:** **{score['formal_tier']}**",
+        f"**Tier Meaning:** {score['formal_tier']} = {score['use_scope']}",
         f"**Use Scope:** {score['use_scope']}",
         "",
         "## Score Matrix",
@@ -169,11 +170,13 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "",
         f"**Stage 4 Replication Score:** **{result.get('replication_score', 0)} / 100**",
         f"**Replication Tier:** **{result.get('replication_tier', 'R0')}**",
+        "**Interpretation:** Stage 4 is a separate replication lane. It improves inspectability and reproducibility review, but it does not currently change the formal tier.",
         "",
         *_markdown_freshness_section(result.get("audit_freshness", {})),
         "## Reasoning Diagnostics",
         "",
         _markdown_reasoning_summary(result.get("reasoning_model", {})),
+        *_markdown_reasoning_interpretation(result.get("reasoning_model", {})),
         "",
         *_markdown_advisory_section(result.get("ai_advisory")),
         *_markdown_regulatory_section(result),
@@ -182,6 +185,9 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     ]
     for key, item in result["code_integrity"].items():
         lines.append(f"- **{key}:** {item['status']} — {item['evidence'][0]}")
+        if item["status"] in {"WARN", "FAIL"}:
+            for detail in item.get("evidence", [])[1:4]:
+                lines.append(f"  - {detail}")
     if ast_note:
         lines.append(f"- **AST analysis scope:** {ast_note}")
 
@@ -190,13 +196,17 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     lines.extend(["", "## Top Risks"])
     for risk in result["notable_risks"][:5]:
         lines.append(f"- {risk}")
+    lines.extend(_markdown_remediation_targets(result))
 
     if mode == "detailed":
         lines.extend(["", "## Stage 1 Evidence"])
         for key, item in result.get("stage_1_rubric", {}).items():
             if isinstance(item, dict):
                 score_value = item.get("score", "")
-                lines.append(f"- **{key}:** {score_value} — {item.get('evidence', '')}")
+                lines.append(
+                    f"- **{key}:** {score_value} — {item.get('evidence', '')}"
+                    f"{_stage1_semantics_suffix(key, item)}"
+                )
         lines.extend(["", "## Stage 2R Evidence"])
         for key, item in result["stage_2r_rubric"].items():
             if isinstance(item, dict):
@@ -292,6 +302,23 @@ def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
         f"{envelope.get('upper', 'n/a')}. "
         "This heuristic layer does not override the final score."
     )
+
+
+def _markdown_reasoning_interpretation(reasoning: dict[str, Any]) -> list[str]:
+    if not reasoning:
+        return []
+    coherence = reasoning.get("lane_coherence", {})
+    uncertainty = reasoning.get("uncertainty_budget", {})
+    notes: list[str] = []
+    if coherence.get("status") in {"heuristic_mixed", "heuristic_divergent"}:
+        notes.append(
+            "- **Interpretation:** lane coherence is mixed, which means README-facing intent and code/accountability signals do not move together cleanly. Review Stage 2R and Stage 3 evidence before treating the score as stable."
+        )
+    if uncertainty.get("status") == "review_advised":
+        notes.append(
+            "- **Interpretation:** the uncertainty band is elevated enough that manual review is recommended, especially for boundary claims, workflow support, and governance surfaces."
+        )
+    return notes
 
 
 def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
@@ -403,12 +430,13 @@ def _markdown_airi_section(airi: dict[str, Any]) -> list[str]:
     bundle_scope = airi.get("airi_bundle_scope", "unknown")
     snapshot = airi.get("airi_upstream_snapshot_date", "unknown")
     lines = [
-        "## AIRI Coverage",
+        "## AIRI Risk Triggers",
         "",
         f"**Covered Risks:** **{covered} / {total}**",
         f"**Coverage Rate:** `{rate:.3f}`",
         f"**Bundle Scope:** `{bundle_scope}`",
         f"**Upstream Snapshot:** `{snapshot}`",
+        "**Interpretation:** This is detector-mapped AIRI coverage inside the current runtime bundle, not a claim that unmapped risks are absent.",
     ]
     covered_risks = airi.get("covered_risks", [])
     if covered_risks:
@@ -416,15 +444,16 @@ def _markdown_airi_section(airi: dict[str, Any]) -> list[str]:
         lines.append("**Examples of Covered AIRI Risks**")
         for risk in covered_risks[:3]:
             reason = _airi_reason_summary(risk)
+            primary = _airi_primary_summary(risk)
             lines.append(
                 f"- `{risk.get('id', 'unknown')}` — {risk.get('title', 'unknown')} "
-                f"(covered by: {', '.join(risk.get('covered_by', []))}; why: {reason})"
+                f"({primary}; why: {reason})"
             )
     gaps = airi.get("known_gaps_in_bundle", [])
     if gaps:
         lines.append("")
         lines.append("**Known Gaps In Bundle**")
-        for gap in gaps[:2]:
+        for gap in gaps:
             lines.append(f"- `{gap.get('id', 'unknown')}` — {gap.get('title', 'unknown')}")
     return lines
 
@@ -475,7 +504,7 @@ def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
         return []
     lines = [
         _EXPLAIN_SEP,
-        "AIRI Coverage",
+        "AIRI Risk Triggers",
         "",
         f"  covered_count                  {airi.get('covered_count', 0)}",
         f"  detector_scope_total           {airi.get('total_risks_in_detector_scope', 0)}",
@@ -489,15 +518,16 @@ def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
         lines.append("  covered examples:")
         for risk in covered_risks[:3]:
             reason = _airi_reason_summary(risk)
+            primary = _airi_primary_summary(risk)
             lines.append(
                 f"    - {risk.get('id', 'unknown')} | {risk.get('title', 'unknown')} "
-                f"| covered_by={','.join(risk.get('covered_by', []))} | why={reason}"
+                f"| {primary} | why={reason}"
             )
     gaps = airi.get("known_gaps_in_bundle", [])
     if gaps:
         lines.append("")
         lines.append("  known gaps in bundle:")
-        for gap in gaps[:2]:
+        for gap in gaps:
             lines.append(
                 f"    - {gap.get('id', 'unknown')} | {gap.get('title', 'unknown')}"
             )
@@ -508,11 +538,14 @@ def _explain_airi_section(airi: dict[str, Any]) -> list[str]:
 def _rubric_trace_suffix(item: dict[str, Any]) -> str:
     detector = str(item.get("detector_id", "")).strip()
     basis = str(item.get("decision_basis", "")).strip()
+    tier_impact = str(item.get("tier_impact", "")).strip()
     parts: list[str] = []
     if detector:
         parts.append(f"detector={detector}")
     if basis:
         parts.append(f"basis={basis}")
+    if tier_impact:
+        parts.append(f"tier-impact={tier_impact}")
     if not parts:
         return ""
     return f" `[{' | '.join(parts)}]`"
@@ -530,6 +563,49 @@ def _airi_reason_summary(risk: dict[str, Any]) -> str:
         reason = trigger or justification or "bounded detector-to-risk mapping"
         snippets.append(f"{detector}: {reason}" if detector else reason)
     return " ; ".join(snippets)
+
+
+def _airi_primary_summary(risk: dict[str, Any]) -> str:
+    primary = str(risk.get("primary_detector_id", "")).strip()
+    secondary = [str(det).strip() for det in risk.get("secondary_detector_ids", []) if str(det).strip()]
+    if primary and secondary:
+        return f"primary: {primary}; also linked by {', '.join(secondary[:2])}"
+    if primary:
+        return f"primary: {primary}"
+    covered_by = [str(det).strip() for det in risk.get("covered_by", []) if str(det).strip()]
+    if covered_by:
+        return f"covered by: {', '.join(covered_by[:2])}"
+    return "bounded detector-to-risk mapping"
+
+
+def _stage1_semantics_suffix(key: str, item: dict[str, Any]) -> str:
+    if key != "R2_regulatory_framework":
+        return ""
+    score = item.get("score")
+    ladder = "+15 strong framework | +5 weak self-asserted compliance | -5 CA-INDIRECT missing framework | -10 CA-DIRECT missing framework"
+    return f" `[partial-credit ladder={ladder}; current={score}]`"
+
+
+def _markdown_remediation_targets(result: dict[str, Any]) -> list[str]:
+    targets: list[str] = []
+    stage2 = result.get("stage_2r_rubric", {})
+    code_integrity = result.get("code_integrity", {})
+    if "R2R_D2_missing_clinical_use_boundary" in stage2:
+        targets.append("Add an explicit non-clinical/non-diagnostic boundary to README and adjacent docs before treating the repository as review-ready.")
+    if "R2R_D4_unsupported_workflow_claim" in stage2:
+        targets.append("Bring workflow, demo, and CLI claims into line with actual local support surfaces, or narrow the README claims.")
+    if code_integrity.get("C2_dependency_pinning", {}).get("status") in {"WARN", "FAIL"}:
+        targets.append("Pin production dependencies and document external-service dependence explicitly when local or self-host claims are part of the positioning.")
+    if code_integrity.get("C5_compliance_boundary_integrity", {}).get("status") in {"WARN", "FAIL"}:
+        targets.append("Remove unsupported legal/compliance language or add the governance and security evidence needed to defend it.")
+    if code_integrity.get("C6_mock_auth_or_fail_open_boundary", {}).get("status") in {"WARN", "FAIL"}:
+        targets.append("Separate mock-auth or auto-login convenience flows from any production, privacy, or self-host trust boundary narrative.")
+    if not targets:
+        return []
+    lines = ["", "## Remediation Targets"]
+    for target in targets:
+        lines.append(f"- {target}")
+    return lines
 
 
 def _explain_freshness_section(freshness: dict[str, Any]) -> list[str]:
@@ -606,6 +682,10 @@ def _explain_reasoning_section(reasoning: dict[str, Any]) -> list[str]:
         item = reasoning.get(key, {})
         status = item.get("status", "unknown")
         lines.append(f"  {key:<31} {status}")
+    if reasoning.get("lane_coherence", {}).get("status") in {"heuristic_mixed", "heuristic_divergent"}:
+        lines.append("  interpretation                  mixed lane coherence; review Stage 2R and Stage 3 evidence manually")
+    if reasoning.get("uncertainty_budget", {}).get("status") == "review_advised":
+        lines.append("  review_note                     uncertainty band elevated; manual review advised")
     lines.append("")
     return lines
 
@@ -950,7 +1030,7 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
     ]
     if airi_lines:
         right_rows.extend([
-            [Paragraph(f'<font color="{_WHITE}"><b>AIRI Coverage</b></font>', _style("AH1", 9, 12, _WHITE, True))],
+            [Paragraph(f'<font color="{_WHITE}"><b>AIRI Risk Triggers</b></font>', _style("AH1", 9, 12, _WHITE, True))],
             [Paragraph(f'<font color="{_DGRAY}" size="8">{airi_lines}</font>', _style("AL1", 7.8, 10.5, _DGRAY))],
         ])
     right_tbl = Table(right_rows, colWidths=["100%"])
@@ -1201,7 +1281,14 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
             continue
         pts = item.get("score", 0)
         col = _RED if pts < 0 else _GREEN if pts > 0 else _DGRAY
-        s1_items.append((label, f"{pts:+d}", col, item.get("evidence", "")))
+        evidence = item.get("evidence", "")
+        if key == "R2_regulatory_framework":
+            evidence = (
+                f"{evidence} "
+                "[partial-credit ladder: +15 strong framework | +5 weak self-asserted compliance | "
+                "-5 CA-INDIRECT missing framework | -10 CA-DIRECT missing framework]"
+            )
+        s1_items.append((label, f"{pts:+d}", col, evidence))
     if not s1_items:
         s1_items = [
             ("Baseline", "+60", _DGRAY, "All non-nascent repositories start at 60."),
@@ -1729,7 +1816,7 @@ def _page5_compact_closure(result: dict[str, Any]) -> list[Any]:
             ))
     if airi:
         story.append(Spacer(1, 3 * mm))
-        story += _sec_hdr("AIRI Coverage Summary", _TEAL)
+        story += _sec_hdr("AIRI Risk Triggers Summary", _TEAL)
         story.append(Paragraph(
             f'<font color="{_DGRAY}" size="8">'
             f'Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b> '
@@ -1841,7 +1928,7 @@ def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
     # AIRI summary
     if airi:
         story.append(Spacer(1, 3 * mm))
-        story += _sec_hdr("AIRI Coverage Summary", _TEAL)
+        story += _sec_hdr("AIRI Risk Triggers Summary", _TEAL)
         story.append(Paragraph(
             f'<font color="{_DGRAY}" size="8">'
             f'Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b> '
@@ -1854,9 +1941,11 @@ def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
         if covered_risks:
             for risk in covered_risks[:3]:
                 reason = _airi_reason_summary(risk)
+                primary = _airi_primary_summary(risk)
                 story.append(Paragraph(
                     f'<font color="{_DGRAY}" size="8">&#8226; <b>{_xt(str(risk.get("id", "—")))}</b> '
                     f'{_xt(str(risk.get("title", "")))}'
+                    f'{f" — { _xt(primary) }" if primary else ""}'
                     f'{f" — why: {_xt(reason)}" if reason else ""}</font>',
                     _style(f"AIRIPDF_{str(risk.get('id', 'risk'))[:8]}", 8, 11, _DGRAY),
                 ))
@@ -1941,7 +2030,7 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
     airi = result.get("airi_risk_coverage", {})
     airi_brief = [
         "",
-        "AIRI Coverage Summary",
+        "AIRI Risk Triggers Summary",
         f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
         f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
     ]
@@ -1949,7 +2038,10 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
     if covered_risks:
         risk = covered_risks[0]
         reason = _airi_reason_summary(risk)
+        primary = _airi_primary_summary(risk)
         line = f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+        if primary:
+            line += f" | {primary}"
         if reason:
             line += f" | why: {reason}"
         airi_brief.append(line)
@@ -2009,11 +2101,12 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
             *[f"- {k}: {v['status']} {v['evidence'][0]}" for k, v in result["code_integrity"].items()],
             *([f"- AST analysis scope: {ast_note}"] if ast_note else []),
             "",
-            "AIRI Coverage Summary",
+            "AIRI Risk Triggers Summary",
             f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
             f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
             *[
                 f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+                + (f" | {_airi_primary_summary(risk)}" if _airi_primary_summary(risk) else "")
                 + (f" | why: {_airi_reason_summary(risk)}" if _airi_reason_summary(risk) else "")
                 for risk in airi.get("covered_risks", [])[:2]
             ],
@@ -2032,12 +2125,13 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
             "Priority Improvement Roadmap",
             *[f"- {r}" for r in result.get("notable_risks", [])[:4]],
             "",
-            "AIRI Coverage Summary",
+            "AIRI Risk Triggers Summary",
             f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
             f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
             f"- Bundle Scope: {airi.get('airi_bundle_scope', 'unknown')}",
             *[
                 f"- {risk.get('id', '—')}: {risk.get('title', '')}"
+                + (f" | {_airi_primary_summary(risk)}" if _airi_primary_summary(risk) else "")
                 + (f" | why: {_airi_reason_summary(risk)}" if _airi_reason_summary(risk) else "")
                 for risk in airi.get("covered_risks", [])[:3]
             ],

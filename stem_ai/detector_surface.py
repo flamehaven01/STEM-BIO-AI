@@ -163,10 +163,42 @@ def regex_detector(
     for path in sorted(set(paths), key=lambda p: relative_path(target, p).as_posix()):
         text = read_text(path)
         lines = text.splitlines()
-        for match in pattern.finditer(text):
-            detected = True
-            line = text.count("\n", 0, match.start()) + 1
-            add_finding(target, findings, counters, detector, pattern_id, "detected", "info", path, line, source_line(lines, line), "regex", explanation, {"match": match.group(0)})
+        matches = list(pattern.finditer(text))
+        if not matches:
+            continue
+        detected = True
+        first = matches[0]
+        line = text.count("\n", 0, first.start()) + 1
+        matched_terms: list[str] = []
+        matched_lines: list[int] = []
+        for match in matches:
+            term = match.group(0)
+            if term not in matched_terms:
+                matched_terms.append(term)
+            match_line = text.count("\n", 0, match.start()) + 1
+            if match_line not in matched_lines:
+                matched_lines.append(match_line)
+        add_finding(
+            target,
+            findings,
+            counters,
+            detector,
+            pattern_id,
+            "detected",
+            "info",
+            path,
+            line,
+            source_line(lines, line),
+            "regex",
+            explanation,
+            {
+                "match": first.group(0),
+                "match_count": len(matches),
+                "matched_terms": matched_terms[:5],
+                "matched_lines": matched_lines[:8],
+                "aggregate_scope": "same_file_regex_presence",
+            },
+        )
     if not detected:
         add_finding(target, findings, counters, detector, pattern_id, "not_detected", "info", Path("."), 0, "", "regex", f"No evidence detected for {detector}.")
 

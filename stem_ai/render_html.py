@@ -1,6 +1,6 @@
 """Interactive HTML report renderer for STEM BIO-AI.
 
-Sections: Executive Summary | Decision Path | Code Integrity | AIRI Coverage | Evidence Detail
+Sections: Executive Summary | Decision Path | Code Integrity | AIRI Risk Triggers | Evidence Detail
 Self-contained: inline CSS + SVG + JS, zero external dependencies.
 """
 from __future__ import annotations
@@ -40,7 +40,7 @@ def _nav(ver: str) -> str:
         ("#s1", "1. Summary"),
         ("#s2", "2. Decision Path"),
         ("#s3", "3. Code Integrity"),
-        ("#s4", "4. AIRI Coverage"),
+        ("#s4", "4. AIRI Risk Triggers"),
         ("#s5", "5. Evidence"),
     ]
     items = "".join(f'<a href="{h}" class="nav-link">{l}</a>' for h, l in links)
@@ -106,6 +106,7 @@ def _iter_rubric_rows(rubric: dict[str, Any]) -> list[dict[str, Any]]:
                 "evidence": xt(str(info.get("evidence", ""))),
                 "detector_id": xt(str(info.get("detector_id", ""))) if info.get("detector_id") else "",
                 "decision_basis": xt(str(info.get("decision_basis", ""))) if info.get("decision_basis") else "",
+                "tier_impact": xt(str(info.get("tier_impact", ""))) if info.get("tier_impact") else "",
             }
         )
     return rows
@@ -137,6 +138,8 @@ def _rubric_focus_list(rows: list[dict[str, Any]]) -> str:
             if row["detector_id"] else ""
         )
         detail = row["decision_basis"] or row["evidence"]
+        if row.get("tier_impact"):
+            detail = f'{detail} | tier impact: {row["tier_impact"]}'
         items += (
             f'<li class="focus-line">'
             f'<div class="focus-top"><span class="focus-key">{xt(row["key"])}</span>'
