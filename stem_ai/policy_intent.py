@@ -141,7 +141,7 @@ def simulate_policy_outcome(
     if replication_posture_changed and final_score == baseline_final:
         notes.append(
             "Formal score remained unchanged because Stage 4 is still a separate "
-            "replication lane in 1.7.9."
+            "replication lane in 1.8.0."
         )
 
     simulation = {

@@ -1,5 +1,5 @@
 # Deterministic Diagnostics for Bio-AI Integrity
-## Version 1.7.9 (Active deterministic bio diagnostics note)
+## Version 1.8.0 (Active deterministic bio diagnostics note)
 
 This document is the active deterministic diagnostics specification for STEM BIO-AI's bio-focused deterministic lane. The local lane is implemented as evidence-bearing repository diagnostics inside `stem_ai/detector_bio.py`. The optional AI lane remains advisory, opt-in, and non-authoritative.
 
@@ -22,7 +22,7 @@ The local deterministic lane is authoritative for hard findings. The AI lane is 
 
 ---
 
-## 1A. Implementation Status (STEM BIO-AI v1.7.9)
+## 1A. Implementation Status (STEM BIO-AI v1.8.0)
 
 Implemented now:
 1. `SMILES-DECEPT` Lane A0 conservative surface scanner
@@ -136,7 +136,7 @@ Not yet implemented:
 ---
 
 ## 3. Integration with STEM-BIO-AI CORE
-These diagnostics align with the current **Code Integrity (C1-C6)** and bio-diagnostic surfaces in the `1.7.9` line:
+These diagnostics align with the current **Code Integrity (C1-C6)** and bio-diagnostic surfaces in the `1.8.0` line:
 
 - **SMILES-DECEPT** -> bio deterministic diagnostics surface first; possible future linkage to `C3` or a dedicated bio-integrity lane after benchmark review
 - **MOUNT-AUDIT** -> future hardening candidate; not currently shipped in the active runtime

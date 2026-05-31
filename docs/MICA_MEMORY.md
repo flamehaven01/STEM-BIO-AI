@@ -1,6 +1,6 @@
 # STEM BIO-AI MICA Memory Layer
 
-Version: 1.7.9
+Version: 1.8.0
 MICA Contract: 0.2.4  
 Status: Active operational memory contract
 

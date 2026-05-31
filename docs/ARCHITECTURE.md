@@ -1,6 +1,6 @@
 # STEM BIO-AI Architecture
 
-This document describes the implemented repository structure and runtime boundaries in `v1.7.9`.
+This document describes the implemented repository structure and runtime boundaries in `v1.8.0`.
 
 ## Purpose
 

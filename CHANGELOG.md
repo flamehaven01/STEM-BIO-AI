@@ -14,6 +14,21 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.8.0] - 2026-05-31
+
+### Added
+- Added explicit MICA invocation runtime surfaces for session-start governance:
+  - `tools/mica_runtime.py --format session-report`
+  - `tools/mica_invoke.py --mode {natural|guided|forced}`
+  - `mica_invoke.bat` Windows wrapper
+- Added `SECURITY.md` so the default deterministic scan boundary, advisory/provider boundary, and verification path are documented as first-class repository surfaces.
+- Added focused regression coverage for the new MICA invocation/session-report path in `tests/test_mica_invocation.py`.
+
+### Changed
+- Refreshed the tracked HTML preview artifact under `docs/assets/report-preview/yorkeccak_bio_report.html` from a real `1.8.0` generated report so the README/browser preview matches the current runtime surface.
+
+---
+
 ## [1.7.9] - 2026-05-31
 
 ### Changed

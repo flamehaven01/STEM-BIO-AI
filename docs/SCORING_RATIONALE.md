@@ -1,6 +1,6 @@
 # STEM BIO-AI Scoring Rationale
 
-Version: 1.7.9
+Version: 1.8.0
 Status: Authoritative design record. Update with each structural score change.
 
 ---
@@ -33,7 +33,7 @@ In LOCAL_ANALYSIS mode, Stage 2 cross-platform verification is unavailable. The 
 
 ## 3. Key Terms
 
-- **CA-DIRECT / CA-INDIRECT**: Clinical-adjacent severity classes derived from visible repository language. They govern cap policy, not clinical truth. In `1.7.9`, the active runtime taxonomy remains `ca-taxonomy-v1` implemented in `scanner.py`; reference markdown is informative, not authoritative.
+- **CA-DIRECT / CA-INDIRECT**: Clinical-adjacent severity classes derived from visible repository language. They govern cap policy, not clinical truth. In `1.8.0`, the active runtime taxonomy remains `ca-taxonomy-v1` implemented in `scanner.py`; reference markdown is informative, not authoritative.
 - **Stage 2R**: Repo-local consistency substitute for full Stage 2 cross-platform verification in LOCAL_ANALYSIS mode.
 - **score_cap**: Post-score ceiling applied when clinical-adjacent boundary conditions are not satisfied.
 - **C1_penalty**: Only code-integrity item that currently subtracts from the final score.
@@ -265,7 +265,7 @@ C1–C6 are code-level or governance-boundary checks available only in LOCAL_ANA
 
 Only C1 affects the final score. C2–C6 are reported as risk surfaces because they represent elevated engineering or governance concern but do not rise to the level of score penalties in the current calibration.
 
-The C4/C5/C6 split is deliberate in `1.7.9`:
+The C4/C5/C6 split is deliberate in `1.8.0`:
 
 - `C4` is reserved for executable fail-open exception behavior in code.
 - `C5` is reserved for compliance, legal, or clinical-boundary integrity warnings surfaced from reviewed repository sources.
