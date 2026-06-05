@@ -457,9 +457,11 @@ def _markdown_regulatory_section(result: dict[str, Any]) -> list[str]:
             continue
         lines.append(f"### {stage_key.replace('_', ' ').title()}")
         for item in items:
+            _src = ", ".join(item.get("source_ids", []))
+            _src_tag = f" `[{_src}]`" if _src else ""
             lines.append(
                 f"- **{item['requirement_id']}** — {item['status']} "
-                f"(mapping confidence: {item['mapping_confidence']}, evidence strength: {item['evidence_strength']})"
+                f"(mapping confidence: {item['mapping_confidence']}, evidence strength: {item['evidence_strength']}){_src_tag}"
             )
             lines.append(f"  - {item['note']}")
         lines.append("")
@@ -851,9 +853,11 @@ def _explain_regulatory_section(result: dict[str, Any]) -> list[str]:
             continue
         lines.append(f"  {stage_key:<31}")
         for item in items:
+            _src = ", ".join(item.get("source_ids", []))
             lines.append(
                 f"    {item['requirement_id']}: {item['status']} "
                 f"(mapping={item['mapping_confidence']}, evidence={item['evidence_strength']})"
+                + (f" | source: {_src}" if _src else "")
             )
             lines.append(f"      note: {item['note']}")
     summary = result.get("regulatory_traceability", {}).get("summary")
