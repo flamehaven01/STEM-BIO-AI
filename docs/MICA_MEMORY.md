@@ -1,6 +1,6 @@
 # STEM BIO-AI MICA Memory Layer
 
-Version: 1.8.0
+Version: 1.8.3
 MICA Contract: 0.2.4  
 Status: Active operational memory contract
 
@@ -58,11 +58,12 @@ It selects exactly three live files:
 
 For the current release the active set is:
 
-- `memory/stem-ai.mica.v1.7.8.json`
-- `memory/stem-ai-playbook.v1.7.8.md`
-- `memory/stem-ai-lessons.v1.7.8.md`
+- `memory/stem-ai.mica.v1.8.3.json`
+- `memory/stem-ai-playbook.v1.8.3.md`
+- `memory/stem-ai-lessons.v1.8.3.md`
 
-Anything older in `memory/` is retained as archive history unless explicitly retired.
+The working tree intentionally keeps only this active trio.
+Older release-memory snapshots are preserved through Git-tagged release history unless explicitly retired by a documented archive-policy change.
 
 ---
 
@@ -160,7 +161,7 @@ Required linkage:
 
 ## Retention Policy
 
-Historical memory snapshots are intentionally kept in Git.
+Historical memory provenance is intentionally kept in Git.
 
 Reasons:
 
@@ -172,8 +173,9 @@ Because of that, `memory/` should not be added to `.gitignore`.
 
 What stays stable:
 
-- old versioned memory files remain as archive
+- Git-tagged release history remains the archive of prior memory states
 - only `memory/mica.yaml` decides what is active
+- the visible working-tree surface keeps only the current archive/playbook/lessons trio
 
 What changes on each release-memory rotation:
 
@@ -194,7 +196,7 @@ When the release version changes and memory is updated:
 5. run `python tools/mica_pct.py .`
 6. run `python tools/mica_runtime.py . --format text`
 7. verify README and docs still point to the current memory policy
-8. keep older snapshots unless there is an explicit archive-pruning decision
+8. keep older snapshots in tagged Git history rather than as parallel working-tree files unless an explicit archive-policy change says otherwise
 
 ---
 

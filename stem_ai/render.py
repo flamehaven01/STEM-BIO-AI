@@ -145,6 +145,18 @@ def _surface_compaction_note(result: dict[str, Any]) -> str:
     return "Human-readable surfaces may compact repeated same-file evidence; JSON remains the canonical full-fidelity artifact."
 
 
+def _compact_labels(items: list[str], *, limit: int = 5) -> str:
+    values = [str(item).strip() for item in items if str(item).strip()]
+    if not values:
+        return ""
+    shown = values[:limit]
+    extra = max(0, len(values) - len(shown))
+    text = ", ".join(shown)
+    if extra:
+        text += f" (+{extra} more)"
+    return text
+
+
 # ── markdown ──────────────────────────────────────────────────────────────────
 def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
     score = result["score"]
@@ -661,25 +673,29 @@ def _airi_reason_summary(risk: dict[str, Any]) -> str:
     if not details:
         return "bounded detector-to-risk mapping"
     snippets: list[str] = []
-    for detail in details[:2]:
+    for detail in details[:5]:
         detector = str(detail.get("detector_id", "")).strip()
         trigger = str(detail.get("trigger_reason", "")).strip()
         justification = str(detail.get("mapping_justification", "")).strip()
         reason = trigger or justification or "bounded detector-to-risk mapping"
         snippets.append(f"{detector}: {reason}" if detector else reason)
-    return " ; ".join(snippets)
+    summary = " ; ".join(snippets)
+    extra = max(0, len(details) - len(snippets))
+    if extra:
+        summary += f" ; (+{extra} more mapping details)"
+    return summary
 
 
 def _airi_primary_summary(risk: dict[str, Any]) -> str:
     primary = str(risk.get("primary_detector_id", "")).strip()
     secondary = [str(det).strip() for det in risk.get("secondary_detector_ids", []) if str(det).strip()]
     if primary and secondary:
-        return f"primary: {primary}; also linked by {', '.join(secondary[:2])}"
+        return f"primary: {primary}; also linked by {_compact_labels(secondary)}"
     if primary:
         return f"primary: {primary}"
     covered_by = [str(det).strip() for det in risk.get("covered_by", []) if str(det).strip()]
     if covered_by:
-        return f"covered by: {', '.join(covered_by[:2])}"
+        return f"covered by: {_compact_labels(covered_by)}"
     return "bounded detector-to-risk mapping"
 
 
@@ -1150,9 +1166,10 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         if covered:
             first = covered[0]
             reason = _airi_reason_summary(first)
+            reason_preview = reason if "(+" in reason else _clip_words(reason, 16)
             airi_lines += (
                 f'&#8226; {_xt(str(first.get("id", "—")))} {_xt(_clip_words(str(first.get("title", "")), 9))}'
-                f'{f"<br/>&nbsp;&nbsp;why: {_xt(_clip_words(reason, 16))}" if reason else ""}'
+                f'{f"<br/>&nbsp;&nbsp;why: {_xt(reason_preview)}" if reason else ""}'
             )
     right_rows = [
         [Paragraph(f'<font color="{_WHITE}"><b>Remediation Targets</b></font>', _style("RH1", 9, 12, _WHITE, True))],
@@ -2246,14 +2263,19 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
             *([f"- AST analysis scope: {ast_note}"] if ast_note else []),
             "",
             "AIRI Risk Triggers Summary",
-            f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}",
+            f"- Covered Risks: {airi.get('covered_count', 0)} / {airi.get('total_risks_in_detector_scope', 0)}"
+            + (
+                f" (+{len(airi.get('covered_risks', [])) - 5} beyond preview)"
+                if len(airi.get("covered_risks", [])) > 5
+                else ""
+            ),
             f"- Coverage Rate: {airi.get('coverage_rate', 0):.3f}",
             f"- Surface Note: {_surface_compaction_note(result)}",
             *[
                 f"- {risk.get('id', '—')}: {risk.get('title', '')}"
                 + (f" | {_airi_primary_summary(risk)}" if _airi_primary_summary(risk) else "")
                 + (f" | why: {_airi_reason_summary(risk)}" if _airi_reason_summary(risk) else "")
-                for risk in airi.get("covered_risks", [])[:2]
+                for risk in airi.get("covered_risks", [])[:5]
             ],
             "",
             "Method Boundary",
@@ -2397,9 +2419,5 @@ def _ascii(t: str) -> str:
 
 def _safe_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", name).strip("_") or "stem_audit"
-
-
-
-
 
 

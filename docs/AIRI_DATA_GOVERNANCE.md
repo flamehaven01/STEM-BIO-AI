@@ -1,6 +1,6 @@
 # AIRI Data Governance
 
-Version: 1.8.0
+Version: 1.8.3
 Status: Active governance note for the local AIRI data layer
 
 ---

@@ -1,6 +1,6 @@
 # STEM BIO-AI Lessons & Failure Mode History
 # Memory Layer — protocol_evolution
-# Version: 1.6.6 | Updated: 2026-05-10
+# Version: 1.8.3 | Updated: 2026-06-05
 
 This document records protocol failure modes discovered through real-world use and their
 authoritative resolutions. Each entry represents a confirmed failure in a prior version.
@@ -271,7 +271,7 @@ Evidence visibility and score credit are separate design choices.
 **Patch:** v1.5.7
 **Failure mode:** Code and public docs moved to v1.5.7 while `memory/mica.yaml` still pointed at v1.5.6 and `SKILL.md` still hard-coded v1.1.2 memory filenames. The active release surface and the MICA loader could initialize different project states.
 **Resolution:** Rotated the active memory layer to v1.5.7, updated `mica.yaml` pointers, and changed `SKILL.md` to follow the files referenced by `mica.yaml` instead of embedding historical memory filenames.
-**Lesson:** Memory retention can be indefinite, but active loader pointers must remain single-source-of-truth. Historical snapshots stay archived; only `mica.yaml` decides what is live.
+**Lesson:** Memory provenance must remain reconstructible, but active loader pointers must remain single-source-of-truth. Git-tagged release history preserves prior states; only `mica.yaml` decides what is live.
 
 ---
 
@@ -296,6 +296,38 @@ Evidence visibility and score credit are separate design choices.
 **Failure mode:** CLI was written at v1.1.3 and frozen. Over 14 releases (v1.3.0–v1.6.0), the engine added Replication Lane, Reasoning Model, Bio Diagnostics, Regulatory Traceability, and notable_risks — none of which appeared in CLI stdout. Users relying on CLI output saw a 5-line summary that omitted 4 major subsystems. CI/CD pipelines could not gate on tier because `run_audit()` always returned exit code 0.
 **Resolution:** Added `--tier-gate` (CI exit code gate), `--quiet` (stdout suppression), per-stage score breakdown (Stage 1–4), clinical adjacency, code integrity, bio diagnostics, regulatory review, AI usage transparency line, and remediation action items from `notable_risks`. Created `docs/CLI_REFERENCE.md`.
 **Lesson:** CLI is a user interface — it must surface what the engine produces. When engine evolution outpaces CLI evolution, the gap creates invisible functionality: features exist but users cannot access them without reading JSON artifacts. CLI stdout drift is a usability failure mode that compounds silently.
+
+---
+
+### L-024: Policy Personalization Must Stay Auditable
+**Patch:** v1.7.2
+**Failure mode:** A calibration wizard without explicit rule priority or bounded preview deltas would behave like a hidden tuning console. Researchers could express valid posture preferences, but the translation into score-affecting changes would be opaque and drift-prone.
+**Resolution:** Added auditable `policy derive` and `policy simulate` preview lanes. Researcher intent now maps through a top-down rule table into a named profile, `default` match, or `preview_only` bounded deltas only. Hidden similarity scoring and arbitrary raw-number mutation remain forbidden.
+**Lesson:** Researcher participation is valuable only when the translation layer is visible, reviewable, and testable. Personalization without governance is just untracked score drift.
+
+---
+
+### L-025: Preview Policy UX Must Not Masquerade as Authoritative Scoring
+**Patch:** v1.7.2
+**Failure mode:** Once named profiles became selectable in scans and derive/simulate preview lanes existed, users could plausibly assume `scan --policy X` and `policy simulate` were the same thing. That would blur the mirror-only boundary and make experimental posture previews look score-authoritative.
+**Resolution:** Strengthened mirror-only wording across CLI, Markdown, explain, API-contract, and calibration-architecture surfaces; preview simulation now revalidates bounded deltas after application and uses profile-aware C1 penalty math.
+**Lesson:** If a policy surface is preview-only, the UI must say so repeatedly and concretely. Boundary honesty is part of the architecture, not just release notes.
+
+---
+
+### L-026: Narrow Policy Tests Can Be Dominated by Demo Import Cost
+**Patch context:** v1.7.3 post-release maintenance
+**Failure mode:** Narrow `policy`/`calibration` test runs appeared unstable because the environment spent disproportionate time importing Gradio and constructing the demo surface through `stem_ai.app`, even though the policy logic itself remained small and deterministic.
+**Resolution:** Record this as an environment/testing boundary rather than a calibration defect. Keep small calibration changes smoke-verified when necessary, prefer future lazy demo construction, and avoid treating UI import latency as evidence of score-path instability.
+**Lesson:** When deterministic logic appears slow, isolate infrastructure-heavy imports before attributing the problem to the scoring or calibration layer.
+
+
+
+
+
+
+
+
 
 
 

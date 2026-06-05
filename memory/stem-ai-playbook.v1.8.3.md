@@ -1,6 +1,6 @@
 # STEM BIO-AI Session Protocol & Rubric Drift Guard
 # Memory Layer — protocol_evolution playbook
-# Version: 1.6.0 | Updated: 2026-05-06
+# Version: 1.8.3 | MICA Contract: 0.2.4 | Updated: 2026-06-05
 
 ---
 
@@ -12,23 +12,50 @@ Every AI session using STEM BIO-AI must begin with this sequence:
 [MICA INIT]
 1. Load memory/mica.yaml         -- verify package structure, mode, layer paths
 2. Load this archive JSON        -- read project identity, design_invariants, operation_meta
-3. Load memory/stem-ai-lessons.v1.6.0.md -- on demand for edge case disambiguation
+3. Load memory/stem-ai-lessons.v1.8.3.md -- on demand for edge case disambiguation
 4. Confirm IMMUTABLE rules are loaded from spec/STEM-AI_v1.1.2_CORE.md
-5. Run PCT self-tests (see §3 below)
-6. Report: [MICA READY] stem-ai-bio v1.6.0 | mode: protocol_evolution | invariants: 18 active
+5. Run `python tools/mica_pct.py .`   -- verify PCT-001 through PCT-011
+6. Run `python tools/mica_runtime.py . --format text`
+7. Report: [MICA READY] stem-ai-bio v1.8.3 | mode: protocol_evolution | invariants: 18 active | pct: CLOSED
 ```
 
 If any PCT check fails at critical level, halt and report before proceeding to audit work.
 
+If PCT-010 or PCT-011 warns, continue only after explicitly noting the maturity boundary:
+
+- PCT-010 WARN means critical DI binding is still incomplete
+- PCT-011 WARN means a declared `lesson_ref` path is dead and must be fixed before the next release-memory rotation
+
+The current STEM-BIO-AI memory layer is using the non-breaking `v0.2.4` contract path:
+
+- runtime validation is upgraded now
+- archive history is preserved
+- DI `binding` is added progressively, not speculatively
+
 ---
 
 
-## 1A. v1.6.0 Operating Surface
+## 1A. v1.8.3 Operating Surface
 
 The current implementation is a local deterministic evidence-surface scanner. It does not
 claim clinical safety, regulatory readiness, model efficacy, or scientific validity.
 
-v1.6.0 keeps the active deterministic scanner surface and adds advisory contract hardening,
+v1.8.3 keeps the active deterministic scanner surface and the workflow-oriented CLI UX from v1.6.2,
+retains the 1.6.3/1.6.4/1.6.5 scoring and calibration-contract refinements, the 1.6.6 policy-visibility surfaces,
+the 1.6.7 derive/simulate preview lanes, the 1.6.8 preview-hardening and citation metadata work,
+and adds the 1.7.x AIRI-governed data layer and interactive HTML reporting surface:
+
+- `stem policy list` and `stem policy explain <name>` expose named calibration profiles directly from the CLI.
+- `stem scan`, `stem gate`, and advisory workflows now accept `--policy <name>` and surface the selected profile in stdout, Markdown, explain text, and PDF header metadata.
+- `stem policy derive` translates 1-5 researcher intent answers into a named profile recommendation, `default` match, or `preview_only` bounded deltas using a top-down rule table.
+- `stem policy simulate <repo>` shows how the current repository outcome would change under the recommended named profile or bounded preview deltas without mutating the authoritative deterministic score path.
+- Preview simulation now revalidates bounded deltas after application and uses profile-aware C1 penalty math instead of assuming scanner constants forever.
+- `CITATION.cff` and `.zenodo.json` are now part of the release surface so GitHub releases can be archived into DOI-backed Zenodo records.
+- AIRI coverage is now driven by a local full registry, curated runtime bundle, and detector-mapping registry rather than a single hardcoded risk subset.
+- HTML reports now surface AIRI bundle scope and upstream provenance directly inside the artifact.
+- Policy selection and derive/simulate outcomes remain **mirror-only** in 1.8.2. The active profile and preview posture are visible and testable, but authoritative score computation still follows the current deterministic runtime constants.
+
+It also retains advisory contract hardening,
 provider-request argument validation, secret-boundary enforcement, exported contract schemas, packet self-checks,
 and detector-precision fixes for C1/C2/C4 integrity signals:
 
@@ -106,6 +133,9 @@ PCT-007: mica_package_complete — umbrella check: mica.yaml exists + fields val
          all required paths exist + mode coherence satisfied + no critical drift signals.
          Answers: "Is this MICA package in a closed, trustworthy contract state?"
                                                           → error if any sub-condition fails
+PCT-008: hook-trigger coherence                           → info/pass now; fail only if hook_trigger is declared without a hook_script
+PCT-010: critical DI binding completeness                 → warn if critical DIs lack binding.origin_episode
+PCT-011: lesson_ref existence                             → warn if binding.lesson_ref points to a missing file
 
 STEM-001: spec/STEM-AI_v1.1.2_CORE.md referenced in SKILL.md exists on disk
           → warning if file missing (package integrity, not MICA contract integrity)
@@ -121,7 +151,7 @@ When STEM BIO-AI version increments:
 1. Update `operation_meta.update_count` (increment by 1).
 2. Update `operation_meta.last_updated` (YYYY-MM-DD).
 3. If IMMUTABLE rules changed (minor version 1.x.0): update `design_invariants` array.
-4. If new failure mode discovered: add to `memory/stem-ai-lessons.v1.6.0.md` per L-ADD protocol.
+4. If new failure mode discovered: add to `memory/stem-ai-lessons.v1.8.3.md` per L-ADD protocol.
 5. If new empirical audit run: add to `provenance_registry`.
 6. Update `mica_schema_version` and `project.version` if version bumped.
 7. Verify archive passes PCT-001 through PCT-007 before committing.
@@ -158,7 +188,7 @@ When running a batch of real-world audits:
 
 ## 7. Drift Profile
 
-MICA v0.2.0 Drift Profile is active. See `memory/mica.yaml drift_profile` block.
+MICA v0.2.4 Drift Profile is active. See `memory/mica.yaml drift_profile` block.
 
 This profile applies when project surfaces — SKILL.md, CORE spec, playbook, archive, README,
 CHANGELOG — no longer describe the same version or operating state. It does not auto-detect;
@@ -169,8 +199,8 @@ it defines how divergence is named, recorded, and responded to when a session fi
 | Class | Covers |
 |-------|--------|
 | code | `SKILL.md` + `spec/STEM-AI_v1.1.2_CORE.md` (canonical spec) |
-| playbook | `memory/stem-ai-playbook.v1.6.0.md` |
-| archive | `memory/stem-ai.mica.v1.6.0.json` |
+| playbook | `memory/stem-ai-playbook.v1.8.3.md` |
+| archive | `memory/stem-ai.mica.v1.8.3.json` |
 | readme | `README.md` — version table, BibTeX citation, quick start |
 | changelog | `CHANGELOG.md` |
 
@@ -214,7 +244,38 @@ auto-update when the file is copied from a prior version.
    Minimum check points: Output Format header, Disclaimer, Input Template header, confirmation line.
 3. **After any spec update:** Check playbook and archive `canonical_statement` for DRF-001/DRF-002.
 4. **On DRF-003 detection:** Do not proceed. Record IMMUTABLE change rationale in archive first.
-5. **Recording new drift evidence:** Append to `memory/stem-ai-lessons.v1.6.0.md` with:
+5. **Recording new drift evidence:** Append to `memory/stem-ai-lessons.v1.8.3.md` with:
    - stale surface path + stale value
    - current surface path + current value
    - resolution action taken
+
+### Current Operational Caution
+
+- `stem_ai.app` eagerly imports Gradio and builds the demo surface at module import time.
+- In constrained environments this can dominate narrow test runs, especially when trying to validate policy/calibration behavior only.
+- Treat this as a test-structure concern. Do not infer calibration instability from UI-import latency alone.
+
+### MICA v0.2.4 Hook Volume Note
+
+The active `invocation_protocol` keeps `primary_pattern: readme_protocol`, so no hook is required for normal STEM sessions.
+
+However, `hook_output` is now declared in `memory/mica.yaml` so that a future hook-capable runtime can reuse the same package without changing archive semantics.
+
+Current policy:
+
+- `max_di_lines: 3`
+- `di_filter: violations_only`
+
+This keeps future hook summaries terse and biased toward violated critical invariants rather than dumping every stable DI into session preamble output.
+
+
+
+
+
+
+
+
+
+
+
+

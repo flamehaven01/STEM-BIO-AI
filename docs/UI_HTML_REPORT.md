@@ -1,9 +1,9 @@
 # HTML Report Dashboard
 
-Version: 1.8.0
+Version: 1.8.3
 Status: Active HTML/PDF surface note
 
-STEM BIO-AI ships a **self-contained interactive HTML dashboard** as the primary human-readable output format. In the current `1.8.0` line, the dashboard reflects the post-`C4/C5/C6` code-integrity split, AIRI detector-to-risk reasoning, policy-surface metadata, and audit-freshness summaries. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
+STEM BIO-AI ships a **self-contained interactive HTML dashboard** as the primary human-readable output format. In the current `1.8.3` line, the dashboard reflects the post-`C4/C5/C6` code-integrity split, AIRI detector-to-risk reasoning, policy-surface metadata, audit-freshness summaries, and explicit compacting notes for human-readable AIRI/render surfaces. The report is a single `.html` file with inline CSS, SVG, and JavaScript — zero external dependencies, fully offline-capable.
 
 ## Generating the Report
 
@@ -137,7 +137,7 @@ The 5-page and 7-page packets both include AIRI coverage and bounded `why:` expl
 
 ![HTML Report Preview](assets/html_report_preview.png)
 
-*Screenshot: current 1.8.0 HTML dashboard surface with the post-C4/C5/C6 integrity split and AIRI domain filtering.*
+*Screenshot: current 1.8.3 HTML dashboard surface with the post-C4/C5/C6 integrity split and AIRI domain filtering.*
 
 ## Color Palette
 
@@ -155,7 +155,7 @@ Refined across the `1.7.x` line to align with AIRI Navigator's visual language �
 | Divider | `_C["mgray"]` | `#E4EBF5` |
 | Muted text | `_C["dgray"]` | `#5A6B80` |
 
-## AIRI Risk Coverage Section
+## AIRI Risk Triggers Section
 
 The AIRI coverage section maps STEM-BIO-AI detectors to a governed local AIRI layer derived from the [MIT AI Risk Repository V4](https://airisk.mit.edu/):
 
@@ -175,7 +175,7 @@ This helps reviewers understand *why* a risk appears in AIRI coverage without im
 
 Coverage rate = covered risk IDs / total IDs in detector scope.
 
-Representative active mapping rows in the `1.8.0` line:
+Representative active mapping rows in the `1.8.3` line:
 
 | Detector | AIRI Risk IDs Covered |
 |----------|----------------------|
@@ -201,4 +201,3 @@ Five known gaps are reported for risks that require dynamic evaluation or extend
 | Typical T3 repository | ~40–80 KB |
 
 Size scales with evidence ledger length. The renderer caps the evidence table at 200 rows.
-

@@ -4,7 +4,7 @@
   "project": {
     "name": "STEM-BIO-AI",
     "full_name": "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories",
-    "version": "1.8.2",
+    "version": "1.8.3",
     "status": "active",
     "purpose": "Deterministic local evidence-surface scanning for bio/medical AI repositories. Produces reproducible T0-T4 review-priority tiers from observable repository signals, including Stage 1 hype/responsibility scoring, Stage 2R contradiction/staleness/workflow-support checks, Stage 3 three-tier changelog/provenance/bias scoring, CA/T0 meta-documentation false-positive filtering, advisory contract hardening with provider-request validation and packet self-checks, detector-honesty fixes for C1/C2/C4 integrity surfaces, advisory secret-boundary hardening for provider-specific env vars and endpoint-policy validation, workflow-oriented CLI UX with dedicated scan/gate/advisory command lanes, named calibration-profile visibility surfaces, auditable derive/simulate preview lanes for researcher policy intent, and DOI-ready citation metadata.",
     "canonical_statement": "STEM BIO-AI is a local deterministic evidence-surface scanner for bio/medical AI repositories. It scans README/docs/package/code surfaces, dependency hygiene, CI/test signals, repo-local consistency contradictions, AST-observable code structure, replication evidence, and license/use-scope boundaries. It reports T0-T4 review-priority tiers, a separate Stage 4 replication lane, diagnostic reasoning-model signals, and provider-neutral advisory packet/response validation. It exports provider-request schemas, advisory contract schemas, packet self-checks, secret-policy metadata, env-contract metadata, mirror-only calibration-profile metadata, DOI-ready citation metadata, and auditable derive/simulate preview outputs without making provider API calls or mutating the authoritative score path. It uses dependency-manifest-only C2 detection, fixture-aware C1 exemptions, AST-backed executable C4 detection, profile-aware preview C1 penalty simulation, deterministic base-URL validation, named policy-selection surfaces, top-down rule-table translation for researcher intent, and bounded preview-only deltas so integrity, advisory, and calibration boundaries follow runnable evidence rather than metadata noise. It does not certify clinical safety, regulatory compliance, model efficacy, scientific validity, or author intent; AI advisory output must cite exact evidence-ledger finding IDs and may not override deterministic scores."
@@ -677,7 +677,7 @@
       "kind": "release_metadata",
       "created_at": "2026-04-30T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 package version, preview-hardening changes, HF surface refresh, and DOI-ready citation metadata."
+      "note": "v1.8.3 package version, registry-label cleanup, M15 display-note normalization, and active memory contract rotation."
     },
     {
       "uri": "README.md",
@@ -685,7 +685,7 @@
       "kind": "documentation",
       "created_at": "2026-04-30T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 public API, scoring rationale, preview-hardening, and citation boundary documentation."
+      "note": "v1.8.3 public API, scoring rationale, release-hardening, and citation boundary documentation."
     },
     {
       "uri": "CHANGELOG.md",
@@ -693,7 +693,7 @@
       "kind": "release_history",
       "created_at": "2026-04-30T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 release history."
+      "note": "v1.8.3 release history."
     },
     {
       "uri": "memory/mica.yaml",
@@ -701,7 +701,7 @@
       "kind": "memory_contract",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 active MICA loader pointers."
+      "note": "v1.8.3 active MICA loader pointers."
     },
     {
       "uri": "MANIFEST.in",
@@ -709,7 +709,7 @@
       "kind": "release_manifest",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 source distribution boundary manifest including CITATION.cff."
+      "note": "v1.8.3 source distribution boundary manifest including CITATION.cff."
     },
     {
       "uri": "scripts/build_stdlib_package.py",
@@ -717,7 +717,7 @@
       "kind": "release_tooling",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 stdlib package-build path for local release validation."
+      "note": "v1.8.3 stdlib package-build path for local release validation."
     },
     {
       "uri": "scripts/validate_release.ps1",
@@ -725,7 +725,7 @@
       "kind": "release_tooling",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 release validation script."
+      "note": "v1.8.3 release validation script."
     },
     {
       "uri": "stem_ai/scanner.py",
@@ -733,7 +733,7 @@
       "kind": "scanner",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 advisory contract hardening, preview-simulation hardening, dead-code cleanup, HF surface refresh, policy derive/simulate lanes, and active scanner implementation."
+      "note": "v1.8.3 regulatory-registry hardening, M15 display-label fixes, and active scanner implementation."
     },
     {
       "uri": "stem_ai/patterns.py",
@@ -741,7 +741,7 @@
       "kind": "scanner",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 clinical-boundary and Stage 3 regex surface definitions."
+      "note": "v1.8.3 clinical-boundary and Stage 3 regex surface definitions."
     },
     {
       "uri": "stem_ai/detector_surface.py",
@@ -749,7 +749,7 @@
       "kind": "scanner",
       "created_at": "2026-05-05T00:00:00Z",
       "trust_class": "canonical",
-      "note": "v1.7.8 evidence-ledger and advisory-surface detectors."
+      "note": "v1.8.3 evidence-ledger and advisory-surface detectors."
     }
   ],
   "artifact_manifest": {
@@ -780,21 +780,21 @@
       },
       {
         "role": "memory_archive",
-        "path": "memory/stem-ai.mica.v1.7.8.json",
+        "path": "memory/stem-ai.mica.v1.8.3.json",
         "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "required": true,
         "produced_by_stage": "S0"
       },
       {
         "role": "session_playbook",
-        "path": "memory/stem-ai-playbook.v1.7.8.md",
+        "path": "memory/stem-ai-playbook.v1.8.3.md",
         "sha256": "1D6EF648DDFB19E6F1AE1063996B710D74CED295205A76BFF72C3AA97929A136",
         "required": true,
         "produced_by_stage": "S0"
       },
       {
         "role": "lessons_history",
-        "path": "memory/stem-ai-lessons.v1.7.8.md",
+        "path": "memory/stem-ai-lessons.v1.8.3.md",
         "sha256": "B44CDC72E92EF05E6D564A5974284C8B478AAF36DD689DE7CC0A51A6BB1E06FE",
         "required": true,
         "produced_by_stage": "S0"
@@ -878,8 +878,8 @@
     "self_test_runtime": "readme_protocol_ai_session",
     "loading_order": [
       "1. Load memory/mica.yaml -- verify package structure and mode",
-      "2. Load memory/stem-ai.mica.v1.7.8.json -- read canonical_statement and design invariants",
-      "3. Load memory/stem-ai-playbook.v1.7.8.md -- current session protocol and drift guard",
+      "2. Load memory/stem-ai.mica.v1.8.3.json -- read canonical_statement and design invariants",
+      "3. Load memory/stem-ai-playbook.v1.8.3.md -- current session protocol and drift guard",
       "4. Load README.md and CHANGELOG.md -- current deterministic scanner and release surface",
       "5. Load local-only spec/ files only when private rubric context is needed",
       "6. Run PCT self-tests to confirm MICA integrity before starting audit"
@@ -902,7 +902,7 @@
       "PCT-002_fail",
       "PCT-003_fail"
     ],
-    "format_template": "[MICA READY] STEM-BIO-AI v1.7.8 | mode: protocol_evolution | invariants: 18 active | Gate: {gate} | Track: {track}"
+    "format_template": "[MICA READY] STEM-BIO-AI v1.8.3 | mode: protocol_evolution | invariants: 18 active | Gate: {gate} | Track: {track}"
   },
   "self_test_policy": {
     "enabled": true,
@@ -951,11 +951,11 @@
   "operation_meta": {
     "archive_id": "MICA-STEM-BIO-AI-001",
     "mica_schema_version": "0.2.4",
-    "baseline_ref": "v1.8.2-2026-06-05",
+    "baseline_ref": "v1.8.3-2026-06-05",
     "objective": "Machine-checkable governance layer for STEM BIO-AI deterministic scanner evolution. Encodes 18 base invariants, evidence-ledger traceability, separate replication/reasoning/advisory surfaces, provider-request validation, packet self-checks, CLI enrichment with CI/CD tier-gate and AI transparency, and versioned lessons.",
     "operating_mode": "protocol_evolution",
     "current_state": "active",
-    "update_count": 15,
+    "update_count": 16,
     "last_updated": "2026-06-05",
     "session_count": 0,
     "domain_status": {
@@ -964,18 +964,6 @@
       "operations": "stable",
       "growth": "active"
     },
-    "invocation_notes": "Primary invocation via local CLI and README contract. MICA v1.8.2 is the active release memory layer and runs under the non-breaking MICA 0.2.4 runtime/validation contract. Added in 1.8.0: MICA invocation runtime surfaces (mica_runtime.py --format session-report, mica_invoke.py --mode {natural|guided|forced}, mica_invoke.bat), SECURITY.md as first-class repository surface. spec/ is local-only private material and is ignored by Git. Evidence-ledger IDs are citation anchors for any AI advisory layer, derive/simulate outputs remain preview-only calibration surfaces rather than score-authoritative runtime policy, and release artifacts now carry DOI-ready citation metadata. In constrained environments, narrow policy/calibration test runs may be dominated by Gradio demo import cost; treat that as an infrastructure boundary rather than immediate evidence of score-path instability."
+    "invocation_notes": "Primary invocation via local CLI and README contract. MICA v1.8.3 is the active release memory layer and runs under the non-breaking MICA 0.2.4 runtime/validation contract. Added in 1.8.0: MICA invocation runtime surfaces (mica_runtime.py --format session-report, mica_invoke.py --mode {natural|guided|forced}, mica_invoke.bat), SECURITY.md as first-class repository surface. spec/ is local-only private material and is ignored by Git. Evidence-ledger IDs are citation anchors for any AI advisory layer, derive/simulate outputs remain preview-only calibration surfaces rather than score-authoritative runtime policy, and release artifacts now carry DOI-ready citation metadata. In constrained environments, narrow policy/calibration test runs may be dominated by Gradio demo import cost; treat that as an infrastructure boundary rather than immediate evidence of score-path instability."
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

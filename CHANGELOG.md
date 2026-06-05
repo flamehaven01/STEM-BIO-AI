@@ -24,6 +24,7 @@ Rubric refinements and additions use patch versions (1.0.x).
 - Rotated MICA active pointer to v1.8.3 (`memory/mica.yaml` + archive, playbook, lessons layer files).
 - Aligned active version surfaces to `1.8.3` across package metadata, README badge, SKILL, and MICA runtime templates.
 - AIRI human-readable summaries now use explicit compacting with `(+N more)` instead of silent `[:2]` truncation for detector links and mapping details.
+- Clarified MICA retention policy: the working tree now treats the active archive/playbook/lessons trio as the only live memory surface, while prior release-memory states remain preserved through Git-tagged history instead of parallel visible files.
 
 ### Fixed
 - `_build_display_note()` previously fell through to full `title` strings for sources added before the YAML workflow existed, producing an unreadably verbose display note whenever the registry was rebuilt. Now only labeled sources appear; the note matches the pre-YAML hand-curated quality.
