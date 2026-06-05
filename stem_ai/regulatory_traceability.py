@@ -75,6 +75,16 @@ def _stage_1_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
             note="Boundary, intended-use, and limitation language is relevant to transparency scaffolding only.",
             not_assessed=["IFU completeness", "deployer communication workflow"],
         ))
+        if "R2_regulatory_framework" in positive_refs:
+            items.append(_traceability_item(
+                stage="stage_1",
+                requirement_id="ICH_M15_SECTION_4_1_MAP",
+                mapping_confidence="weak_moderate",
+                finding_refs=["R2_regulatory_framework"],
+                source_ids=["ich_m15_midd_2026"],
+                note="Regulatory framework language aligns with ICH M15 §4.1 MAP: pre-defined documentation of intended model analysis is a core MIDD planning requirement. Post-hoc alignment — not causally derived from M15.",
+                not_assessed=["MAP completeness", "formal MIDD planning stage documents"],
+            ))
     unsupported_claim_refs = [
         finding["finding_id"]
         for finding in evidence
@@ -119,7 +129,7 @@ def _stage_2r_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
         return []
     positive_refs = [key for key in refs if key == "R2R_4_limitation_repetition" and rubric.get(key, {}).get("score", 0) > 0]
     status = "partially_aligned" if positive_refs else "signal_only"
-    return [{
+    items = [{
         "stage": "stage_2r",
         "requirement_id": "IMDRF_CLINICAL_CONTEXT_BOUNDARY_SIGNAL",
         "mapping_confidence": "weak_moderate",
@@ -130,6 +140,17 @@ def _stage_2r_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
         "source_ids": ["imdrf_samd_clinical_eval_2017"],
         "note": "Repository-local contradiction and boundary signals are relevant to clinical-context traceability, not clinical validation.",
     }]
+    if "R2R_D2_missing_clinical_use_boundary" in refs:
+        items.append(_traceability_item(
+            stage="stage_2r",
+            requirement_id="ICH_M15_SECTION_2_1_2_CONTEXT_OF_USE",
+            mapping_confidence="moderate",
+            finding_refs=["R2R_D2_missing_clinical_use_boundary"],
+            source_ids=["ich_m15_midd_2026"],
+            note="Missing clinical-use boundary directly maps to ICH M15 §2.1.2 Context of Use: 'a concise, clear, and explicit description of the role and scope of the model' is required. Post-hoc alignment.",
+            not_assessed=["formal CoU document", "regulatory submission completeness"],
+        ))
+    return items
 
 
 def _stage_3_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
@@ -156,6 +177,26 @@ def _stage_3_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
             note="Provenance and bias signals are relevant to data-governance review, but do not verify execution quality.",
             not_assessed=["measurement correctness", "dataset adequacy", "regulator adequacy"],
         ))
+    if "B1_data_provenance_controls" in bias_refs:
+        items.append(_traceability_item(
+            stage="stage_3",
+            requirement_id="ICH_M15_SECTION_3_VERIFICATION",
+            mapping_confidence="weak_moderate",
+            finding_refs=["B1_data_provenance_controls"],
+            source_ids=["ich_m15_midd_2026"],
+            note="Data provenance signals align with ICH M15 §3 Verification: user-generated codes and data handling must be documented and available for review. Also aligns with §4.2 MAR data and methods section. Post-hoc alignment.",
+            not_assessed=["user-generated code documentation", "MAR completeness", "formal verification record"],
+        ))
+    if "B2_bias_limitations" in bias_refs:
+        items.append(_traceability_item(
+            stage="stage_3",
+            requirement_id="ICH_M15_SECTION_3_VALIDATION",
+            mapping_confidence="weak_moderate",
+            finding_refs=["B2_bias_limitations"],
+            source_ids=["ich_m15_midd_2026"],
+            note="Bias and limitations language aligns with ICH M15 §3 Validation and Applicability Assessment: 'limitations of the data and model should be described and discussed.' Post-hoc alignment.",
+            not_assessed=["graphical and numerical diagnostics", "external validation", "sensitivity analysis"],
+        ))
     return items
 
 
@@ -169,7 +210,7 @@ def _stage_4_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
     ) if rubric.get(key, {}).get("score", 0) > 0]
     if not refs:
         return []
-    return [_traceability_item(
+    items = [_traceability_item(
         stage="stage_4",
         requirement_id="EU_AI_ACT_ARTICLE_12",
         mapping_confidence="moderate",
@@ -178,6 +219,21 @@ def _stage_4_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:
         note="Reproducibility and trace manifests support record-keeping scaffolding, not operational logging completeness.",
         not_assessed=["deploy-time event logging", "runtime event completeness"],
     )]
+    repro_refs = [r for r in refs if r in (
+        "S4_environment_lock_evidence", "S4_container_environment",
+        "S4_checksum_files", "S4_readme_reproducibility_section",
+    )]
+    if repro_refs:
+        items.append(_traceability_item(
+            stage="stage_4",
+            requirement_id="ICH_M15_SECTION_4_3_CODE_SUBMISSION",
+            mapping_confidence="moderate",
+            finding_refs=repro_refs,
+            source_ids=["ich_m15_midd_2026"],
+            note="Reproducibility environment signals align with ICH M15 §4.3: 'all documents and files supporting submitted MIDD evidence, including data used in M&S analyses and relevant coding scripts, should be submitted or available for regulatory review.' Post-hoc alignment.",
+            not_assessed=["coding script completeness", "dataset submission", "formal regulatory submission"],
+        ))
+    return items
 
 
 def _bio_traceability(result: dict[str, Any]) -> list[dict[str, Any]]:

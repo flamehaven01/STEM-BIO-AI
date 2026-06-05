@@ -89,6 +89,22 @@ When Stage 2 is fully N/A (no external evidence and no local repo), its weight r
 
 This weight split was stabilized after an earlier design phase found that equal 1/3 weights caused instability when Stage 2 = N/A.
 
+### ICH M15 post-hoc alignment note
+
+**Important caveat:** The 0.4 / 0.2 / 0.4 weights and rubric items were designed before ICH M15 adoption. The alignment described below is *confirmed post-hoc*, not causally derived from M15. It supports credibility but should not be cited as "we built this from M15."
+
+| Stage / Item | ICH M15 alignment |
+|---|---|
+| Stage 1 (40%) — README/claims | §2.2.2 Appropriateness of Proposed MIDD: planning communication and boundary disclosure |
+| Stage 1 R2 regulatory framework | §4.1 MAP: pre-defined documentation of intended model analysis |
+| Stage 2R R2R_D2 missing boundary | §2.1.2 Context of Use: explicit description of model role and scope required |
+| Stage 3 (40%) — code/governance | §3 Model Evaluation: Verification, Validation, Applicability Assessment |
+| Stage 3 B1 data provenance | §3 Verification + §4.2 MAR: data handling, user-generated code documentation |
+| Stage 3 B2 bias/limitations | §3 Validation and Applicability Assessment: limitations must be described and discussed |
+| Stage 4 reproducibility | §4.3 Documentation: coding scripts and data must be available for regulatory review |
+
+This alignment supports the claim that the rubric captures evidence posture relevant to ICH regulatory standards for MIDD repos. For non-MIDD repos, the same items remain grounded in EU AI Act and IMDRF frameworks.
+
 ---
 
 ## 7. Baseline 60
