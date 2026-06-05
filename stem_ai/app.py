@@ -114,6 +114,8 @@ def _finding_cards(result: dict) -> str:
         "No regulatory traceability summary emitted.",
     )
     basis_title = basis.get("note", {}).get("title", "Regulatory basis note")
+    source_ids = basis.get("source_ids", [])
+    m15_active = "ich_m15_midd_2026" in source_ids
 
     return "\n".join(
         [
@@ -147,6 +149,7 @@ def _finding_cards(result: dict) -> str:
             "### Regulatory Traceability",
             f"- **Summary:** {traceability_summary}",
             f"- **{basis_title}:** current official source classes as of {basis.get('as_of', 'current registry month')}",
+            f"- **ICH M15 MIDD:** {'✓ aligned — §§2.1.2 Context of Use · §3 Verification/Validation · §4.1 MAP · §4.2 MAR · §4.3 code submission' if m15_active else 'not in registry (update regulatory_basis_registry.v1.json)'}",
         ]
     )
 
@@ -284,7 +287,8 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
           <p>Deterministic evidence-surface scanner for bio/medical AI repositories.
           No LLM &nbsp;·&nbsp; No API key &nbsp;·&nbsp; No model runtime &nbsp;·&nbsp; No secrets sent anywhere.<br>
           Scans README, docs, CI, tests, changelogs, and manifests — returns a T0–T4 triage tier
-          with JSON, Markdown, and PDF artifacts, plus an evidence-only regulatory traceability note layer.</p>
+          with JSON, Markdown, and PDF artifacts. Rubric items are citation-aligned to
+          <strong>ICH M15 MIDD</strong> (Step 4, 2026) and EU AI Act / IMDRF frameworks for regulatory traceability.</p>
         </div>
         """
     )
@@ -326,10 +330,13 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
-            <p style="{_CARD_TITLE}">AIRI — AI Risk Index</p>
+            <p style="{_CARD_TITLE}">Regulatory Frameworks</p>
             <p style="{_CARD_BODY}">
-              Maps triggered detectors to the curated MIT AI Risk Repository runtime bundle so
-              covered risks, known gaps, and detector-scope coverage stay visible in every scan.
+              <strong>ICH M15 MIDD</strong> (Step 4, 2026) — each rubric item is citation-aligned to
+              ICH M15 §§2.1.2 · 3 · 4.1 · 4.2 · 4.3 so MIDD repos see directly applicable FDA/EMA regulatory
+              requirement context in the traceability output.<br>
+              <strong>AIRI</strong> — MIT AI Risk Repository runtime bundle maps triggered detectors to
+              covered risks and known gaps across the curated bio/clinical subset.
             </p>
           </div>
           <div style="{_CARD_STYLE}">
