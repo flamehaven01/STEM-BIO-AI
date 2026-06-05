@@ -14,6 +14,27 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.8.3] - 2026-06-05
+
+### Changed
+- `tools/update_regulatory_registry.py` — `_build_display_note()` now uses `display_label` before `short_label`, and skips sources with neither field. Prevents supplementary reference entries (timeline URLs, umbrella links) from appearing as verbose full-title strings in the display note. Ensures "Step 4, Jan 2026" from ICH M15's `display_label` reaches the rendered note rather than being dropped in favor of the shorter `short_label`.
+- `references/_registry_entries/` — Added YAML entries for all six primary regulatory sources (`eu_ai_act_2024_1689`, `fda_qmsr`, `fda_mlmd_transparency_2024`, `fda_pccp_2025`, `imdrf_samd_clinical_eval_2017`, `imdrf_gmlp_2025`). All sources are now YAML-managed with explicit `short_label` and `display_label` fields; `eu_ai_act_timeline_ec` remains JSON-only as a supplementary reference.
+- `docs/regulatory_basis_registry.v1.json` — Rebuilt via script: all managed sources carry `display_label`, display_note `body_line_1` is clean and jurisdiction-grouped.
+- `references/_registry_entries/README.md` — Updated active entries table to reflect all seven managed entries.
+- Rotated MICA active pointer to v1.8.3 (`memory/mica.yaml` + archive, playbook, lessons layer files).
+- Aligned active version surfaces to `1.8.3` across package metadata, README badge, SKILL, and MICA runtime templates.
+- AIRI human-readable summaries now use explicit compacting with `(+N more)` instead of silent `[:2]` truncation for detector links and mapping details.
+
+### Fixed
+- `_build_display_note()` previously fell through to full `title` strings for sources added before the YAML workflow existed, producing an unreadably verbose display note whenever the registry was rebuilt. Now only labeled sources appear; the note matches the pre-YAML hand-curated quality.
+- Fixed stale `v1.7.8` identity/path strings inside `memory/stem-ai.mica.v1.8.3.json` so the active archive is self-consistent with the rotated MICA loader pointers.
+- Replaced contradictory file-level `retention: indefinite` wording with Git-tagged release-history retention language to match the current memory rotation workflow.
+
+### Tests
+- Split the highest-noise rendering and bio-detector regression coverage out of `tests/test_scanner_regressions.py` into focused modules (`tests/test_airi_render_surfaces.py`, `tests/test_bio_detectors.py`) with a shared helper layer in `tests/helpers.py`, reducing cross-domain churn in the main regression file without changing asserted runtime behavior.
+
+---
+
 ## [1.8.2] - 2026-06-05
 
 ### Added
