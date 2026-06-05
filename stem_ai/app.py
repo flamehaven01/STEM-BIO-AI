@@ -302,22 +302,17 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             GitHub API, or any external service.</p>
           </div>
           <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">Local CLI</p>
+            <p style="{_CARD_BODY}">Run locally for downloadable JSON, Markdown, PDF, and explain artifacts:</p>
+            <code style="{_CODE_PILL}">stem &lt;folder&gt; --format all --explain</code>
+          </div>
+          <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">What STEM scans</p>
             <p style="{_CARD_BODY}">
               <span style="{_STAGE_BADGE}">S1</span> README hype/responsibility (H1–H6 penalties, R1–R5 credits) &nbsp;
               <span style="{_STAGE_BADGE}">S2R</span> Repo-local consistency &nbsp;
               <span style="{_STAGE_BADGE}">S3</span> CI · tests · changelog hygiene · data provenance · bias measurement &nbsp;
               <span style="{_STAGE_BADGE}">S4</span> Replication evidence lane
-            </p>
-          </div>
-          <div style="{_CARD_STYLE}">
-            <p style="{_CARD_TITLE}">Regulatory Traceability</p>
-            <p style="{_CARD_BODY}">
-              Each rubric item is citation-aligned to official regulatory frameworks.
-              Every scan output surfaces applicable requirement IDs.<br>
-              <span style="display:inline-block;margin-top:6px;background:#dbeafe;border:1px solid #3b82f6;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#1d4ed8;">✓ ICH M15 MIDD (Step 4, 2026)</span>
-              <span style="display:inline-block;margin-top:4px;background:#e0f2fe;border:1px solid #0284c7;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#075985;">✓ EU AI Act 2024/1689</span>
-              <span style="display:inline-block;margin-top:4px;background:#f0fdf4;border:1px solid #16a34a;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#15803d;">✓ IMDRF SaMD/GMLP</span>
             </p>
           </div>
           <div style="{_CARD_STYLE}">
@@ -333,17 +328,22 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
+            <p style="{_CARD_TITLE}">Regulatory Traceability</p>
+            <p style="{_CARD_BODY}">
+              Each rubric item is citation-aligned to official regulatory frameworks.
+              Every scan output surfaces applicable requirement IDs.<br>
+              <span style="display:inline-block;margin-top:6px;background:#dbeafe;border:1px solid #3b82f6;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#1d4ed8;">✓ ICH M15 MIDD (Step 4, 2026)</span>
+              <span style="display:inline-block;margin-top:4px;background:#e0f2fe;border:1px solid #0284c7;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#075985;">✓ EU AI Act 2024/1689</span>
+              <span style="display:inline-block;margin-top:4px;background:#f0fdf4;border:1px solid #16a34a;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#15803d;">✓ IMDRF SaMD/GMLP</span>
+            </p>
+          </div>
+          <div style="{_CARD_STYLE}">
             <p style="{_CARD_TITLE}">AIRI — AI Risk Index</p>
             <p style="{_CARD_BODY}">
               <span style="display:inline-block;background:#1e3a6e;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#ffffff;">AIRI</span>
               MIT AI Risk Repository runtime bundle maps triggered detectors to covered risks and known gaps
               across the curated bio/clinical subset (184 risks · 32 in detector scope).
             </p>
-          </div>
-          <div style="{_CARD_STYLE}">
-            <p style="{_CARD_TITLE}">Local CLI</p>
-            <p style="{_CARD_BODY}">Run locally for downloadable artifacts:</p>
-            <code style="{_CODE_PILL}">stem &lt;folder&gt; --format all --explain</code>
           </div>
         </div>
         """
