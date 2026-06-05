@@ -14,6 +14,26 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.8.1] - 2026-06-05
+
+### Changed
+- Surfaced **Tier Lock** labels in all human-readable artifacts: `Tier Lock [CA-CAP]` (score ceiling at 69, T2 maximum) and `Tier Lock [T0-FLOOR]` (score ceiling at 39) now appear in Markdown header and HTML Executive Summary alert banner when a `score_cap` is active, so reviewers do not need to inspect raw JSON to understand tier constraints.
+- Added **Classification Applied** state (`ca_severity | score_cap | t0_floor`) to Markdown header and HTML Policy Boundary card, exposing the active classification decision next to the score.
+- Added **Stage 3 normalization formula** to the Score Matrix in Markdown (`raw: X/80`) so the raw-to-normalized conversion is inspector-readable without the JSON.
+- Added **Reasoning Diagnostics threshold reference** to Markdown output: lane consistency and uncertainty band labels now show their gate boundaries inline (`>=0.80=consistent`, `<0.20=low-spread`, etc.).
+- Upgraded **Remediation Targets** section to a **Remediation Roadmap** table with `Finding | Action | Expected Impact` columns, including quantified score recovery (`+20 S2R (+4 final) | unlocks tier cap`) where applicable.
+- Removed hard cap `[:2]` on PDF AIRI Known Gaps; now shows up to 5 with a `(+N more)` count when the bundle has more gaps, consistent with MD and explain output.
+- Rotated MICA active pointer from v1.7.8 to v1.8.0 (`memory/mica.yaml` + archive, playbook, lessons layer files).
+- Updated `docs/UI_HTML_REPORT.md`: section 4 renamed from "AIRI Risk Coverage" to "AIRI Risk Triggers"; Tier Lock and Classification Applied surfaces documented.
+- Updated `docs/SCORING_RATIONALE.md`: added Tier Lock surface section describing `[CA-CAP]` and `[T0-FLOOR]` labels and their resolution paths.
+- Rotated `SKILL.md`, `CITATION.cff` version references to `1.8.1`.
+
+### Tests
+- Added four regression tests for new artifact surfaces: `test_tier_lock_ca_cap_surfaces_in_markdown`, `test_tier_lock_t0_floor_surfaces_in_markdown`, `test_stage3_normalization_formula_in_markdown`, `test_airi_gaps_count_suffix_in_markdown_when_over_five`.
+- Updated `test_markdown_surfaces_humanized_top_risks_and_warn_file_lines` to assert `## Remediation Roadmap` (was `## Remediation Targets`).
+
+---
+
 ## [1.8.0] - 2026-05-31
 
 ### Added

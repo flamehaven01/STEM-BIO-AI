@@ -161,10 +161,12 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         f"`{calibration.get('profile_read_mode', 'unknown')}`, "
         f"`{calibration.get('profile_status', 'unknown')}`)",
         *([f"**Calibration Effect:** {calibration_effect}"] if calibration_effect else []),
+        *_classification_applied_md(result),
         f"**Final Score:** **{score['final_score']} / 100**",
         f"**Formal Tier:** **{score['formal_tier']}**",
         f"**Tier Meaning:** {score['formal_tier']} = {score['use_scope']}",
         f"**Use Scope:** {score['use_scope']}",
+        *_tier_lock_label_md(result),
         "",
         "## Score Matrix",
         "",
@@ -172,7 +174,7 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         "| --- | ---: | ---: |",
         f"| Stage 1 README Evidence Signal | 0.40 | {score['stage_1_readme_intent']} |",
         f"| Stage 2R Repo-Local Consistency | 0.20 | {score['stage_2_repo_local_consistency']} |",
-        f"| Stage 3 Code/Bio Responsibility | 0.40 | {score['stage_3_code_bio']} |",
+        f"| Stage 3 Code/Bio Responsibility | 0.40 | {score['stage_3_code_bio']}{_s3_formula(result)} |",
         f"| Risk Penalty | -- | {score['risk_penalty']} |",
         "",
         "## Replication Evidence Lane",
@@ -291,6 +293,43 @@ def render_explain(result: dict[str, Any]) -> str:
     return "\n".join(out) + "\n"
 
 
+def _classification_applied_md(result: dict[str, Any]) -> list[str]:
+    cls = result.get("classification", {})
+    ca = cls.get("ca_severity", "none")
+    cap = cls.get("score_cap")
+    t0 = cls.get("t0_hard_floor", False)
+    cap_str = str(cap) if cap is not None else "none"
+    t0_str = "active" if t0 else "clear"
+    return [f"**Classification Applied:** ca_severity={ca} | score_cap={cap_str} | t0_floor={t0_str}"]
+
+
+def _tier_lock_label_md(result: dict[str, Any]) -> list[str]:
+    cls = result.get("classification", {})
+    score_cap = cls.get("score_cap")
+    if score_cap is None:
+        return []
+    if cls.get("t0_hard_floor"):
+        return [
+            f"**Tier Lock [T0-FLOOR]:** Score ceiling active at **39** (T0 maximum). "
+            f"CA-DIRECT classification with insufficient code presence. "
+            f"Resolving this condition is required before any tier advancement."
+        ]
+    return [
+        f"**Tier Lock [CA-CAP]:** Score ceiling active at **{score_cap}** (T2 maximum). "
+        f"Clinical-adjacent surface detected without explicit non-clinical boundary. "
+        f"Adding a non-diagnostic disclaimer resolves this lock."
+    ]
+
+
+def _s3_formula(result: dict[str, Any]) -> str:
+    s3_raw = result.get("stage_3_rubric", {}).get("stage_3_raw_total", {})
+    raw = s3_raw.get("score")
+    max_val = s3_raw.get("max")
+    if raw is None or not max_val:
+        return ""
+    return f" (raw: {raw}/{max_val})"
+
+
 def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
     if not reasoning:
         return "Reasoning diagnostics are not available."
@@ -303,9 +342,9 @@ def _markdown_reasoning_summary(reasoning: dict[str, Any]) -> str:
         f"Diagnostic-only heuristic `{reasoning.get('version', 'unknown')}` "
         f"({policy.get('weights', 'uncalibrated')}); "
         f"lane consistency `{coherence.get('status', 'unknown')}` "
-        f"({coherence.get('overall', 'n/a')}), "
+        f"({coherence.get('overall', 'n/a')}; >=0.80=consistent, >=0.55=mixed, <0.55=divergent), "
         f"uncertainty band `{uncertainty.get('status', 'unknown')}` "
-        f"({uncertainty.get('uncertainty', 'n/a')}), "
+        f"({uncertainty.get('uncertainty', 'n/a')}; <0.20=low-spread, <=0.45=review-advised, >0.45=manual-review), "
         f"risk heuristic `{gate.get('status', 'unknown')}` "
         f"({gate.get('evidence_risk', 'n/a')}), "
         f"confidence envelope {envelope.get('lower', 'n/a')}-"
@@ -651,24 +690,49 @@ def _stage1_semantics_suffix(key: str, item: dict[str, Any]) -> str:
 
 
 def _markdown_remediation_targets(result: dict[str, Any]) -> list[str]:
-    targets: list[str] = []
+    rows: list[tuple[str, str, str]] = []
     stage2 = result.get("stage_2r_rubric", {})
     code_integrity = result.get("code_integrity", {})
     if "R2R_D2_missing_clinical_use_boundary" in stage2:
-        targets.append("Add an explicit non-clinical/non-diagnostic boundary to README and adjacent docs before treating the repository as review-ready.")
+        rows.append((
+            "R2R_D2 missing clinical boundary",
+            "Add non-clinical/non-diagnostic disclaimer to README and all adjacent docs",
+            "+20 S2R (+4 final) | unlocks tier cap",
+        ))
     if "R2R_D4_unsupported_workflow_claim" in stage2:
-        targets.append("Bring workflow, demo, and CLI claims into line with actual local support surfaces, or narrow the README claims.")
+        rows.append((
+            "R2R_D4 unsupported workflow claim",
+            "Align README workflow/demo/CLI claims with actual local support surfaces",
+            "+15 S2R (+3 final)",
+        ))
     if code_integrity.get("C2_dependency_pinning", {}).get("status") in {"WARN", "FAIL"}:
-        targets.append("Pin production dependencies and document external-service dependence explicitly when local or self-host claims are part of the positioning.")
+        rows.append((
+            "C2 dependency pinning WARN",
+            "Pin production dependencies; document external-service dependence explicitly",
+            "C2 -> PASS (no direct score delta)",
+        ))
     if code_integrity.get("C5_compliance_boundary_integrity", {}).get("status") in {"WARN", "FAIL"}:
-        targets.append("Remove unsupported legal/compliance language or add the governance and security evidence needed to defend it.")
+        rows.append((
+            "C5 compliance boundary WARN",
+            "Remove unsupported legal/compliance language or add backing governance evidence",
+            "C5 -> PASS (no direct score delta)",
+        ))
     if code_integrity.get("C6_mock_auth_or_fail_open_boundary", {}).get("status") in {"WARN", "FAIL"}:
-        targets.append("Separate mock-auth or auto-login convenience flows from any production, privacy, or self-host trust boundary narrative.")
-    if not targets:
+        rows.append((
+            "C6 mock-auth boundary WARN",
+            "Separate mock-auth/auto-login flows from production trust boundary narrative",
+            "C6 -> PASS (no direct score delta)",
+        ))
+    if not rows:
         return []
-    lines = ["", "## Remediation Targets"]
-    for target in targets:
-        lines.append(f"- {target}")
+    lines = [
+        "", "## Remediation Roadmap",
+        "",
+        "| Finding | Action | Expected Impact |",
+        "| --- | --- | --- |",
+    ]
+    for finding, action, impact in rows:
+        lines.append(f"| {finding} | {action} | {impact} |")
     return lines
 
 
@@ -1900,12 +1964,14 @@ def _page5_compact_closure(result: dict[str, Any]) -> list[Any]:
                 _style(f"AIRC_{str(risk.get('id', 'risk'))[:8]}", 8, 10, _DGRAY),
             ))
         if airi.get("known_gaps_in_bundle"):
+            _all_gaps = airi.get("known_gaps_in_bundle", [])
             gap_preview = ", ".join(
                 f"{g.get('id', '—')} {_xt(str(g.get('title', '')))}"
-                for g in airi.get("known_gaps_in_bundle", [])[:2]
+                for g in _all_gaps[:5]
             )
+            _gap_extra = f" (+{len(_all_gaps) - 5} more)" if len(_all_gaps) > 5 else ""
             story.append(Paragraph(
-                f'<font color="{_DGRAY}" size="8">Known gaps preview: {gap_preview}</font>',
+                f'<font color="{_DGRAY}" size="8">Known gaps: {gap_preview}{_gap_extra}</font>',
                 _style("AIRI_GAPC", 8, 10, _DGRAY),
             ))
 
@@ -2024,10 +2090,11 @@ def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
         gaps = airi.get("known_gaps_in_bundle", [])
         if gaps:
             gap_preview = ", ".join(
-                f"{g.get('id', '—')} {_xt(str(g.get('title', '')))}" for g in gaps[:2]
+                f"{g.get('id', '—')} {_xt(str(g.get('title', '')))}" for g in gaps[:5]
             )
+            _gap_extra = f" (+{len(gaps) - 5} more)" if len(gaps) > 5 else ""
             story.append(Paragraph(
-                f'<font color="{_DGRAY}" size="8">Known gaps preview: {gap_preview}</font>',
+                f'<font color="{_DGRAY}" size="8">Known gaps: {gap_preview}{_gap_extra}</font>',
                 _style("AIRIPDF_GAPS", 8, 11, _DGRAY),
             ))
 

@@ -1,7 +1,7 @@
 ---
 name: stem-ai
 description: "Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories. Audits and reviews open-source bio/medical AI repositories for repository evidence-surface triage using a rubric-based 3-stage evaluation protocol with governance overlay. Produces scored review-priority reports with evidence chains. Supports 4 execution modes: LOCAL_ANALYSIS (AI CLI + local clone), FULL (web search + fetch), SEARCH_ONLY, and MANUAL. Use when asked to evaluate, audit, review, or assess evidence signals for any bio-AI, medical AI, or clinical-adjacent repository."
-version: "1.7.8"
+version: "1.8.1"
 author: "Flamehaven"
 license: "Apache-2.0"
 platforms: ["claude-code", "codex", "gemini-cli", "cursor", "copilot", "antigravity", "universal"]

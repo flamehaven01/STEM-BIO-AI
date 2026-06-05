@@ -218,14 +218,17 @@ def _code_integrity_summary(integrity: dict[str, Any]) -> tuple[list[tuple[str, 
 
 
 def _section1(result: dict[str, Any], final: int, tc: str,
-              s1: int, s2: int, s3: int, s4: int, t0: bool) -> str:
+              s1: int, s2: int, s3: int, s4: int, t0: bool,
+              score_cap: int | None = None) -> str:
     score = result["score"]
     calibration = result.get("calibration_profile", {})
+    cls = result.get("classification", {})
     freshness = result.get("audit_freshness", {})
     policy_name = xt(str(calibration.get("profile_name", "unknown")))
     policy_status = xt(str(calibration.get("profile_status", "unknown")))
     policy_mode = xt(str(calibration.get("profile_read_mode", "unknown")))
     calibration_note = _calibration_effect_note(calibration)
+    ca_severity = cls.get("ca_severity", "none")
 
     stats = "".join(
         f'<div class="metric-card">'
@@ -244,13 +247,23 @@ def _section1(result: dict[str, Any], final: int, tc: str,
     positives = result.get("notable_positive_evidence", [])[:4]
     stage2_focus = _select_focus_rows(result.get("stage_2r_rubric", {}), negatives_first=True, limit=3)
     stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=3)
-    alert = (
-        f'<div class="alert-t0">'
-        f'T0 hard floor triggered: direct clinical framing without an explicit boundary declaration. '
-        f'Score capped at {final}/100.'
-        f'</div>'
-        if t0 else ""
-    )
+    if t0:
+        alert = (
+            f'<div class="alert-t0">'
+            f'<strong>Tier Lock [T0-FLOOR]:</strong> Direct clinical framing without an explicit boundary declaration. '
+            f'Score ceiling at 39. Resolving this condition is required before any tier advancement.'
+            f'</div>'
+        )
+    elif score_cap is not None:
+        alert = (
+            f'<div class="alert-t0" style="background:#fff3cd;border-color:#ffc107;color:#856404;">'
+            f'<strong>Tier Lock [CA-CAP]:</strong> Clinical-adjacent surface detected without explicit non-clinical boundary. '
+            f'Score ceiling at {score_cap} (T2 maximum). '
+            f'Adding a non-diagnostic disclaimer resolves this lock.'
+            f'</div>'
+        )
+    else:
+        alert = ""
     risk_list = "".join(f'<li>{xt(str(r))}</li>' for r in risks) or "<li>No notable risks surfaced.</li>"
     positive_list = "".join(f'<li>{xt(str(p))}</li>' for p in positives) or "<li>No notable positive evidence surfaced.</li>"
     return (
@@ -303,6 +316,10 @@ def _section1(result: dict[str, Any], final: int, tc: str,
         f'<div class="eyebrow">Policy Boundary</div>'
         f'<h3>How to read this artifact</h3>'
         f'<p class="memo-text">{xt(calibration_note) if calibration_note else "Authoritative scoring and surfaced policy metadata are aligned in this release line."}</p>'
+        f'<p class="memo-note"><strong>Classification applied:</strong> '
+        f'ca_severity={xt(ca_severity)} | '
+        f'score_cap={xt(str(score_cap)) if score_cap is not None else "none"} | '
+        f't0_floor={"active" if t0 else "clear"}</p>'
         f'</article>'
         f'</div>'
         f'</section>'
@@ -357,6 +374,8 @@ def _section2(result: dict[str, Any], s1: int, s2: int, s3: int, s4: int) -> str
     stage2_focus = _select_focus_rows(result.get("stage_2r_rubric", {}), negatives_first=True, limit=4)
     stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=4)
     stage4_focus = _select_focus_rows(result.get("stage_4_rubric", {}), negatives_first=False, limit=4)
+    _s3r = result.get("stage_3_rubric", {}).get("stage_3_raw_total", {})
+    _s3_formula = f" (raw: {_s3r['score']}/{_s3r['max']})" if _s3r.get("score") is not None and _s3r.get("max") else ""
     cards = "".join([
         _stage_card(
             "Stage 1 — README Intent",
@@ -380,7 +399,7 @@ def _section2(result: dict[str, Any], s1: int, s2: int, s3: int, s4: int) -> str
             _C["slate"],
             _STAGE_TIPS[2],
             stage3_focus,
-            "Engineering accountability, provenance, and reviewable responsibility surfaces.",
+            f"Engineering accountability, provenance, and reviewable responsibility surfaces.{_s3_formula}",
         ),
         _stage_card(
             "Stage 4 — Replication",
@@ -625,11 +644,13 @@ def render_html(result: dict[str, Any]) -> str:
     s2 = int(score.get("stage_2_repo_local_consistency", 0))
     s3 = int(score.get("stage_3_code_bio", 0))
     s4 = int(result.get("replication_score", 0))
-    t0 = result.get("classification", {}).get("t0_hard_floor", False)
+    cls = result.get("classification", {})
+    t0 = cls.get("t0_hard_floor", False)
+    score_cap = cls.get("score_cap")
 
     css = build_css(tc)
     hero = _hero(score, final, tier, tc, target, date)
-    sec1 = _section1(result, final, tc, s1, s2, s3, s4, t0)
+    sec1 = _section1(result, final, tc, s1, s2, s3, s4, t0, score_cap)
     sec2 = _section2(result, s1, s2, s3, s4)
     sec3 = _section3(result.get("code_integrity", {}), result.get("code_contract", {}))
     sec4 = _section4(result.get("airi_risk_coverage", {}))

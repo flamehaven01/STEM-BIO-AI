@@ -1228,7 +1228,7 @@ def test_markdown_surfaces_humanized_top_risks_and_warn_file_lines(tmp_path: Pat
     assert "C2_dependency_pinning: WARN" not in markdown
     assert "External operational dependency signal surfaced in code-integrity lane." in markdown
     assert ".env.example:2 VALYU_API_KEY=valyu_your_api_key_here" in markdown
-    assert "## Remediation Targets" in markdown
+    assert "## Remediation Roadmap" in markdown
 
 
 def test_markdown_airi_gaps_and_reasoning_interpretation_are_not_truncated(tmp_path: Path) -> None:
@@ -2976,4 +2976,59 @@ def test_json_and_pdf_surface_notes_preserve_canonical_boundary(tmp_path: Path) 
     assert "Surface Note:" in flat_lines
 
 
+# ── Tier Lock / Classification Applied surface tests (P0/P1 hardening) ───────
+
+def test_tier_lock_ca_cap_surfaces_in_markdown(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Scientific skills catalog.\n"
+        "Includes AutoDock Vina drug docking, nnU-Net medical imaging, pydicom, "
+        "biomarker survival analysis, and clinical trial examples.\n",
+    )
+    result = audit_repository(tmp_path)
+    assert result["classification"]["score_cap"] == 69
+    markdown = render_markdown(result, mode="detailed", pages=7)
+    assert "Tier Lock [CA-CAP]" in markdown
+    assert "Score ceiling active at **69**" in markdown
+    assert "Classification Applied:" in markdown
+    assert "score_cap=69" in markdown
+    assert "t0_floor=clear" in markdown
+
+
+def test_tier_lock_t0_floor_surfaces_in_markdown(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "Autonomous diagnosis tool for clinical triage decisions.\n",
+    )
+    result = audit_repository(tmp_path)
+    assert result["classification"]["t0_hard_floor"] is True
+    assert result["classification"]["score_cap"] == 39
+    markdown = render_markdown(result, mode="detailed", pages=7)
+    assert "Tier Lock [T0-FLOOR]" in markdown
+    assert "Score ceiling active at **39**" in markdown
+    assert "t0_floor=active" in markdown
+
+
+def test_stage3_normalization_formula_in_markdown(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    _write(tmp_path / ".github" / "workflows" / "ci.yml", "name: CI\n")
+    result = audit_repository(tmp_path)
+    s3_rubric = result.get("stage_3_rubric", {})
+    raw_entry = s3_rubric.get("stage_3_raw_total", {})
+    assert raw_entry.get("max") == 80
+    markdown = render_markdown(result, mode="detailed", pages=7)
+    assert "(raw: " in markdown
+    assert "/80)" in markdown
+
+
+def test_airi_gaps_count_suffix_in_markdown_when_over_five(tmp_path: Path) -> None:
+    _write(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path)
+    result["airi_risk_coverage"]["known_gaps_in_bundle"] = [
+        {"id": f"99.0{i}.00", "title": f"Synthetic gap {i}"} for i in range(8)
+    ]
+    markdown = render_markdown(result, mode="detailed", pages=7)
+    assert "Known Gaps In Bundle" in markdown
+    for i in range(8):
+        assert f"99.0{i}.00" in markdown
 

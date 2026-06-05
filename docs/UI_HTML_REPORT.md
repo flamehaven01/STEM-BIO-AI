@@ -26,13 +26,30 @@ Example:
 
 | Section | ID | Content |
 |---------|-----|---------|
-| **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, T0 alert banner |
-| **Decision Path** | `#s2` | Stage bars (S1/S2R/S3/S4), score formula, and policy/configuration explainer |
+| **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, Tier Lock alert banner, Classification Applied state |
+| **Decision Path** | `#s2` | Stage bars (S1/S2R/S3/S4 with Stage 3 raw formula), score formula, and policy/configuration explainer |
 | **Code Integrity & Contract** | `#s3` | C1–C6 + CC1–CC3 expandable cards, with C4/C5/C6 split visible |
-| **AIRI Risk Coverage** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table + domain filter cards |
+| **AIRI Risk Triggers** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table + domain filter cards |
 | **Evidence Detail** | `#s5` | Full evidence ledger with severity filter chips |
 
 Navigation between sections via a **sticky top navbar** with scroll-spy active state.
+
+### Tier Lock Alert (Section 1)
+
+When a score ceiling is active, a colored alert banner appears at the top of the Executive Summary:
+
+- **`Tier Lock [T0-FLOOR]`** (red): CA-DIRECT classification with no disclaimer. Score ceiling at 39. Must be resolved before any tier advancement.
+- **`Tier Lock [CA-CAP]`** (amber): Clinical-adjacent surface without non-clinical boundary. Score ceiling at 69 (T2 maximum). Adding a non-diagnostic disclaimer resolves this lock.
+
+### Classification Applied (Section 1)
+
+The Policy Boundary card in Section 1 now shows the applied classification state:
+
+```
+Classification applied: ca_severity=CA-INDIRECT | score_cap=69 | t0_floor=clear
+```
+
+This makes the active cap and severity class inspectable without reading the raw JSON.
 
 ## Interactive Features
 

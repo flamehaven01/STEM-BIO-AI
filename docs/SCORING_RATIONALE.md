@@ -234,6 +234,15 @@ The score is capped at 39, forcing T0.
 
 **Rationale:** The combination of direct clinical output + autonomous framing + no disclaimer represents the highest-risk posture in the framework. A scoring penalty is insufficient here because even a heavily penalized repo could still score T1 or T2 through strong S3 signals. The hard floor bypasses the scoring formula entirely (spec Principle 6: "Hard floors over soft penalties for catastrophic risk").
 
+### Tier Lock surface
+
+When a `score_cap` is active, all human-readable artifacts surface a **Tier Lock** label so reviewers do not need to inspect the raw JSON to understand why the tier is constrained:
+
+- `Tier Lock [CA-CAP]`: score ceiling at 69 (T2 maximum). Clinical-adjacent surface without non-clinical boundary. Resolved by adding an explicit non-diagnostic disclaimer.
+- `Tier Lock [T0-FLOOR]`: score ceiling at 39 (T0). CA-DIRECT framing + T0 terms + no disclaimer. Resolving requires removing autonomous/direct-clinical framing or adding a compliant boundary.
+
+The `classification` block in the JSON output also records `ca_severity`, `score_cap`, and `t0_hard_floor` for machine-readable traceability. Human-readable artifacts additionally surface **Classification Applied** state (`ca_severity | score_cap | t0_floor`) in the Policy Boundary section.
+
 ---
 
 ## 13. Stage 4: Replication Evidence
