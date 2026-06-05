@@ -14,6 +14,23 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.8.2] - 2026-06-05
+
+### Added
+- Integrated **ICH M15 General Principles for Model-Informed Drug Development** (Step 4, January 2026) as a citation authority for existing S1–S4 rubric items.
+  - Added `ich_m15_midd_2026` to `docs/regulatory_basis_registry.v1.json` with section-level citations (§2.1.2, §3, §4.1, §4.2, §4.3).
+  - Stage traceability now emits M15 requirement IDs alongside EU AI Act and IMDRF: `ICH_M15_SECTION_4_1_MAP` (Stage 1 R2), `ICH_M15_SECTION_2_1_2_CONTEXT_OF_USE` (Stage 2R R2R_D2), `ICH_M15_SECTION_3_VERIFICATION` (Stage 3 B1), `ICH_M15_SECTION_3_VALIDATION` (Stage 3 B2), `ICH_M15_SECTION_4_3_CODE_SUBMISSION` (Stage 4 replication).
+  - Added ICH M15 post-hoc alignment table to `docs/SCORING_RATIONALE.md` with explicit caveat that alignment is confirmed post-hoc, not causally derived from M15.
+
+### Changed
+- `measurement_basis` strings in `scanner.py` now cite ICH M15 section references for B1, B2, Stage 4, Stage 1, and Stage 2R items.
+- MD and explain regulatory traceability render now surfaces `source_ids` inline so reviewers can identify which regulatory framework each requirement maps to (`[ich_m15_midd_2026]`, `eu_ai_act_2024_1689`, etc.).
+- Regulatory basis note updated to mention ICH M15 as of June 2026.
+- Rotated `SKILL.md`, `CITATION.cff` version references to `1.8.2`.
+- Rotated MICA active pointer to v1.8.2 (`memory/mica.yaml` + archive, playbook, lessons layer files).
+
+---
+
 ## [1.8.1] - 2026-06-05
 
 ### Changed
