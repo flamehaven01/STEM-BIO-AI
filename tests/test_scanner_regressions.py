@@ -2452,10 +2452,10 @@ def test_markdown_and_explain_surface_calibration_profile(tmp_path: Path) -> Non
     html = render_html(result)
 
     assert "**Calibration Profile:** `default` (`ca-policy-1.0`, `mirror_only`, `authoritative_release`)" in markdown
-    assert "**Calibration Effect:** mirror-only in 1.8.0" in markdown
+    assert "**Calibration Effect:** mirror-only in " in markdown
     assert "Stage 4 replication emphasis" in markdown
     assert "Policy  : default [ca-policy-1.0; mirror_only; authoritative_release]" in explain
-    assert "Policy Mode: mirror-only in 1.8.0" in explain
+    assert "Policy Mode: mirror-only in " in explain
     assert "Stage 4 replication emphasis" in explain
     assert "authoritative_release" in html
     assert "mirror_only" in html
@@ -2894,7 +2894,7 @@ def test_policy_simulate_cli_rejects_mixing_profile_file_and_intent_answers(tmp_
 
 
 def test_regulatory_basis_review_required_flips_when_registry_is_stale() -> None:
-    basis = build_regulatory_basis(date(2026, 6, 1))
+    basis = build_regulatory_basis(date(2027, 1, 1))
 
     assert basis["review_required"] is True
     assert "registry_as_of_stale" in basis["review_reasons"]

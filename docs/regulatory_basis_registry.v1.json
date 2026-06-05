@@ -1,6 +1,6 @@
 {
   "schema_version": "stem-ai-regulatory-basis-registry-v1",
-  "as_of": "May 2026",
+  "as_of": "June 2026",
   "display_note": {
     "title": "Regulatory basis note",
     "body_line_1": "Aligned to current official source classes as of June 2026: EU AI Act (Regulation (EU) 2024/1689), FDA QMSR, FDA AI-enabled device guidance themes, IMDRF SaMD/GMLP frameworks, and ICH M15 General Principles for Model-Informed Drug Development.",

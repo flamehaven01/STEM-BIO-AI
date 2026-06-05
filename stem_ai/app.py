@@ -311,10 +311,13 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
-            <p style="{_CARD_TITLE}">Current Deterministic Layers</p>
+            <p style="{_CARD_TITLE}">Regulatory Traceability</p>
             <p style="{_CARD_BODY}">
-              Deterministic bio diagnostics for SMILES surface checks, optional RDKit validation, parser-guard detection,
-              silent mock fallback detection, contract-surface checks, and an evidence-only regulatory traceability assistant.
+              Each rubric item is citation-aligned to official regulatory frameworks.
+              Every scan output surfaces applicable requirement IDs.<br>
+              <span style="display:inline-block;margin-top:6px;background:#dbeafe;border:1px solid #3b82f6;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#1d4ed8;">✓ ICH M15 MIDD (Step 4, 2026)</span>
+              <span style="display:inline-block;margin-top:4px;background:#e0f2fe;border:1px solid #0284c7;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#075985;">✓ EU AI Act 2024/1689</span>
+              <span style="display:inline-block;margin-top:4px;background:#f0fdf4;border:1px solid #16a34a;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#15803d;">✓ IMDRF SaMD/GMLP</span>
             </p>
           </div>
           <div style="{_CARD_STYLE}">
@@ -330,13 +333,11 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             </p>
           </div>
           <div style="{_CARD_STYLE}">
-            <p style="{_CARD_TITLE}">Regulatory Frameworks</p>
+            <p style="{_CARD_TITLE}">AIRI — AI Risk Index</p>
             <p style="{_CARD_BODY}">
-              <strong>ICH M15 MIDD</strong> (Step 4, 2026) — each rubric item is citation-aligned to
-              ICH M15 §§2.1.2 · 3 · 4.1 · 4.2 · 4.3 so MIDD repos see directly applicable FDA/EMA regulatory
-              requirement context in the traceability output.<br>
-              <strong>AIRI</strong> — MIT AI Risk Repository runtime bundle maps triggered detectors to
-              covered risks and known gaps across the curated bio/clinical subset.
+              <span style="display:inline-block;background:#1e3a6e;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#ffffff;">AIRI</span>
+              MIT AI Risk Repository runtime bundle maps triggered detectors to covered risks and known gaps
+              across the curated bio/clinical subset (184 risks · 32 in detector scope).
             </p>
           </div>
           <div style="{_CARD_STYLE}">
