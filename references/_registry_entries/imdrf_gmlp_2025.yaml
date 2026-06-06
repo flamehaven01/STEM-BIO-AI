@@ -1,0 +1,19 @@
+id: imdrf_gmlp_2025
+jurisdiction: IMDRF
+title: "Good machine learning practice for medical device development: Guiding principles"
+short_label: "IMDRF GMLP"
+display_label: "IMDRF GMLP (2025)"
+status: final_framework
+published_date: "2025-01-29"
+effective_date: null
+source_file: null
+source_url: "https://www.imdrf.org/documents/good-machine-learning-practice-medical-device-development-guiding-principles"
+
+used_for:
+  - gmlp
+  - lifecycle_discipline
+  - human_ai_team
+  - risk_management
+
+notes: >
+  Use for lifecycle-discipline and transparency-adjacent references.
