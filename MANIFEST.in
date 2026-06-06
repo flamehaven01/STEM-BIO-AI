@@ -28,9 +28,9 @@ include policy/scoring_profile.schema.json
 include policy/scoring_profile.default.v1.json
 include policy/scoring_profile.strict_clinical_adjacency.v1.json
 include memory/mica.yaml
-include memory/stem-ai.mica.v1.7.4.json
-include memory/stem-ai-playbook.v1.7.4.md
-include memory/stem-ai-lessons.v1.7.4.md
+# Version-agnostic: ships whatever active MICA archive/playbook/lessons exist,
+# so a MICA rotation never silently breaks the sdist (see CHANGELOG 1.8.4).
+recursive-include memory *.json *.md *.yaml
 
 recursive-include stem_ai *.py
 recursive-include stem_ai *.json

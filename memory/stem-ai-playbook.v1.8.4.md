@@ -1,6 +1,6 @@
 # STEM BIO-AI Session Protocol & Rubric Drift Guard
 # Memory Layer — protocol_evolution playbook
-# Version: 1.8.3 | MICA Contract: 0.2.4 | Updated: 2026-06-05
+# Version: 1.8.4 | MICA Contract: 0.2.4 | Updated: 2026-06-05
 
 ---
 
@@ -12,11 +12,11 @@ Every AI session using STEM BIO-AI must begin with this sequence:
 [MICA INIT]
 1. Load memory/mica.yaml         -- verify package structure, mode, layer paths
 2. Load this archive JSON        -- read project identity, design_invariants, operation_meta
-3. Load memory/stem-ai-lessons.v1.8.3.md -- on demand for edge case disambiguation
+3. Load memory/stem-ai-lessons.v1.8.4.md -- on demand for edge case disambiguation
 4. Confirm IMMUTABLE rules are loaded from spec/STEM-AI_v1.1.2_CORE.md
 5. Run `python tools/mica_pct.py .`   -- verify PCT-001 through PCT-011
 6. Run `python tools/mica_runtime.py . --format text`
-7. Report: [MICA READY] stem-ai-bio v1.8.3 | mode: protocol_evolution | invariants: 18 active | pct: CLOSED
+7. Report: [MICA READY] stem-ai-bio v1.8.4 | mode: protocol_evolution | invariants: 18 active | pct: CLOSED
 ```
 
 If any PCT check fails at critical level, halt and report before proceeding to audit work.
@@ -35,12 +35,12 @@ The current STEM-BIO-AI memory layer is using the non-breaking `v0.2.4` contract
 ---
 
 
-## 1A. v1.8.3 Operating Surface
+## 1A. v1.8.4 Operating Surface
 
 The current implementation is a local deterministic evidence-surface scanner. It does not
 claim clinical safety, regulatory readiness, model efficacy, or scientific validity.
 
-v1.8.3 keeps the active deterministic scanner surface and the workflow-oriented CLI UX from v1.6.2,
+v1.8.4 keeps the active deterministic scanner surface and the workflow-oriented CLI UX from v1.6.2,
 retains the 1.6.3/1.6.4/1.6.5 scoring and calibration-contract refinements, the 1.6.6 policy-visibility surfaces,
 the 1.6.7 derive/simulate preview lanes, the 1.6.8 preview-hardening and citation metadata work,
 and adds the 1.7.x AIRI-governed data layer and interactive HTML reporting surface:
@@ -151,7 +151,7 @@ When STEM BIO-AI version increments:
 1. Update `operation_meta.update_count` (increment by 1).
 2. Update `operation_meta.last_updated` (YYYY-MM-DD).
 3. If IMMUTABLE rules changed (minor version 1.x.0): update `design_invariants` array.
-4. If new failure mode discovered: add to `memory/stem-ai-lessons.v1.8.3.md` per L-ADD protocol.
+4. If new failure mode discovered: add to `memory/stem-ai-lessons.v1.8.4.md` per L-ADD protocol.
 5. If new empirical audit run: add to `provenance_registry`.
 6. Update `mica_schema_version` and `project.version` if version bumped.
 7. Verify archive passes PCT-001 through PCT-007 before committing.
@@ -199,8 +199,8 @@ it defines how divergence is named, recorded, and responded to when a session fi
 | Class | Covers |
 |-------|--------|
 | code | `SKILL.md` + `spec/STEM-AI_v1.1.2_CORE.md` (canonical spec) |
-| playbook | `memory/stem-ai-playbook.v1.8.3.md` |
-| archive | `memory/stem-ai.mica.v1.8.3.json` |
+| playbook | `memory/stem-ai-playbook.v1.8.4.md` |
+| archive | `memory/stem-ai.mica.v1.8.4.json` |
 | readme | `README.md` — version table, BibTeX citation, quick start |
 | changelog | `CHANGELOG.md` |
 
@@ -244,7 +244,7 @@ auto-update when the file is copied from a prior version.
    Minimum check points: Output Format header, Disclaimer, Input Template header, confirmation line.
 3. **After any spec update:** Check playbook and archive `canonical_statement` for DRF-001/DRF-002.
 4. **On DRF-003 detection:** Do not proceed. Record IMMUTABLE change rationale in archive first.
-5. **Recording new drift evidence:** Append to `memory/stem-ai-lessons.v1.8.3.md` with:
+5. **Recording new drift evidence:** Append to `memory/stem-ai-lessons.v1.8.4.md` with:
    - stale surface path + stale value
    - current surface path + current value
    - resolution action taken

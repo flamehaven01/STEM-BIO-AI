@@ -9,6 +9,7 @@ from typing import Any
 from . import __version__
 from .redaction import redact_object, sanitize_artifact_text
 from .render_html import render_html
+from .render_html_components import REQ_LABELS as _REQ_LABELS
 
 try:
     from reportlab.lib import colors
@@ -53,6 +54,13 @@ _BIO_DETECTOR_LABELS = {
     "BIO_silent_mock_fallback": "Silent Mock Fallback",
     "BIO_trace_manifest": "Traceability Manifest Surface",
     "BIO_run_trace": "Bio Subprocess Run Trace",
+}
+
+_STATUS_LABELS: dict[str, str] = {
+    "signal_only":      "⚠ Signal only",
+    "partially_aligned": "~ Partially aligned",
+    "aligned":           "✓ Aligned",
+    "not_detected":      "✗ Not detected",
 }
 
 def _hx(h: str) -> Any:
@@ -461,7 +469,7 @@ def _markdown_regulatory_section(result: dict[str, Any]) -> list[str]:
     ]
     if basis.get("review_required"):
         reasons = ", ".join(basis.get("review_reasons", []))
-        lines.append(f"> Review required: `{reasons}`")
+        lines.append(f"> ⚠ Review required: `{reasons}`")
         lines.append("")
     for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
         items = traceability.get(stage_key, [])
@@ -469,17 +477,24 @@ def _markdown_regulatory_section(result: dict[str, Any]) -> list[str]:
             continue
         lines.append(f"### {stage_key.replace('_', ' ').title()}")
         for item in items:
-            _src = ", ".join(item.get("source_ids", []))
-            _src_tag = f" `[{_src}]`" if _src else ""
-            lines.append(
-                f"- **{item['requirement_id']}** — {item['status']} "
-                f"(mapping confidence: {item['mapping_confidence']}, evidence strength: {item['evidence_strength']}){_src_tag}"
-            )
+            req_id = item["requirement_id"]
+            label = _REQ_LABELS.get(req_id, req_id)
+            status = _STATUS_LABELS.get(item["status"], item["status"])
+            src_tag = ""
+            if item.get("source_ids"):
+                src_tag = " `[" + ", ".join(item["source_ids"]) + "]`"
+            lines.append(f"- **{label}**{src_tag} — {status}")
+            refs = item.get("finding_refs", [])
+            if refs:
+                lines.append(f"  - Triggered by: {', '.join(f'`{r}`' for r in refs)}")
+            gaps = item.get("not_assessed", [])
+            if gaps:
+                lines.append(f"  - Not assessed: {'; '.join(gaps)}")
             lines.append(f"  - {item['note']}")
         lines.append("")
     summary = result.get("regulatory_traceability", {}).get("summary")
     if summary:
-        lines.append(f"**Summary:** {summary}")
+        lines.append(f"**Traceability summary:** {summary}")
         lines.append("")
     return lines
 
@@ -861,25 +876,32 @@ def _explain_regulatory_section(result: dict[str, Any]) -> list[str]:
     lines.append(f"  {note.get('body_line_1', '')}")
     lines.append(f"  {note.get('body_line_2', '')}")
     if basis.get("review_required"):
-        lines.append(f"  review_required                 {', '.join(basis.get('review_reasons', []))}")
+        lines.append(f"  review_required  {', '.join(basis.get('review_reasons', []))}")
     lines.append("")
     for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
         items = traceability.get(stage_key, [])
         if not items:
             continue
-        lines.append(f"  {stage_key:<31}")
+        lines.append(f"  {stage_key}")
         for item in items:
-            _src = ", ".join(item.get("source_ids", []))
-            lines.append(
-                f"    {item['requirement_id']}: {item['status']} "
-                f"(mapping={item['mapping_confidence']}, evidence={item['evidence_strength']})"
-                + (f" | source: {_src}" if _src else "")
-            )
+            req_id = item["requirement_id"]
+            label = _REQ_LABELS.get(req_id, req_id)
+            status = _STATUS_LABELS.get(item["status"], item["status"])
+            src = ", ".join(item.get("source_ids", []))
+            lines.append(f"    {label}: {status}")
+            if src:
+                lines.append(f"      source: {src}")
+            refs = item.get("finding_refs", [])
+            if refs:
+                lines.append(f"      triggered by: {', '.join(refs)}")
+            gaps = item.get("not_assessed", [])
+            if gaps:
+                lines.append(f"      not assessed: {'; '.join(gaps)}")
             lines.append(f"      note: {item['note']}")
     summary = result.get("regulatory_traceability", {}).get("summary")
     if summary:
         lines.append("")
-        lines.append(f"  summary                         {summary}")
+        lines.append(f"  summary: {summary}")
     lines.append("")
     return lines
 
@@ -960,8 +982,7 @@ def _page1_executive(result: dict[str, Any], mode: str, pages: int) -> list[Any]
     story += _stage_cards(result)
     story.append(Spacer(1, 3 * mm))
     story += _integrity_and_risks(result)
-    story.append(Spacer(1, 2 * mm))
-    story += _regulatory_basis_box(result)
+    story.append(Spacer(1, 3 * mm))
     story += _footer_block()
     return _single_page_story(story)
 
@@ -1166,11 +1187,12 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         if covered:
             first = covered[0]
             reason = _airi_reason_summary(first)
-            reason_preview = reason if "(+" in reason else _clip_words(reason, 16)
+            reason_preview = reason if "(+" in reason else _clip_words(reason, 60)
             airi_lines += (
-                f'&#8226; {_xt(str(first.get("id", "—")))} {_xt(_clip_words(str(first.get("title", "")), 9))}'
+                f'&#8226; {_xt(str(first.get("id", "—")))} {_xt(_clip_words(str(first.get("title", "")), 50))}'
                 f'{f"<br/>&nbsp;&nbsp;why: {_xt(reason_preview)}" if reason else ""}'
             )
+    reg_lines = _regulatory_bullets(result)
     right_rows = [
         [Paragraph(f'<font color="{_WHITE}"><b>Remediation Targets</b></font>', _style("RH1", 9, 12, _WHITE, True))],
         [Paragraph(f'<font color="{_DGRAY}" size="8">{risk_lines}</font>', _style("RL1", 8, 11, _DGRAY))],
@@ -1181,6 +1203,11 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         right_rows.extend([
             [Paragraph(f'<font color="{_WHITE}"><b>AIRI Risk Triggers</b></font>', _style("AH1", 9, 12, _WHITE, True))],
             [Paragraph(f'<font color="{_DGRAY}" size="8">{airi_lines}</font>', _style("AL1", 7.8, 10.5, _DGRAY))],
+        ])
+    if reg_lines:
+        right_rows.extend([
+            [Paragraph(f'<font color="{_WHITE}"><b>Regulatory Traceability</b></font>', _style("GH1", 9, 12, _WHITE, True))],
+            [Paragraph(f'<font color="{_DGRAY}" size="8">{reg_lines}</font>', _style("GL1", 7.8, 10.5, _DGRAY))],
         ])
     right_tbl = Table(right_rows, colWidths=["100%"])
     right_style = [
@@ -1193,10 +1220,17 @@ def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
         ("LEFTPADDING",   (0, 0), (-1, -1), 6),
         ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
     ]
+    _next = 4
     if airi_lines:
         right_style.extend([
-            ("BACKGROUND", (0, 4), (0, 4), _hx(_TEAL)),
-            ("BACKGROUND", (0, 5), (0, 5), _hx(_LGRAY)),
+            ("BACKGROUND", (0, _next), (0, _next), _hx(_TEAL)),
+            ("BACKGROUND", (0, _next + 1), (0, _next + 1), _hx(_LGRAY)),
+        ])
+        _next += 2
+    if reg_lines:
+        right_style.extend([
+            ("BACKGROUND", (0, _next), (0, _next), _hx(_NAVY)),
+            ("BACKGROUND", (0, _next + 1), (0, _next + 1), _hx(_LGRAY)),
         ])
     right_tbl.setStyle(TableStyle(right_style))
 
@@ -1249,6 +1283,95 @@ def _bio_diagnostics_pdf_table(result: dict[str, Any]) -> Table | None:
     return tbl
 
 
+def _regulatory_pdf_text_lines(result: dict[str, Any]) -> list[str]:
+    """Plain-text regulatory traceability page for the simple PDF fallback."""
+    basis = result.get("regulatory_basis", {})
+    traceability = result.get("stage_traceability", {})
+    if not basis and not traceability:
+        return []
+    note = basis.get("note", {})
+    lines = ["Regulatory Traceability", ""]
+    if note.get("body_line_1"):
+        lines.append(note["body_line_1"])
+    if note.get("body_line_2"):
+        lines.append(note["body_line_2"])
+    lines.append("")
+    _stage_labels = {
+        "stage_1": "Stage 1 - README Intent",
+        "stage_2r": "Stage 2R - Repo Consistency",
+        "stage_3": "Stage 3 - Code / Bio",
+        "stage_4": "Stage 4 - Replication",
+        "bio_diagnostics": "Bio Diagnostics",
+    }
+    for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
+        items = traceability.get(stage_key, [])
+        if not items:
+            continue
+        lines.append(_stage_labels.get(stage_key, stage_key))
+        for item in items:
+            label = _REQ_LABELS.get(item["requirement_id"], item["requirement_id"])
+            status = _STATUS_PDF_LABEL.get(item.get("status", ""), item.get("status", ""))
+            lines.append(f"- {label}: {status}")
+            refs = ", ".join(item.get("finding_refs", []))
+            if refs:
+                lines.append(f"    triggered by: {refs}")
+    summary = result.get("regulatory_traceability", {}).get("summary")
+    if summary:
+        lines.append("")
+        lines.append(f"Summary: {summary}")
+    return lines
+
+
+def _regulatory_bullets(result: dict[str, Any]) -> str:
+    """Compact actionable bullet summary of regulatory traceability for page 1.
+
+    Surfaces what actually has structural alignment (partially_aligned) versus
+    weak signal-only references, instead of restating the boilerplate basis note.
+    """
+    trace = result.get("stage_traceability", {})
+    items: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
+        for it in trace.get(stage_key, []):
+            rid = it.get("requirement_id", "")
+            if rid in seen:
+                continue
+            seen.add(rid)
+            items.append(it)
+    if not items:
+        return ""
+
+    framework_order = ["EU AI Act", "ICH M15", "IMDRF", "FDA"]
+    frameworks: set[str] = set()
+    for it in items:
+        for sid in it.get("source_ids", []):
+            if sid.startswith("eu_ai_act"):
+                frameworks.add("EU AI Act")
+            elif sid.startswith("ich_m15"):
+                frameworks.add("ICH M15")
+            elif sid.startswith("imdrf"):
+                frameworks.add("IMDRF")
+            elif sid.startswith("fda"):
+                frameworks.add("FDA")
+    fw_str = ", ".join(f for f in framework_order if f in frameworks)
+
+    partial = [it for it in items if it.get("status") == "partially_aligned"]
+    signal = [it for it in items if it.get("status") == "signal_only"]
+
+    lines = [f'&#8226; <b>{len(items)} mapped</b>: {_xt(fw_str)}']
+    if partial:
+        labels = "; ".join(
+            _REQ_LABELS.get(it["requirement_id"], it["requirement_id"])
+            for it in partial[:3]
+        )
+        lines.append(f'&#8226; <b>Partially aligned ({len(partial)}):</b> {_xt(labels)}')
+    if signal:
+        lines.append(
+            f'&#8226; <b>Signal only ({len(signal)})</b> — weak pre-audit scaffolding refs'
+        )
+    return "<br/>".join(lines)
+
+
 def _regulatory_basis_box(result: dict[str, Any]) -> list[Any]:
     basis = result.get("regulatory_basis", {})
     note = basis.get("note", {})
@@ -1281,6 +1404,111 @@ def _regulatory_basis_box(result: dict[str, Any]) -> list[Any]:
         ("RIGHTPADDING", (0, 0), (-1, -1), 7),
     ]))
     return [panel]
+
+
+_STATUS_PDF_COLOR = {
+    "signal_only":       _AMBER,
+    "partially_aligned": _TEAL,
+    "aligned":           _GREEN,
+    "not_detected":      _DGRAY,
+}
+_STATUS_PDF_LABEL = {
+    "signal_only":       "Signal only",
+    "partially_aligned": "Partially aligned",
+    "aligned":           "Aligned",
+    "not_detected":      "Not detected",
+}
+
+
+def _regulatory_traceability_pdf(result: dict[str, Any]) -> list[Any]:
+    """Detailed per-requirement regulatory traceability block for PDF pages."""
+    basis = result.get("regulatory_basis", {})
+    traceability = result.get("stage_traceability", {})
+    if not basis and not traceability:
+        return []
+
+    note = basis.get("note", {})
+    story: list[Any] = []
+
+    story += _sec_hdr("Regulatory Traceability", _NAVY)
+    story.append(Paragraph(
+        f'<font color="{_DGRAY}" size="8">'
+        f'<b>{_xt(note.get("title", "Regulatory basis note"))}</b><br/>'
+        f'{_xt(note.get("body_line_1", ""))}<br/>'
+        f'<i>{_xt(note.get("body_line_2", ""))}</i>'
+        f'</font>',
+        _style("REGT_BASIS", 8, 11, _DGRAY),
+    ))
+    story.append(Spacer(1, 3 * mm))
+
+    _STAGE_LABELS_PDF = {
+        "stage_1":        "Stage 1 — README Intent",
+        "stage_2r":       "Stage 2R — Repo Consistency",
+        "stage_3":        "Stage 3 — Code / Bio",
+        "stage_4":        "Stage 4 — Replication",
+        "bio_diagnostics": "Bio Diagnostics",
+    }
+    _label_col_w = _PDF_CONTENT_WIDTH - 38 * mm
+    for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
+        items = traceability.get(stage_key, [])
+        if not items:
+            continue
+        story.append(Paragraph(
+            f'<font color="{_NAVY}" size="8.5"><b>{_xt(_STAGE_LABELS_PDF.get(stage_key, stage_key))}</b></font>',
+            _style(f"REGT_S_{stage_key[:6]}", 8.5, 11, _NAVY, True),
+        ))
+        story.append(Spacer(1, 1 * mm))
+        for item in items:
+            req_id = item["requirement_id"]
+            label = _REQ_LABELS.get(req_id, req_id)
+            status = item.get("status", "")
+            status_label = _STATUS_PDF_LABEL.get(status, status)
+            status_color = _STATUS_PDF_COLOR.get(status, _DGRAY)
+            refs = ", ".join(item.get("finding_refs", []))
+            gaps = "; ".join(item.get("not_assessed", []))
+            detail_lines = [f'<font color="{_DGRAY}" size="7.5">{_xt(item["note"])}</font>']
+            if refs:
+                detail_lines.append(
+                    f'<font color="{_DGRAY}" size="7.5">Triggered by: <i>{_xt(refs)}</i></font>'
+                )
+            if gaps:
+                detail_lines.append(
+                    f'<font color="{_DGRAY}" size="7.5">Not assessed: {_xt(gaps)}</font>'
+                )
+            row = Table(
+                [[
+                    Paragraph(
+                        f'<font color="{_NAVY}" size="8"><b>{_xt(label)}</b></font><br/>'
+                        + "<br/>".join(detail_lines),
+                        _style(f"REGT_B_{req_id[:10]}", 8, 11, _DGRAY),
+                    ),
+                    Paragraph(
+                        f'<font color="{status_color}" size="7.5"><b>{_xt(status_label)}</b></font>',
+                        _style(f"REGT_V_{req_id[:10]}", 7.5, 10, status_color, True, "RIGHT"),
+                    ),
+                ]],
+                colWidths=[_label_col_w, 38 * mm],
+            )
+            row.setStyle(TableStyle([
+                ("BACKGROUND",    (0, 0), (-1, -1), _hx(_LGRAY)),
+                ("BOX",           (0, 0), (-1, -1), 0.4, _hx(_MGRAY)),
+                ("TOPPADDING",    (0, 0), (-1, -1), 4),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+                ("RIGHTPADDING",  (0, 0), (-1, -1), 5),
+                ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+            ]))
+            story.append(row)
+            story.append(Spacer(1, 1.5 * mm))
+        story.append(Spacer(1, 2 * mm))
+
+    summary = result.get("regulatory_traceability", {}).get("summary", "")
+    if summary:
+        story.append(Paragraph(
+            f'<font color="{_DGRAY}" size="7.5"><i>{_xt(summary)}</i></font>',
+            _style("REGT_SUMM", 7.5, 10, _DGRAY),
+        ))
+    return story
 
 
 def _footer_block() -> list[Any]:
@@ -1318,6 +1546,7 @@ def _detail_pages(result: dict[str, Any], pages: int) -> list[Any]:
     elif pages >= 7:
         story += _page4_integrity_deep(result)
         story += _page6_method_airi(result)
+        story += _page_regulatory_traceability(result)
         story += _page7_report_metadata(result)
     return story
 
@@ -1997,6 +2226,9 @@ def _page5_compact_closure(result: dict[str, Any]) -> list[Any]:
             ))
 
     story.append(Spacer(1, 3 * mm))
+    story += _regulatory_basis_box(result)
+
+    story.append(Spacer(1, 3 * mm))
     story += _sec_hdr("Method Boundary", _DGRAY)
     story.append(Paragraph(
         f'<font color="{_DGRAY}" size="8"><b>Final score:</b> {score["final_score"]} / 100 ({_xt(score["formal_tier"])})'
@@ -2139,7 +2371,17 @@ def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
     return _single_page_story(story, break_before=True)
 
 
-# ── Page 7: Report Metadata (7p only) ────────────────────────────────────────
+# ── Page 7: Regulatory Traceability (dedicated, detailed packet only) ─────────
+def _page_regulatory_traceability(result: dict[str, Any]) -> list[Any]:
+    block = _regulatory_traceability_pdf(result)
+    if not block:
+        return []
+    story = list(block)
+    story += _footer_block()
+    return _single_page_story(story, break_before=True)
+
+
+# ── Page 8: Report Metadata (detailed packet only) ───────────────────────────
 def _page7_report_metadata(result: dict[str, Any]) -> list[Any]:
     story: list[Any] = []
     score = result["score"]
@@ -2307,6 +2549,9 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
             "Method Boundary",
             result["method"],
         ]))
+        _reg_lines = _regulatory_pdf_text_lines(result)
+        if _reg_lines:
+            sets.append(_fit_page(_reg_lines))
         sets.append(_fit_page([
             "Report Metadata",
             f"- Schema Version: {result.get('schema_version', '—')}",

@@ -1,0 +1,18 @@
+id: imdrf_samd_clinical_eval_2017
+jurisdiction: IMDRF
+title: "Software as a Medical Device (SaMD): Clinical Evaluation"
+short_label: "IMDRF SaMD/ClinEval"
+display_label: "IMDRF SaMD Clinical Eval (2017)"
+status: final_framework
+published_date: "2017-09-21"
+effective_date: null
+source_file: null
+source_url: "https://www.imdrf.org/documents/software-medical-device-samd-clinical-evaluation"
+
+used_for:
+  - scientific_validity_signal
+  - analytical_validation_signal
+  - clinical_context_boundary_signal
+
+notes: >
+  Use for evidence family language; do not claim direct clinical validation.

@@ -141,10 +141,6 @@ section{{margin-bottom:34px;scroll-margin-top:72px}}
 .metric-label{{font-size:11px;color:{dg};font-weight:800;text-transform:uppercase;letter-spacing:.08em}}
 .alert-t0{{background:{r};color:#fff;padding:15px 18px;border-radius:14px;margin-bottom:18px;font-weight:700;box-shadow:var(--shadow-soft)}}
 .decision-panel{{padding:18px}}
-.formula-banner{{
-  margin-bottom:16px;padding:12px 14px;border-radius:14px;background:#eef5fb;
-  border:1px solid #d7e5f4;font-size:12px;color:{n};font-family:"Consolas","SFMono-Regular",monospace
-}}
 .config-pattern{{
   display:grid;
   grid-template-columns:minmax(0,1.2fr) minmax(0,1.8fr);
@@ -244,6 +240,26 @@ section{{margin-bottom:34px;scroll-margin-top:72px}}
 .filter-chip.active{{background:{n};color:#fff;border-color:{n}}}
 .filter-chip:hover:not(.active){{background:{lg}}}
 .footer{{font-size:11px;color:{dg};text-align:center;padding:24px 0;border-top:1px solid rgba(13,31,60,.08);margin-top:40px}}
+.reg-basis-box{{background:#f8fafc;border:1px solid #dbe6f1;border-radius:12px;padding:14px 16px;margin-bottom:20px}}
+.reg-basis-title{{font-size:12px;font-weight:700;color:{n};margin-bottom:4px}}
+.reg-basis-body{{font-size:12px;color:{dg};margin-bottom:2px}}
+.reg-basis-note{{font-size:11px;color:{dg};font-style:italic}}
+.reg-review-warn{{font-size:11px;color:#b45309;margin-top:6px;font-weight:600}}
+.reg-stage{{margin-bottom:22px}}
+.reg-stage-title{{font-size:13px;font-weight:700;color:{n};border-bottom:1px solid #dbe6f1;padding-bottom:4px;margin-bottom:10px}}
+.reg-item{{border-left:3px solid #dbe6f1;padding:8px 12px;margin-bottom:8px;border-radius:0 8px 8px 0;background:#fbfdff}}
+.reg-item-header{{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:4px}}
+.reg-req-label{{font-size:12px;font-weight:600;color:{n}}}
+.reg-badge{{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;white-space:nowrap}}
+.reg-signal{{background:#fff7ed;color:#b45309;border:1px solid #fed7aa}}
+.reg-partial{{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}}
+.reg-aligned{{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}}
+.reg-gap{{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}}
+.reg-src-chip{{font-size:10px;color:{dg};background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 5px;font-family:"Consolas","SFMono-Regular",monospace}}
+.reg-meta{{font-size:11px;color:{dg};margin-top:2px}}
+.reg-gap-note{{color:#9a3412}}
+.reg-note-text{{font-size:11px;color:{dg};margin-top:3px;font-style:italic}}
+.reg-summary{{font-size:12px;color:{dg};border-top:1px solid #dbe6f1;padding-top:10px;margin-top:4px}}
 @media(max-width:1000px){{
   .metric-grid{{grid-template-columns:repeat(3,minmax(0,1fr))}}
   .stage-deck{{grid-template-columns:1fr}}

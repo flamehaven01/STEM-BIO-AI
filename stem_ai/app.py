@@ -288,7 +288,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
           No LLM &nbsp;·&nbsp; No API key &nbsp;·&nbsp; No model runtime &nbsp;·&nbsp; No secrets sent anywhere.<br>
           Scans README, docs, CI, tests, changelogs, and manifests — returns a T0–T4 triage tier
           with JSON, Markdown, and PDF artifacts. Rubric items are citation-aligned to
-          <strong>ICH M15 MIDD</strong> (Step 4, 2026) and EU AI Act / IMDRF frameworks for regulatory traceability.</p>
+          <strong>ICH M15 MIDD</strong> (Step 4, Jan 2026) and EU AI Act / IMDRF frameworks for regulatory traceability.</p>
         </div>
         """
     )
@@ -332,7 +332,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
             <p style="{_CARD_BODY}">
               Each rubric item is citation-aligned to official regulatory frameworks.
               Every scan output surfaces applicable requirement IDs.<br>
-              <span style="display:inline-block;margin-top:6px;background:#dbeafe;border:1px solid #3b82f6;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#1d4ed8;">✓ ICH M15 MIDD (Step 4, 2026)</span>
+              <span style="display:inline-block;margin-top:6px;background:#dbeafe;border:1px solid #3b82f6;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#1d4ed8;">✓ ICH M15 MIDD (Step 4, Jan 2026)</span>
               <span style="display:inline-block;margin-top:4px;background:#e0f2fe;border:1px solid #0284c7;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#075985;">✓ EU AI Act 2024/1689</span>
               <span style="display:inline-block;margin-top:4px;background:#f0fdf4;border:1px solid #16a34a;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;color:#15803d;">✓ IMDRF SaMD/GMLP</span>
             </p>
@@ -371,7 +371,7 @@ with gr.Blocks(title=f"STEM BIO-AI — Evidence Scanner v{__version__}", **_bloc
                 choices=[
                     ("Brief - 1 page (legacy)", 1),
                     ("Standard - 5 pages", 2),
-                    ("Full - 7 pages", 3),
+                    ("Full - 8 pages", 3),
                 ],
                 value=3,
                 label="Report Level",

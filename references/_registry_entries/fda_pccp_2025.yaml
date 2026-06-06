@@ -1,0 +1,18 @@
+id: fda_pccp_2025
+jurisdiction: FDA
+title: "Marketing Submission Recommendations for a Predetermined Change Control Plan for Artificial Intelligence-Enabled Device Software Functions"
+short_label: "FDA PCCP"
+display_label: "FDA PCCP (2025)"
+status: final_guidance
+published_date: "2025-08-18"
+effective_date: null
+source_file: null
+source_url: "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/marketing-submission-recommendations-predetermined-change-control-plan-artificial"
+
+used_for:
+  - pccp_readiness
+  - change_control
+  - impact_assessment
+
+notes: >
+  Use for versioned change evidence and planned modification scaffolding.

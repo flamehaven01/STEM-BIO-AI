@@ -1,6 +1,6 @@
 # STEM BIO-AI Lessons & Failure Mode History
 # Memory Layer — protocol_evolution
-# Version: 1.8.3 | Updated: 2026-06-05
+# Version: 1.8.4 | Updated: 2026-06-05
 
 This document records protocol failure modes discovered through real-world use and their
 authoritative resolutions. Each entry represents a confirmed failure in a prior version.

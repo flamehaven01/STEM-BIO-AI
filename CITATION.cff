@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use STEM BIO-AI, please cite the versioned software release."
 title: "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories"
-version: "1.8.2"
+version: "1.8.4"
 type: software
 license: Apache-2.0
 doi: "10.5281/zenodo.20154479"
