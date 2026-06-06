@@ -123,6 +123,33 @@ def test_release_version_surface_is_consistent() -> None:
     assert f"stable-v{__version__}" in readme_text
 
 
+def test_packaging_data_files_all_exist() -> None:
+    """Every file listed in [tool.setuptools.data-files] must exist on disk.
+
+    `data-files` cannot use globs, so a MICA rotation that updates the memory
+    filenames without updating pyproject silently breaks `python -m build`
+    (the failure surfaces only in the publish CI). This guard turns that class
+    of drift into a fast unit-test failure that names the stale entry.
+    """
+    try:
+        import tomllib  # Python 3.11+
+    except ModuleNotFoundError:
+        tomllib = pytest.importorskip("tomli")
+
+    repo_root = Path(__file__).resolve().parents[1]
+    pyproject = tomllib.loads((repo_root / "pyproject.toml").read_text(encoding="utf-8"))
+    data_files = pyproject.get("tool", {}).get("setuptools", {}).get("data-files", {})
+    assert data_files, "expected [tool.setuptools.data-files] to be present"
+
+    missing = [
+        rel
+        for entries in data_files.values()
+        for rel in entries
+        if not (repo_root / rel).is_file()
+    ]
+    assert not missing, f"data-files reference non-existent files: {missing}"
+
+
 def test_exact_dependency_pins_pass(tmp_path: Path) -> None:
     _write(tmp_path / "README.md", "Bioinformatics repository for viral sequencing.\n")
     _write(tmp_path / "requirements.txt", "gradio==4.44.1\nreportlab==4.2.5\n")
