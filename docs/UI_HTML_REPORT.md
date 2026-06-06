@@ -129,9 +129,9 @@ The matching PDF surfaces now track the packet tiers:
 
 - `level 1` → `brief_1p.pdf` (legacy quick brief)
 - `level 2` → `detailed_5p.pdf` (standard review packet)
-- `level 3` → `detailed_7p.pdf` (full evidence packet)
+- `level 3` → `detailed_8p.pdf` (full evidence packet)
 
-The 5-page and 7-page packets both include AIRI coverage and bounded `why:` explanations, while the 7-page packet adds the deeper closeout and metadata pages.
+The 5-page and 8-page packets both include AIRI coverage and bounded `why:` explanations, while the 8-page packet adds the deeper closeout and metadata pages.
 
 ## Report Preview
 

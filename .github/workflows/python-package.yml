@@ -98,7 +98,7 @@ jobs:
           test -f /tmp/stem-output-l3/stem-target_experiment_results.json
           test -f /tmp/stem-output-l3/stem-target_report.md
           test -f /tmp/stem-output-l3/stem-target_report.html
-          test -f /tmp/stem-output-l3/stem-target_detailed_7p.pdf
+          test -f /tmp/stem-output-l3/stem-target_detailed_8p.pdf
 
       - name: Build source and wheel distributions
         run: |

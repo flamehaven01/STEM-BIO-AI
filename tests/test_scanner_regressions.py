@@ -2159,12 +2159,13 @@ def test_detailed_pdf_packets_render_expected_page_counts(tmp_path: Path) -> Non
     pdf_5 = next(path for path in created_5 if path.suffix == ".pdf")
     reader_5 = pypdf.PdfReader(str(pdf_5))
 
-    created_7 = write_outputs(result, out_dir / "l3", mode="detailed", pages=7, fmt="pdf", explain=False)
-    pdf_7 = next(path for path in created_7 if path.suffix == ".pdf")
-    reader_7 = pypdf.PdfReader(str(pdf_7))
+    created_8 = write_outputs(result, out_dir / "l3", mode="detailed", pages=8, fmt="pdf", explain=False)
+    pdf_8 = next(path for path in created_8 if path.suffix == ".pdf")
+    reader_8 = pypdf.PdfReader(str(pdf_8))
 
     assert len(reader_5.pages) == 5
-    assert len(reader_7.pages) == 7
+    # Detailed packet now gives regulatory traceability its own page (8 total).
+    assert len(reader_8.pages) == 8
 
 
 def test_cli_rejects_invalid_policy_name(tmp_path: Path) -> None:

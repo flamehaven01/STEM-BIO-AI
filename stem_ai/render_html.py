@@ -10,6 +10,8 @@ from typing import Any
 from .render_html_components import (
     _C,
     _STAGE_TIPS,
+    REQ_LABELS,
+    REQ_STATUS_BADGE,
     xt,
     tier_color,
     tip_icon,
@@ -96,6 +98,7 @@ def _nav(ver: str) -> str:
         ("#s3", "3. Code Integrity"),
         ("#s4", "4. AIRI Risk Triggers"),
         ("#s5", "5. Evidence"),
+        ("#s6", "6. Regulatory"),
     ]
     items = "".join(f'<a href="{h}" class="nav-link">{l}</a>' for h, l in links)
     return (
@@ -410,11 +413,13 @@ def _section2(result: dict[str, Any], s1: int, s2: int, s3: int, s4: int) -> str
             "Reproducibility evidence is reported separately and does not alter the formal tier.",
         ),
     ])
+    formula_tip = tip_icon(
+        "Final = 0.4 × S1 + 0.2 × S2R + 0.4 × S3 − C1_penalty  |  Stage 4 remains a separate replication lane."
+    )
     return (
         f'<section id="s2">'
-        f'<h2 class="s-title">Decision Path {tip_icon("This section explains where the score came from, with rubric-level movement and detector-linked rationale where available.")}</h2>'
+        f'<h2 class="s-title">Decision Path {formula_tip}</h2>'
         f'<div class="panel decision-panel">'
-        f'<div class="formula-banner">Final = 0.4 × S1 + 0.2 × S2R + 0.4 × S3 − C1_penalty &nbsp;|&nbsp; Stage 4 remains a separate replication lane.</div>'
         f'{_config_pattern_card()}'
         f'<div class="stage-deck">{cards}</div>'
         f'</div></section>'
@@ -632,6 +637,106 @@ def _section5(evidence_ledger: list) -> str:
     )
 
 
+def _section6(result: dict[str, Any]) -> str:
+    """Regulatory Traceability — actionable per-requirement breakdown."""
+    basis = result.get("regulatory_basis", {})
+    traceability = result.get("stage_traceability", {})
+    if not basis and not traceability:
+        return ""
+    note = basis.get("note", {})
+    body1 = xt(note.get("body_line_1", ""))
+    body2 = xt(note.get("body_line_2", ""))
+    hint = tip_icon(
+        "Traceability maps detector findings to specific regulatory article or guideline requirements. "
+        "Signal only = relevant evidence was found but is insufficient to confirm alignment. "
+        "Partially aligned = structural evidence exists; gaps remain. "
+        "Not assessed items are outside the current scan scope."
+    )
+
+    # Basis note box
+    review_warn = ""
+    if basis.get("review_required"):
+        reasons = xt(", ".join(basis.get("review_reasons", [])))
+        review_warn = (
+            f'<div class="reg-review-warn">&#9888; Registry review required: {reasons}</div>'
+        )
+
+    basis_box = (
+        f'<div class="reg-basis-box">'
+        f'<div class="reg-basis-title">{xt(note.get("title", "Regulatory basis note"))}</div>'
+        f'<div class="reg-basis-body">{body1}</div>'
+        f'<div class="reg-basis-note">{body2}</div>'
+        f'{review_warn}'
+        f'</div>'
+    )
+
+    # Per-stage traceability rows
+    stage_blocks = ""
+    _STAGE_LABELS = {
+        "stage_1": "Stage 1 — README Intent",
+        "stage_2r": "Stage 2R — Repo Consistency",
+        "stage_3": "Stage 3 — Code / Bio Responsibility",
+        "stage_4": "Stage 4 — Replication",
+        "bio_diagnostics": "Bio Diagnostics",
+    }
+    for stage_key in ("stage_1", "stage_2r", "stage_3", "stage_4", "bio_diagnostics"):
+        items = traceability.get(stage_key, [])
+        if not items:
+            continue
+        rows_html = ""
+        for item in items:
+            req_id = item["requirement_id"]
+            label = xt(REQ_LABELS.get(req_id, req_id))
+            badge = REQ_STATUS_BADGE.get(item["status"], xt(item["status"]))
+            src_chips = "".join(
+                f'<span class="reg-src-chip">{xt(s)}</span>'
+                for s in item.get("source_ids", [])
+            )
+            refs = item.get("finding_refs", [])
+            refs_html = ""
+            if refs:
+                refs_str = ", ".join(f'<code>{xt(r)}</code>' for r in refs)
+                refs_html = f'<div class="reg-meta">Triggered by: {refs_str}</div>'
+            gaps = item.get("not_assessed", [])
+            gaps_html = ""
+            if gaps:
+                gaps_str = "; ".join(xt(g) for g in gaps)
+                gaps_html = f'<div class="reg-meta reg-gap-note">Not assessed: {gaps_str}</div>'
+            note_html = f'<div class="reg-note-text">{xt(item["note"])}</div>'
+            rows_html += (
+                f'<div class="reg-item">'
+                f'<div class="reg-item-header">'
+                f'<span class="reg-req-label">{label}</span>'
+                f'{badge}{src_chips}'
+                f'</div>'
+                f'{refs_html}{gaps_html}{note_html}'
+                f'</div>'
+            )
+        stage_blocks += (
+            f'<div class="reg-stage">'
+            f'<div class="reg-stage-title">{_STAGE_LABELS.get(stage_key, stage_key)}</div>'
+            f'{rows_html}'
+            f'</div>'
+        )
+
+    summary = result.get("regulatory_traceability", {}).get("summary", "")
+    summary_html = ""
+    if summary:
+        summary_html = (
+            f'<div class="reg-summary">{xt(summary)}</div>'
+        )
+
+    return (
+        f'<section id="s6">'
+        f'<h2 class="s-title">Regulatory Traceability {hint}</h2>'
+        f'<div class="panel">'
+        f'{basis_box}'
+        f'{stage_blocks}'
+        f'{summary_html}'
+        f'</div></section>'
+    )
+
+
 def render_html(result: dict[str, Any]) -> str:
     score = result["score"]
     final = int(score["final_score"])
@@ -655,6 +760,7 @@ def render_html(result: dict[str, Any]) -> str:
     sec3 = _section3(result.get("code_integrity", {}), result.get("code_contract", {}))
     sec4 = _section4(result.get("airi_risk_coverage", {}))
     sec5 = _section5(result.get("evidence_ledger", []))
+    sec6 = _section6(result)
     ver = xt(result.get("stem_ai_version", ""))
     nav = _nav(ver)
 
@@ -675,6 +781,7 @@ def render_html(result: dict[str, Any]) -> str:
 {sec3}
 {sec4}
 {sec5}
+{sec6}
 <div class="footer">
   STEM BIO-AI Local CLI Scan &nbsp;|&nbsp; {ver}
   &nbsp;|&nbsp; Deterministic surface scan &mdash; no LLM, network, or runtime execution.

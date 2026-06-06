@@ -4,7 +4,7 @@
   "project": {
     "name": "STEM-BIO-AI",
     "full_name": "STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories",
-    "version": "1.8.3",
+    "version": "1.8.4",
     "status": "active",
     "purpose": "Deterministic local evidence-surface scanning for bio/medical AI repositories. Produces reproducible T0-T4 review-priority tiers from observable repository signals, including Stage 1 hype/responsibility scoring, Stage 2R contradiction/staleness/workflow-support checks, Stage 3 three-tier changelog/provenance/bias scoring, CA/T0 meta-documentation false-positive filtering, advisory contract hardening with provider-request validation and packet self-checks, detector-honesty fixes for C1/C2/C4 integrity surfaces, advisory secret-boundary hardening for provider-specific env vars and endpoint-policy validation, workflow-oriented CLI UX with dedicated scan/gate/advisory command lanes, named calibration-profile visibility surfaces, auditable derive/simulate preview lanes for researcher policy intent, and DOI-ready citation metadata.",
     "canonical_statement": "STEM BIO-AI is a local deterministic evidence-surface scanner for bio/medical AI repositories. It scans README/docs/package/code surfaces, dependency hygiene, CI/test signals, repo-local consistency contradictions, AST-observable code structure, replication evidence, and license/use-scope boundaries. It reports T0-T4 review-priority tiers, a separate Stage 4 replication lane, diagnostic reasoning-model signals, and provider-neutral advisory packet/response validation. It exports provider-request schemas, advisory contract schemas, packet self-checks, secret-policy metadata, env-contract metadata, mirror-only calibration-profile metadata, DOI-ready citation metadata, and auditable derive/simulate preview outputs without making provider API calls or mutating the authoritative score path. It uses dependency-manifest-only C2 detection, fixture-aware C1 exemptions, AST-backed executable C4 detection, profile-aware preview C1 penalty simulation, deterministic base-URL validation, named policy-selection surfaces, top-down rule-table translation for researcher intent, and bounded preview-only deltas so integrity, advisory, and calibration boundaries follow runnable evidence rather than metadata noise. It does not certify clinical safety, regulatory compliance, model efficacy, scientific validity, or author intent; AI advisory output must cite exact evidence-ledger finding IDs and may not override deterministic scores."
@@ -780,21 +780,21 @@
       },
       {
         "role": "memory_archive",
-        "path": "memory/stem-ai.mica.v1.8.3.json",
+        "path": "memory/stem-ai.mica.v1.8.4.json",
         "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "required": true,
         "produced_by_stage": "S0"
       },
       {
         "role": "session_playbook",
-        "path": "memory/stem-ai-playbook.v1.8.3.md",
+        "path": "memory/stem-ai-playbook.v1.8.4.md",
         "sha256": "1D6EF648DDFB19E6F1AE1063996B710D74CED295205A76BFF72C3AA97929A136",
         "required": true,
         "produced_by_stage": "S0"
       },
       {
         "role": "lessons_history",
-        "path": "memory/stem-ai-lessons.v1.8.3.md",
+        "path": "memory/stem-ai-lessons.v1.8.4.md",
         "sha256": "B44CDC72E92EF05E6D564A5974284C8B478AAF36DD689DE7CC0A51A6BB1E06FE",
         "required": true,
         "produced_by_stage": "S0"
@@ -951,12 +951,12 @@
   "operation_meta": {
     "archive_id": "MICA-STEM-BIO-AI-001",
     "mica_schema_version": "0.2.4",
-    "baseline_ref": "v1.8.3-2026-06-05",
+    "baseline_ref": "v1.8.4-2026-06-06",
     "objective": "Machine-checkable governance layer for STEM BIO-AI deterministic scanner evolution. Encodes 18 base invariants, evidence-ledger traceability, separate replication/reasoning/advisory surfaces, provider-request validation, packet self-checks, CLI enrichment with CI/CD tier-gate and AI transparency, and versioned lessons.",
     "operating_mode": "protocol_evolution",
     "current_state": "active",
-    "update_count": 16,
-    "last_updated": "2026-06-05",
+    "update_count": 17,
+    "last_updated": "2026-06-06",
     "session_count": 0,
     "domain_status": {
       "identity": "stable",
@@ -964,6 +964,6 @@
       "operations": "stable",
       "growth": "active"
     },
-    "invocation_notes": "Primary invocation via local CLI and README contract. MICA v1.8.3 is the active release memory layer and runs under the non-breaking MICA 0.2.4 runtime/validation contract. Added in 1.8.0: MICA invocation runtime surfaces (mica_runtime.py --format session-report, mica_invoke.py --mode {natural|guided|forced}, mica_invoke.bat), SECURITY.md as first-class repository surface. spec/ is local-only private material and is ignored by Git. Evidence-ledger IDs are citation anchors for any AI advisory layer, derive/simulate outputs remain preview-only calibration surfaces rather than score-authoritative runtime policy, and release artifacts now carry DOI-ready citation metadata. In constrained environments, narrow policy/calibration test runs may be dominated by Gradio demo import cost; treat that as an infrastructure boundary rather than immediate evidence of score-path instability."
+    "invocation_notes": "Primary invocation via local CLI and README contract. MICA v1.8.4 is the active release memory layer and runs under the non-breaking MICA 0.2.4 runtime/validation contract. Added in 1.8.0: MICA invocation runtime surfaces (mica_runtime.py --format session-report, mica_invoke.py --mode {natural|guided|forced}, mica_invoke.bat), SECURITY.md as first-class repository surface. spec/ is local-only private material and is ignored by Git. Evidence-ledger IDs are citation anchors for any AI advisory layer, derive/simulate outputs remain preview-only calibration surfaces rather than score-authoritative runtime policy, and release artifacts now carry DOI-ready citation metadata. In constrained environments, narrow policy/calibration test runs may be dominated by Gradio demo import cost; treat that as an infrastructure boundary rather than immediate evidence of score-path instability."
   }
 }

@@ -53,7 +53,7 @@ These options work across `scan`, `gate`, and `advisory` workflows unless otherw
 
 | Flag | Values | Default | Description |
 |------|--------|---------|-------------|
-| `--level` | `1`, `2`, `3` | `3` | Report depth: 1=brief 1p (legacy), 2=standard review 5p, 3=full packet 7p |
+| `--level` | `1`, `2`, `3` | `3` | Report depth: 1=brief 1p (legacy), 2=standard review 5p, 3=full packet 8p |
 | `--format` | `json`, `md`, `pdf`, `all` | command-specific | Artifact format to write |
 | `--out`, `--output` | `DIR` | `stem_output` | Output directory |
 | `--policy` | `NAME` | `default` | Named calibration profile to surface in the scan result |
@@ -244,7 +244,7 @@ Writes artifacts only. Equivalent to `--quiet`.
 | `<repo>_report.md` | Human-readable Markdown report |
 | `<repo>_brief_1p.pdf` | Level 1 brief report (legacy quick brief) |
 | `<repo>_detailed_5p.pdf` | Level 2 standard review packet |
-| `<repo>_detailed_7p.pdf` | Level 3 full packet |
+| `<repo>_detailed_8p.pdf` | Level 3 full packet |
 | `<repo>_explain.txt` | Proof trace from `--explain` |
 
 ---

@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml"><img src="https://github.com/flamehaven01/STEM-BIO-AI/actions/workflows/python-package.yml/badge.svg" alt="CI"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.8.3-informational.svg" alt="v1.8.3"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/stable-v1.8.4-informational.svg" alt="v1.8.4"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
   <a href="https://pypi.org/project/stem-ai/"><img src="https://img.shields.io/pypi/v/stem-ai.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0"></a>
@@ -57,7 +57,7 @@ pip install -e .[pdf]
 # fastest path: scan a local repository
 stem /path/to/bio-ai-repo
 
-# 7-page full evidence packet with proof trace
+# 8-page full evidence packet with proof trace
 stem scan /path/to/bio-ai-repo --level 3 --format all --explain
 ```
 
@@ -84,7 +84,7 @@ stem audit /path/to/bio-ai-repo --tier-gate T3 --quiet
 
 Clone the target repository first; the CLI operates on local paths only.
 
-Calibration profiles are implemented in `mirror_only` mode in `1.8.3`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
+Calibration profiles are implemented in `mirror_only` mode in `1.8.4`. `--policy` changes what profile is surfaced in artifacts, while `policy derive` and `policy simulate` provide governed preview lanes without mutating the authoritative deterministic score path. `policy simulate --profile-file <path>` allows local schema-valid profile experiments without registering a new named policy. In the current rule scope, `strict_clinical_adjacency` is the only release-grade named recommendation; stronger reproducibility postures still fall back to `preview_only` simulation deltas rather than a named profile.
 
 Researchers and domain specialists are expected to influence calibration through `derive`, `simulate`, and documented preview/profile proposals. The intent interview uses a governed `1–5` posture scale, while official score-affecting policy changes still require profile promotion rather than direct ad hoc tuning.
 
@@ -200,7 +200,7 @@ flowchart LR
     I --> L[Evidence ledger]
     I --> M[Explain trace]
     I --> N[Markdown report]
-    I --> O[PDF packets 1p / 5p / 7p]
+    I --> O[PDF packets 1p / 5p / 8p]
     I --> P[Interactive HTML dashboard]
 ```
 
@@ -211,7 +211,7 @@ Core modules: `stem_ai/scanner.py`, `stem_ai/render.py`, `stem_ai/cli.py`, `stem
 ## Output Artifacts
 
 Each run writes to `--out DIR` (default: `stem_output/`).
-The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`, which emits the full 7-page evidence packet unless you select a lower level explicitly.
+The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`, which emits the full 8-page evidence packet unless you select a lower level explicitly.
 `audits/` is retained only for historical benchmark and reference artifacts; routine CLI output should land in `stem_output/<repo_slug>/`.
 
 | Level | Pages | Audience | Artifacts |
@@ -226,7 +226,7 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
 <repo>_detailed_5p.pdf           # Level 2 standard review packet
-<repo>_detailed_7p.pdf           # Level 3 full review packet
+<repo>_detailed_8p.pdf           # Level 3 full review packet
 <repo>_explain.txt               # --explain: file/line/snippet proof trace
 ```
 
@@ -248,7 +248,7 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 
 Interactive features: sticky scroll-spy nav · repo hyperlink in the hero header · `?` tooltip icons on every metric · click-to-expand integrity cards · covered/gaps + domain filtering for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
 
-Current `1.8.3` HTML semantics:
+Current `1.8.4` HTML semantics:
 
 - `Decision Path` explains score construction and policy posture with `Configured, Not Rewritten`
 - `Code Integrity` surfaces the split between `C4` fail-open exceptions, `C5` compliance/boundary integrity, and `C6` mock-auth/no-auth trust boundaries
@@ -262,29 +262,29 @@ This is a review aid, not a claim that AIRI independently verified the repositor
 ## Report Preview
 
 <p align="center">
-  <img src="docs/assets/report-preview/7p-1.png" alt="STEM BIO-AI full 7-page packet — page 1" width="760">
+  <img src="docs/assets/report-preview/8p-1.png" alt="STEM BIO-AI full 8-page packet — page 1" width="760">
 </p>
 
-**Sample PDF:** [Download the 7-page full packet preview](docs/assets/report-preview/yorkeccak_bio_detailed_7p.pdf)
+**Sample PDF:** [Download the 8-page full packet preview](docs/assets/report-preview/yorkeccak_bio_detailed_8p.pdf)
 
 <details>
 <summary>View all 7 full-packet preview pages</summary>
 
 | Page 1 | Page 2 |
 |--------|--------|
-| <img src="docs/assets/report-preview/7p-1.png" alt="Page 1"> | <img src="docs/assets/report-preview/7p-2.png" alt="Page 2"> |
+| <img src="docs/assets/report-preview/8p-1.png" alt="Page 1"> | <img src="docs/assets/report-preview/8p-2.png" alt="Page 2"> |
 
 | Page 3 | Page 4 |
 |--------|--------|
-| <img src="docs/assets/report-preview/7p-3.png" alt="Page 3"> | <img src="docs/assets/report-preview/7p-4.png" alt="Page 4"> |
+| <img src="docs/assets/report-preview/8p-3.png" alt="Page 3"> | <img src="docs/assets/report-preview/8p-4.png" alt="Page 4"> |
 
 | Page 5 | Page 6 |
 |--------|--------|
-| <img src="docs/assets/report-preview/7p-5.png" alt="Page 5"> | <img src="docs/assets/report-preview/7p-6.png" alt="Page 6"> |
+| <img src="docs/assets/report-preview/8p-5.png" alt="Page 5"> | <img src="docs/assets/report-preview/8p-6.png" alt="Page 6"> |
 
 | Page 7 |
 |--------|
-| <img src="docs/assets/report-preview/7p-7.png" alt="Page 7"> |
+| <img src="docs/assets/report-preview/8p-7.png" alt="Page 7"> |
 
 </details>
 
@@ -382,7 +382,7 @@ How AIRI is used here:
 - AIRI does **not** prove harm, causality, clinical safety, or regulatory status
 - AIRI helps place local findings into a wider risk vocabulary for review
 
-In the current `1.8.3` line, AIRI is used through three local governed layers:
+In the current `1.8.4` line, AIRI is used through three local governed layers:
 
 1. full normalized local registry
 2. curated runtime bundle used by deterministic scans
@@ -430,9 +430,9 @@ the active layer is selected by `memory/mica.yaml`.
 
 The working tree intentionally keeps only the current active MICA trio:
 
-- `memory/stem-ai.mica.v1.8.3.json`
-- `memory/stem-ai-playbook.v1.8.3.md`
-- `memory/stem-ai-lessons.v1.8.3.md`
+- `memory/stem-ai.mica.v1.8.4.json`
+- `memory/stem-ai-playbook.v1.8.4.md`
+- `memory/stem-ai-lessons.v1.8.4.md`
 
 Older release-memory snapshots are preserved in Git-tagged history rather than as parallel live files in the visible repo surface.
 
@@ -511,14 +511,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). High-value areas: rubric discrimination 
 
 Preferred citation metadata lives in [`CITATION.cff`](CITATION.cff).
 
-Current concept DOI-backed archive for the `1.8.3` line:
+Current concept DOI-backed archive for the `1.8.4` line:
 - <https://doi.org/10.5281/zenodo.20154479>
 
 ```bibtex
 @software{stem-bio-ai,
   author  = {Yun, Kwansub},
   title   = {STEM BIO-AI: Deterministic Evidence-Surface Scanner for Bio/Medical AI Repositories},
-  version = {1.8.3},
+  version = {1.8.4},
   year    = {2026},
   doi     = {10.5281/zenodo.20154479},
   url     = {https://doi.org/10.5281/zenodo.20154479}

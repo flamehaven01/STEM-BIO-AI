@@ -14,6 +14,24 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ---
 
+## [1.8.4] - 2026-06-06
+
+### Changed
+- **Regulatory traceability is now actionable in every artifact surface, not just a basis-note restatement.** Each mapped requirement now renders with a human-readable label (e.g. `EU AI Act Art. 13 — Transparency`, `ICH M15 §2.1.2 — Context of Use`), an explicit status (`Signal only` / `Partially aligned` / `Aligned`), the `finding_refs` that triggered it, and the `not_assessed` gaps. Applies to Markdown (`_markdown_regulatory_section`), explain text (`_explain_regulatory_section`), HTML (new `#s6` Regulatory section), and PDF.
+- **Detailed PDF packet (Level 3) is now 8 pages instead of 7.** Regulatory traceability gets its own dedicated page (page 7) and Report Metadata moves to page 8. Previously both were crammed onto one page, which triggered `KeepInFrame(mode="shrink")` and shrank that page's fonts out of step with the rest of the report. The page count is no longer treated as a fixed design contract — Level 3 = "full detail" and the page count follows the content. `_LEVEL_MAP[3]` is now `("detailed", 8)`.
+- **Page 1 executive summary now carries an actionable regulatory bullet box** in the right column, directly below AIRI Risk Triggers, mirroring the AIRI box style: `N mapped` across frameworks, the `Partially aligned` requirements by name, and the `Signal only` count. Replaced the previous full-width box that only restated the boilerplate basis note ("Aligned to current official source classes...") and generic traceability summary — that box conveyed no per-repository signal.
+- HTML Decision Path: moved the `Final = 0.4 × S1 + ...` formula from a standalone banner into the section-title tooltip (less visual noise; the formula is reference material, not a headline).
+
+### Fixed
+- Double HTML-escaping of regulatory requirement labels containing `&` (e.g. `ICH M15 §4.3 — Code & Data Submission` previously rendered as `Code &amp; Data Submission` in the PDF). `REQ_LABELS` is now stored as plain text and each renderer escapes via its own `xt()` / `_xt()` helper. `REQ_LABELS` and `REQ_STATUS_BADGE` are defined once in `render_html_components.py` and shared by the Markdown, HTML, and PDF renderers (single source).
+- **Packaging manifest drift:** `MANIFEST.in` still referenced the long-superseded `v1.7.4` memory layer files and `pyproject.toml` package-data referenced `v1.8.3`, so source distributions could ship stale or missing MICA memory files. Both now point to the active `v1.8.4` archive/playbook/lessons trio. These manifests must be rotated together with the MICA pointer on every memory bump.
+
+### Tests
+- Updated `test_detailed_pdf_packets_render_expected_page_counts` to assert the Level 3 packet renders 8 physical pages (was 7); the 5-page standard packet is unchanged.
+- Rotated MICA active pointer to v1.8.4 (`memory/mica.yaml` + archive, playbook, lessons layer files); removed superseded v1.8.3 files (Git-tagged history retains them).
+
+---
+
 ## [1.8.3] - 2026-06-05
 
 ### Changed

@@ -47,6 +47,31 @@ _STAGE_TIPS = [
     "Stage 4: Evaluates reproducibility artifacts: seed fixation, dataset pinning, environment lock files.",
 ]
 
+# Human-readable labels for regulatory requirement IDs (shared by MD and HTML renderers).
+# Stored as PLAIN text — each renderer escapes via its own xt()/_xt() helper.
+REQ_LABELS: dict[str, str] = {
+    "EU_AI_ACT_ARTICLE_10":                 "EU AI Act Art. 10 — Data Governance",
+    "EU_AI_ACT_ARTICLE_12":                 "EU AI Act Art. 12 — Record Keeping",
+    "EU_AI_ACT_ARTICLE_13":                 "EU AI Act Art. 13 — Transparency",
+    "EU_AI_ACT_ARTICLE_15":                 "EU AI Act Art. 15 — Robustness",
+    "ICH_M15_SECTION_2_1_2_CONTEXT_OF_USE": "ICH M15 §2.1.2 — Context of Use",
+    "ICH_M15_SECTION_3_VERIFICATION":       "ICH M15 §3 — Verification",
+    "ICH_M15_SECTION_3_VALIDATION":         "ICH M15 §3 — Validation & Applicability",
+    "ICH_M15_SECTION_4_1_MAP":              "ICH M15 §4.1 — Model Analysis Plan",
+    "ICH_M15_SECTION_4_3_CODE_SUBMISSION":  "ICH M15 §4.3 — Code & Data Submission",
+    "IMDRF_CLINICAL_CONTEXT_BOUNDARY_SIGNAL": "IMDRF SaMD — Clinical Context Boundary",
+    "IMDRF_ANALYTICAL_VALIDATION_SIGNAL":   "IMDRF SaMD — Analytical Validation",
+    "COMPLIANCE_CLAIM_GROUNDING_SIGNAL":    "Compliance Claim Grounding",
+}
+
+# HTML badge for each traceability status.
+REQ_STATUS_BADGE: dict[str, str] = {
+    "signal_only":       f'<span class="reg-badge reg-signal">&#9888; Signal only</span>',
+    "partially_aligned": f'<span class="reg-badge reg-partial">&#126; Partially aligned</span>',
+    "aligned":           f'<span class="reg-badge reg-aligned">&#10003; Aligned</span>',
+    "not_detected":      f'<span class="reg-badge reg-gap">&#10007; Not detected</span>',
+}
+
 
 def tier_color(tier: str) -> str:
     for k, v in _TIER_COLOR.items():
@@ -179,6 +204,18 @@ def domain_card(d_num: int, covered_count: int, gap_count: int = 0) -> str:
     )
 
 
+def _compact_labels(items: list[str], *, limit: int = 5) -> str:
+    values = [str(item).strip() for item in items if str(item).strip()]
+    if not values:
+        return ""
+    shown = values[:limit]
+    extra = max(0, len(values) - len(shown))
+    text = ",".join(shown)
+    if extra:
+        text += f" (+{extra} more)"
+    return text
+
+
 def airi_row(r: dict[str, Any], status: str = "covered") -> str:
     color = _C["green"] if status == "covered" else _C["amber"]
     if status == "covered":
@@ -187,7 +224,7 @@ def airi_row(r: dict[str, Any], status: str = "covered") -> str:
         secondary = [str(det).strip() for det in r.get("secondary_detector_ids", []) if str(det).strip()]
         if details:
             preview_bits = []
-            for detail in details[:2]:
+            for detail in details[:5]:
                 detector_id = str(detail.get("detector_id", "")).strip()
                 reason = str(detail.get("trigger_reason") or detail.get("mapping_justification") or "").strip()
                 if detector_id and reason:
@@ -197,20 +234,27 @@ def airi_row(r: dict[str, Any], status: str = "covered") -> str:
             if preview_bits:
                 prefix = f"primary={primary}" if primary else ""
                 if secondary:
-                    prefix += f"; also={','.join(secondary[:2])}" if prefix else f"also={','.join(secondary[:2])}"
-                det = f"{prefix} | {' | '.join(preview_bits)}" if prefix else " | ".join(preview_bits)
+                    prefix += f"; also={_compact_labels(secondary)}" if prefix else f"also={_compact_labels(secondary)}"
+                detail_text = " | ".join(preview_bits)
+                extra = max(0, len(details) - len(preview_bits))
+                if extra:
+                    detail_text += f" | (+{extra} more mapping details)"
+                det = f"{prefix} | {detail_text}" if prefix else detail_text
             else:
-                det = ", ".join(r.get("covered_by", []))
+                det = _compact_labels(r.get("covered_by", []))
         else:
             if primary and secondary:
-                det = f"primary={primary}; also={','.join(secondary[:2])}"
+                det = f"primary={primary}; also={_compact_labels(secondary)}"
             elif primary:
                 det = f"primary={primary}"
             else:
-                det = ", ".join(r.get("covered_by", []))
+                det = _compact_labels(r.get("covered_by", []))
     else:
         det = r.get("note", "")[:70]
     sub   = xt(r.get("subdomain_label", r.get("subdomain_id", "")))[:32]
+    det_text = xt(str(det))
+    if "(+" not in str(det):
+        det_text = det_text[:65]
     cls   = "airi-covered" if status == "covered" else "airi-gaps"
     dom   = str(r.get("subdomain_id", "0")).split(".")[0]
     return (
@@ -222,7 +266,7 @@ def airi_row(r: dict[str, Any], status: str = "covered") -> str:
         f'{xt(r.get("title",""))[:55]}</td>'
         f'<td style="padding:8px 6px;font-size:11px;color:{_C["purple"]}">{sub}</td>'
         f'<td style="padding:8px 6px;font-size:11px;color:{color}">'
-        f'{xt(str(det))[:65]}</td></tr>'
+        f'{det_text}</td></tr>'
     )
 
 
