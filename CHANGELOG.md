@@ -16,6 +16,8 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ## [1.8.4] - 2026-06-06
 
+> Zenodo version DOI for this release: [10.5281/zenodo.20572541](https://doi.org/10.5281/zenodo.20572541) (concept DOI `10.5281/zenodo.20154479` resolves to latest). Recorded post-release in `CITATION.cff`; no new tag — a re-tag would mint a different DOI.
+
 ### Changed
 - **Regulatory traceability is now actionable in every artifact surface, not just a basis-note restatement.** Each mapped requirement now renders with a human-readable label (e.g. `EU AI Act Art. 13 — Transparency`, `ICH M15 §2.1.2 — Context of Use`), an explicit status (`Signal only` / `Partially aligned` / `Aligned`), the `finding_refs` that triggered it, and the `not_assessed` gaps. Applies to Markdown (`_markdown_regulatory_section`), explain text (`_explain_regulatory_section`), HTML (new `#s6` Regulatory section), and PDF.
 - **Detailed PDF packet (Level 3) is now 8 pages instead of 7.** Regulatory traceability gets its own dedicated page (page 7) and Report Metadata moves to page 8. Previously both were crammed onto one page, which triggered `KeepInFrame(mode="shrink")` and shrank that page's fonts out of step with the rest of the report. The page count is no longer treated as a fixed design contract — Level 3 = "full detail" and the page count follows the content. `_LEVEL_MAP[3]` is now `("detailed", 8)`.
