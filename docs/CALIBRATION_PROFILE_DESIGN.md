@@ -1,7 +1,7 @@
 # STEM BIO-AI Calibration Profile Architecture
 
-Version: 1.8.3
-Status: implemented mirror-only calibration contract with derive/simulate preview surfaces; 1.8.3 preview hardening complete; authoritative read-through remains future work
+Version: 1.8.4
+Status: implemented mirror-only calibration contract with derive/simulate preview surfaces; 1.8.4 preview hardening complete; authoritative read-through remains future work
 
 ---
 
@@ -9,7 +9,7 @@ Status: implemented mirror-only calibration contract with derive/simulate previe
 
 STEM BIO-AI already separates formal scoring, deterministic diagnostics, regulatory traceability, and AI advisory into distinct lanes.
 
-As of `1.8.3`, the repository ships a real calibration architecture:
+As of `1.8.4`, the repository ships a real calibration architecture:
 
 - packaged profiles in `policy/`
 - schema and runtime validation
@@ -25,7 +25,7 @@ What is still not fully separated is the **authoritative score read-through surf
 - evidence-only versus score-authoritative detector status
 - reasoning-model status labels
 
-In `1.8.3`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata, CLI-visible profile selection, and derive/simulate preview surfaces are already live. That is acceptable for the current release line, but it still creates a long-term maintenance risk:
+In `1.8.4`, most score-affecting values are still implemented as runtime constants plus prose in `SCORING_RATIONALE.md`, even though mirror-only profile metadata, CLI-visible profile selection, and derive/simulate preview surfaces are already live. That is acceptable for the current release line, but it still creates a long-term maintenance risk:
 
 > if calibration values are easy to change but hard to govern, the architecture will drift even if the lane boundaries remain conceptually correct.
 

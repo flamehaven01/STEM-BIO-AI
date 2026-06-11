@@ -91,14 +91,30 @@ def _calibration_effect_note(calibration: dict[str, Any]) -> str | None:
     )
 
 
+def _score_boundary_html() -> str:
+    return (
+        f'<article class="memo-card" style="grid-column:1 / -1">'
+        f'<div class="eyebrow">&#9888; About This Score</div>'
+        f'<h3>How to read the number</h3>'
+        f'<p class="memo-text"><strong>Score reflects calculation integrity, not calibrated validity. Triage signal only.</strong></p>'
+        f'<ul class="memo-list">'
+        f'<li><strong>What is verified:</strong> calculation integrity. The same input produces the same score.</li>'
+        f'<li><strong>What is not verified:</strong> calibrated measurement validity. Weights and detector scope remain bounded.</li>'
+        f'<li><strong>Use this score as a triage signal</strong>, not as certification, safety proof, or deployment approval.</li>'
+        f'</ul>'
+        f'</article>'
+    )
+
+
 def _nav(ver: str) -> str:
     links = [
         ("#s1", "1. Summary"),
         ("#s2", "2. Decision Path"),
         ("#s3", "3. Code Integrity"),
-        ("#s4", "4. AIRI Risk Triggers"),
-        ("#s5", "5. Evidence"),
-        ("#s6", "6. Regulatory"),
+        ("#s6", "4. Regulatory"),
+        ("#s4", "5. AIRI Risk Triggers"),
+        ("#s5", "6. Evidence"),
+        ("#s7", "7. Developer"),
     ]
     items = "".join(f'<a href="{h}" class="nav-link">{l}</a>' for h, l in links)
     return (
@@ -190,16 +206,20 @@ def _rubric_focus_list(rows: list[dict[str, Any]]) -> str:
     for row in rows:
         sc = row["score"]
         sign = "+" if sc > 0 else ""
+        detector_id = str(row.get("detector_id", "")).strip()
+        key = str(row.get("key", "")).strip()
+        detail = str(row["decision_basis"] or row["evidence"]).strip()
+        if detector_id and detail.startswith(detector_id):
+            detail = detail[len(detector_id):].lstrip(" :|-")
         detector = (
-            f'<span class="focus-detector">{row["detector_id"]}</span>'
-            if row["detector_id"] else ""
+            f'<span class="focus-detector">{detector_id}</span> '
+            if detector_id and detector_id != key else ""
         )
-        detail = row["decision_basis"] or row["evidence"]
         if row.get("tier_impact"):
             detail = f'{detail} | tier impact: {row["tier_impact"]}'
         items += (
             f'<li class="focus-line">'
-            f'<div class="focus-top"><span class="focus-key">{xt(row["key"])}</span>'
+            f'<div class="focus-top"><span class="focus-key">{xt(key)}</span>'
             f'<span class="focus-score">{sign}{sc}</span></div>'
             f'<div class="focus-detail">{detector}{detail}</div>'
             f'</li>'
@@ -232,6 +252,7 @@ def _section1(result: dict[str, Any], final: int, tc: str,
     policy_mode = xt(str(calibration.get("profile_read_mode", "unknown")))
     calibration_note = _calibration_effect_note(calibration)
     ca_severity = cls.get("ca_severity", "none")
+    tier_lock = "T0-FLOOR" if t0 else (f"CA-CAP @{score_cap}" if score_cap is not None else "clear")
 
     stats = "".join(
         f'<div class="metric-card">'
@@ -248,27 +269,39 @@ def _section1(result: dict[str, Any], final: int, tc: str,
     )
     risks = result.get("notable_risks", [])[:5]
     positives = result.get("notable_positive_evidence", [])[:4]
-    stage2_focus = _select_focus_rows(result.get("stage_2r_rubric", {}), negatives_first=True, limit=3)
-    stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=3)
     if t0:
         alert = (
             f'<div class="alert-t0">'
-            f'<strong>Tier Lock [T0-FLOOR]:</strong> Direct clinical framing without an explicit boundary declaration. '
-            f'Score ceiling at 39. Resolving this condition is required before any tier advancement.'
+            f'<strong>Tier Lock [T0-FLOOR]:</strong> This report does not allow clinical trust. '
+            f'The repository presents direct clinical framing without a clear safety boundary. '
+            f'Current ceiling: 39. A clear non-clinical boundary is required before any tier advancement.'
             f'</div>'
         )
     elif score_cap is not None:
         alert = (
             f'<div class="alert-t0" style="background:#fff3cd;border-color:#ffc107;color:#856404;">'
-            f'<strong>Tier Lock [CA-CAP]:</strong> Clinical-adjacent surface detected without explicit non-clinical boundary. '
-            f'Score ceiling at {score_cap} (T2 maximum). '
-            f'Adding a non-diagnostic disclaimer resolves this lock.'
+            f'<strong>Tier Lock [CA-CAP]:</strong> This repository can be explored, but the report will stop at T2 '
+            f'until the project clearly says it is not for clinical or diagnostic use. '
+            f'Current ceiling: {score_cap}. Add an explicit non-diagnostic boundary to remove this cap.'
             f'</div>'
         )
     else:
         alert = ""
     risk_list = "".join(f'<li>{xt(str(r))}</li>' for r in risks) or "<li>No notable risks surfaced.</li>"
     positive_list = "".join(f'<li>{xt(str(p))}</li>' for p in positives) or "<li>No notable positive evidence surfaced.</li>"
+    policy_card = (
+        f'<article class="memo-card" style="grid-column:1 / -1">'
+        f'<div class="eyebrow">Policy Boundary</div>'
+        f'<h3>How to read this artifact</h3>'
+        f'<p class="memo-text">{xt(calibration_note) if calibration_note else "Authoritative scoring and surfaced policy metadata are aligned in this release line."}</p>'
+        f'<ul class="memo-list">'
+        f'<li><strong>Classification applied:</strong> ca_severity={xt(ca_severity)}</li>'
+        f'<li><strong>Score cap:</strong> {xt(str(score_cap)) if score_cap is not None else "none"}</li>'
+        f'<li><strong>Tier lock:</strong> {xt(tier_lock)}</li>'
+        f'<li><strong>Practical meaning:</strong> the report can cap the tier when the repository sounds clinically adjacent but does not state a clear non-clinical boundary.</li>'
+        f'</ul>'
+        f'</article>'
+    )
     return (
         f'<section id="s1">'
         f'<h2 class="s-title">Executive Summary</h2>'
@@ -304,27 +337,8 @@ def _section1(result: dict[str, Any], final: int, tc: str,
         f'{xt(str(freshness.get("change_triggered_reaudit_recommended_now", False)))}</p>'
         f'</article>'
         f'</div>'
-        f'<div class="memo-grid" style="margin-top:18px">'
-        f'<article class="memo-card">'
-        f'<div class="eyebrow">Stage 2R Focus</div>'
-        f'<h3>Repo-local contradictions</h3>'
-        f'<ul class="focus-list">{_rubric_focus_list(stage2_focus)}</ul>'
-        f'</article>'
-        f'<article class="memo-card">'
-        f'<div class="eyebrow">Stage 3 Focus</div>'
-        f'<h3>Accountability surfaces</h3>'
-        f'<ul class="focus-list">{_rubric_focus_list(stage3_focus)}</ul>'
-        f'</article>'
-        f'<article class="memo-card">'
-        f'<div class="eyebrow">Policy Boundary</div>'
-        f'<h3>How to read this artifact</h3>'
-        f'<p class="memo-text">{xt(calibration_note) if calibration_note else "Authoritative scoring and surfaced policy metadata are aligned in this release line."}</p>'
-        f'<p class="memo-note"><strong>Classification applied:</strong> '
-        f'ca_severity={xt(ca_severity)} | '
-        f'score_cap={xt(str(score_cap)) if score_cap is not None else "none"} | '
-        f't0_floor={"active" if t0 else "clear"}</p>'
-        f'</article>'
-        f'</div>'
+        f'<div style="margin-top:18px">{_score_boundary_html()}</div>'
+        f'<div style="margin-top:18px">{policy_card}</div>'
         f'</section>'
     )
 
@@ -378,7 +392,14 @@ def _section2(result: dict[str, Any], s1: int, s2: int, s3: int, s4: int) -> str
     stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=4)
     stage4_focus = _select_focus_rows(result.get("stage_4_rubric", {}), negatives_first=False, limit=4)
     _s3r = result.get("stage_3_rubric", {}).get("stage_3_raw_total", {})
-    _s3_formula = f" (raw: {_s3r['score']}/{_s3r['max']})" if _s3r.get("score") is not None and _s3r.get("max") else ""
+    _s3_normalized = result.get("score", {}).get("stage_3_code_bio")
+    if _s3r.get("score") is not None and _s3r.get("max"):
+        _s3_formula = f" (raw: {_s3r['score']}/{_s3r['max']}"
+        if isinstance(_s3_normalized, (int, float)):
+            _s3_formula += f" -> normalized: {int(round(_s3_normalized))}"
+        _s3_formula += ")"
+    else:
+        _s3_formula = ""
     cards = "".join([
         _stage_card(
             "Stage 1 — README Intent",
@@ -559,7 +580,7 @@ def _section4(airi: dict) -> str:
     )
     return (
         f'<section id="s4">'
-        f'<h2 class="s-title">MIT AI Risk Repository Coverage {hint}<span class="airi-tag">{src} | airisk.mit.edu</span></h2>'
+        f'<h2 class="s-title">MIT AI Risk Repository Risk Triggers {hint}<span class="airi-tag">{src} | airisk.mit.edu</span></h2>'
         f'<div class="airi-stack">'
         f'<div class="panel">'
         f'<div class="eyebrow">Feature Explainer</div>'
@@ -725,6 +746,14 @@ def _section6(result: dict[str, Any]) -> str:
         summary_html = (
             f'<div class="reg-summary">{xt(summary)}</div>'
         )
+    faq = (
+        f'<div class="faq-block" style="margin-top:18px">'
+        f'<details class="faq-item"><summary>What does “signal only” mean here?</summary>'
+        f'<p>It means repository evidence is relevant to a governance framework, but this scan is not claiming alignment, compliance, or clearance.</p></details>'
+        f'<details class="faq-item"><summary>What does this section actually help establish?</summary>'
+        f'<p>It shows where repository evidence connects to transparency, record-keeping, model-analysis-plan, or code-submission expectations before any formal audit.</p></details>'
+        f'</div>'
+    )
 
     return (
         f'<section id="s6">'
@@ -733,6 +762,68 @@ def _section6(result: dict[str, Any]) -> str:
         f'{basis_box}'
         f'{stage_blocks}'
         f'{summary_html}'
+        f'{faq}'
+        f'</div></section>'
+    )
+
+
+def _section7_developer(result: dict[str, Any]) -> str:
+    stage2_focus = _select_focus_rows(result.get("stage_2r_rubric", {}), negatives_first=True, limit=3)
+    stage3_focus = _select_focus_rows(result.get("stage_3_rubric", {}), negatives_first=False, limit=3)
+    score = result.get("score", {})
+    stage2_score = int(score.get("stage_2_repo_local_consistency", 0) or 0)
+    stage3_score = int(score.get("stage_3_code_bio", 0) or 0)
+    risks = result.get("notable_risks", [])[:4]
+    if not risks:
+        risk_html = "<li>No immediate remediation actions surfaced.</li>"
+    else:
+        detail_map = {
+            "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.": "Add a clear research-use / non-diagnostic boundary in README and self-host surfaces first.",
+            "Self-asserted compliance or privacy-governance claim requires independent verification.": "Either remove the claim or add supporting governance documentation and operational controls.",
+            "Legal, privacy, or compliance claim appears without supporting governance or security-grounding evidence in reviewed repository sources.": "Separate marketing language from reviewed evidence and add concrete governance artifacts.",
+            "Core workflow appears materially dependent on named external service providers; local or self-host claims may overstate operational independence.": "Document the external-service dependency explicitly and narrow self-host or privacy claims.",
+        }
+        risk_html = "".join(
+            f'<li><strong>{xt(risk)}</strong><br/><span class="memo-note">{xt(detail_map.get(str(risk), "Review the matching evidence rows and close the contradiction before broadening deployment claims."))}</span></li>'
+            for risk in risks
+        )
+    impact_html = (
+        '<li>Boundary and workflow contradictions usually matter more than adding more replication artifacts.</li>'
+        '<li>Removing a tier lock changes the meaning of the report first, and can unlock higher tiers later.</li>'
+        '<li>Use Code Integrity for detector lanes, and Evidence Detail for file-level proof before making code changes.</li>'
+    )
+    next_html = (
+        '<li><strong>Decision Path:</strong> use it to see which stage is holding the formal tier down.</li>'
+        '<li><strong>Code Integrity details:</strong> use it for detector-specific trust boundary failures.</li>'
+        '<li><strong>Evidence detail:</strong> use it when you need file-level proof before editing the repository.</li>'
+    )
+    return (
+        f'<section id="s7">'
+        f'<h2 class="s-title">Developer Follow-up</h2>'
+        f'<div class="memo-grid">'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Decision Path</div>'
+        f'<h3>Which stages are holding the report down</h3>'
+        f'<p class="memo-note"><strong>Stage 2R:</strong> {stage2_score}/100 — repo-local contradictions and missing trust boundaries.</p>'
+        f'<ul class="focus-list">{_rubric_focus_list(stage2_focus)}</ul>'
+        f'<p class="memo-note" style="margin-top:10px"><strong>Stage 3:</strong> {stage3_score}/100 — accountability and bio-governance evidence.</p>'
+        f'<ul class="focus-list">{_rubric_focus_list(stage3_focus)}</ul>'
+        f'</article>'
+        f'<article class="memo-card memo-primary">'
+        f'<div class="eyebrow">Top remediation actions</div>'
+        f'<h3>What to fix first</h3>'
+        f'<ul class="memo-list">{risk_html}</ul>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Expected impact</div>'
+        f'<h3>What changes the report meaning</h3>'
+        f'<ul class="memo-list">{impact_html}</ul>'
+        f'</article>'
+        f'<article class="memo-card">'
+        f'<div class="eyebrow">Where to inspect next</div>'
+        f'<h3>Use the developer-facing sections</h3>'
+        f'<ul class="memo-list">{next_html}</ul>'
+        f'</article>'
         f'</div></section>'
     )
 
@@ -761,6 +852,7 @@ def render_html(result: dict[str, Any]) -> str:
     sec4 = _section4(result.get("airi_risk_coverage", {}))
     sec5 = _section5(result.get("evidence_ledger", []))
     sec6 = _section6(result)
+    sec7 = _section7_developer(result)
     ver = xt(result.get("stem_ai_version", ""))
     nav = _nav(ver)
 
@@ -779,12 +871,13 @@ def render_html(result: dict[str, Any]) -> str:
 {sec1}
 {sec2}
 {sec3}
+{sec6}
 {sec4}
 {sec5}
-{sec6}
+{sec7}
 <div class="footer">
-  STEM BIO-AI Local CLI Scan &nbsp;|&nbsp; {ver}
-  &nbsp;|&nbsp; Deterministic surface scan &mdash; no LLM, network, or runtime execution.
+  STEM BIO-AI Local CLI Scan &nbsp;|&nbsp; {ver} &nbsp;|&nbsp; Deterministic surface scan &mdash; no LLM, network, or runtime execution.<br/>
+  Not clinical certification. Not regulatory clearance. Not medical advice.
 </div>
 </div>
 <script>{JS}</script>

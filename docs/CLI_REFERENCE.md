@@ -1,13 +1,13 @@
 # CLI Reference
 
-**Version:** 1.8.3
+**Version:** 1.8.4
 **Status:** Stable
 
 ---
 
 ## Command Model
 
-The 1.8.3 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
+The 1.8.4 CLI is organized around workflows instead of one long option string, exposes named calibration profiles directly, and adds auditable researcher-intent derive/simulate surfaces.
 
 ```bash
 stem <folder> [OPTIONS]                  # shortcut for `stem scan <folder>`
@@ -90,7 +90,7 @@ The shorthand remains:
 stem /path/to/repo
 ```
 
-Policy selection remains mirror-only in scans in `1.8.3`: the chosen profile is surfaced in outputs and summaries, and `policy derive` / `policy simulate` preview governed posture changes without turning those deltas into authoritative scan behavior.
+Policy selection remains mirror-only in scans in `1.8.4`: the chosen profile is surfaced in outputs and summaries, and `policy derive` / `policy simulate` preview governed posture changes without turning those deltas into authoritative scan behavior.
 
 Layer 2 AST contract detectors (`CC1` / `CC2` / `CC3`) run during normal scans
 and surface through:
@@ -130,7 +130,7 @@ stem policy simulate /path/to/repo \
 
 In this mode, the profile file must remain schema-valid and `mirror_only`. The file is used for preview only and is not added to the packaged named-profile set.
 
-Current `1.8.3` rule scope is intentionally narrow:
+Current `1.8.4` rule scope is intentionally narrow:
 
 - strong clinical strictness maps to `strict_clinical_adjacency`
 - balanced `2..3` answers keep `default`

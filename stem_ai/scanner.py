@@ -736,7 +736,7 @@ def _finding_summary(finding: dict[str, Any]) -> str:
     snippet = str(finding.get("snippet", "")).strip()
     location = file if file == "." or not line else f"{file}:{line}"
     if snippet:
-        return f"{location} {snippet}"
+        return f"{location} — {snippet}"
     return location
 
 

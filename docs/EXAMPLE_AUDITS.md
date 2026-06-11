@@ -1,6 +1,6 @@
 # Example Audits
 
-Version: 1.8.3
+Version: 1.8.4
 Status: Public proof-surface index
 
 ---
@@ -16,7 +16,7 @@ This project is easier to evaluate through outputs than through claims. This pag
 - Report preview pages: [`docs/assets/report-preview/`](assets/report-preview)
 - Sample PDF: [`yorkeccak_bio_detailed_8p.pdf`](assets/report-preview/yorkeccak_bio_detailed_8p.pdf)
 
-Use this when you want to inspect the current `1.8.3` full 8-page packet shape, Stage 4 separation, AIRI reasoning, and closeout metadata.
+Use this when you want to inspect the current `1.8.4` full 8-page packet shape, Stage 4 separation, AIRI reasoning, and closeout metadata.
 
 ---
 

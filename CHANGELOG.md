@@ -16,6 +16,17 @@ Rubric refinements and additions use patch versions (1.0.x).
 
 ## [1.8.4] - 2026-06-06
 
+### Changed
+- Reworked the detailed `8p` PDF packet into a clearer chapter hierarchy:
+  - `Chapter 1 — Stage Scorecard and Governance Scoring`
+  - `Chapter 2 — Code Integrity Deep Analysis`
+  - `Chapter 3 — Regulatory Traceability`
+  - `Chapter 4 — Remediation Actions, AIRI Risk Triggers & Method Boundary`
+  - `Chapter 5 — Report Metadata`
+- Reduced page-7 density without splitting audiences into separate packets: the PDF now keeps developer follow-up, AIRI, and method boundary in one unified flow while using `4.1`–`4.4` subsection headings instead of stacked boxed headers.
+- Enlarged the repository metadata block on page 1, unified the HTML/PDF footer wording, and promoted the score-boundary note as a fixed interpretive guardrail near the score surface.
+- Refreshed tracked preview artifacts under `docs/assets/report-preview/` so the checked-in HTML and PDF match the current `1.8.4` runtime semantics.
+
 > Zenodo version DOI for this release: [10.5281/zenodo.20572541](https://doi.org/10.5281/zenodo.20572541) (concept DOI `10.5281/zenodo.20154479` resolves to latest). Recorded post-release in `CITATION.cff`; no new tag — a re-tag would mint a different DOI.
 
 ### Changed

@@ -557,7 +557,7 @@ def mock_auth_or_fail_open_boundary_detector(
                 "Mock-auth, auto-login, or no-auth local/self-host boundary surfaced in reviewed sources.",
                 {"match": row["match"], "local_claim_context": bool(local_claim_rows)},
             )
-        for row in local_claim_rows[:2]:
+        for row in local_claim_rows:
             add_finding(
                 target,
                 findings,

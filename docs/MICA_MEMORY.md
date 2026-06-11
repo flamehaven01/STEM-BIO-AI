@@ -1,6 +1,6 @@
 # STEM BIO-AI MICA Memory Layer
 
-Version: 1.8.3
+Version: 1.8.4
 MICA Contract: 0.2.4  
 Status: Active operational memory contract
 
@@ -58,9 +58,9 @@ It selects exactly three live files:
 
 For the current release the active set is:
 
-- `memory/stem-ai.mica.v1.8.3.json`
-- `memory/stem-ai-playbook.v1.8.3.md`
-- `memory/stem-ai-lessons.v1.8.3.md`
+- `memory/stem-ai.mica.v1.8.4.json`
+- `memory/stem-ai-playbook.v1.8.4.md`
+- `memory/stem-ai-lessons.v1.8.4.md`
 
 The working tree intentionally keeps only this active trio.
 Older release-memory snapshots are preserved through Git-tagged release history unless explicitly retired by a documented archive-policy change.

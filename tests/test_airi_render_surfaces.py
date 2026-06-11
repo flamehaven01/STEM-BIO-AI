@@ -67,6 +67,9 @@ def test_json_and_pdf_surface_notes_preserve_canonical_boundary(tmp_path: Path) 
     pdf_pages = render_pdf_pages(result, mode="detailed", pages=7)
     flat_lines = "\n".join("\n".join(page) for page in pdf_pages)
     assert "Surface Note:" in flat_lines
+    assert "About This Score:" in flat_lines
+    assert "calculation integrity" in flat_lines
+    assert "calibrated validity" in flat_lines
 
 
 def test_tier_lock_ca_cap_surfaces_in_markdown(tmp_path: Path) -> None:
@@ -109,7 +112,32 @@ def test_stage3_normalization_formula_in_markdown(tmp_path: Path) -> None:
     assert raw_entry.get("max") == 80
     markdown = render_markdown(result, mode="detailed", pages=7)
     assert "(raw: " in markdown
-    assert "/80)" in markdown
+    assert "-> normalized:" in markdown
+    assert "/80 -> normalized:" in markdown
+
+
+def test_stage3_normalization_formula_and_airi_heading_in_html(tmp_path: Path) -> None:
+    write_text(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    write_text(tmp_path / ".github" / "workflows" / "ci.yml", "name: CI\n")
+    result = audit_repository(tmp_path)
+    html = render_html(result)
+    assert "raw:" in html
+    assert "normalized:" in html
+    assert "/80" in html
+    assert "MIT AI Risk Repository Risk Triggers" in html
+    assert "About This Score" in html
+    assert "Score reflects calculation integrity, not calibrated validity. Triage signal only." in html
+    assert html.index("Regulatory Traceability") < html.index("MIT AI Risk Repository Risk Triggers")
+    assert "<strong>Tier lock:</strong>" in html
+    assert "Developer Follow-up" in html
+
+
+def test_markdown_surfaces_score_boundary_note(tmp_path: Path) -> None:
+    write_text(tmp_path / "README.md", "Bio repository for molecular analysis.\n")
+    result = audit_repository(tmp_path)
+    markdown = render_markdown(result, mode="detailed", pages=7)
+    assert "**About This Score:** Score reflects calculation integrity, not calibrated validity. Triage signal only." in markdown
+    assert "**What is verified:** calculation integrity." in markdown
 
 
 def test_airi_gaps_count_suffix_in_markdown_when_over_five(tmp_path: Path) -> None:

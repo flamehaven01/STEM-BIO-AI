@@ -153,6 +153,18 @@ def _surface_compaction_note(result: dict[str, Any]) -> str:
     return "Human-readable surfaces may compact repeated same-file evidence; JSON remains the canonical full-fidelity artifact."
 
 
+def _score_boundary_short_line() -> str:
+    return "Score reflects calculation integrity, not calibrated validity. Triage signal only."
+
+
+def _score_boundary_lines() -> list[str]:
+    return [
+        "**What is verified:** calculation integrity. The same input produces the same score.",
+        "**What is not verified:** calibrated measurement validity. Weights and detector scope remain bounded.",
+        "**Use this score as a triage signal, not as certification, safety proof, or deployment approval.**",
+    ]
+
+
 def _compact_labels(items: list[str], *, limit: int = 5) -> str:
     values = [str(item).strip() for item in items if str(item).strip()]
     if not values:
@@ -187,6 +199,8 @@ def render_markdown(result: dict[str, Any], mode: str, pages: int) -> str:
         f"**Tier Meaning:** {score['formal_tier']} = {score['use_scope']}",
         f"**Use Scope:** {score['use_scope']}",
         *_tier_lock_label_md(result),
+        f"**About This Score:** {_score_boundary_short_line()}",
+        *_score_boundary_lines(),
         "",
         "## Score Matrix",
         "",
@@ -347,6 +361,9 @@ def _s3_formula(result: dict[str, Any]) -> str:
     max_val = s3_raw.get("max")
     if raw is None or not max_val:
         return ""
+    normalized = result.get("score", {}).get("stage_3_code_bio")
+    if isinstance(normalized, (int, float)):
+        return f" (raw: {raw}/{max_val} -> normalized: {int(round(normalized))})"
     return f" (raw: {raw}/{max_val})"
 
 
@@ -949,7 +966,25 @@ def _write_rl_pdf(path: Path, result: dict[str, Any], mode: str, pages: int) -> 
     story += _page1_executive(result, mode, pages)
     if mode == "detailed":
         story += _detail_pages(result, pages)
-    doc.build(story)
+    def _draw_footer(canvas: Any, _: Any) -> None:
+        canvas.saveState()
+        canvas.setStrokeColor(_hx(_MGRAY))
+        canvas.setLineWidth(0.5)
+        canvas.line(doc.leftMargin, 13.2 * mm, A4[0] - doc.rightMargin, 13.2 * mm)
+        canvas.setFont("Helvetica", 7)
+        canvas.setFillColor(_hx(_DGRAY))
+        canvas.drawCentredString(
+            A4[0] / 2,
+            8.2 * mm,
+            f"STEM BIO-AI Local CLI Scan | {result.get('stem_ai_version', __version__)} | Deterministic surface scan — no LLM, network, or runtime execution.",
+        )
+        canvas.drawCentredString(
+            A4[0] / 2,
+            4.9 * mm,
+            "Not clinical certification. Not regulatory clearance. Not medical advice.",
+        )
+        canvas.restoreState()
+    doc.build(story, onFirstPage=_draw_footer, onLaterPages=_draw_footer)
 
 
 # ── style factory ─────────────────────────────────────────────────────────────
@@ -1001,30 +1036,30 @@ def _header_block(result: dict[str, Any]) -> list[Any]:
 
     header_data = [[Paragraph(
         f'<font color="{_WHITE}"><b>STEM BIO-AI Evidence-Surface Scan v{result["stem_ai_version"]}</b></font>',
-        _style("H1", 14, 18, _WHITE, True),
+        _style("H1", 10.5, 13, _WHITE, True),
     )]]
     header_tbl = Table(header_data, colWidths=["100%"])
     header_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0, 0), (-1, -1), _hx(_NAVY)),
-        ("TOPPADDING",    (0, 0), (-1, -1), 7),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+        ("TOPPADDING",    (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
         ("LEFTPADDING",   (0, 0), (-1, -1), 8),
     ]))
 
     meta = (
         f'<font color="{_DGRAY}"><b>Repository:</b> {_xt(t["name"])} &nbsp;|&nbsp; '
         f'<b>Commit:</b> {commit} &nbsp;|&nbsp; '
-        f'<b>Branch:</b> {_xt(branch)} &nbsp;|&nbsp; '
-        f'<b>Audit Date:</b> {audit_date} &nbsp;|&nbsp; '
+        f'<b>Branch:</b> {_xt(branch)}</font><br/>'
+        f'<font color="{_DGRAY}"><b>Audit Date:</b> {audit_date} &nbsp;|&nbsp; '
         f'<b>Mode:</b> {mode} &nbsp;|&nbsp; '
         f'<b>Policy:</b> {_xt(profile_label)}</font>'
     )
-    meta_data = [[Paragraph(meta, _style("M1", 7, 10, _DGRAY))]]
+    meta_data = [[Paragraph(meta, _style("M1", 10.2, 13.8, _DGRAY))]]
     meta_tbl = Table(meta_data, colWidths=["100%"])
     meta_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0, 0), (-1, -1), _hx(_MGRAY)),
-        ("TOPPADDING",    (0, 0), (-1, -1), 4),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING",    (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
         ("LEFTPADDING",   (0, 0), (-1, -1), 8),
     ]))
     return [header_tbl, meta_tbl, Spacer(1, 3 * mm)]
@@ -1039,9 +1074,9 @@ def _score_row(result: dict[str, Any]) -> list[Any]:
 
     score_cell = [
         Paragraph(
-            f'<font color="{_NAVY}" size="28"><b>{fs}</b></font>'
-            f'<font color="{_DGRAY}" size="13"> / 100</font>',
-            _style("SC1", 28, 34, _NAVY, True, "CENTER"),
+            f'<font color="{_NAVY}" size="22"><b>{fs}</b></font>'
+            f'<font color="{_DGRAY}" size="11"> / 100</font>',
+            _style("SC1", 22, 27, _NAVY, True, "CENTER"),
         ),
         Paragraph("Final Score", _style("SL1", 8, 11, _DGRAY, False, "CENTER")),
     ]
@@ -1066,13 +1101,7 @@ def _score_row(result: dict[str, Any]) -> list[Any]:
         ),
     ]
 
-    weight_note = (
-        f'<font color="{_DGRAY}" size="7.5">Weighted model: '
-        f'Stage 1 x 0.40 + Stage 2R x 0.20 + Stage 3 x 0.40 '
-        f'- Risk Penalty = <b>{fs}</b></font>'
-    )
-
-    row_tbl = Table([[score_cell, scope_cell]], colWidths=[50 * mm, None])
+    row_tbl = Table([[score_cell, scope_cell]], colWidths=[44 * mm, None])
     row_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0, 0), (0, 0), _hx(_LGRAY)),
         ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
@@ -1082,7 +1111,25 @@ def _score_row(result: dict[str, Any]) -> list[Any]:
         ("RIGHTPADDING",  (0, 0), (-1, -1), 8),
         ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
     ]))
-    return [row_tbl, Spacer(1, 1 * mm), Paragraph(weight_note, _style("WN1", 7.5, 10, _DGRAY))]
+    score_note_lines = "<br/>".join([
+        f"<b>&#9888; About this score</b><br/>{_xt(_score_boundary_short_line())}",
+        '&#8226; <b>What is verified:</b> calculation integrity. The same input produces the same score.',
+        '&#8226; <b>What is not verified:</b> calibrated measurement validity. Weights and detector scope remain bounded.',
+        '&#8226; <b>Use this score as a triage signal:</b> not as certification, safety proof, or deployment approval.',
+    ])
+    score_note_tbl = Table(
+        [[Paragraph(f'<font color="{_DGRAY}" size="7.5">{score_note_lines}</font>', _style("SN1", 7.5, 10, _DGRAY))]],
+        colWidths=["100%"],
+    )
+    score_note_tbl.setStyle(TableStyle([
+        ("BACKGROUND",    (0, 0), (-1, -1), _hx("#FFF4D6")),
+        ("TOPPADDING",    (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 8),
+        ("BOX",           (0, 0), (-1, -1), 0.7, _hx(_AMBER)),
+    ]))
+    return [row_tbl, Spacer(1, 1 * mm), score_note_tbl]
 
 
 def _stage_cards(result: dict[str, Any]) -> list[Any]:
@@ -1125,121 +1172,132 @@ def _stage_cards(result: dict[str, Any]) -> list[Any]:
 
 
 def _integrity_and_risks(result: dict[str, Any]) -> list[Any]:
-    ci = result["code_integrity"]
-    risks = result["notable_risks"]
+    score = result["score"]
+    cls = result.get("classification", {})
+    risks = result.get("notable_risks", [])
     positive = result.get("notable_positive_evidence", [])
     airi = result.get("airi_risk_coverage", {})
+    stage_3 = result.get("stage_3_rubric", {})
+    stage_4 = result.get("stage_4_rubric", {})
 
-    ci_rows = [[Paragraph(
-        f'<font color="{_WHITE}"><b>Code Integrity</b></font>',
-        _style("CIH1", 9, 12, _WHITE, True),
-    )]]
-    labels = {
-        "C1_hardcoded_credentials": "C1 Credentials",
-        "C2_dependency_pinning": "C2 Dependency Pinning",
-        "C3_dead_or_deprecated_patient_adjacent_paths": "C3 Deprecated Paths",
-        "C4_exception_handling_clinical_adjacent_paths": "C4 Exception Handling",
-        "C5_compliance_boundary_integrity": "C5 Compliance Boundary",
-        "C6_mock_auth_or_fail_open_boundary": "C6 Mock Auth Boundary",
-    }
-    for key, item in ci.items():
-        s = item["status"]
-        sc = _status_hex(s)
-        ev = _clip_words(item["evidence"][0] if item["evidence"] else "", 92)
-        badge = [[Paragraph(
-            f'<font color="{_WHITE}" size="7"><b>{s}</b></font>',
-            _style(f"B_{key[:4]}", 7, 9, _WHITE, True, "CENTER"),
-        )]]
-        bt = Table(badge, colWidths=[15 * mm])
-        bt.setStyle(TableStyle([
-            ("BACKGROUND",    (0, 0), (-1, -1), _hx(sc)),
-            ("TOPPADDING",    (0, 0), (-1, -1), 1),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
-        ]))
-        short_key = labels.get(key, key)
-        ci_rows.append([[
-            bt,
-            Paragraph(
-                f'<font color="{_DGRAY}" size="8"><b>{short_key}</b><br/>{_xt(ev)}</font>',
-                _style(f"CI_{key[:4]}", 7.5, 10, _DGRAY),
-            ),
-        ]])
+    if cls.get("t0_hard_floor"):
+        posture = (
+            "Bio-governance posture is not suitable for clinical or patient-adjacent trust. "
+            "Direct-clinical framing appears without an adequate boundary declaration."
+        )
+        posture_color = _RED
+    elif cls.get("score_cap") is not None:
+        posture = (
+            "Bio-governance posture is partial and bounded. Some provenance and replication signals exist, "
+            "but explicit non-clinical boundary and trust-control evidence remain insufficient."
+        )
+        posture_color = _AMBER
+    else:
+        posture = (
+            "Bio-governance posture is structurally stronger in the reviewed repository surfaces, "
+            "but this artifact still remains a pre-screen rather than certification."
+        )
+        posture_color = _GREEN
 
-    ci_tbl = Table(ci_rows, colWidths=["100%"])
-    ci_tbl.setStyle(TableStyle([
-        ("BACKGROUND",    (0, 0), (0, 0), _hx(_NAVY)),
-        ("ROWBACKGROUNDS",(0, 1), (0, -1), [_hx(_LGRAY), _hx(_WHITE)]),
-        ("TOPPADDING",    (0, 0), (-1, -1), 4),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 6),
-        ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
-    ]))
+    present_lines: list[str] = []
+    if stage_3.get("B1_data_provenance_controls", {}).get("score", 0) > 0:
+        present_lines.append("Repository provenance surfaces are present through dependency or lock manifests.")
+    if stage_3.get("B3_coi_funding", {}).get("score", 0) > 0:
+        present_lines.append("Funding / COI acknowledgement language is present.")
+    if result.get("stage_1_rubric", {}).get("S1_domain_package", {}).get("score", 0) > 0:
+        present_lines.append("Package metadata was available for repo-local consistency checks.")
+    if result.get("replication_score", 0) > 0:
+        present_lines.append("Some reproducibility evidence exists, including environment lock or container surfaces.")
+    if result.get("stage_traceability", {}).get("stage_4"):
+        present_lines.append("Regulatory traceability mappings exist for reproducibility and record-keeping scaffolding.")
+    for item in positive[:3]:
+        if item not in present_lines:
+            present_lines.append(str(item))
+    if not present_lines:
+        present_lines.append("Only limited positive governance evidence surfaced in the reviewed repository sources.")
 
-    risk_lines = "".join(f'&#8226; {_xt(r[:110])}<br/>' for r in risks[:4])
-    pos_lines  = "".join(f'&#8226; {_xt(p[:110])}<br/>' for p in positive[:3])
+    missing_lines = [str(r) for r in risks[:5]] or ["No major missing-or-contradicted governance surfaces were surfaced."]
+
+    reg_lines = _regulatory_bullets(result)
     airi_lines = ""
     if airi:
         airi_lines += (
-            f'&#8226; Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b>'
-            f' | Rate: <b>{airi.get("coverage_rate", 0):.3f}</b><br/>'
+            f'&#8226; <b>Secondary risk vocabulary:</b> {airi.get("covered_count", 0)} mapped triggers across '
+            f'{airi.get("total_risks_in_detector_scope", 0)} in-bundle AIRI risks.<br/>'
+            f'&#8226; <b>Meaning:</b> broadens local findings into risk language; it does not prove harm, safety, or compliance.<br/>'
+            f'&#8226; <b>Why this matters:</b> useful when a user needs a broader risk vocabulary around governance gaps, not when they need deployment approval.'
         )
         covered = airi.get("covered_risks", [])
-        if covered:
-            first = covered[0]
-            reason = _airi_reason_summary(first)
-            reason_preview = reason if "(+" in reason else _clip_words(reason, 60)
-            airi_lines += (
-                f'&#8226; {_xt(str(first.get("id", "—")))} {_xt(_clip_words(str(first.get("title", "")), 50))}'
-                f'{f"<br/>&nbsp;&nbsp;why: {_xt(reason_preview)}" if reason else ""}'
+        for idx, risk in enumerate(covered[:2], start=1):
+            reason = _airi_reason_summary(risk)
+            primary = _airi_primary_summary(risk)
+            detail = f'{_xt(str(risk.get("id", "—")))} {_xt(_clip_words(str(risk.get("title", "")), 48))}'
+            if primary:
+                detail += f' | {_xt(primary)}'
+            if reason:
+                detail += f' | why: {_xt(_clip_words(reason, 92))}'
+            airi_lines += f'<br/>&#8226; <b>Mapped theme {idx}:</b> {detail}'
+        gaps = airi.get("known_gaps_in_bundle", [])
+        if gaps:
+            gap_preview = "; ".join(
+                f"{g.get('id', '—')} {_xt(_clip_words(str(g.get('title', '')), 22))}"
+                for g in gaps[:3]
             )
-    reg_lines = _regulatory_bullets(result)
-    right_rows = [
-        [Paragraph(f'<font color="{_WHITE}"><b>Remediation Targets</b></font>', _style("RH1", 9, 12, _WHITE, True))],
-        [Paragraph(f'<font color="{_DGRAY}" size="8">{risk_lines}</font>', _style("RL1", 8, 11, _DGRAY))],
-        [Paragraph(f'<font color="{_WHITE}"><b>Positive Evidence</b></font>', _style("PH1", 9, 12, _WHITE, True))],
-        [Paragraph(f'<font color="{_DGRAY}" size="8">{pos_lines}</font>', _style("PL1", 8, 11, _DGRAY))],
-    ]
-    if airi_lines:
-        right_rows.extend([
-            [Paragraph(f'<font color="{_WHITE}"><b>AIRI Risk Triggers</b></font>', _style("AH1", 9, 12, _WHITE, True))],
-            [Paragraph(f'<font color="{_DGRAY}" size="8">{airi_lines}</font>', _style("AL1", 7.8, 10.5, _DGRAY))],
-        ])
-    if reg_lines:
-        right_rows.extend([
-            [Paragraph(f'<font color="{_WHITE}"><b>Regulatory Traceability</b></font>', _style("GH1", 9, 12, _WHITE, True))],
-            [Paragraph(f'<font color="{_DGRAY}" size="8">{reg_lines}</font>', _style("GL1", 7.8, 10.5, _DGRAY))],
-        ])
-    right_tbl = Table(right_rows, colWidths=["100%"])
-    right_style = [
-        ("BACKGROUND",    (0, 0), (0, 0), _hx(_RED)),
-        ("BACKGROUND",    (0, 1), (0, 1), _hx(_LGRAY)),
-        ("BACKGROUND",    (0, 2), (0, 2), _hx(_GREEN)),
-        ("BACKGROUND",    (0, 3), (0, 3), _hx(_WHITE)),
-        ("TOPPADDING",    (0, 0), (-1, -1), 4),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 6),
-        ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
-    ]
-    _next = 4
-    if airi_lines:
-        right_style.extend([
-            ("BACKGROUND", (0, _next), (0, _next), _hx(_TEAL)),
-            ("BACKGROUND", (0, _next + 1), (0, _next + 1), _hx(_LGRAY)),
-        ])
-        _next += 2
-    if reg_lines:
-        right_style.extend([
-            ("BACKGROUND", (0, _next), (0, _next), _hx(_NAVY)),
-            ("BACKGROUND", (0, _next + 1), (0, _next + 1), _hx(_LGRAY)),
-        ])
-    right_tbl.setStyle(TableStyle(right_style))
+            airi_lines += f'<br/>&#8226; <b>Still unmapped here:</b> {gap_preview}'
 
-    left_stack = [ci_tbl]
-    bio_tbl = _bio_diagnostics_pdf_table(result)
-    if bio_tbl is not None:
-        left_stack += [Spacer(1, 2 * mm), bio_tbl]
+    def _summary_block(title: str, body: str, head_color: str, key: str) -> Table:
+        tbl = Table([
+            [Paragraph(f'<font color="{_WHITE}"><b>{_xt(title)}</b></font>', _style(f"{key}_H", 9, 12, _WHITE, True))],
+            [Paragraph(f'<font color="{_DGRAY}" size="8">{body}</font>', _style(f"{key}_B", 8, 11, _DGRAY))],
+        ], colWidths=["100%"])
+        tbl.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (0, 0), _hx(head_color)),
+            ("BACKGROUND", (0, 1), (0, 1), _hx(_LGRAY)),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("BOX", (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+        ]))
+        return tbl
+
+    left_stack: list[Any] = [
+        _summary_block(
+            "What Is Actually Present",
+            "".join(f'&#8226; {_xt(_clip_words(line, 170))}<br/>' for line in present_lines[:6]),
+            _GREEN,
+            "WIP",
+        ),
+        Spacer(1, 2 * mm),
+        _summary_block(
+            "What Is Missing Or Contradicted",
+            "".join(f'&#8226; {_xt(_clip_words(line, 170))}<br/>' for line in missing_lines),
+            _RED,
+            "WIM",
+        ),
+    ]
     left_col = Table([[item] for item in left_stack], colWidths=["100%"])
     left_col.setStyle(TableStyle([
+        ("LEFTPADDING",  (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING",   (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING",(0, 0), (-1, -1), 0),
+        ("VALIGN",       (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    right_stack: list[Any] = [
+        _summary_block(
+            "Governance Posture",
+            f'<b>{_xt(score["formal_tier"])}</b> — {_xt(score.get("use_scope", ""))}<br/>{_xt(posture)}',
+            posture_color,
+            "GOV",
+        ),
+    ]
+    if reg_lines:
+        right_stack += [Spacer(1, 2 * mm), _summary_block("Regulatory Traceability", reg_lines, _NAVY, "REG")]
+    if airi_lines:
+        right_stack += [Spacer(1, 2 * mm), _summary_block("AIRI Risk Triggers", airi_lines, _TEAL, "AIRI")]
+    right_tbl = Table([[item] for item in right_stack], colWidths=["100%"])
+    right_tbl.setStyle(TableStyle([
         ("LEFTPADDING",  (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING",   (0, 0), (-1, -1), 0),
@@ -1358,17 +1416,19 @@ def _regulatory_bullets(result: dict[str, Any]) -> str:
     partial = [it for it in items if it.get("status") == "partially_aligned"]
     signal = [it for it in items if it.get("status") == "signal_only"]
 
-    lines = [f'&#8226; <b>{len(items)} mapped</b>: {_xt(fw_str)}']
+    lines = [f'&#8226; <b>Frameworks touched:</b> {_xt(fw_str)}']
     if partial:
         labels = "; ".join(
             _REQ_LABELS.get(it["requirement_id"], it["requirement_id"])
             for it in partial[:3]
         )
-        lines.append(f'&#8226; <b>Partially aligned ({len(partial)}):</b> {_xt(labels)}')
+        lines.append(f'&#8226; <b>Structural alignment exists ({len(partial)}):</b> {_xt(labels)}')
     if signal:
         lines.append(
-            f'&#8226; <b>Signal only ({len(signal)})</b> — weak pre-audit scaffolding refs'
+            f'&#8226; <b>Signal-only references ({len(signal)}):</b> useful for pre-audit traceability, but not strong enough to count as compliance proof'
         )
+    lines.append('&#8226; <b>Meaning:</b> repository evidence maps to governance frameworks, but the report does not establish compliance or clearance.')
+    lines.append('&#8226; <b>Why this matters:</b> this section helps answer whether governance scaffolding is present at all before a formal audit, not whether the repository is approved for use.')
     return "<br/>".join(lines)
 
 
@@ -1430,7 +1490,7 @@ def _regulatory_traceability_pdf(result: dict[str, Any]) -> list[Any]:
     note = basis.get("note", {})
     story: list[Any] = []
 
-    story += _sec_hdr("Regulatory Traceability", _NAVY)
+    story += _chapter_hdr("Chapter 3 — Regulatory Traceability", _NAVY)
     story.append(Paragraph(
         f'<font color="{_DGRAY}" size="8">'
         f'<b>{_xt(note.get("title", "Regulatory basis note"))}</b><br/>'
@@ -1512,16 +1572,7 @@ def _regulatory_traceability_pdf(result: dict[str, Any]) -> list[Any]:
 
 
 def _footer_block() -> list[Any]:
-    return [
-        Spacer(1, 4 * mm),
-        HRFlowable(width="100%", thickness=0.5, color=_hx(_MGRAY)),
-        Spacer(1, 1.5 * mm),
-        Paragraph(
-            f'<font color="{_DGRAY}" size="7">Independent audit summary — STEM BIO-AI v{__version__} &nbsp;|&nbsp; '
-            "Not clinical certification. Not regulatory clearance. Not medical advice.</font>",
-            _style("FT1", 7, 9, _DGRAY, False, "CENTER"),
-        ),
-    ]
+    return [Spacer(1, 2 * mm)]
 
 
 def _single_page_story(flowables: list[Any], *, break_before: bool = False) -> list[Any]:
@@ -1545,8 +1596,8 @@ def _detail_pages(result: dict[str, Any], pages: int) -> list[Any]:
         story += _page5_compact_closure(result)
     elif pages >= 7:
         story += _page4_integrity_deep(result)
-        story += _page6_method_airi(result)
         story += _page_regulatory_traceability(result)
+        story += _page6_method_airi(result)
         story += _page7_report_metadata(result)
     return story
 
@@ -1564,6 +1615,26 @@ def _sec_hdr(title: str, color: str = _NAVY) -> list[Any]:
         ("LEFTPADDING",   (0, 0), (-1, -1), 8),
     ]))
     return [tbl, Spacer(1, 2 * mm)]
+
+
+def _chapter_hdr(title: str, color: str = _NAVY) -> list[Any]:
+    return [
+        Paragraph(
+            f'<font color="{color}" size="14"><b>{title}</b></font>',
+            _style(f"CH_{title[:8]}", 14, 17, color, True),
+        ),
+        Spacer(1, 3.5 * mm),
+    ]
+
+
+def _subsec_hdr(title: str, color: str = _NAVY) -> list[Any]:
+    return [
+        Paragraph(
+            f'<font color="{color}" size="10.5"><b>{title}</b></font>',
+            _style(f"SUB_{title[:8]}", 10.5, 13, color, True),
+        ),
+        Spacer(1, 1.8 * mm),
+    ]
 
 
 def _mini_score(label: str, val: int, max_val: int, col: str) -> Table:
@@ -1631,6 +1702,8 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
     has_disc = cls["has_explicit_clinical_boundary"]
     readme_present = "README.md" in result.get("file_hashes_sha256", {})
 
+    story += _chapter_hdr("Chapter 1 — Stage Scorecard and Governance Scoring", _NAVY)
+
     # ── Stage 1 ──────────────────────────────────────────────────────────────
     story += _sec_hdr("Stage 1 — README Evidence Signal  |  Weight: 0.40", _TEAL)
 
@@ -1673,8 +1746,6 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
             ("README present", "+0" if readme_present else "-20", _GREEN if readme_present else _RED,
              "README.md detected in repository root." if readme_present else "No README found — major deduction applied."),
         ]
-    calc_note = s1_rubric.get("calculation", f"Stage 1 evidence score = {s1} / 100")
-
     chip1 = _mini_score("S1 Score", s1, 100, _TEAL)
     tbl1 = _rubric_rows(s1_items, "S1")
     combined1 = Table([[chip1, tbl1]], colWidths=[38 * mm, None])
@@ -1684,11 +1755,6 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
         ("RIGHTPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(combined1)
-    story.append(Spacer(1, 1 * mm))
-    story.append(Paragraph(
-        f'<font color="{_DGRAY}" size="7.5"><i>Calculation: {_xt(calc_note)}</i></font>',
-        _style("S1CL", 7.5, 10, _DGRAY),
-    ))
 
     # Classification info bar
     ca_col = _ORANGE if ca else _GREEN
@@ -1701,12 +1767,14 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
         f' &nbsp;&nbsp; '
         f'&#8226; T0 Hard Floor: <font color="{t0_col}"><b>{"TRIGGERED" if cls["t0_hard_floor"] else "Clear"}</b></font>'
     )
-    info_tbl = Table([[Paragraph(info_text, _style("INF1", 8, 11, _DGRAY))]], colWidths=["100%"])
+    info_tbl = Table([[Paragraph(info_text, _style("INF1", 8, 11, _DGRAY, False, "CENTER"))]], colWidths=["100%"])
     info_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0, 0), (-1, -1), _hx(_LGRAY)),
         ("TOPPADDING",    (0, 0), (-1, -1), 5),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
         ("LEFTPADDING",   (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 8),
+        ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
         ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
     ]))
     story.append(Spacer(1, 2 * mm))
@@ -1718,8 +1786,6 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
 
     rubric = result.get("stage_2r_rubric", {})
     verdict = str(rubric.get("verdict", ""))
-    calculation = str(rubric.get("calculation", f"= {s2r}"))
-
     _label_map = {
         "baseline": "Baseline",
         "R2R_1_readme_package_code_alignment": "R2R-1: README / Package Alignment",
@@ -1787,11 +1853,20 @@ def _page2_stage_analysis(result: dict[str, Any]) -> list[Any]:
     story.append(Spacer(1, 1 * mm))
 
     verdict_col = _GREEN if "Strong" in verdict else (_AMBER if "Mixed" in verdict else _RED)
-    story.append(Paragraph(
-        f'<font color="{_DGRAY}" size="7.5"><i>{_xt(calculation)}</i></font>'
-        f'  &nbsp;&nbsp; <font color="{verdict_col}"><b>{_xt(verdict)}</b></font>',
-        _style("S2RVERDICT", 7.5, 10, _DGRAY),
-    ))
+    verdict_text = (
+        f'&#8226; <b>Consistency Verdict:</b> <font color="{verdict_col}"><b>{_xt(verdict)}</b></font>'
+    )
+    verdict_tbl = Table([[Paragraph(verdict_text, _style("S2RVERDICT", 8, 11, _DGRAY, False, "CENTER"))]], colWidths=["100%"])
+    verdict_tbl.setStyle(TableStyle([
+        ("BACKGROUND",    (0, 0), (-1, -1), _hx(_LGRAY)),
+        ("TOPPADDING",    (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 8),
+        ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
+        ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+    ]))
+    story.append(verdict_tbl)
 
     story += _footer_block()
     return _single_page_story(story, break_before=True)
@@ -1889,6 +1964,18 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
         ("RIGHTPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(main_row)
+    raw_entry = rubric.get("stage_3_raw_total", {})
+    raw_score = raw_entry.get("score")
+    raw_max = raw_entry.get("max")
+    if raw_score is not None and raw_max:
+        t_total = sum(rubric.get(k, {}).get("score", 0) for k in ["T1_CI_CD", "T2_domain_tests", "T3_changelog_release_hygiene"])
+        b_total = sum(rubric.get(k, {}).get("score", 0) for k in ["B1_data_provenance_controls", "B2_bias_limitations", "B3_coi_funding"])
+        story.append(Spacer(1, 2 * mm))
+        story.append(Paragraph(
+            f'<font color="{_DGRAY}" size="8"><b>Normalized score:</b> '
+            f'T-series {t_total}/45 + B-series {b_total}/35 = raw {raw_score}/{raw_max} &#8594; {s3}/100.</font>',
+            _style("S3NORM", 8, 11, _DGRAY),
+        ))
 
     # Gap analysis
     story.append(Spacer(1, 5 * mm))
@@ -1901,23 +1988,37 @@ def _page3_stage3_analysis(result: dict[str, Any]) -> list[Any]:
     t_total = sum(rubric.get(k, {}).get("score", 0) for k in ["T1_CI_CD", "T2_domain_tests", "T3_changelog_release_hygiene"])
     b_total = sum(rubric.get(k, {}).get("score", 0) for k in ["B1_data_provenance_controls", "B2_bias_limitations", "B3_coi_funding"])
 
-    gap_lines = [
-        f'&#8226; <b>T-series (engineering) attained:</b> {t_total} / 45 &nbsp; '
-        f'<b>B-series (bio integrity) attained:</b> {b_total} / 35',
-        f'&#8226; <b>Local CLI scan maximum:</b> {local_max} / 100 '
-        f'(T1+T2+T3 max 15 each; B1 max 10; B2/B3 require manual review)',
-        f'&#8226; <b>Gap to T3 (final score &gt;= 70):</b> {gap_t3} points needed across all stages',
-        f'&#8226; <b>Gap to T4 (final score &gt;= 85):</b> {gap_t4} points needed across all stages',
-        '&#8226; <b>B2 Bias/Limitations:</b> Not detectable — requires manual audit of README, '
-        'model card, or supplementary documentation for validation boundaries and algorithmic limitations',
-        '&#8226; <b>B3 COI/Funding:</b> Not detectable — requires inspection of README or FUNDING.md '
-        'for conflict of interest and funding source disclosure',
+    gap_rows = [
+        ("T-series vs B-series", f"T-series (engineering) attained: {t_total} / 45 | B-series (bio integrity) attained: {b_total} / 35"),
+        ("Local CLI scan maximum", f"{local_max} / 100 (T1+T2+T3 max 15 each; B1 max 10; B2/B3 require manual review)"),
+        ("Gap to T3", f"{gap_t3} points needed across all stages to reach final score >= 70"),
+        ("Gap to T4", f"{gap_t4} points needed across all stages to reach final score >= 85"),
+        ("B2 Bias/Limitations", "Not detectable — requires manual audit of README, model card, or supplementary documentation for validation boundaries and algorithmic limitations"),
+        ("B3 COI/Funding", "Not detectable — requires inspection of README or FUNDING.md for conflict of interest and funding source disclosure"),
     ]
-    for line in gap_lines:
-        story.append(Paragraph(
-            f'<font color="{_DGRAY}" size="8">{line}</font>',
-            _style(f"GL_{line[:6]}", 8, 13, _DGRAY),
-        ))
+    gap_table_rows: list[list[Any]] = [[
+        Paragraph(f'<font color="{_WHITE}"><b>Stage 3 gap interpretation</b></font>', _style("S3GAPH", 8.5, 11, _WHITE, True)),
+        ""
+    ]]
+    for label, detail in gap_rows:
+        gap_table_rows.append([
+            Paragraph(f'<font color="{_SLATE}"><b>{_xt(label)}</b></font>', _style(f"S3GL_{label[:6]}", 8, 10, _SLATE, True)),
+            Paragraph(f'<font color="{_DGRAY}" size="8">{_xt(detail)}</font>', _style(f"S3GD_{label[:6]}", 8, 11, _DGRAY)),
+        ])
+    gap_table = Table(gap_table_rows, colWidths=[45 * mm, None])
+    gap_table.setStyle(TableStyle([
+        ("SPAN",          (0, 0), (1, 0)),
+        ("BACKGROUND",    (0, 0), (1, 0), _hx(_SLATE)),
+        ("ROWBACKGROUNDS",(0, 1), (-1, -1), [_hx(_LGRAY), _hx(_WHITE)]),
+        ("TOPPADDING",    (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 6),
+        ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+        ("GRID",          (0, 1), (-1, -1), 0.3, _hx(_MGRAY)),
+        ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+    ]))
+    story.append(gap_table)
 
     story += _footer_block()
     return _single_page_story(story, break_before=True)
@@ -1975,13 +2076,25 @@ def _page4_stage4_replication(result: dict[str, Any]) -> list[Any]:
         _style("S4_NOTE", 7.5, 10, _DGRAY),
     ))
     story.append(Spacer(1, 3 * mm))
-    story.append(Paragraph(
-        f'<font color="{_DGRAY}" size="8">'
-        f'Final score remains <b>{score["final_score"]} / 100</b> ({_xt(score["formal_tier"])}) even when Stage 4 moves. '
-        'This lane exists to show reproducibility and operational evidence posture separately from the formal repository score.'
-        f'</font>',
-        _style("S4_SCOPE", 8, 11, _DGRAY),
-    ))
+    story += _sec_hdr("Formal Score Effect", _NAVY)
+    final_box = Table([[
+        Paragraph(
+            f'<font color="{_DGRAY}" size="8"><b>Final Score:</b> {score["final_score"]} / 100 ({_xt(score["formal_tier"])})<br/>'
+            '<b>Formal effect:</b> Stage 4 does not raise or lower the formal repository score.<br/>'
+            '&#8226; This page exists to show reproducibility and operational evidence posture separately from the governance score.<br/>'
+            '&#8226; Stronger replication evidence improves trust in reproducibility posture, not the formal governance tier.</font>',
+            _style("S4_SCOPE", 8, 11, _DGRAY),
+        )
+    ]], colWidths=["100%"])
+    final_box.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), _hx("#FFF7E3")),
+        ("BOX", (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("LEFTPADDING", (0, 0), (-1, -1), 7),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 7),
+    ]))
+    story.append(final_box)
     story += _footer_block()
     return _single_page_story(story, break_before=True)
 
@@ -1995,7 +2108,7 @@ def _page4_integrity_deep(result: dict[str, Any]) -> list[Any]:
     tgt = result["target"]
     ast_note = _ast_scope_note(result)
 
-    story += _sec_hdr("Code Integrity — Deep Analysis", _NAVY)
+    story += _chapter_hdr("Chapter 2 — Code Integrity Deep Analysis", _NAVY)
 
     _remediation = {
         "C1_hardcoded_credentials":
@@ -2239,15 +2352,46 @@ def _page5_compact_closure(result: dict[str, Any]) -> list[Any]:
     return _single_page_story(story, break_before=True)
 
 
-# ── Page 6: Priority Improvements + AIRI + Method (7p only) ─────────────────
+# ── Page 6: Remediation + AIRI + Method (7p only) ────────────────────────────
 def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
     story: list[Any] = []
     risks = result.get("notable_risks", [])
-    positive = result.get("notable_positive_evidence", [])
     airi = result.get("airi_risk_coverage", {})
+    score = result.get("score", {})
+    stage2_score = int(score.get("stage_2_repo_local_consistency", 0) or 0)
+    stage3_score = int(score.get("stage_3_code_bio", 0) or 0)
 
-    # Priority Improvements
-    story += _sec_hdr("Priority Improvement Roadmap", _RED)
+    story += _chapter_hdr("Chapter 4 — Remediation Actions, AIRI Risk Triggers & Method Boundary", _NAVY)
+    story += _subsec_hdr("4.1 Decision Path", _SLATE)
+    decision_rows = [
+        ("Stage 2R score", f"{stage2_score} / 100 — repo-local contradictions and missing trust boundaries are holding the report down."),
+        ("Stage 3 score", f"{stage3_score} / 100 — accountability and bio-governance evidence remain partial rather than mature."),
+    ]
+    decision_table_rows: list[list[Any]] = [[
+        Paragraph(f'<font color="{_WHITE}"><b>Developer-facing decision path</b></font>', _style("DPDF_H", 8.5, 11, _WHITE, True)),
+        ""
+    ]]
+    for label, detail in decision_rows:
+        decision_table_rows.append([
+            Paragraph(f'<font color="{_SLATE}"><b>{_xt(label)}</b></font>', _style(f"DPDF_K_{label[:4]}", 8, 10, _SLATE, True)),
+            Paragraph(f'<font color="{_DGRAY}" size="8">{_xt(detail)}</font>', _style(f"DPDF_V_{label[:4]}", 8, 11, _DGRAY)),
+        ])
+    decision_table = Table(decision_table_rows, colWidths=[40 * mm, None])
+    decision_table.setStyle(TableStyle([
+        ("SPAN",          (0, 0), (1, 0)),
+        ("BACKGROUND",    (0, 0), (1, 0), _hx(_SLATE)),
+        ("ROWBACKGROUNDS",(0, 1), (-1, -1), [_hx(_LGRAY), _hx(_WHITE)]),
+        ("TOPPADDING",    (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 6),
+        ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+        ("GRID",          (0, 1), (-1, -1), 0.3, _hx(_MGRAY)),
+        ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+    ]))
+    story.append(decision_table)
+    story.append(Spacer(1, 4 * mm))
+    story += _subsec_hdr("4.2 Top Remediation Actions", _RED)
 
     _pri_detail: dict[str, str] = {
         "Clinical-adjacent surfaces exist without an explicit non-diagnostic/non-clinical boundary.":
@@ -2287,73 +2431,110 @@ def _page6_method_airi(result: dict[str, Any]) -> list[Any]:
             _style("NR1", 8, 12, _DGRAY),
         ))
     else:
-        for i, risk in enumerate(risks, 1):
+        remediation_rows: list[list[Any]] = [[
+            Paragraph(f'<font color="{_WHITE}"><b>Priority</b></font>', _style("REMD_H1", 8.5, 11, _WHITE, True)),
+            Paragraph(f'<font color="{_WHITE}"><b>What to fix first</b></font>', _style("REMD_H2", 8.5, 11, _WHITE, True)),
+        ]]
+        for i, risk in enumerate(risks[:4], 1):
             guidance = _pri_detail.get(risk, (
-                "Review this finding and implement appropriate controls "
-                "before supervised or clinical-adjacent deployment."
+                "Review this finding and implement appropriate controls before supervised or clinical-adjacent deployment."
             ))
-            ri_col = _RED if ("FAIL" in risk or "Clinical-adjacent" in risk) else _AMBER
-            story.append(Paragraph(
-                f'<font color="{ri_col}"><b>Priority {i}: {_xt(risk)}</b></font>',
-                _style(f"PRI_{i}", 8.5, 12, ri_col, True),
-            ))
-            story.append(Paragraph(
-                f'<font color="{_DGRAY}" size="8">&#8594; {_xt(guidance)}</font>',
-                _style(f"PRG_{i}", 8, 11, _DGRAY),
-            ))
-            story.append(Spacer(1, 2.5 * mm))
-
-    # Positive Evidence
-    story.append(Spacer(1, 2 * mm))
-    story += _sec_hdr("Positive Evidence Summary", _GREEN)
-    for ev in positive:
-        story.append(Paragraph(
-            f'&#8226; <font color="{_DGRAY}" size="8">{_xt(ev)}</font>',
-            _style(f"PE_{ev[:4]}", 8, 12, _DGRAY),
-        ))
-
+            remediation_rows.append([
+                Paragraph(
+                    f'<font color="{_RED if i == 1 else _AMBER}"><b>P{i}</b></font>',
+                    _style(f"REMD_P{i}", 8, 11, _DGRAY, True, "CENTER"),
+                ),
+                Paragraph(
+                    f'<b>{_xt(_clip_words(risk, 95))}</b><br/><font color="{_DGRAY}" size="7.5">{_xt(_clip_words(guidance, 145))}</font>',
+                    _style(f"REMD_V{i}", 7.8, 10, _DGRAY),
+                ),
+            ])
+        remediation_table = Table(remediation_rows, colWidths=[16 * mm, None])
+        remediation_table.setStyle(TableStyle([
+            ("BACKGROUND",    (0, 0), (-1, 0), _hx(_RED)),
+            ("ROWBACKGROUNDS",(0, 1), (-1, -1), [_hx(_LGRAY), _hx(_WHITE)]),
+            ("TOPPADDING",    (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 6),
+            ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+            ("GRID",          (0, 0), (-1, -1), 0.3, _hx(_MGRAY)),
+            ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+        ]))
+        story.append(remediation_table)
     # AIRI summary
     if airi:
-        story.append(Spacer(1, 3 * mm))
-        story += _sec_hdr("AIRI Risk Triggers Summary", _TEAL)
-        story.append(Paragraph(
-            f'<font color="{_DGRAY}" size="8">'
-            f'Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b> '
-            f'| Coverage Rate: <b>{airi.get("coverage_rate", 0):.3f}</b> '
-            f'| Bundle Scope: <b>{_xt(str(airi.get("airi_bundle_scope", "unknown")))}</b>'
-            f'</font>',
-            _style("AIRIPDF_SUMMARY", 8, 12, _DGRAY),
-        ))
-        story.append(Paragraph(
-            f'<font color="{_DGRAY}" size="7">{_xt(_surface_compaction_note(result))}</font>',
-            _style("AIRIPDF_NOTE", 7, 10, _DGRAY),
-        ))
+        story.append(Spacer(1, 4 * mm))
+        story += _subsec_hdr("4.3 AIRI Risk Triggers Summary", _TEAL)
+        airi_rows: list[list[Any]] = [[
+            Paragraph(f'<font color="{_WHITE}"><b>AIRI summary</b></font>', _style("AIRIPDF_H", 8.5, 11, _WHITE, True)),
+            ""
+        ]]
+        airi_rows.append([
+            Paragraph(f'<font color="{_TEAL}"><b>Coverage</b></font>', _style("AIRIPDF_K0", 8, 10, _TEAL, True)),
+            Paragraph(
+                f'<font color="{_DGRAY}" size="8">Covered Risks: <b>{airi.get("covered_count", 0)} / {airi.get("total_risks_in_detector_scope", 0)}</b> '
+                f'| Coverage Rate: <b>{airi.get("coverage_rate", 0):.3f}</b> '
+                f'| Bundle Scope: <b>{_xt(str(airi.get("airi_bundle_scope", "unknown")))}</b></font>',
+                _style("AIRIPDF_V0", 8, 11, _DGRAY),
+            ),
+        ])
+        airi_rows.append([
+            Paragraph(f'<font color="{_TEAL}"><b>Meaning</b></font>', _style("AIRIPDF_KM0", 8, 10, _TEAL, True)),
+            Paragraph(
+                f'<font color="{_DGRAY}" size="8">AIRI broadens local governance findings into a secondary risk vocabulary. '
+                f'It does not prove harm, compliance, or deployment readiness.</font>',
+                _style("AIRIPDF_VM0", 8, 11, _DGRAY),
+            ),
+        ])
         covered_risks = airi.get("covered_risks", [])
-        if covered_risks:
-            for risk in covered_risks[:3]:
-                reason = _airi_reason_summary(risk)
-                primary = _airi_primary_summary(risk)
-                story.append(Paragraph(
-                    f'<font color="{_DGRAY}" size="8">&#8226; <b>{_xt(str(risk.get("id", "—")))}</b> '
-                    f'{_xt(str(risk.get("title", "")))}'
-                    f'{f" — { _xt(primary) }" if primary else ""}'
-                    f'{f" — why: {_xt(reason)}" if reason else ""}</font>',
-                    _style(f"AIRIPDF_{str(risk.get('id', 'risk'))[:8]}", 8, 11, _DGRAY),
-                ))
+        for idx, risk in enumerate(covered_risks[:2], start=1):
+            reason = _airi_reason_summary(risk)
+            primary = _airi_primary_summary(risk)
+            detail = f'{_xt(str(risk.get("id", "—")))} {_xt(_clip_words(str(risk.get("title", "")), 44))}'
+            if primary:
+                detail += f' | {_xt(primary)}'
+            if reason:
+                detail += f' | why: {_xt(_clip_words(reason, 80))}'
+            airi_rows.append([
+                Paragraph(f'<font color="{_TEAL}"><b>Mapped theme {idx}</b></font>', _style(f"AIRIPDF_KM{idx}", 8, 10, _TEAL, True)),
+                Paragraph(f'<font color="{_DGRAY}" size="8">{detail}</font>', _style(f"AIRIPDF_VM{idx}", 8, 11, _DGRAY)),
+            ])
         gaps = airi.get("known_gaps_in_bundle", [])
         if gaps:
             gap_preview = ", ".join(
-                f"{g.get('id', '—')} {_xt(str(g.get('title', '')))}" for g in gaps[:5]
+                f"{g.get('id', '—')} {_xt(_clip_words(str(g.get('title', '')), 18))}" for g in gaps[:3]
             )
-            _gap_extra = f" (+{len(gaps) - 5} more)" if len(gaps) > 5 else ""
-            story.append(Paragraph(
-                f'<font color="{_DGRAY}" size="8">Known gaps: {gap_preview}{_gap_extra}</font>',
-                _style("AIRIPDF_GAPS", 8, 11, _DGRAY),
-            ))
+            _gap_extra = f" (+{len(gaps) - 3} more)" if len(gaps) > 3 else ""
+            airi_rows.append([
+                Paragraph(f'<font color="{_TEAL}"><b>Known gaps</b></font>', _style("AIRIPDF_KG", 8, 10, _TEAL, True)),
+                Paragraph(f'<font color="{_DGRAY}" size="8">{gap_preview}{_gap_extra}</font>', _style("AIRIPDF_VG", 8, 11, _DGRAY)),
+            ])
+        airi_rows.append([
+            Paragraph(f'<font color="{_TEAL}"><b>Why this matters</b></font>', _style("AIRIPDF_KW", 8, 10, _TEAL, True)),
+            Paragraph(
+                f'<font color="{_DGRAY}" size="8">This section helps a reviewer describe governance weaknesses in broader risk language, but it should remain secondary to repository boundary, traceability, and evidence posture.</font>',
+                _style("AIRIPDF_VW", 8, 11, _DGRAY),
+            ),
+        ])
+        airi_table = Table(airi_rows, colWidths=[34 * mm, None])
+        airi_table.setStyle(TableStyle([
+            ("SPAN",          (0, 0), (1, 0)),
+            ("BACKGROUND",    (0, 0), (1, 0), _hx(_TEAL)),
+            ("ROWBACKGROUNDS",(0, 1), (-1, -1), [_hx(_LGRAY), _hx(_WHITE)]),
+            ("TOPPADDING",    (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 6),
+            ("BOX",           (0, 0), (-1, -1), 0.5, _hx(_MGRAY)),
+            ("GRID",          (0, 1), (-1, -1), 0.3, _hx(_MGRAY)),
+            ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+        ]))
+        story.append(airi_table)
 
     # Method Boundary
-    story.append(Spacer(1, 4 * mm))
-    story += _sec_hdr("Method Boundary", _DGRAY)
+    story.append(Spacer(1, 6 * mm))
+    story += _subsec_hdr("4.4 Method Boundary", _DGRAY)
     story.append(Paragraph(
         _xt(result.get("method", "")),
         _style("MB2", 8, 12, _DGRAY),
@@ -2385,7 +2566,7 @@ def _page_regulatory_traceability(result: dict[str, Any]) -> list[Any]:
 def _page7_report_metadata(result: dict[str, Any]) -> list[Any]:
     story: list[Any] = []
     score = result["score"]
-    story += _sec_hdr("Report Metadata", _NAVY)
+    story += _chapter_hdr("Chapter 5 — Report Metadata", _NAVY)
     tgt = result["target"]
     meta_items = [
         ("Schema Version", result.get("schema_version", "—")),
@@ -2454,6 +2635,10 @@ def render_pdf_pages(result: dict[str, Any], mode: str, pages: int) -> list[list
         f"Final Score: {score['final_score']} / 100",
         f"Formal Tier: {score['formal_tier']}",
         f"Use Scope: {score['use_scope']}",
+        f"About This Score: {_score_boundary_short_line()}",
+        f"- {_score_boundary_lines()[0].replace('**', '')}",
+        f"- {_score_boundary_lines()[1].replace('**', '')}",
+        f"- {_score_boundary_lines()[2].replace('**', '')}",
         "",
         "Stage Scores",
         f"- Stage 1 README Evidence Signal: {score['stage_1_readme_intent']} / 100",

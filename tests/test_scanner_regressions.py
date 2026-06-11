@@ -800,6 +800,40 @@ def test_code_integrity_lane_surfaces_mock_auth_or_fail_open_boundary(tmp_path: 
         f["detector"] == "C6_mock_auth_or_fail_open_boundary" and f["status"] == "detected"
         for f in result["evidence_ledger"]
     )
+    claim_rows = [
+        f for f in result["evidence_ledger"]
+        if f["detector"] == "C6_mock_auth_or_fail_open_boundary"
+        and f["status"] == "detected"
+        and f.get("metadata", {}).get("line_role") == "local_or_self_host_claim"
+    ]
+    assert len(claim_rows) >= 1
+
+
+def test_mock_auth_detector_does_not_silently_cap_local_claim_context_rows(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "README.md",
+        "# Repo\n"
+        "Self-hosted mode is the recommended way to run Bio.\n"
+        "Local deployment is supported for research teams.\n"
+        "No authentication required - Auto-login as dev user.\n",
+    )
+    _write(tmp_path / "docs" / "ARCHITECTURE.md", "Self-hosted mode keeps the stack local.\n")
+    _write(tmp_path / ".env.example", "NEXT_PUBLIC_APP_MODE=self-hosted\n")
+    _write(
+        tmp_path / "src" / "auth.py",
+        "DEV_USER_EMAIL = 'dev@localhost'\n"
+        "# Mock auth object for self-hosted mode\n",
+    )
+
+    result = audit_repository(tmp_path)
+    claim_rows = [
+        f for f in result["evidence_ledger"]
+        if f["detector"] == "C6_mock_auth_or_fail_open_boundary"
+        and f["status"] == "detected"
+        and f.get("metadata", {}).get("line_role") == "local_or_self_host_claim"
+    ]
+
+    assert len(claim_rows) >= 3
 
 
 def test_airi_coverage_can_be_triggered_by_supported_report_layer_detectors(tmp_path: Path) -> None:
@@ -846,7 +880,7 @@ def test_markdown_surfaces_humanized_top_risks_and_warn_file_lines(tmp_path: Pat
     assert "## Top Risks" in markdown
     assert "C2_dependency_pinning: WARN" not in markdown
     assert "External operational dependency signal surfaced in code-integrity lane." in markdown
-    assert ".env.example:2 VALYU_API_KEY=valyu_your_api_key_here" in markdown
+    assert ".env.example:2 — VALYU_API_KEY=valyu_your_api_key_here" in markdown
     assert "## Remediation Roadmap" in markdown
 
 

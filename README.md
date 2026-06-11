@@ -244,7 +244,7 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 - Open in browser: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/assets/report-preview/yorkeccak_bio_report.html>
 - Raw HTML artifact: [`docs/assets/report-preview/yorkeccak_bio_report.html`](docs/assets/report-preview/yorkeccak_bio_report.html)
 
-**5 sections:** Executive Summary · Decision Path · Code Integrity · AIRI Risk Triggers · Evidence Detail
+**7 sections:** Executive Summary · Decision Path · Code Integrity · Regulatory Traceability · AIRI Risk Triggers · Evidence Detail · Developer Follow-up
 
 Interactive features: sticky scroll-spy nav · repo hyperlink in the hero header · `?` tooltip icons on every metric · click-to-expand integrity cards · covered/gaps + domain filtering for AIRI risks · FAIL/WARN/PASS/INFO filter on the evidence ledger.
 
