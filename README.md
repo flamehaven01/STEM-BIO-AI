@@ -218,11 +218,11 @@ The plain `stem <repo>` and `stem scan <repo>` path now defaults to `--level 3`,
 |-------|------:|---------|-----------|
 | `--level 1` | 1 | Executive / triage (legacy) | Score, tier, stage cards, code integrity summary |
 | `--level 2` | 5 | Standard audit review | Level 1 + Stage 1/2R/3/4 breakdown, AIRI summary, closeout page |
-| `--level 3` | 7 | Full evidence packet | Level 2 + Stage 4 replication page, code integrity deep dive, remediation roadmap, metadata page |
+| `--level 3` | 8 | Full evidence packet | Level 2 + dedicated regulatory traceability page, code integrity deep dive, remediation/AIRI/method page, metadata page |
 
 ```
 <repo>_experiment_results.json   # machine-readable score + full evidence object
-<repo>_report.html               # interactive 5-section HTML dashboard (v1.7.0+)
+<repo>_report.html               # interactive 7-section HTML dashboard (v1.7.0+)
 <repo>_report.md                 # human-readable audit report
 <repo>_brief_1p.pdf              # Level 1 executive dashboard
 <repo>_detailed_5p.pdf           # Level 2 standard review packet
@@ -268,7 +268,7 @@ This is a review aid, not a claim that AIRI independently verified the repositor
 **Sample PDF:** [Download the 8-page full packet preview](docs/assets/report-preview/yorkeccak_bio_detailed_8p.pdf)
 
 <details>
-<summary>View all 7 full-packet preview pages</summary>
+<summary>View all 8 full-packet preview pages</summary>
 
 | Page 1 | Page 2 |
 |--------|--------|
@@ -282,9 +282,9 @@ This is a review aid, not a claim that AIRI independently verified the repositor
 |--------|--------|
 | <img src="docs/assets/report-preview/8p-5.png" alt="Page 5"> | <img src="docs/assets/report-preview/8p-6.png" alt="Page 6"> |
 
-| Page 7 |
-|--------|
-| <img src="docs/assets/report-preview/8p-7.png" alt="Page 7"> |
+| Page 7 | Page 8 |
+|--------|--------|
+| <img src="docs/assets/report-preview/8p-7.png" alt="Page 7"> | <img src="docs/assets/report-preview/8p-8.png" alt="Page 8"> |
 
 </details>
 

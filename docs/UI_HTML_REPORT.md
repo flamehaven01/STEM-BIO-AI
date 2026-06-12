@@ -22,15 +22,17 @@ Example:
 - browser preview: <https://htmlpreview.github.io/?https://raw.githubusercontent.com/flamehaven01/STEM-BIO-AI/main/docs/assets/report-preview/yorkeccak_bio_report.html>
 - raw artifact: [`docs/assets/report-preview/yorkeccak_bio_report.html`](assets/report-preview/yorkeccak_bio_report.html)
 
-## 5-Section Structure
+## 7-Section Structure
 
 | Section | ID | Content |
 |---------|-----|---------|
 | **Executive Summary** | `#s1` | Score gauge, 5-metric stat grid, notable risks, Tier Lock alert banner, Classification Applied state |
 | **Decision Path** | `#s2` | Stage bars (S1/S2R/S3/S4 with Stage 3 raw formula), score formula, and policy/configuration explainer |
 | **Code Integrity & Contract** | `#s3` | C1–C6 + CC1–CC3 expandable cards, with C4/C5/C6 split visible |
-| **AIRI Risk Triggers** | `#s4` | MIT AI Risk Repository donut + covered/gaps toggle table + domain filter cards |
-| **Evidence Detail** | `#s5` | Full evidence ledger with severity filter chips |
+| **Regulatory Traceability** | `#s4` | Repository-to-framework mapping summary with status labels, framework grouping, and bounded meaning notes |
+| **AIRI Risk Triggers** | `#s5` | MIT AI Risk Repository donut + covered/gaps toggle table + domain filter cards |
+| **Evidence Detail** | `#s6` | Full evidence ledger with severity filter chips |
+| **Developer Follow-up** | `#s7` | Decision Path recap, remediation priorities, expected impact, and where-to-inspect-next guidance |
 
 Navigation between sections via a **sticky top navbar** with scroll-spy active state.
 
